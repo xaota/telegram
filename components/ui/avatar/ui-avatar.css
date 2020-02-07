@@ -1,0 +1,31 @@
+:host {
+  font-size: 16px;
+
+  min-width: 2rem;
+  min-height: 2rem;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+
+  color: #fff;
+  font-weight: 500;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.33333rem;
+  text-transform: uppercase;
+}
+
+img {
+  display: none;
+  width: 100%;
+  height: 100%;
+}
+
+slot + img[src] {
+  display: block;
+}
+
+:host([src]) slot {
+  display: none;
+}

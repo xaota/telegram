@@ -1,0 +1,28 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  border-right: 1px solid #dadce0;
+  background-color: #fff;
+  font-family: var(--font);
+  font-size: 15px;
+}
+
+chats-header {
+  height: 4.13333rem;
+}
+
+ui-list {
+  max-height: calc(100% - 4.13333rem);
+  flex: 1 50%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  height: 100%;
+}
+
+chat-item[lastpin] {
+  border-bottom: 1px solid #edeef0;
+  padding-bottom: .1rem;
+  margin-bottom: calc(.3rem - 1px);
+}

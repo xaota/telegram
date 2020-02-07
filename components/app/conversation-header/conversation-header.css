@@ -1,0 +1,43 @@
+:host {
+  background: #fff;
+  border-bottom: 1px solid #edeef0;
+  padding: .33333rem 1.33333rem;
+  display: flex;
+  /* justify-content: space-between; */
+  align-items: center;
+  flex-direction: row;
+  font-size: 15px;
+  box-sizing: border-box;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+ui-avatar {
+  width: 3.06667rem;
+  height: 3.06667rem;
+  /* 46x46px */
+}
+
+.header__info {
+  padding-left: .8rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center
+}
+
+.header__title {
+  font-weight: 500;
+  font-size: 1rem
+}
+
+.header__status {
+  font-size: .93333rem;
+  color: #707579
+}
+
+.header__status.online {
+  color: #1da1f1
+}

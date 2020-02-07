@@ -1,0 +1,275 @@
+<template>
+  <link rel="stylesheet" href="./layout-chats.css" />
+
+  <chats-header></chats-header>
+  <ui-list>
+    <chat-item timestamp="Tue" badge="37" pin muted>
+      <!-- <ui-avatar slot="avatar" src="./content/c5d83ed4-f41d-4ac6-8061-7ffe73d4501a.jpeg"></ui-avatar></ui-avatar> -->
+      <ui-avatar slot="avatar" src="./content/c5d83ed4-f41d-4ac6-8061-7ffe73d4501a.jpeg" color="C394DD">У</ui-avatar>
+      <span slot="title">Уютненькое</span>
+      <span slot="author">Эльза</span>
+      <span slot="message">Мне ещё работать и работать 😊🤪</span>
+    </chat-item>
+    <chat-item timestamp="Tue" pin muted>
+      <ui-avatar slot="avatar" src="./content/4a2a6d47-d864-473d-b9ce-94a33ebd8677.jpeg">MР</ui-avatar>
+      <span slot="title">Modulbank Разработка</span>
+      <span slot="author">Алия</span>
+      <span slot="message">Коллеги,
+        собираем релиз портала.
+        https://confluence.modulbank.ru/x/cSKZBQ
+        Версия - 3.44.0
+        Вливайте на сборочный мир задачи в статусе TestDone, до 14:00 по мск.</span>
+    </chat-item>
+    <chat-item timestamp="Mon" pin muted>
+      <ui-avatar slot="avatar" color="93CD73">xm</ui-avatar>
+      <span slot="title">xaota music</span>
+      <span slot="message">Document</span>
+    </chat-item>
+    <chat-item timestamp="Mon" pin muted>
+      <ui-avatar slot="avatar" color="E8D081">Вт</ui-avatar>
+      <span slot="title">Вялое такси</span>
+      <span slot="author">Ринат</span>
+      <span slot="message">Бесполезная хрень и трата времени</span>
+    </chat-item>
+    <chat-item timestamp="31.01.2020" pin muted lastpin>
+      <ui-avatar slot="avatar" src="./content/a7217ed2-431f-4a2d-8bfd-afa8aae13597.jpeg">БП</ui-avatar>
+      <span slot="title">Бар по четвергам</span>
+      <span slot="author">Роберт</span>
+      <span slot="message">Так это только Витя так посидел. Остальные не стали свои чеки фоткать)</span>
+    </chat-item>
+    <chat-item timestamp="Tue" pin badge="350" muted>
+      <ui-avatar slot="avatar" src="./content/c1b6daaf-c479-437c-832d-cee11b7020c0.jpeg"></ui-avatar>
+      <span slot="title">Котообразие Felidae и не только</span>
+      <span slot="message">🖼 Photo</span>
+    </chat-item>
+    <chat-item timestamp="Mon">
+      <ui-avatar slot="avatar" src="./content/a0a9782a-ab2b-4c98-b973-3a4c56ae0178.jpeg"></ui-avatar>
+      <span slot="title">Анна Кузнецова</span>
+      <span slot="message">сейчас</span>
+    </chat-item>
+    <chat-item timestamp="Mon">
+      <ui-avatar slot="avatar" src="./content/91a02d0a-2b73-450c-a604-1c3846bbc3d3.jpeg"></ui-avatar>
+      <span slot="title">Роман Баландин</span>
+      <span slot="message">Ок, сориентируйте тогда по времени</span>
+    </chat-item>
+    <chat-item timestamp="Mon" badge="70" muted>
+      <ui-avatar slot="avatar" src="./content/30e39c1f-e7ab-47a0-88c9-90a5495d7622.jpeg"></ui-avatar>
+      <span slot="title">NLP Chat (AI Community)</span>
+      <span slot="message">Лучше б помогали, чесслово</span>
+    </chat-item>
+    <chat-item timestamp="Mon" badge="2" muted>
+      <ui-avatar slot="avatar" src="./content/01427be9-3df8-42e0-9d85-8315638e1a66.jpeg"></ui-avatar>
+      <span slot="title">Модуль Уфа</span>
+      <span slot="author">Kseniia</span>
+      <span slot="message">Пришлось гуглить, да, это оно)</span>
+    </chat-item>
+    <chat-item timestamp="Mon" badge="4" muted>
+      <ui-avatar slot="avatar" src="./content/c3bc3a5e-45e5-4c81-a31a-c2bb47bf1ffd.jpeg"></ui-avatar>
+      <span slot="title">Лучшие умы</span>
+      <span slot="author">Vitaliy</span>
+      <span slot="message">+</span>
+    </chat-item>
+    <chat-item timestamp="Mon">
+      <ui-avatar slot="avatar" src="./content/8a2e6f2f-7167-4b86-ae91-c0381daf814c.jpeg"></ui-avatar>
+      <span slot="title">Telegram</span>
+      <span slot="message">Код подтверждения: 61595. Никому не давайте код, даже если его требуют от имени Telegram!
+        Этот код используется для входа в Ваш аккаунт в Telegram. Он никогда не нужен для чего-то еще.
+        Если Вы не запрашивали код для входа, проигнорируйте это сообщение.</span>
+    </chat-item>
+    <chat-item timestamp="Mon" badge="40" muted>
+      <ui-avatar slot="avatar" src="./content/c017e458-fd7e-48e2-95ad-f9db50f71553.jpeg"></ui-avatar>
+      <span slot="title">[AI Community] Уфа</span>
+      <span slot="author">Airat</span>
+      <span slot="message">Добрый день!
+        Нам в команду нужен 1-2 frontend-разработчика на ReactJS или аналогичном фреймворке. Гибкий
+        график и частично удалённая работа. Занимаемся задачами, связанными с машинным обучением и
+        машинным зрением
+        (http://scivision.pro). Заказчик проекта не из Уфы.
+        Подробности в ЛС. Резюме можно присылать на почту info@scivision.pro</span>
+    </chat-item>
+    <chat-item timestamp="Mon" badge="27" muted>
+      <ui-avatar slot="avatar" src="./content/87015c93-f114-4bd4-b2ee-ec311d6d6e00.jpeg"></ui-avatar>
+      <span slot="title">ᴀʀᴛᴄʜᴀᴛɪᴋ</span>
+      <span slot="author">Павел Александрович</span>
+      <span slot="message">Document</span>
+    </chat-item>
+    <chat-item timestamp="10:53" muted badge="2">
+      <ui-avatar slot="avatar" src="./content/92f48b6b-7a64-45cf-909f-d3df89dd1de4.jpeg"></ui-avatar>
+      <span slot="title">Эм и чаты. Разработка</span>
+      <span slot="author">Идель</span>
+      <span slot="message">дорабоки есть, на стороне фронта пока</span>
+    </chat-item>
+    <chat-item timestamp="10:53">
+      <ui-avatar slot="avatar" color="7DB0E0">Эи</ui-avatar>
+      <span slot="title">Эм и чаты. Не разработка</span>
+      <span slot="author">Ruslan</span>
+      <span slot="message">у вербы есть помощник, так что могут отклонения и просечь</span>
+    </chat-item>
+    <chat-item timestamp="10:53" muted badge="5">
+      <ui-avatar slot="avatar" color="D77F7C">Эи</ui-avatar>
+      <span slot="title">Эм и чаты. Митинг</span>
+      <span slot="author">МитЯ</span>
+      <span slot="message">О, теперь я вас знаю!</span>
+    </chat-item>
+    <chat-item timestamp="10:21">
+      <ui-avatar slot="avatar" src="./content/39795eb9-4a1f-4c63-8c70-242dd565b381.jpeg"></ui-avatar>
+      <span slot="title">VK Music Bot</span>
+      <span slot="message">&#8203;💣БЕСПЛАТНЫЙ ЭКСПРЕСС НА ФУТБОЛ С КФ 63 ⚽️
+        😱Коэффициент: 63➕
+        🎁Цена: БЕСПЛАТНО
+        🔥Выложил здесь: забрать экспресс
+        Отмечаемся❤️ и забираем</span>
+    </chat-item>
+    <chat-item timestamp="10:21">
+      <ui-avatar slot="avatar" src="./content/bf2b1148-3ce1-4baf-bcdc-32ecd538c8b6.jpeg"></ui-avatar>
+      <span slot="title">Анвар Рамазанов</span>
+      <span slot="message">был автотестером когда это не было мейнстримом</span>
+    </chat-item>
+    <chat-item timestamp="10:14">
+      <ui-avatar slot="avatar" src="./content/7df97dad-26f3-4d32-bd61-b63c100c2504.jpeg"></ui-avatar>
+      <span slot="title">Виктор Назаренко</span>
+      <span slot="message">потом наблюдает</span>
+    </chat-item>
+    <chat-item timestamp="10:00" badge="1">
+      <ui-avatar slot="avatar" src="./content/4dfe1995-d914-4472-a0d0-3e228082bd14.jpeg">М</ui-avatar>
+      <span slot="title">МитЯ</span>
+      <span slot="message">Сегодня еще никто не узнал про твои планы - действуй, пока никто не узнал, что никто не узнал</span>
+    </chat-item>
+    <chat-item timestamp="9:35">
+      <ui-avatar slot="avatar" src="./content/19d292f9-fe67-48e0-ac5a-ce5f67ed4bfe.jpeg">И</ui-avatar>
+      <span slot="title">Игрочо</span>
+      <span slot="author">Денис</span>
+      <span slot="message">r/ #gaming
+        Blizzard запустила автоматический возврат средств за Warcraft 3:&nbsp;Reforged&nbsp;
+
+        Пока это единственная реакция разработчиков на массовое недовольство ремейком. Сам возврат можно
+        оформить за пару минут и забыть про игру, как про страшный сон.</span>
+    </chat-item>
+    <chat-item timestamp="8:52">
+      <ui-avatar slot="avatar" src="./content/4812f92d-dc15-46e1-9980-0c6e22c3efad.jpeg">НЖ</ui-avatar>
+      <span slot="title">Николай Жидков</span>
+      <span slot="message">Едем к тебе</span>
+    </chat-item>
+    <chat-item timestamp="8:23">
+      <ui-avatar slot="avatar" src="./content/5dd6623a-3a4a-4783-ad81-86e84b9ddff5.jpeg">РД</ui-avatar>
+      <span slot="title">Райнур Дильмуахметов</span>
+      <span slot="message">Либо (2) - спиздить мтпрото версию на сокете, если получится. Если она сильно пожата, то, канеш, увы(</span>
+    </chat-item>
+    <chat-item timestamp="5:47" muted badge="33">
+      <ui-avatar slot="avatar" src="./content/5c442353-5415-42d6-bc5f-89a235985e3a.jpeg">PM</ui-avatar>
+      <span slot="title">Physics.Math.Code</span>
+      <span slot="message">Document</span>
+    </chat-item>
+    <chat-item timestamp="3:17">
+      <ui-avatar slot="avatar" color="C394DD">ЧР</ui-avatar>
+      <span slot="title">Чаты. Редизайн-2019</span>
+      <span slot="author">Ринат</span>
+      <span slot="message">Document</span>
+    </chat-item>
+    <chat-item timestamp="1:11">
+      <ui-avatar slot="avatar" src="./content/5ba273a5-2cc3-4ebc-93d8-bddcc7a6ff8a.jpeg">TS</ui-avatar>
+      <span slot="title">Telegram Stickers | Стикеры</span>
+      <span slot="message">Peter And Molly
+        #bear #rabbit #animated #couple #cute #cocoprymuted badge=65</span>
+    </chat-item>
+    <chat-item timestamp="Mon" muted badge="27">
+      <ui-avatar slot="avatar" src="./content/97dcfb28-4249-4923-8c45-bc00cd2514a8.jpeg">УУ</ui-avatar>
+      <span slot="title">Уютненький Уфакод</span>
+      <span slot="author">Di</span>
+      <span slot="message">Это ещё не самый странный)</span>
+    </chat-item>
+    <chat-item timestamp="Mon">
+      <ui-avatar slot="avatar" src="./content/874f624e-6904-4241-b8b1-aa91def0e124.jpeg">Л</ui-avatar>
+      <span slot="title">Ламповая</span>
+      <span slot="author">Райнур</span>
+      <span slot="message">https://hangouts.google.com/call/x9_blawvdFQbxUHIPQ3ZAEEI</span>
+    </chat-item>
+    <chat-item timestamp="3:17">
+      <ui-avatar slot="avatar" color="EB91AE">АВ</ui-avatar>
+      <span slot="title">Андрей Владимирович Поташин</span>
+      <span slot="message">Document</span>
+    </chat-item>
+    <chat-item timestamp="Mon">
+      <ui-avatar slot="avatar" src="./content/a5e066b1-7c22-417b-9e24-5a498e523765.jpeg">МЦ</ui-avatar>
+      <span slot="title">Модуль Цитатник</span>
+      <span slot="message">"Кто софт писал, тот в цирке не смеётся" ©</span>
+    </chat-item>
+    <chat-item timestamp="Mon">
+      <ui-avatar slot="avatar" src="./content/407a344b-2cfd-440e-bb9b-ce7465836d80.jpeg">В</ui-avatar>
+      <span slot="title">Всратослав</span>
+      <span slot="message">Здорова, коты!
+        Для тех, кто еще не в курсе, неделю назад мы запустили для вас возможность шарить и оценивать
+        мемы из бота. Рад, что некоторые из вас уже нашли и активно используют эту функцию 😌
+
+        Получать и оценивать мемы от других пользователей можно через меню Всратослава:
+        режим оценки &gt; получить мем
+
+        Напоминаю, что топ картинки каждого дня выгружаются на наш канал Всратославненько
+        @vsratoslavnenko
+
+        Чем больше ваших зеленых галочек получат заслуживающие их годные мемесы, тем справедливее
+        выстроится рейтинг и тем качественнее будет топ на канале 😌
+
+        Спасибо, что остаетесь с нами!
+        Целую в лобик 😘</span>
+    </chat-item>
+    <chat-item timestamp="Mon">
+      <ui-avatar slot="avatar" src="./content/bd025263-be79-41e5-856e-a7f91217dc38.jpeg">CV</ui-avatar>
+      <span slot="title">Corona Virus 🦠</span>
+      <span slot="message">️В Москве раскупили http://bit.ly/mask_soldout все медицинские маски.
+        А еще производитель масок в Ростове приостановил http://bit.ly/maskprodstop производство.
+        @NovelCoronaVirusBot</span>
+    </chat-item>
+    <chat-item timestamp="Mon">
+      <ui-avatar slot="avatar" src="./content/ccf40852-55e4-4cc2-967f-f6f6b6886d3c.jpeg">NL</ui-avatar>
+      <span slot="title">Natural Language Processing</span>
+      <span slot="author">Aleksandr</span>
+      <span slot="message">Друзья, а здесь нет кого-то, кто хорошо знаком с библиотекой whoosh?muted badge=151</span>
+    </chat-item>
+    <chat-item timestamp="Mon">
+      <ui-avatar slot="avatar" src="./content/482b473c-d376-4953-9a24-3a0d8d48932b.jpeg">РФ</ui-avatar>
+      <span slot="title">Рустам Фаткуллин</span>
+      <span slot="message">А я не за компом уже и не в офисе</span>
+    </chat-item>
+    <chat-item timestamp="Mon">
+      <ui-avatar slot="avatar" src="./content/2d00e9fd-5f5c-492d-b163-a47256eafacc.jpeg">U</ui-avatar>
+      <span slot="title">UFACODER</span>
+      <span slot="author">CBETA</span>
+      <span slot="message">CBETA joined the group</span>
+    </chat-item>
+    <chat-item timestamp="Mon">
+      <ui-avatar slot="avatar" src="./content/8a61cd10-6646-4cb6-9bf2-f5b18fd17127.jpeg">ДМ</ui-avatar>
+      <span slot="title">Денис Минниахметов</span>
+      <span slot="message">B52 почти</span>
+    </chat-item>
+    <chat-item timestamp="Mon">
+      <ui-avatar slot="avatar" src="./content/3f6dd57f-5c5f-4d51-b2a8-2f6cee1b25b5.jpeg">ИТ</ui-avatar>
+      <span slot="title">Ильдус Тимерханов</span>
+      <span slot="message">https://youtu.be/oa-274QeN7U</span>
+    </chat-item>
+    <chat-item timestamp="3:17">
+      <ui-avatar slot="avatar" color="93CD73">PО</ui-avatar>
+      <span slot="title">PM-5536 Отправка уведомлений в канал Эм по сегментам</span>
+      <span slot="author">Михаил</span>
+      <span slot="message">Примерно сориентируй по срокам.</span>
+    </chat-item>
+    <chat-item timestamp="Mon">
+      <ui-avatar slot="avatar" src="./content/5eb8170b-52cb-469c-8a31-cfa6b050bd46.jpeg">Y</ui-avatar>
+      <span slot="title">Yoga</span>
+      <span slot="author">Карина</span>
+      <span slot="message">Карина removed someone from the group</span>
+    </chat-item>
+    <chat-item timestamp="Mon">
+      <ui-avatar slot="avatar" src="./content/4fe20524-bddc-4ade-9d53-8e70eb758424.jpeg">ПА</ui-avatar>
+      <span slot="title">Павел Александрович Трофимов</span>
+      <span slot="message">агонь!</span>
+    </chat-item>
+    <chat-item timestamp="Mon" badge="11" muted>
+      <ui-avatar slot="avatar" src="./content/5272e419-202f-416d-a3b7-64ef5ec268bf.jpeg"></ui-avatar>
+      <span slot="title">Настольный футбольчик</span>
+      <span slot="author">Ильнур</span>
+      <span slot="message">Document</span>
+    </chat-item>
+  </ui-list>
+  <!-- <layout-loading></layout-loading> -->
+</template>

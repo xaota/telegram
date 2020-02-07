@@ -1,0 +1,41 @@
+:host {
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0 1.33333rem;
+  flex: none;
+}
+
+:host, icon-menu {
+  display: flex;
+  align-items: center;
+  cursor: not-allowed;
+}
+
+
+icon-menu {
+  padding: 6PX;
+  margin-right: 1.06667rem;
+  justify-content: left;
+  width: 24px;
+  height: 24px;
+}
+
+div {
+  flex: 1 50%;
+  height: 2.93333rem;
+  padding: 0 .8rem;
+  background-color: #f4f4f5;
+  color: #8d969c;
+  border-radius: 1.46667rem;
+  cursor: not-allowed;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+icon-search {
+  width: 1.6rem;
+  height: 1.6rem;
+  margin-right: .4rem;
+  flex: none;
+}

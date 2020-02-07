@@ -1,0 +1,53 @@
+:host {
+  display: block;
+  width: 360px;
+  font-family: var(--font);
+  color: #070707;
+  margin: 0 auto;
+}
+
+.enter-avatar {
+  position: relative;
+  background: #4ea4f6;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  width: 160px;
+  height: 160px;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+icon-photo-add {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  pointer-events: none;
+  transform: scale(0.3);
+}
+
+h1 {
+  font-family: var(--font);
+  margin-top: 44px;
+  font-size: 32px;
+  font-weight: bold;
+}
+
+h2 {
+  font-family: var(--font);
+  margin-top: 13px;
+  margin-bottom: 49px;
+  font-size: 16px;
+  line-height: 21px;
+  color: #707579;
+  max-width: 260px;
+  margin-left: auto;
+  margin-right: auto;
+  font-weight: bold;
+  max-width: 210px;
+}

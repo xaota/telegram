@@ -1,0 +1,44 @@
+:host {
+  display: block;
+  width: 360px;
+  font-family: var(--font);
+  color: #070707;
+  margin: 0 auto;
+}
+
+ui-sticker {
+  width: 170px;
+  margin: 0 auto;
+}
+
+icon-edit {
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+div {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+}
+
+h1 {
+  font-family: var(--font);
+  margin-top: 44px;
+  font-size: 32px;
+  font-weight: bold;
+}
+
+h2 {
+  font-family: var(--font);
+  margin-top: 13px;
+  margin-bottom: 49px;
+  font-size: 16px;
+  line-height: 21px;
+  color: #707579;
+  max-width: 260px;
+  margin-left: auto;
+  margin-right: auto;
+  font-weight: bold;
+  max-width: 210px;
+}
