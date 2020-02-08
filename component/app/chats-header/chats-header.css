@@ -3,6 +3,7 @@
   justify-content: space-between;
   padding: 0 1.33333rem;
   flex: none;
+  position: relative;
 }
 
 :host, icon-menu {
@@ -11,12 +12,17 @@
 }
 
 icon-menu {
-  padding: 6PX;
+  padding: 8PX;
   margin-right: 1.06667rem;
   justify-content: left;
   width: 24px;
   height: 24px;
   cursor: pointer;
+  border-radius: 50%;
+}
+
+icon-menu:hover {
+  background-color: #f4f4f5;
 }
 
 div {
