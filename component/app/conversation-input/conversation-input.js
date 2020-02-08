@@ -1,4 +1,6 @@
 import Component from '../../../script/Component.js';
+import '../../icon/emoji/icon-emoji.js';
+import '../../icon/attach/icon-attach.js';
 import $, {updateChildrenProperty} from '../../../script/DOM.js';
 
 const component = Component.meta(import.meta.url, 'conversation-input');

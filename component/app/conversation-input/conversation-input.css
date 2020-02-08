@@ -89,21 +89,13 @@ textarea:focus {
   outline: none;
 }
 
-.emoji {
+icon-emoji, icon-attach {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 1.86667rem;
   height: 44px;
-  background: url(../../../asset/emoji.svg);
-  background-repeat: no-repeat;
-  background-position: 50%;
   margin-right: 1.06667rem
-}
-
-.attach {
-  width: 1.86667rem;
-  height: 44px;
-  background: url(../../../asset/attach.svg);
-  background-repeat: no-repeat;
-  background-position: 50%;
 }
 
 .enter {
