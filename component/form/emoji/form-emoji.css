@@ -4,6 +4,44 @@
 
 }
 
-slot {
+.box {
+    height: 325px;
+    overflow-y: scroll;
+}
 
+.list {
+    display: flex;
+    width: 100%;
+    flex-flow: row wrap;
+    font-size: 32px;
+    justify-content: space-between;
+    padding: 0px 9px;
+    box-sizing: border-box;
+}
+
+.list div {
+    cursor: pointer;
+    width: 42px;
+    height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-radius: 6px;
+    margin: 0px 1px;
+}
+
+.group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.group .item {
+    cursor: pointer;
+    width: 42px;
+    height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
