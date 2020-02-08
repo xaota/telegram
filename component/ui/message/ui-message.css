@@ -49,7 +49,7 @@ slot:not([name]) { /* содержимое сообщения */
 slot:not([name])::slotted(*) {
   margin-top: 4px;
 }
-/*:not(:last-of-type)*/
+
 slot:not([name])::slotted(message-text:not(:last-of-type)) {
   margin-top: 20px;
 }

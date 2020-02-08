@@ -28,7 +28,7 @@ export default class ConversationInput extends Component {
     return this;
   }
 
-  focus = () => {
+  focus = (input) => {
     input.focus();
   };
 
