@@ -12,6 +12,10 @@ const properties = {
     }
   }
 
+focus = (input) => {
+  input.focus();
+};
+
 export default class ConversationInput extends Component {
   constructor() {
     super(component);
@@ -28,14 +32,18 @@ export default class ConversationInput extends Component {
     return this;
   }
 
-  focus = (input) => {
-    input.focus();
-  };
-
   onChange = (e) => {
     const value = e.target.value;
 
     // изменяем кнопку отправки сообщения, если есть контент
+    if (value.length > 0) {
+      console.log($('.action', this.shadowRoot));
+      $('.action', this.shadowRoot)
+          .classList.add('send');
+    } else {
+      $('.action', this.shadowRoot)
+          .classList.remove('send');
+    }
     const el = e.target;
     // скидываем заранее заданное значение
     el.style.height = 'inherit';

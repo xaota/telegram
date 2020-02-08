@@ -12,7 +12,6 @@
   width: 80%;
   font-size: 16px;
   box-sizing: border-box;
-  cursor: not-allowed;
   padding: calc(.4rem - 1px) 1.33333rem 0;
   display: flex;
   flex-direction: row;
@@ -77,7 +76,6 @@ textarea {
   border: none;
   font-family: Roboto;
   font-size: 1.06667rem;
-  cursor: not-allowed;
   background: #fff;
   width: 100%;
   padding: 0;
@@ -118,4 +116,8 @@ textarea:focus {
   height: 3.6rem;
   box-shadow: 0 1px 2px 0 rgba(16,35,47,.15);
   margin-left: .53333rem
+}
+
+.send {
+  background-image: url(../../../asset/send.svg);
 }
