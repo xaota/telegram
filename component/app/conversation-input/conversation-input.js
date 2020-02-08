@@ -1,8 +1,10 @@
 import Component from '../../../script/Component.js';
+import $, {updateChildrenProperty} from '../../../script/DOM.js';
+
 import '../../icon/emoji/icon-emoji.js';
 import '../../icon/attach/icon-attach.js';
 import '../../ui/drop/ui-drop.js';
-import $, {updateChildrenProperty} from '../../../script/DOM.js';
+import FormEmoji from '../../form/emoji/form-emoji.js';
 
 const component = Component.meta(import.meta.url, 'conversation-input');
 const attributes = {

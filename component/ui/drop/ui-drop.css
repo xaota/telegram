@@ -19,6 +19,12 @@
   top: 100%;
 }
 
+:host([up]) {
+  top: auto;
+  bottom: 100%;
+  transform: translateY(10px);
+}
+
 :host([show]) {
   opacity: 1;
   visibility: visible;
