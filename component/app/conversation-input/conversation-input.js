@@ -33,6 +33,9 @@ export default class ConversationInput extends Component {
   };
 
   onChange = (e) => {
+    const value = e.target.value;
+
+    // изменяем кнопку отправки сообщения, если есть контент
     const el = e.target;
     // скидываем заранее заданное значение
     el.style.height = 'inherit';

@@ -50,10 +50,6 @@ slot:not([name])::slotted(*) {
   margin-top: 4px;
 }
 
-slot:not([name])::slotted(message-text:not(:last-of-type)) {
-  margin-top: 20px;
-}
-
 slot[name="avatar"] {
   display: block;
   /* width: 2rem;
