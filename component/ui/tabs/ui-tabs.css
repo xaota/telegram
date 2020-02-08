@@ -1,0 +1,8 @@
+@charset "utf-8";
+
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid rgb(218, 220, 224);
+}
