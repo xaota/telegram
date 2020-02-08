@@ -3,19 +3,19 @@
 :host {
   display: block;
   position: absolute;
-  /* width: 218px; */
+  min-width: 218px;
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.4) 0px 0px 10px;
   z-index: 40;
   background-color: rgb(255, 255, 255);
-  margin-top: 8px;
+  /* margin-top: 8px; */
   padding: 8px 0px;
   overflow: hidden;
   opacity: 0;
   visibility: hidden;
   transform: translateY(-10px);
   transition: all 0.2s ease 0s;
-  right: 0px;
+  left: 16px;
   top: 100%;
 }
 
@@ -23,6 +23,11 @@
   top: auto;
   bottom: 100%;
   transform: translateY(10px);
+}
+
+:host([right]) {
+  left: auto;
+  right: 16px;
 }
 
 :host([show]) {
