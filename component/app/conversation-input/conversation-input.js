@@ -1,6 +1,7 @@
 import Component from '../../../script/Component.js';
 import '../../icon/emoji/icon-emoji.js';
 import '../../icon/attach/icon-attach.js';
+import '../../ui/drop/ui-drop.js';
 import $, {updateChildrenProperty} from '../../../script/DOM.js';
 
 const component = Component.meta(import.meta.url, 'conversation-input');
@@ -31,6 +32,10 @@ export default class ConversationInput extends Component {
 
     $('.wrap_textarea', node)
         .addEventListener('click', () => this.focus(input));
+
+    const emoji = $('icon-emoji', node);
+    const drop = $('ui-drop', node);
+    emoji.addEventListener('click', () => drop.show = !drop.show);
     return this;
   }
 
