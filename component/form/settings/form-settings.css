@@ -1,9 +1,54 @@
 @charset "utf-8";
 
 :host {
-
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  position: relative;
 }
 
-slot {
+main {
+  display: block;
+  height: 100%;
+  overflow-y: auto;
+}
 
+.enter-avatar {
+  position: relative;
+  background: #4ea4f6; /* rgb(78, 164, 246); */
+  /* background-size: cover; */
+  /* background-repeat: no-repeat; */
+  /* background-position: 0 0; */
+  width: 120px;
+  height: 120px;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 50%;
+  cursor: pointer;
+  margin-bottom: 34px;
+}
+
+icon-photo-add {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  pointer-events: none;
+  transform: scale(0.33);
+}
+
+/* h2 {
+  margin-top: 16px;
+  margin-bottom: 27px;
+  font-size: 16px;
+  font-weight: 500;
+  color: rgb(112, 117, 121);
+} */
+
+p {
+  font-size: 14px;
+  color: rgb(112, 117, 121);
 }

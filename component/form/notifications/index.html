@@ -1,142 +1,25 @@
 <template>
   <link rel="stylesheet" href="./form-notifications.css" />
 
-  <div style="display: flex; flex-direction: column; justify-content: space-between; height: 100%; position: relative;">
-    <div>
-      <div style="height: 60px; display: flex; align-items: center; padding: 0px 20px 0px 14px; width: 100%;">
-        <div>
-          <div
-            style="cursor: pointer; height: 44px; width: 44px; display: flex; align-items: center; justify-content: center; background: rgb(255, 255, 255); border-radius: 50%; line-height: 44px;">
-            <div class="icon-wrap"><svg width="24" height="24" viewBox="0 0 24 24">
-                <g fill="none" fill-rule="evenodd">
-                  <polygon points="0 0 24 0 24 24 0 24"></polygon>
-                  <path fill="#707579" fill-rule="nonzero"
-                    d="M4.29289322,11.2928932 L11.2928932,4.29289322 C11.6834175,3.90236893 12.3165825,3.90236893 12.7071068,4.29289322 C13.0675907,4.65337718 13.0953203,5.22060824 12.7902954,5.61289944 L12.7071068,5.70710678 L7.414,11 L19,11 C19.5128358,11 19.9355072,11.3860402 19.9932723,11.8833789 L20,12 C20,12.5128358 19.6139598,12.9355072 19.1166211,12.9932723 L19,13 L7.414,13 L12.7071068,18.2928932 C13.0675907,18.6533772 13.0953203,19.2206082 12.7902954,19.6128994 L12.7071068,19.7071068 C12.3466228,20.0675907 11.7793918,20.0953203 11.3871006,19.7902954 L11.2928932,19.7071068 L4.29289322,12.7071068 C3.93240926,12.3466228 3.90467972,11.7793918 4.20970461,11.3871006 L4.29289322,11.2928932 L11.2928932,4.29289322 L4.29289322,11.2928932 Z">
-                  </path>
-                </g>
-              </svg></div>
-          </div>
-        </div>
-        <div></div>
-        <div style="">
-          <div style="font-size: 20px; font-weight: 500; margin-left: 22px;">Noitifications</div>
-          <div></div>
-        </div>
-      </div>
-    </div>
-    <div style="height: 100%; overflow-y: auto;">
-      <div style="padding: 0px 24px; border-top: 1px solid rgb(218, 220, 224);">
-        <div style="margin-top: 26px; margin-bottom: 35px;">
-          <div style="font-size: 16px; font-weight: 500; color: rgb(112, 117, 121);">Private Chats</div>
-        </div><label style="cursor: pointer; display: flex; align-items: flex-start; margin-bottom: 32px;"><input
-            type="checkbox" style="position: absolute; left: -9999px; opacity: 0; visibility: hidden;"><span
-            style="height: 24px;">
-            <div class="icon-wrap"><svg width="24" height="24" viewBox="0 0 24 24">
-                <g fill="none" fill-rule="evenodd">
-                  <polygon points="0 0 24 0 24 24 0 24"></polygon>
-                  <path fill="#4EA4F6" fill-rule="nonzero"
-                    d="M18,3 C19.6568542,3 21,4.34314575 21,6 L21,18 C21,19.6568542 19.6568542,21 18,21 L6,21 C4.34314575,21 3,19.6568542 3,18 L3,6 C3,4.34314575 4.34314575,3 6,3 L18,3 Z M17.2928932,7.29289322 L10,14.5857864 L6.70710678,11.2928932 C6.31658249,10.9023689 5.68341751,10.9023689 5.29289322,11.2928932 C4.90236893,11.6834175 4.90236893,12.3165825 5.29289322,12.7071068 L9.29289322,16.7071068 C9.68341751,17.0976311 10.3165825,17.0976311 10.7071068,16.7071068 L18.7071068,8.70710678 C19.0976311,8.31658249 19.0976311,7.68341751 18.7071068,7.29289322 C18.3165825,6.90236893 17.6834175,6.90236893 17.2928932,7.29289322 Z">
-                  </path>
-                </g>
-              </svg></div>
-          </span><span style="display: block; margin-left: 32px;"><span
-              style="display: block; font-size: 16px; color: rgb(7, 7, 7);">Notifications for private chats</span><span
-              style="display: block; font-size: 14px; color: rgb(112, 117, 121); margin-top: 5px;">Enabled</span></span></label><label
-          style="cursor: pointer; display: flex; align-items: flex-start; margin-bottom: 32px;"><input type="checkbox"
-            style="position: absolute; left: -9999px; opacity: 0; visibility: hidden;"><span style="height: 24px;">
-            <div class="icon-wrap"><svg width="24" height="24" viewBox="0 0 24 24">
-                <g fill="none" fill-rule="evenodd">
-                  <polygon points="0 0 24 0 24 24 0 24"></polygon>
-                  <path fill="#4EA4F6" fill-rule="nonzero"
-                    d="M18,3 C19.6568542,3 21,4.34314575 21,6 L21,18 C21,19.6568542 19.6568542,21 18,21 L6,21 C4.34314575,21 3,19.6568542 3,18 L3,6 C3,4.34314575 4.34314575,3 6,3 L18,3 Z M17.2928932,7.29289322 L10,14.5857864 L6.70710678,11.2928932 C6.31658249,10.9023689 5.68341751,10.9023689 5.29289322,11.2928932 C4.90236893,11.6834175 4.90236893,12.3165825 5.29289322,12.7071068 L9.29289322,16.7071068 C9.68341751,17.0976311 10.3165825,17.0976311 10.7071068,16.7071068 L18.7071068,8.70710678 C19.0976311,8.31658249 19.0976311,7.68341751 18.7071068,7.29289322 C18.3165825,6.90236893 17.6834175,6.90236893 17.2928932,7.29289322 Z">
-                  </path>
-                </g>
-              </svg></div>
-          </span><span style="display: block; margin-left: 32px;"><span
-              style="display: block; font-size: 16px; color: rgb(7, 7, 7);">Message preview</span><span
-              style="display: block; font-size: 14px; color: rgb(112, 117, 121); margin-top: 5px;">Enabled</span></span></label>
-      </div>
-      <div style="padding: 0px 24px; border-top: 1px solid rgb(218, 220, 224);">
-        <div style="margin-top: 26px; margin-bottom: 35px;">
-          <div style="font-size: 16px; font-weight: 500; color: rgb(112, 117, 121);">Groups</div>
-        </div><label style="cursor: pointer; display: flex; align-items: flex-start; margin-bottom: 32px;"><input
-            type="checkbox" style="position: absolute; left: -9999px; opacity: 0; visibility: hidden;"><span
-            style="height: 24px;">
-            <div class="icon-wrap"><svg width="24" height="24" viewBox="0 0 24 24">
-                <g fill="none" fill-rule="evenodd">
-                  <polygon points="0 0 24 0 24 24 0 24"></polygon>
-                  <path fill="#4EA4F6" fill-rule="nonzero"
-                    d="M18,3 C19.6568542,3 21,4.34314575 21,6 L21,18 C21,19.6568542 19.6568542,21 18,21 L6,21 C4.34314575,21 3,19.6568542 3,18 L3,6 C3,4.34314575 4.34314575,3 6,3 L18,3 Z M17.2928932,7.29289322 L10,14.5857864 L6.70710678,11.2928932 C6.31658249,10.9023689 5.68341751,10.9023689 5.29289322,11.2928932 C4.90236893,11.6834175 4.90236893,12.3165825 5.29289322,12.7071068 L9.29289322,16.7071068 C9.68341751,17.0976311 10.3165825,17.0976311 10.7071068,16.7071068 L18.7071068,8.70710678 C19.0976311,8.31658249 19.0976311,7.68341751 18.7071068,7.29289322 C18.3165825,6.90236893 17.6834175,6.90236893 17.2928932,7.29289322 Z">
-                  </path>
-                </g>
-              </svg></div>
-          </span><span style="display: block; margin-left: 32px;"><span
-              style="display: block; font-size: 16px; color: rgb(7, 7, 7);">Notifications for groups</span><span
-              style="display: block; font-size: 14px; color: rgb(112, 117, 121); margin-top: 5px;">Enabled</span></span></label><label
-          style="cursor: pointer; display: flex; align-items: flex-start; margin-bottom: 32px;"><input type="checkbox"
-            style="position: absolute; left: -9999px; opacity: 0; visibility: hidden;"><span style="height: 24px;">
-            <div class="icon-wrap"><svg width="24" height="24" viewBox="0 0 24 24">
-                <g fill="none" fill-rule="evenodd">
-                  <polygon points="0 0 24 0 24 24 0 24"></polygon>
-                  <path fill="#4EA4F6" fill-rule="nonzero"
-                    d="M18,3 C19.6568542,3 21,4.34314575 21,6 L21,18 C21,19.6568542 19.6568542,21 18,21 L6,21 C4.34314575,21 3,19.6568542 3,18 L3,6 C3,4.34314575 4.34314575,3 6,3 L18,3 Z M17.2928932,7.29289322 L10,14.5857864 L6.70710678,11.2928932 C6.31658249,10.9023689 5.68341751,10.9023689 5.29289322,11.2928932 C4.90236893,11.6834175 4.90236893,12.3165825 5.29289322,12.7071068 L9.29289322,16.7071068 C9.68341751,17.0976311 10.3165825,17.0976311 10.7071068,16.7071068 L18.7071068,8.70710678 C19.0976311,8.31658249 19.0976311,7.68341751 18.7071068,7.29289322 C18.3165825,6.90236893 17.6834175,6.90236893 17.2928932,7.29289322 Z">
-                  </path>
-                </g>
-              </svg></div>
-          </span><span style="display: block; margin-left: 32px;"><span
-              style="display: block; font-size: 16px; color: rgb(7, 7, 7);">Message preview</span><span
-              style="display: block; font-size: 14px; color: rgb(112, 117, 121); margin-top: 5px;">Enabled</span></span></label>
-      </div>
-      <div style="padding: 0px 24px; border-top: 1px solid rgb(218, 220, 224);">
-        <div style="margin-top: 26px; margin-bottom: 35px;">
-          <div style="font-size: 16px; font-weight: 500; color: rgb(112, 117, 121);">Channels</div>
-        </div><label style="cursor: pointer; display: flex; align-items: flex-start; margin-bottom: 32px;"><input
-            type="checkbox" style="position: absolute; left: -9999px; opacity: 0; visibility: hidden;"><span
-            style="height: 24px;">
-            <div class="icon-wrap"><svg width="24" height="24" viewBox="0 0 24 24">
-                <g fill="none" fill-rule="evenodd">
-                  <polygon points="0 0 24 0 24 24 0 24"></polygon>
-                  <path fill="#4EA4F6" fill-rule="nonzero"
-                    d="M18,3 C19.6568542,3 21,4.34314575 21,6 L21,18 C21,19.6568542 19.6568542,21 18,21 L6,21 C4.34314575,21 3,19.6568542 3,18 L3,6 C3,4.34314575 4.34314575,3 6,3 L18,3 Z M17.2928932,7.29289322 L10,14.5857864 L6.70710678,11.2928932 C6.31658249,10.9023689 5.68341751,10.9023689 5.29289322,11.2928932 C4.90236893,11.6834175 4.90236893,12.3165825 5.29289322,12.7071068 L9.29289322,16.7071068 C9.68341751,17.0976311 10.3165825,17.0976311 10.7071068,16.7071068 L18.7071068,8.70710678 C19.0976311,8.31658249 19.0976311,7.68341751 18.7071068,7.29289322 C18.3165825,6.90236893 17.6834175,6.90236893 17.2928932,7.29289322 Z">
-                  </path>
-                </g>
-              </svg></div>
-          </span><span style="display: block; margin-left: 32px;"><span
-              style="display: block; font-size: 16px; color: rgb(7, 7, 7);">Notifications for channels</span><span
-              style="display: block; font-size: 14px; color: rgb(112, 117, 121); margin-top: 5px;">Enabled</span></span></label><label
-          style="cursor: pointer; display: flex; align-items: flex-start; margin-bottom: 32px;"><input type="checkbox"
-            style="position: absolute; left: -9999px; opacity: 0; visibility: hidden;"><span style="height: 24px;">
-            <div class="icon-wrap"><svg width="24" height="24" viewBox="0 0 24 24">
-                <g fill="none" fill-rule="evenodd">
-                  <polygon points="0 0 24 0 24 24 0 24"></polygon>
-                  <path fill="#4EA4F6" fill-rule="nonzero"
-                    d="M18,3 C19.6568542,3 21,4.34314575 21,6 L21,18 C21,19.6568542 19.6568542,21 18,21 L6,21 C4.34314575,21 3,19.6568542 3,18 L3,6 C3,4.34314575 4.34314575,3 6,3 L18,3 Z M17.2928932,7.29289322 L10,14.5857864 L6.70710678,11.2928932 C6.31658249,10.9023689 5.68341751,10.9023689 5.29289322,11.2928932 C4.90236893,11.6834175 4.90236893,12.3165825 5.29289322,12.7071068 L9.29289322,16.7071068 C9.68341751,17.0976311 10.3165825,17.0976311 10.7071068,16.7071068 L18.7071068,8.70710678 C19.0976311,8.31658249 19.0976311,7.68341751 18.7071068,7.29289322 C18.3165825,6.90236893 17.6834175,6.90236893 17.2928932,7.29289322 Z">
-                  </path>
-                </g>
-              </svg></div>
-          </span><span style="display: block; margin-left: 32px;"><span
-              style="display: block; font-size: 16px; color: rgb(7, 7, 7);">Message preview</span><span
-              style="display: block; font-size: 14px; color: rgb(112, 117, 121); margin-top: 5px;">Enabled</span></span></label>
-      </div>
-      <div style="padding: 0px 24px; border-top: 1px solid rgb(218, 220, 224);">
-        <div style="margin-top: 26px; margin-bottom: 35px;">
-          <div style="font-size: 16px; font-weight: 500; color: rgb(112, 117, 121);">Other</div>
-        </div><label style="cursor: pointer; display: flex; align-items: flex-start; margin-bottom: 32px;"><input
-            type="checkbox" style="position: absolute; left: -9999px; opacity: 0; visibility: hidden;"><span
-            style="height: 24px;">
-            <div class="icon-wrap"><svg width="24" height="24" viewBox="0 0 24 24">
-                <g fill="none" fill-rule="evenodd">
-                  <polygon points="0 0 24 0 24 24 0 24"></polygon>
-                  <path fill="#707579" fill-rule="nonzero"
-                    d="M6,3 L18,3 C19.6568542,3 21,4.34314575 21,6 L21,18 C21,19.6568542 19.6568542,21 18,21 L6,21 C4.34314575,21 3,19.6568542 3,18 L3,6 C3,4.34314575 4.34314575,3 6,3 Z M6,5 C5.44771525,5 5,5.44771525 5,6 L5,18 C5,18.5522847 5.44771525,19 6,19 L18,19 C18.5522847,19 19,18.5522847 19,18 L19,6 C19,5.44771525 18.5522847,5 18,5 L6,5 Z">
-                  </path>
-                </g>
-              </svg></div>
-          </span><span style="display: block; margin-left: 32px;"><span
-              style="display: block; font-size: 16px; color: rgb(7, 7, 7);">Contacts joined Telegram</span><span
-              style="display: block; font-size: 14px; color: rgb(112, 117, 121); margin-top: 5px;">Disabled</span></span></label>
-      </div>
-    </div>
-    <div></div>
-  </div>
+  <ui-header back>Noitifications</ui-header>
+  <main>
+    <ui-fieldset name="Private Chats">
+      <ui-checkbox checked hint>Notifications for private chats</ui-checkbox>
+      <ui-checkbox checked hint>Message preview</ui-checkbox>
+    </ui-fieldset>
+
+    <ui-fieldset name="Groups">
+      <ui-checkbox checked hint>Notifications for groups</ui-checkbox>
+      <ui-checkbox checked hint>Message preview</ui-checkbox>
+    </ui-fieldset>
+
+    <ui-fieldset name="Channels">
+      <ui-checkbox checked hint>Notifications for channels</ui-checkbox>
+      <ui-checkbox checked hint>Message preview</ui-checkbox>
+    </ui-fieldset>
+
+    <ui-fieldset name="Other">
+      <ui-checkbox hint>Contacts joined Telegram</ui-checkbox>
+    </ui-fieldset>
+  </main>
 </template>

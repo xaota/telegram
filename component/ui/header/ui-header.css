@@ -1,0 +1,59 @@
+@charset "utf-8";
+
+:host {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  /* padding-left: 18px; */
+  padding: 0 8px 0 16px;
+  width: 100%;
+  box-sizing: border-box;
+
+  justify-content: space-between;
+  font-size: 20px;
+  font-weight: 500;
+  /* margin-left: 22px; */
+  position: relative;
+}
+
+icon-back,
+icon-more {
+  cursor: pointer;
+  height: 44px;
+  width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgb(255, 255, 255);
+  border-radius: 50%;
+  line-height: 44px;
+}
+
+icon-more {
+  display: none;
+}
+
+slot {
+  display: block;
+  width: 100%;
+  /* padding-left: 36px; */
+  padding-left: 30px;
+}
+
+div.drop {
+  position: absolute;
+  width: 218px;
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 0px 10px;
+  z-index: 40;
+  background-color: rgb(255, 255, 255);
+  margin-top: 8px;
+  padding: 8px 0px;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.2s ease 0s;
+  right: 0px;
+  top: 100%;
+}

@@ -1,0 +1,15 @@
+@charset "utf-8";
+
+:host {
+  display: block;
+  padding: 0px 24px;
+  border-top: 1px solid rgb(218, 220, 224);
+}
+
+h1 {
+  margin-top: 26px;
+  margin-bottom: 35px;
+  font-size: 16px;
+  font-weight: 500;
+  color: rgb(112, 117, 121);
+}

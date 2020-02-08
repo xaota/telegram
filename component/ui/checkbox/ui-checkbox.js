@@ -1,8 +1,13 @@
 import Component from '../../../script/Component.js';
+import $, {updateChildrenProperty} from '../../../script/DOM.js';
+
+import IconCheck from '../../icon/check/icon-check.js';
 
 const component = Component.meta(import.meta.url, 'ui-checkbox');
 const properties = {
-    checked(root, value) { console.log('check') }
+    checked(root, value) {
+      updateChildrenProperty(root, 'input[type="checkbox"]', 'checked', value)
+    }
   }
 
 export default class UICheckbox extends Component {
@@ -11,7 +16,7 @@ export default class UICheckbox extends Component {
   }
 
   mount(node) {
-    super.mount({}, properties);
+    super.mount(node, {}, properties);
 
     return this;
   }

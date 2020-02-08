@@ -3,9 +3,8 @@
   flex-direction: column;
   justify-content: flex-start;
   border-right: 1px solid #dadce0;
-  background-color: #fff;
-  font-family: var(--font);
   font-size: 15px;
+  height: 100%;
 }
 
 chats-header {

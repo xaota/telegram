@@ -1,9 +1,46 @@
 @charset "utf-8";
 
 :host {
+  width: 100%;
 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 100%;
 }
 
-slot {
+h1 {
+  color: rgb(112, 117, 121);
+  font-size: 24px;
+  width: 200px;
+  text-align: center;
+  line-height: 32px;
+}
 
+main {
+  display: flex;
+  width: 400px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+div {
+  text-align: center;
+}
+
+div > *:first-child {
+  display: flex;
+  border-radius: 100%;
+  background: #fff;
+  width: 72px;
+  height: 72px;
+  margin-bottom: 8px;
+  align-items: center;
+  justify-content: center;
+}
+
+span {
+  display: block;
+  color: rgb(112, 117, 121);
 }

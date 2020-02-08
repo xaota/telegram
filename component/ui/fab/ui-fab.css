@@ -1,0 +1,22 @@
+@charset "utf-8";
+
+:host {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background-color: rgb(218, 220, 224);
+  border-radius: 50%;
+  width: 54px;
+  height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+}
+
+slot {
+  display: block;
+  width: 24px;
+  height: 24px;
+}
