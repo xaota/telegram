@@ -1,5 +1,11 @@
 import Component from '../../../script/Component.js';
+
+import UITab  from '../../ui/tab/ui-tab.js';
+import UITabs from '../../ui/tabs/ui-tabs.js';
+
+import IconEmoji from '../../icon/emoji/icon-emoji.js';
 import $ from '../../../script/DOM.js';
+
 const component = Component.meta(import.meta.url, 'form-emoji');
 const attributes = {
 

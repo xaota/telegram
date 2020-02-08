@@ -1,0 +1,19 @@
+@charset "utf-8";
+
+:host {
+  display: inline-flex;
+  align-items: center;
+  text-align: center;
+  color: rgb(112, 117, 121);
+  font-size: 16px;
+  font-weight: 500;
+  margin: 0px 26px;
+  height: 48px;
+  cursor: pointer;
+  border-bottom: 4px solid transparent;
+}
+
+:host([selected]) {
+  color: rgb(78, 164, 246);
+  border-bottom: 4px solid rgb(78, 164, 246);
+}

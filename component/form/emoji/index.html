@@ -1,20 +1,13 @@
 <template>
   <link rel="stylesheet" href="./form-emoji.css" />
 
-  <div id="ew20TtvT43poWYZhPJxprS"
-    style="background: rgb(255, 255, 255); width: 420px; border-radius: 10px; box-shadow: rgba(0, 0, 0, 0.4) 0px 0px 10px;">
-    <div
-      style="display: flex; align-items: center; justify-content: center; border-bottom: 1px solid rgb(218, 220, 224);">
-      <div
-        style="display: inline-flex; align-items: center; text-align: center; color: rgb(78, 164, 246); font-size: 16px; font-weight: 500; margin: 0px 26px; height: 48px; cursor: pointer; border-bottom: 4px solid rgb(78, 164, 246);">
-        Emoji</div>
-      <div
-        style="display: inline-flex; align-items: center; text-align: center; color: rgb(112, 117, 121); font-size: 16px; font-weight: 500; margin: 0px 26px; height: 48px; cursor: pointer; border-bottom: 4px solid transparent;">
-        Stickers</div>
-      <div
-        style="display: inline-flex; align-items: center; text-align: center; color: rgb(112, 117, 121); font-size: 16px; font-weight: 500; margin: 0px 26px; height: 48px; cursor: pointer; border-bottom: 4px solid transparent;">
-        GIFs</div>
-    </div>
+  <ui-tabs>
+    <ui-tab selected>Emoji</ui-tab>
+    <ui-tab>Stickers</ui-tab>
+    <ui-tab>GIFs</ui-tab>
+  </ui-tabs>
+
+
     <div>
       <div style="height: 325px; overflow-y: scroll;">
         <div id="emoji"
