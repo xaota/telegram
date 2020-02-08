@@ -17,7 +17,7 @@ div {
   display: inline-block;
   background: #fff;
   border-radius: 10px;
-  border-bottom-left-radius: 5px;
+  border-bottom-left-radius: 0px;
   border-top-left-radius: 5px;
   position: relative;
   box-shadow: 0 1px 2px 0 rgba(16, 35, 47, 0.15);
@@ -28,6 +28,29 @@ div {
   text-align: left;
   padding: 5px;
   /* white-space: nowrap; */
+}
+
+div:after {
+  left: -9px;
+  bottom: 0px;
+  z-index: 2;
+  background-image: url(../../../asset/tail.svg);
+}
+
+div:after, div:before {
+  position: absolute;
+  width: 11px;
+  height: 18px;
+  content: "";
+  background-size: 100%;
+  background-repeat: no-repeat;
+}
+
+div:before {
+  left: -10px;
+  bottom: -1px;
+  background-image: url(../../../asset/tail_shadow.svg);
+  z-index: 0;
 }
 
 :host([reply]) div {

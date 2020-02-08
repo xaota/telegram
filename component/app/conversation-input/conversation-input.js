@@ -20,7 +20,39 @@ export default class ConversationInput extends Component {
   mount(node) {
     super.mount(node, attributes, properties);
 
+    const input = $('textarea', node);
+    input.addEventListener('input', this.onChange);
+
+    $('.wrap_textarea', node)
+        .addEventListener('click', () => this.focus(input));
     return this;
+  }
+
+  focus = () => {
+    input.focus();
+  };
+
+  onChange = (e) => {
+    const el = e.target;
+    // скидываем заранее заданное значение
+    el.style.height = 'inherit';
+
+    const computed = window.getComputedStyle(el);
+    const stepPerRow = parseInt(
+        computed.getPropertyValue('line-height'),
+        10,
+    );
+    const padding =
+        parseInt(computed.getPropertyValue('padding-top'), 10) +
+        parseInt(computed.getPropertyValue('padding-bottom'), 10);
+    const maxRows = 10;
+
+    // с учетом вертикальных padding'ов
+    const preferredHeight = el.scrollHeight;
+    const maxAllowedHeight = maxRows * stepPerRow + padding;
+
+    const newHeight = Math.min(preferredHeight, maxAllowedHeight);
+    el.style.height = `${newHeight}px`;
   }
 }
 

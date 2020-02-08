@@ -1,11 +1,16 @@
 <template>
   <link rel="stylesheet" href="./conversation-input.css" />
 
-  <div class="msginput__bubble_wrap">
-    <div class="msginput__bubble">
-      <div class="msginput__icon_emoji"></div><input placeholder="Message" disabled="">
-      <div class="msginput__icon_attach"></div>
+  <div class="wrap">
+    <div class="msginput__bubble_wrap">
+      <div class="msginput__bubble">
+        <div class="emoji"></div>
+        <div class="wrap_textarea">
+          <textarea placeholder="Message" rows="1"></textarea>
+        </div>
+        <div class="attach"></div>
+      </div>
     </div>
+    <div class="enter"></div>
   </div>
-  <div class="msginput__btn"></div>
 </template>
