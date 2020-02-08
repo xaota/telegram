@@ -37,7 +37,6 @@ export default class ConversationInput extends Component {
 
     // изменяем кнопку отправки сообщения, если есть контент
     if (value.length > 0) {
-      console.log($('.action', this.shadowRoot));
       $('.action', this.shadowRoot)
           .classList.add('send');
     } else {
