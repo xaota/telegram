@@ -1,6 +1,7 @@
 import Component from '../../../script/Component.js';
 
 import LayoutChat         from '../chats/layout-chats.js';
+import LayoutEmpty        from '../empty/layout-empty.js';
 import LayoutConversation from '../conversation/layout-conversation.js';
 
 const component = Component.meta(import.meta.url, 'layout-main');
