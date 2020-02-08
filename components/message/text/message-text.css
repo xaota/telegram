@@ -1,0 +1,85 @@
+@charset "utf-8";
+
+:host {
+  display: block;
+  font: var(--font);
+
+  --color: red;
+
+  font-size: 14px;
+}
+
+:host([reply]) {
+  font-size: 13px;
+}
+
+div {
+  display: inline-block;
+  background: #fff;
+  border-radius: 10px;
+  border-bottom-left-radius: 5px;
+  border-top-left-radius: 5px;
+  position: relative;
+  box-shadow: 0 1px 2px 0 rgba(16, 35, 47, 0.15);
+  /* z-index: 1; */
+  /* width: auto; */
+  max-width: 40rem;
+  /* overflow: hidden; */
+  text-align: left;
+  padding: 5px;
+  /* white-space: nowrap; */
+}
+
+:host([reply]) div {
+  border-left: 2px solid #4ea4f5;
+  border-radius: 0;
+  box-shadow: none;
+  display: block;
+  max-width: 100%;
+  background: transparent;
+  padding-left: 3px;
+  position: static;
+}
+
+slot {
+  display: block;
+  font-size: 1rem;
+  padding: 0 5px;
+}
+
+slot[name="author"] {
+  font-size: 0.93333rem;
+  font-weight: 500;
+  /* color: #1da1f1; */
+  line-height: 150%;
+  color: var(--color);
+}
+
+slot[name="content"] {
+  /* white-space: pre-wrap; */
+}
+
+:host([reply]) slot[name="content"]::slotted(span) {
+  color: #707579;
+}
+
+slot[name="content"]::slotted(span):after {
+  content: "";
+  display: inline-block;
+  width: 1.8rem;
+}
+
+span { /* timestamp */
+  position: absolute;
+  /* display: block;
+  text-align: right; */
+  font-size: 0.73333rem;
+  color: #a3adb6;
+  font-weight: 400;
+  right: 4px;
+  bottom: 1px;
+}
+
+:host([reply]) span {
+  display: none;
+}

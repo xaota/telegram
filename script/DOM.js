@@ -28,7 +28,7 @@ export function updateChildrenAttribute(root, selector, attribute, value) {
 export function updateChildrenProperty(root, selector, property, value = false) {
   const children = $(selector, root);
   if (!children) return;
-  value
+  value === '' || Boolean(value)
     ? children.setAttribute(property, '')
     : children.removeAttribute(property)
 }

@@ -16,6 +16,14 @@ conversation-header {
   height: 4.13333rem;
 }
 
+ui-list {
+  padding-left: 20px;
+}
+
+ui-message {
+  margin-bottom: 2px;
+}
+
 conversation-input {
   padding-bottom: 1.2rem;
 }
