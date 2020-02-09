@@ -1,5 +1,7 @@
 import Component from '../../../script/Component.js';
 
+import $ from '../../../script/DOM.js';
+
 import UIList             from '../../ui/list/ui-list.js';
 import UIMessage          from '../../ui/message/ui-message.js';
 import LayoutLoading      from '../loading/layout-loading.js';
@@ -8,6 +10,11 @@ import ConversationHeader from '../../app/conversation-header/conversation-heade
 
 import MessageText  from '../../message/text/message-text.js';
 import MessageEmoji from '../../message/emoji/message-emoji.js';
+
+import '../../ui/tabs/ui-tabs.js';
+import '../../ui/tab/ui-tab.js';
+
+import '../../ui/icon/ui-icon.js';
 
 const component = Component.meta(import.meta.url, 'layout-conversation');
 const attributes = {
@@ -25,7 +32,15 @@ export default class LayoutConversation extends Component {
 
   mount(node) {
     super.mount(node, attributes, properties);
-
+    const aside = $('aside', node);
+    $('#close', node)
+        .addEventListener('click', () => {
+          aside.style.display = 'none';
+        });
+    $('conversation-header', node)
+        .addEventListener('open-profile', e => {
+          aside.style.display = 'flex';
+        });
     return this;
   }
 }

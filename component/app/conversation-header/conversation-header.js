@@ -1,4 +1,5 @@
 import Component from '../../../script/Component.js';
+import $ from '../../../script/DOM.js';
 
 import UIAvatar from '../../ui/avatar/ui-avatar.js';
 
@@ -18,7 +19,10 @@ export default class ConversationHeader extends Component {
 
   mount(node) {
     super.mount(node, attributes, properties);
-
+    $('.header__info', node)
+        .addEventListener('click', () => {
+          this.event('open-profile', {id: 1})
+        });
     return this;
   }
 }

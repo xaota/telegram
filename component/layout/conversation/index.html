@@ -1,305 +1,380 @@
 <template>
   <link rel="stylesheet" href="./layout-conversation.css" />
 
-  <conversation-header></conversation-header>
-  <ui-list>
-    <div class="message chat media">
-      <div class="message__inner">
-        <div class="avatar">
-          <div class="avatar__standart color-5 removed">ВН</div>
-          <div class="avatar__picture"><img src="./content/f09ecd5e-979d-4bff-8f0c-c75398e93742.jpeg"></div>
-        </div>
-        <div class="message__baloon">
-          <div class="photo portrait" style="width: 241px; height: 320px;">
-            <div class="photo__thumbnail"><img src="./content/6175aec5-cc2c-4110-bc89-b823b8373d3d.jpeg"
-                alt="Message photo"></div>
-            <div class="photo__loader"><svg viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg"
-                class="materialSpinner ">
-                <circle class="xb8ytEhx" r="20" cx="22" cy="22" stroke="#000" stroke-width="4" stroke-dasharray="1, 200"
-                  stroke-linecap="round" fill="none"></circle>
-              </svg></div>
+  <div class="mid">
+    <conversation-header></conversation-header>
+    <ui-list>
+      <div class="message chat media">
+        <div class="message__inner">
+          <div class="avatar">
+            <div class="avatar__standart color-5 removed">ВН</div>
+            <div class="avatar__picture"><img src="./content/f09ecd5e-979d-4bff-8f0c-c75398e93742.jpeg"></div>
+          </div>
+          <div class="message__baloon">
+            <div class="photo portrait" style="width: 241px; height: 320px;">
+              <div class="photo__thumbnail"><img src="./content/6175aec5-cc2c-4110-bc89-b823b8373d3d.jpeg"
+                  alt="Message photo"></div>
+              <div class="photo__loader"><svg viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg"
+                  class="materialSpinner ">
+                  <circle class="xb8ytEhx" r="20" cx="22" cy="22" stroke="#000" stroke-width="4" stroke-dasharray="1, 200"
+                    stroke-linecap="round" fill="none"></circle>
+                </svg></div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <ui-message left>
-      <ui-avatar slot="avatar" src="./content/7df97dad-26f3-4d32-bd61-b63c100c2504.jpeg" color="D77F7C">ВН</ui-avatar>
-      <message-text timestamp="10:57" color="D77F7C">
-        <span slot="author">Виктор Назаренко</span>
-        <span slot="content">В нашем мите нет Роберта</span>
-      </message-text>
-    </ui-message>
-    <div class="message chat media first">
-      <div class="message__inner">
-        <div class="avatar">
-          <div class="avatar__standart color-7 removed">ЭБ</div>
-          <div class="avatar__picture"><img src="./content/f528710b-4e2c-46ca-b3ca-bc81d5146b7f.jpeg"></div>
-        </div>
-        <div class="sticker"><img src="./content/448b69a7-35b4-4006-a84a-f4a19ef77dd7" class="sticker__image"></div>
-      </div>
-    </div>
-    <ui-message left>
-      <ui-avatar slot="avatar" src="./content/5d7f1797-e405-4ff0-be99-099f31e14c44.jpeg" color="88CBCF">ЭБ</ui-avatar>
-      <message-text timestamp="10:57" color="88CBCF">
-        <span slot="author">Эльза Бердигулова</span>
-        <span slot="content">А зачем вербе это не пойму? Даже в наш добавили</span>
-      </message-text>
-    </ui-message>
-    <ui-message left>
-      <ui-avatar slot="avatar" src="./content/7df97dad-26f3-4d32-bd61-b63c100c2504.jpeg" color="D77F7C">ВН</ui-avatar>
-      <message-text timestamp="10:57" color="D77F7C">
-        <span slot="author">Виктор Назаренко</span>
-        <span slot="content">Ну захотел</span>
-      </message-text>
-      <message-text timestamp="10:58" color="D77F7C">
-        <span slot="content">Видимо узнал вчера про эти чаты</span>
-      </message-text>
-      <message-text timestamp="10:58" color="D77F7C">
-        <span slot="content">И такой, о, добавляйте</span>
-      </message-text>
-    </ui-message>
-    <!-- <div class="message chat as-emoji last first">
-      <div class="message__inner">
-        <div class="avatar">
-          <div class="avatar__picture"><img src="./content/eb847c67-f441-4f79-ae35-95770232cc14.jpeg"></div>
-        </div>
-        <div class="emoji">
-          <div class="emoji__content e1">🙄</div>
-          <div class="message__date"><span class="">10:58</span></div>
-        </div>
-      </div>
-    </div> -->
-    <ui-message left>
-      <ui-avatar slot="avatar" src="./content/5d7f1797-e405-4ff0-be99-099f31e14c44.jpeg" color="88CBCF">ЭБ</ui-avatar>
-      <message-emoji timestamp="10:58" color="88CBCF">
-        <span slot="author">Эльза Бердигулова</span>
-        <span slot="content">🙄</span>
-      </message-emoji>
-    </ui-message>
-    <ui-message left>
-      <ui-avatar slot="avatar" src="./content/7df97dad-26f3-4d32-bd61-b63c100c2504.jpeg" color="D77F7C">ВН</ui-avatar>
-      <message-text timestamp="10:58" color="D77F7C">
-        <span slot="author">Виктор Назаренко</span>
-        <span slot="content">Первое время директорства наверное захочется все контролить</span>
-      </message-text>
-    </ui-message>
-    <ui-message left>
-      <ui-avatar slot="avatar" src="./content/ff577dec-07f5-4c20-81a7-f3b79d1cab4c.jpeg" color="C394DD">КА</ui-avatar>
-      <message-text timestamp="10:58" color="C394DD">
-        <span slot="author">Корюн Акопян</span>
-        <span slot="content">Как сказал один мой знакомый<br/>"Микроменеджмент детектед"</span>
-      </message-text>
-    </ui-message>
-    <ui-message left>
-      <ui-avatar slot="avatar" src="./content/7df97dad-26f3-4d32-bd61-b63c100c2504.jpeg" color="D77F7C">ВН</ui-avatar>
-      <message-text timestamp="10:59" color="D77F7C">
-        <span slot="author">Виктор Назаренко</span>
-        <span slot="content">Думаю он врядли сможет внимательно изучать все сообщения всех митингов</span>
-      </message-text>
-    </ui-message>
-    <ui-message left>
-      <ui-avatar slot="avatar" src="./content/ff577dec-07f5-4c20-81a7-f3b79d1cab4c.jpeg" color="C394DD">КА</ui-avatar>
-      <message-text timestamp="11:00" color="C394DD">
-        <span slot="author">Корюн Акопян</span>
-        <span slot="content">Нет, мб будет триггериться на большие переносы без объяснений</span>
-      </message-text>
-    </ui-message>
-    <ui-message left>
-      <ui-avatar slot="avatar" src="./content/7df97dad-26f3-4d32-bd61-b63c100c2504.jpeg" color="D77F7C">ВН</ui-avatar>
-      <message-text timestamp="11:01" color="D77F7C">
-        <span slot="author">Виктор Назаренко</span>
-        <span slot="content">Ну пусть триггерится, как-будто это к чему-то приведет</span>
-      </message-text>
-    </ui-message>
-    <ui-message left>
-      <ui-avatar slot="avatar" src="./content/ff577dec-07f5-4c20-81a7-f3b79d1cab4c.jpeg" color="C394DD">КА</ui-avatar>
-      <message-text timestamp="11:01" color="C394DD">
-        <span slot="author">Корюн Акопян</span>
-        <span slot="content">Это напрягает)</span>
-      </message-text>
-    </ui-message>
-    <ui-message left>
-      <ui-avatar slot="avatar" src="./content/7df97dad-26f3-4d32-bd61-b63c100c2504.jpeg" color="D77F7C">ВН</ui-avatar>
-      <message-text timestamp="11:01" color="D77F7C">
-        <span slot="author">Виктор Назаренко</span>
-        <span slot="content">Ну да, согласен</span>
-      </message-text>
-    </ui-message>
-    <ui-message left>
-      <ui-avatar slot="avatar" src="./content/ff577dec-07f5-4c20-81a7-f3b79d1cab4c.jpeg" color="C394DD">КА</ui-avatar>
-      <message-text timestamp="11:01" color="C394DD">
-        <span slot="author">Корюн Акопян</span>
-        <span slot="content">Поднимает уровень ада малость))</span>
-      </message-text>
-    </ui-message>
-    <ui-message left>
-      <ui-avatar slot="avatar" src="./content/7df97dad-26f3-4d32-bd61-b63c100c2504.jpeg" color="D77F7C">ВН</ui-avatar>
-      <message-text timestamp="11:02" color="D77F7C">
-        <span slot="author">Виктор Назаренко</span>
-        <span slot="content">Поэтому надеюсь, что никто не заметит, что в нашем мите его нет))</span>
-      </message-text>
-      <message-text timestamp="11:02" color="D77F7C">
-        <span slot="content">Но если заметят - ну лан</span>
-      </message-text>
-      <message-text timestamp="11:02" color="D77F7C">
-        <span slot="content">Будет работать как работали</span>
-      </message-text>
-      <message-text timestamp="11:02" color="D77F7C">
-        <span slot="content">А там посмотрим</span>
-      </message-text>
-      <message-text timestamp="11:02" color="D77F7C">
-        <span slot="content">Ты же не боишься увольнения?</span>
-      </message-text>
-    </ui-message>
-    <ui-message left>
-      <ui-avatar slot="avatar" src="./content/14704c20-a82b-4572-a001-4a869102de9f.jpeg" color="88CBCF">АП</ui-avatar>
-      <message-text timestamp="11:03" color="88CBCF">
-        <span slot="author">Александр Павлов</span>
-        <message-text slot="content" timestamp="10:02" color="D77F7C" reply>
+      <ui-message left>
+        <ui-avatar slot="avatar" src="./content/7df97dad-26f3-4d32-bd61-b63c100c2504.jpeg" color="D77F7C">ВН</ui-avatar>
+        <message-text timestamp="10:57" color="D77F7C">
           <span slot="author">Виктор Назаренко</span>
-          <span slot="content">По идее может же</span>
+          <span slot="content">В нашем мите нет Роберта</span>
         </message-text>
-        <span slot="content">да, просто боксинг будет</span>
-      </message-text>
-    </ui-message>
-    <ui-message left>
-      <ui-avatar slot="avatar" src="./content/5d7f1797-e405-4ff0-be99-099f31e14c44.jpeg" color="88CBCF">ЭБ</ui-avatar>
-      <message-text timestamp="11:09" color="88CBCF">
-        <span slot="author">Эльза Бердигулова</span>
-        <message-text slot="content" timestamp="11:01" color="C394DD" reply>
+      </ui-message>
+      <div class="message chat media first">
+        <div class="message__inner">
+          <div class="avatar">
+            <div class="avatar__standart color-7 removed">ЭБ</div>
+            <div class="avatar__picture"><img src="./content/f528710b-4e2c-46ca-b3ca-bc81d5146b7f.jpeg"></div>
+          </div>
+          <div class="sticker"><img src="./content/448b69a7-35b4-4006-a84a-f4a19ef77dd7" class="sticker__image"></div>
+        </div>
+      </div>
+      <ui-message left>
+        <ui-avatar slot="avatar" src="./content/5d7f1797-e405-4ff0-be99-099f31e14c44.jpeg" color="88CBCF">ЭБ</ui-avatar>
+        <message-text timestamp="10:57" color="88CBCF">
+          <span slot="author">Эльза Бердигулова</span>
+          <span slot="content">А зачем вербе это не пойму? Даже в наш добавили</span>
+        </message-text>
+      </ui-message>
+      <ui-message left>
+        <ui-avatar slot="avatar" src="./content/7df97dad-26f3-4d32-bd61-b63c100c2504.jpeg" color="D77F7C">ВН</ui-avatar>
+        <message-text timestamp="10:57" color="D77F7C">
+          <span slot="author">Виктор Назаренко</span>
+          <span slot="content">Ну захотел</span>
+        </message-text>
+        <message-text timestamp="10:58" color="D77F7C">
+          <span slot="content">Видимо узнал вчера про эти чаты</span>
+        </message-text>
+        <message-text timestamp="10:58" color="D77F7C">
+          <span slot="content">И такой, о, добавляйте</span>
+        </message-text>
+      </ui-message>
+      <!-- <div class="message chat as-emoji last first">
+        <div class="message__inner">
+          <div class="avatar">
+            <div class="avatar__picture"><img src="./content/eb847c67-f441-4f79-ae35-95770232cc14.jpeg"></div>
+          </div>
+          <div class="emoji">
+            <div class="emoji__content e1">🙄</div>
+            <div class="message__date"><span class="">10:58</span></div>
+          </div>
+        </div>
+      </div> -->
+      <ui-message left>
+        <ui-avatar slot="avatar" src="./content/5d7f1797-e405-4ff0-be99-099f31e14c44.jpeg" color="88CBCF">ЭБ</ui-avatar>
+        <message-emoji timestamp="10:58" color="88CBCF">
+          <span slot="author">Эльза Бердигулова</span>
+          <span slot="content">🙄</span>
+        </message-emoji>
+      </ui-message>
+      <ui-message left>
+        <ui-avatar slot="avatar" src="./content/7df97dad-26f3-4d32-bd61-b63c100c2504.jpeg" color="D77F7C">ВН</ui-avatar>
+        <message-text timestamp="10:58" color="D77F7C">
+          <span slot="author">Виктор Назаренко</span>
+          <span slot="content">Первое время директорства наверное захочется все контролить</span>
+        </message-text>
+      </ui-message>
+      <ui-message left>
+        <ui-avatar slot="avatar" src="./content/ff577dec-07f5-4c20-81a7-f3b79d1cab4c.jpeg" color="C394DD">КА</ui-avatar>
+        <message-text timestamp="10:58" color="C394DD">
+          <span slot="author">Корюн Акопян</span>
+          <span slot="content">Как сказал один мой знакомый<br/>"Микроменеджмент детектед"</span>
+        </message-text>
+      </ui-message>
+      <ui-message left>
+        <ui-avatar slot="avatar" src="./content/7df97dad-26f3-4d32-bd61-b63c100c2504.jpeg" color="D77F7C">ВН</ui-avatar>
+        <message-text timestamp="10:59" color="D77F7C">
+          <span slot="author">Виктор Назаренко</span>
+          <span slot="content">Думаю он врядли сможет внимательно изучать все сообщения всех митингов</span>
+        </message-text>
+      </ui-message>
+      <ui-message left>
+        <ui-avatar slot="avatar" src="./content/ff577dec-07f5-4c20-81a7-f3b79d1cab4c.jpeg" color="C394DD">КА</ui-avatar>
+        <message-text timestamp="11:00" color="C394DD">
+          <span slot="author">Корюн Акопян</span>
+          <span slot="content">Нет, мб будет триггериться на большие переносы без объяснений</span>
+        </message-text>
+      </ui-message>
+      <ui-message left>
+        <ui-avatar slot="avatar" src="./content/7df97dad-26f3-4d32-bd61-b63c100c2504.jpeg" color="D77F7C">ВН</ui-avatar>
+        <message-text timestamp="11:01" color="D77F7C">
+          <span slot="author">Виктор Назаренко</span>
+          <span slot="content">Ну пусть триггерится, как-будто это к чему-то приведет</span>
+        </message-text>
+      </ui-message>
+      <ui-message left>
+        <ui-avatar slot="avatar" src="./content/ff577dec-07f5-4c20-81a7-f3b79d1cab4c.jpeg" color="C394DD">КА</ui-avatar>
+        <message-text timestamp="11:01" color="C394DD">
+          <span slot="author">Корюн Акопян</span>
+          <span slot="content">Это напрягает)</span>
+        </message-text>
+      </ui-message>
+      <ui-message left>
+        <ui-avatar slot="avatar" src="./content/7df97dad-26f3-4d32-bd61-b63c100c2504.jpeg" color="D77F7C">ВН</ui-avatar>
+        <message-text timestamp="11:01" color="D77F7C">
+          <span slot="author">Виктор Назаренко</span>
+          <span slot="content">Ну да, согласен</span>
+        </message-text>
+      </ui-message>
+      <ui-message left>
+        <ui-avatar slot="avatar" src="./content/ff577dec-07f5-4c20-81a7-f3b79d1cab4c.jpeg" color="C394DD">КА</ui-avatar>
+        <message-text timestamp="11:01" color="C394DD">
           <span slot="author">Корюн Акопян</span>
           <span slot="content">Поднимает уровень ада малость))</span>
         </message-text>
-        <span slot="content">Угу</span>
-      </message-text>
-    </ui-message>
-    <ui-message left>
-      <ui-avatar slot="avatar" src="./content/ff577dec-07f5-4c20-81a7-f3b79d1cab4c.jpeg" color="C394DD">КА</ui-avatar>
-      <message-text timestamp="11:09" color="C394DD">
-        <span slot="author">Корюн Акопян</span>
-        <message-text slot="content" timestamp="11:02" color="D77F7C" reply>
+      </ui-message>
+      <ui-message left>
+        <ui-avatar slot="avatar" src="./content/7df97dad-26f3-4d32-bd61-b63c100c2504.jpeg" color="D77F7C">ВН</ui-avatar>
+        <message-text timestamp="11:02" color="D77F7C">
           <span slot="author">Виктор Назаренко</span>
+          <span slot="content">Поэтому надеюсь, что никто не заметит, что в нашем мите его нет))</span>
+        </message-text>
+        <message-text timestamp="11:02" color="D77F7C">
+          <span slot="content">Но если заметят - ну лан</span>
+        </message-text>
+        <message-text timestamp="11:02" color="D77F7C">
+          <span slot="content">Будет работать как работали</span>
+        </message-text>
+        <message-text timestamp="11:02" color="D77F7C">
+          <span slot="content">А там посмотрим</span>
+        </message-text>
+        <message-text timestamp="11:02" color="D77F7C">
           <span slot="content">Ты же не боишься увольнения?</span>
         </message-text>
-        <span slot="content">😃 знаешь, не хотелось бы</span>
-      </message-text>
-      <message-text timestamp="11:09" color="C394DD">
-        <span slot="content">Не боюсь, но не настроен сейчас менять работу)</span>
-      </message-text>
-      <message-text timestamp="11:10" color="C394DD">
-        <span slot="content">Это придется город менять)</span>
-      </message-text>
-    </ui-message>
-    <ui-message left>
-      <ui-avatar slot="avatar" src="./content/7df97dad-26f3-4d32-bd61-b63c100c2504.jpeg" color="D77F7C">ВН</ui-avatar>
-      <message-text timestamp="11:10" color="D77F7C">
-        <span slot="author">Виктор Назаренко</span>
-        <span slot="content">Ну я в общем-то тоже, просто пока мы востребованы, не вижу смысла слишком беспокоиться на эту тему</span>
-      </message-text>
-    </ui-message>
-    <ui-message left>
-      <ui-avatar slot="avatar" src="./content/5d7f1797-e405-4ff0-be99-099f31e14c44.jpeg" color="88CBCF">ЭБ</ui-avatar>
-      <message-text timestamp="11:11" color="88CBCF">
-        <span slot="author">Эльза Бердигулова</span>
-        <span slot="content">Ваши волнения необоснованны, ребят! Все будет гуд)</span>
-      </message-text>
-      <message-text timestamp="11:11" color="88CBCF">
-        <span slot="content">Тем более, у вас</span>
-      </message-text>
-    </ui-message>
-    <ui-message left>
-      <ui-avatar slot="avatar" src="./content/b862785b-60a6-4d73-9cbd-ebf07fc42dec.jpeg" color="63A4EF">RS</ui-avatar>
-      <message-text timestamp="11:11" color="63A4EF">
-        <span slot="author">Rustam Salakhutdinov</span>
-        <span slot="content">Тебе кстати когда в декрет уходить?)</span>
-      </message-text>
-    </ui-message>
-    <ui-message left>
-      <ui-avatar slot="avatar" src="./content/7df97dad-26f3-4d32-bd61-b63c100c2504.jpeg" color="D77F7C">ВН</ui-avatar>
-      <message-text timestamp="11:12" color="D77F7C">
-        <span slot="author">Виктор Назаренко</span>
-        <message-text slot="content" timestamp="11:12" color="88CBCF" reply>
+      </ui-message>
+      <ui-message left>
+        <ui-avatar slot="avatar" src="./content/14704c20-a82b-4572-a001-4a869102de9f.jpeg" color="88CBCF">АП</ui-avatar>
+        <message-text timestamp="11:03" color="88CBCF">
+          <span slot="author">Александр Павлов</span>
+          <message-text slot="content" timestamp="10:02" color="D77F7C" reply>
+            <span slot="author">Виктор Назаренко</span>
+            <span slot="content">По идее может же</span>
+          </message-text>
+          <span slot="content">да, просто боксинг будет</span>
+        </message-text>
+      </ui-message>
+      <ui-message left>
+        <ui-avatar slot="avatar" src="./content/5d7f1797-e405-4ff0-be99-099f31e14c44.jpeg" color="88CBCF">ЭБ</ui-avatar>
+        <message-text timestamp="11:09" color="88CBCF">
           <span slot="author">Эльза Бердигулова</span>
+          <message-text slot="content" timestamp="11:01" color="C394DD" reply>
+            <span slot="author">Корюн Акопян</span>
+            <span slot="content">Поднимает уровень ада малость))</span>
+          </message-text>
+          <span slot="content">Угу</span>
+        </message-text>
+      </ui-message>
+      <ui-message left>
+        <ui-avatar slot="avatar" src="./content/ff577dec-07f5-4c20-81a7-f3b79d1cab4c.jpeg" color="C394DD">КА</ui-avatar>
+        <message-text timestamp="11:09" color="C394DD">
+          <span slot="author">Корюн Акопян</span>
+          <message-text slot="content" timestamp="11:02" color="D77F7C" reply>
+            <span slot="author">Виктор Назаренко</span>
+            <span slot="content">Ты же не боишься увольнения?</span>
+          </message-text>
+          <span slot="content">😃 знаешь, не хотелось бы</span>
+        </message-text>
+        <message-text timestamp="11:09" color="C394DD">
+          <span slot="content">Не боюсь, но не настроен сейчас менять работу)</span>
+        </message-text>
+        <message-text timestamp="11:10" color="C394DD">
+          <span slot="content">Это придется город менять)</span>
+        </message-text>
+      </ui-message>
+      <ui-message left>
+        <ui-avatar slot="avatar" src="./content/7df97dad-26f3-4d32-bd61-b63c100c2504.jpeg" color="D77F7C">ВН</ui-avatar>
+        <message-text timestamp="11:10" color="D77F7C">
+          <span slot="author">Виктор Назаренко</span>
+          <span slot="content">Ну я в общем-то тоже, просто пока мы востребованы, не вижу смысла слишком беспокоиться на эту тему</span>
+        </message-text>
+      </ui-message>
+      <ui-message left>
+        <ui-avatar slot="avatar" src="./content/5d7f1797-e405-4ff0-be99-099f31e14c44.jpeg" color="88CBCF">ЭБ</ui-avatar>
+        <message-text timestamp="11:11" color="88CBCF">
+          <span slot="author">Эльза Бердигулова</span>
+          <span slot="content">Ваши волнения необоснованны, ребят! Все будет гуд)</span>
+        </message-text>
+        <message-text timestamp="11:11" color="88CBCF">
           <span slot="content">Тем более, у вас</span>
         </message-text>
-        <span slot="content">У тебя тоже, еще полгодика потерпеть и потом сменишь работу на няньку</span>
-      </message-text>
-    </ui-message>
-    <ui-message left>
-      <ui-avatar slot="avatar" src="./content/b862785b-60a6-4d73-9cbd-ebf07fc42dec.jpeg" color="63A4EF">RS</ui-avatar>
-      <message-text timestamp="11:13" color="63A4EF">
-        <span slot="author">Rustam Salakhutdinov</span>
-        <message-text slot="content" timestamp="11:12" color="D77F7C" reply>
-          <span slot="author">Виктор Назаренко</span>
-          <span slot="content">У тебя тоже, еще полгодика потерпеть и потом сменишь работу на няньку</span>
-        </message-text>
-        <span slot="content">По-моему уже меньше</span>
-      </message-text>
-    </ui-message>
-    <ui-message left>
-      <ui-avatar slot="avatar" src="./content/5d7f1797-e405-4ff0-be99-099f31e14c44.jpeg" color="88CBCF">ЭБ</ui-avatar>
-      <message-text timestamp="11:13" color="88CBCF">
-        <span slot="author">Эльза Бердигулова</span>
-        <message-text slot="content" timestamp="11:11" color="63A4EF" reply>
+      </ui-message>
+      <ui-message left>
+        <ui-avatar slot="avatar" src="./content/b862785b-60a6-4d73-9cbd-ebf07fc42dec.jpeg" color="63A4EF">RS</ui-avatar>
+        <message-text timestamp="11:11" color="63A4EF">
           <span slot="author">Rustam Salakhutdinov</span>
           <span slot="content">Тебе кстати когда в декрет уходить?)</span>
         </message-text>
-        <span slot="content">По числам в конце мая, но скорее всего 1 июня )</span>
-      </message-text>
-      <message-text timestamp="11:14" color="88CBCF">
-        <message-text slot="content" timestamp="11:12" color="D77F7C" reply>
+      </ui-message>
+      <ui-message left>
+        <ui-avatar slot="avatar" src="./content/7df97dad-26f3-4d32-bd61-b63c100c2504.jpeg" color="D77F7C">ВН</ui-avatar>
+        <message-text timestamp="11:12" color="D77F7C">
           <span slot="author">Виктор Назаренко</span>
+          <message-text slot="content" timestamp="11:12" color="88CBCF" reply>
+            <span slot="author">Эльза Бердигулова</span>
+            <span slot="content">Тем более, у вас</span>
+          </message-text>
           <span slot="content">У тебя тоже, еще полгодика потерпеть и потом сменишь работу на няньку</span>
         </message-text>
-        <span slot="content">Счастливой Жены, Лучшей Мамочки... 🤣🤣🤣 что там пишут в Инстраграммах курочки</span>
-      </message-text>
-    </ui-message>
-    <ui-message left>
-      <ui-avatar slot="avatar" src="./content/b862785b-60a6-4d73-9cbd-ebf07fc42dec.jpeg" color="63A4EF">RS</ui-avatar>
-      <message-text timestamp="11:15" color="63A4EF">
-        <span slot="author">Rustam Salakhutdinov</span>
-        <message-text slot="content" timestamp="11:13" color="88CBCF" reply>
+      </ui-message>
+      <ui-message left>
+        <ui-avatar slot="avatar" src="./content/b862785b-60a6-4d73-9cbd-ebf07fc42dec.jpeg" color="63A4EF">RS</ui-avatar>
+        <message-text timestamp="11:13" color="63A4EF">
+          <span slot="author">Rustam Salakhutdinov</span>
+          <message-text slot="content" timestamp="11:12" color="D77F7C" reply>
+            <span slot="author">Виктор Назаренко</span>
+            <span slot="content">У тебя тоже, еще полгодика потерпеть и потом сменишь работу на няньку</span>
+          </message-text>
+          <span slot="content">По-моему уже меньше</span>
+        </message-text>
+      </ui-message>
+      <ui-message left>
+        <ui-avatar slot="avatar" src="./content/5d7f1797-e405-4ff0-be99-099f31e14c44.jpeg" color="88CBCF">ЭБ</ui-avatar>
+        <message-text timestamp="11:13" color="88CBCF">
           <span slot="author">Эльза Бердигулова</span>
+          <message-text slot="content" timestamp="11:11" color="63A4EF" reply>
+            <span slot="author">Rustam Salakhutdinov</span>
+            <span slot="content">Тебе кстати когда в декрет уходить?)</span>
+          </message-text>
           <span slot="content">По числам в конце мая, но скорее всего 1 июня )</span>
         </message-text>
-        <span slot="content">Ууу, скоро совсем. Это значит в декрет где-то через 2 месяца уходишь?</span>
-      </message-text>
-      <message-text timestamp="11:15" color="63A4EF">
-        <span slot="content">Или это был срок декрета, а не самих родов?</span>
-      </message-text>
-    </ui-message>
-    <ui-message left>
-      <ui-avatar slot="avatar" src="./content/5d7f1797-e405-4ff0-be99-099f31e14c44.jpeg" color="88CBCF">ЭБ</ui-avatar>
-      <message-text timestamp="11:15" color="88CBCF">
-        <span slot="author">Эльза Бердигулова</span>
-        <message-text slot="content" timestamp="11:15" color="63A4EF" reply>
+        <message-text timestamp="11:14" color="88CBCF">
+          <message-text slot="content" timestamp="11:12" color="D77F7C" reply>
+            <span slot="author">Виктор Назаренко</span>
+            <span slot="content">У тебя тоже, еще полгодика потерпеть и потом сменишь работу на няньку</span>
+          </message-text>
+          <span slot="content">Счастливой Жены, Лучшей Мамочки... 🤣🤣🤣 что там пишут в Инстраграммах курочки</span>
+        </message-text>
+      </ui-message>
+      <ui-message left>
+        <ui-avatar slot="avatar" src="./content/b862785b-60a6-4d73-9cbd-ebf07fc42dec.jpeg" color="63A4EF">RS</ui-avatar>
+        <message-text timestamp="11:15" color="63A4EF">
           <span slot="author">Rustam Salakhutdinov</span>
+          <message-text slot="content" timestamp="11:13" color="88CBCF" reply>
+            <span slot="author">Эльза Бердигулова</span>
+            <span slot="content">По числам в конце мая, но скорее всего 1 июня )</span>
+          </message-text>
           <span slot="content">Ууу, скоро совсем. Это значит в декрет где-то через 2 месяца уходишь?</span>
         </message-text>
-        <span slot="content">Не, ещё февраль, март, апрель, май... долго</span>
-      </message-text>
-      <message-text timestamp="11:16" color="88CBCF">
-        <message-text slot="content" timestamp="11:15" color="63A4EF" reply>
-          <span slot="author">Rustam Salakhutdinov</span>
+        <message-text timestamp="11:15" color="63A4EF">
           <span slot="content">Или это был срок декрета, а не самих родов?</span>
         </message-text>
-        <span slot="content">Ой может я неправильно разъяснялась: на 30 неделе отправляют в декрет уже сильно 🤰 это как раз и попадает на 1 июня. А пдр (предварительная дата родов) пока 08/08/2020</span>
-      </message-text>
-    </ui-message>
-    <ui-message left>
-      <ui-avatar slot="avatar" src="./content/b862785b-60a6-4d73-9cbd-ebf07fc42dec.jpeg" color="63A4EF">RS</ui-avatar>
-      <message-text timestamp="11:16" color="63A4EF">
-        <span slot="author">Rustam Salakhutdinov</span>
-        <span slot="content">Аааа, понял 👌</span>
-      </message-text>
-    </ui-message>
-    <ui-message left>
-      <ui-avatar slot="avatar" src="./content/5d7f1797-e405-4ff0-be99-099f31e14c44.jpeg" color="88CBCF">ЭБ</ui-avatar>
-      <message-text timestamp="11:17" color="88CBCF">
-        <span slot="author">Эльза Бердигулова</span>
-        <span slot="content">Мне ещё работать и работать 😊🤪</span>
-      </message-text>
-    </ui-message>
-  </ui-list>
-  <conversation-input></conversation-input>
+      </ui-message>
+      <ui-message left>
+        <ui-avatar slot="avatar" src="./content/5d7f1797-e405-4ff0-be99-099f31e14c44.jpeg" color="88CBCF">ЭБ</ui-avatar>
+        <message-text timestamp="11:15" color="88CBCF">
+          <span slot="author">Эльза Бердигулова</span>
+          <message-text slot="content" timestamp="11:15" color="63A4EF" reply>
+            <span slot="author">Rustam Salakhutdinov</span>
+            <span slot="content">Ууу, скоро совсем. Это значит в декрет где-то через 2 месяца уходишь?</span>
+          </message-text>
+          <span slot="content">Не, ещё февраль, март, апрель, май... долго</span>
+        </message-text>
+        <message-text timestamp="11:16" color="88CBCF">
+          <message-text slot="content" timestamp="11:15" color="63A4EF" reply>
+            <span slot="author">Rustam Salakhutdinov</span>
+            <span slot="content">Или это был срок декрета, а не самих родов?</span>
+          </message-text>
+          <span slot="content">Ой может я неправильно разъяснялась: на 30 неделе отправляют в декрет уже сильно 🤰 это как раз и попадает на 1 июня. А пдр (предварительная дата родов) пока 08/08/2020</span>
+        </message-text>
+      </ui-message>
+      <ui-message left>
+        <ui-avatar slot="avatar" src="./content/b862785b-60a6-4d73-9cbd-ebf07fc42dec.jpeg" color="63A4EF">RS</ui-avatar>
+        <message-text timestamp="11:16" color="63A4EF">
+          <span slot="author">Rustam Salakhutdinov</span>
+          <span slot="content">Аааа, понял 👌</span>
+        </message-text>
+      </ui-message>
+      <ui-message left>
+        <ui-avatar slot="avatar" src="./content/5d7f1797-e405-4ff0-be99-099f31e14c44.jpeg" color="88CBCF">ЭБ</ui-avatar>
+        <message-text timestamp="11:17" color="88CBCF">
+          <span slot="author">Эльза Бердигулова</span>
+          <span slot="content">Мне ещё работать и работать 😊🤪</span>
+        </message-text>
+      </ui-message>
+    </ui-list>
+    <conversation-input></conversation-input>
+  </div>
+  <aside>
+      <div class="header">
+        <ui-icon id="close">close</ui-icon>
+        <div class="info">Info</div>
+        <ui-icon id="more">more</ui-icon>
+      </div>
+
+      <div class="profile">
+        <ui-avatar slot="avatar" src="./content/7df97dad-26f3-4d32-bd61-b63c100c2504.jpeg" color="D77F7C"></ui-avatar>
+        <div class="name">Karen Stanford</div>
+        <div class="status online">online</div>
+        <div class="list">
+
+          <div class="item">
+            <div class="left">
+              <ui-icon>close</ui-icon>
+            </div>
+            <div class="right">
+              <div>Live location</div>
+              <div class="desc">Karen is sharing live location</div>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="left">
+              <ui-icon>close</ui-icon>
+            </div>
+            <div class="right">
+              <div>25 y.o. traveler</div>
+              <div class="desc">Bio</div>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="left">
+              <ui-icon>close</ui-icon>
+            </div>
+            <div class="right">
+              <div>kare</div>
+              <div class="desc">Username</div>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="left">
+              <ui-icon>phone</ui-icon>
+            </div>
+            <div class="right">
+              <div>+1 123 23232323</div>
+              <div class="desc">Phone</div>
+            </div>
+          </div>
+
+          <div class="item">
+            <div class="left">
+              <ui-icon>close</ui-icon>
+            </div>
+            <div class="right">
+              <div>Notifications</div>
+              <div class="desc">Enabled</div>
+            </div>
+          </div>
+        </div>
+        <div class="footer">
+          <ui-tabs>
+            <ui-tab selected>Media</ui-tab>
+            <ui-tab>Docs</ui-tab>
+            <ui-tab>Links</ui-tab>
+            <ui-tab>Audio</ui-tab>
+          </ui-tabs>
+        </div>
+      </div>
+  </aside>
 </template>
