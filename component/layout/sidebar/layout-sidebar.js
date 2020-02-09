@@ -58,7 +58,7 @@ export default class LayoutSidebar extends Component {
       setTimeout(() => {
         this.container.innerHTML = '';
         resolve();
-      }, 400);
+      }, 300);
     })
   }
 }
