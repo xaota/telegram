@@ -9,13 +9,13 @@ import FormEmoji from '../../form/emoji/form-emoji.js';
 const component = Component.meta(import.meta.url, 'conversation-input');
 const attributes = {
 
-  }
+};
 
 const properties = {
     disabled(root, value) {
       updateChildrenProperty(root, 'input', 'disabled', value)
     }
-  }
+};
 
 focus = (input) => {
   input.focus();

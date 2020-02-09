@@ -4,6 +4,14 @@
 
 }
 
+ui-tabs {
+    width: 420px;
+}
+
+.wrap {
+    height: 370px;
+}
+
 .box {
     height: 325px;
     overflow-y: scroll;
@@ -14,8 +22,8 @@
     width: 100%;
     flex-flow: row wrap;
     font-size: 32px;
-    justify-content: space-between;
-    padding: 0px 9px;
+    justify-content: flex-start;
+    padding: 9px;
     box-sizing: border-box;
 }
 
@@ -32,9 +40,14 @@
 }
 
 .group {
+    width: 420px;
+    overflow-x: auto;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
+    border-top: 1px solid rgb(218, 220, 224);
+    padding-left: 2px;
+    box-sizing: border-box;
 }
 
 .group .item {
@@ -44,4 +57,10 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
+    padding: 0 5px;
+}
+
+.group .item[active="true"] {
+    background-color: red;
 }
