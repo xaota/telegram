@@ -5,6 +5,7 @@ import sidebarEvents from '../../layout/sidebar/events.js';
 
 import UIAvatar from '../../ui/avatar/ui-avatar.js';
 import '../../ui/icon/ui-icon.js';
+import '../../ui/drop/ui-drop.js';
 
 const component = Component.meta(import.meta.url, 'conversation-header');
 const attributes = {
@@ -30,6 +31,10 @@ export default class ConversationHeader extends Component {
         .addEventListener('click', () => {
             channel.send(sidebarEvents.OPEN_SEARCH);
         });
+
+    const drop = $('ui-drop', node);
+    $('#more', node)
+        .addEventListener('click', () => drop.show = !drop.show);
     return this;
   }
 }
