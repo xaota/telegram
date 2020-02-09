@@ -1,4 +1,5 @@
 import Component from '../../../script/Component.js';
+import $, {channel} from '../../../script/DOM.js';
 
 import UIIcon    from '../../ui/icon/ui-icon.js';
 import UIInput   from '../../ui/input/ui-input.js';
@@ -22,8 +23,27 @@ export default class FormConfirm extends Component {
   mount(node) {
     super.mount(node, attributes, properties);
 
+    const input = $('ui-input', node);
+    input.addEventListener('input', _ => {
+      // console.log(input.value);
+      if (input.value.length < 5) return;
+      console.log(input.value);
+      input.disabled = true;
+      // loader ?
+      setTimeout(() => {
+        channel.send('login-confirm');
+        wipe.call(this, input);
+      }, 2000); // +user
+    });
+
     return this;
   }
 }
 
 Component.init(FormConfirm, component, {attributes, properties});
+
+/** */
+  function wipe(input) {
+    input.disabled = false;
+    input.value = '';
+  }

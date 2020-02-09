@@ -9,6 +9,1231 @@
   <ui-country></ui-country>
   <ui-input>Phone number</ui-input>
   <ui-checkbox checked>Keep me signed in</ui-checkbox>
+  <ui-checkbox>use dev mode</ui-checkbox>
 
   <ui-button>Next</ui-button>
+
+  <div style="display: none;">
+    <div id="login_countryInputContainer" class="input-container select-container">
+      <input id="login_countryInput" type="text" placeholder="Country">
+      <label for="login_countryInput" style="display: none;">Country</label>
+      <div class="select-items">
+        <div class="select-item" data-id="0">
+          <div class="country-flag">🇦🇫</div>
+          <div class="country-name">Afghanistan</div>
+          <div class="country-code">+93</div>
+        </div>
+        <div class="select-item" data-id="1">
+          <div class="country-flag">🇦🇱</div>
+          <div class="country-name">Albania</div>
+          <div class="country-code">+355</div>
+        </div>
+        <div class="select-item" data-id="2">
+          <div class="country-flag">🇩🇿</div>
+          <div class="country-name">Algeria</div>
+          <div class="country-code">+213</div>
+        </div>
+        <div class="select-item" data-id="3">
+          <div class="country-flag">🇦🇸</div>
+          <div class="country-name">American Samoa</div>
+          <div class="country-code">+1</div>
+        </div>
+        <div class="select-item" data-id="4">
+          <div class="country-flag">🇦🇩</div>
+          <div class="country-name">Andorra</div>
+          <div class="country-code">+376</div>
+        </div>
+        <div class="select-item" data-id="5">
+          <div class="country-flag">🇦🇴</div>
+          <div class="country-name">Angola</div>
+          <div class="country-code">+244</div>
+        </div>
+        <div class="select-item" data-id="6">
+          <div class="country-flag">🇦🇮</div>
+          <div class="country-name">Anguilla</div>
+          <div class="country-code">+1</div>
+        </div>
+        <div class="select-item" data-id="7">
+          <div class="country-flag">🇦🇬</div>
+          <div class="country-name">Antigua and Barbuda</div>
+          <div class="country-code">+1</div>
+        </div>
+        <div class="select-item" data-id="8">
+          <div class="country-flag">🇦🇷</div>
+          <div class="country-name">Argentina</div>
+          <div class="country-code">+54</div>
+        </div>
+        <div class="select-item" data-id="9">
+          <div class="country-flag">🇦🇲</div>
+          <div class="country-name">Armenia</div>
+          <div class="country-code">+374</div>
+        </div>
+        <div class="select-item" data-id="10">
+          <div class="country-flag">🇦🇼</div>
+          <div class="country-name">Aruba</div>
+          <div class="country-code">+297</div>
+        </div>
+        <div class="select-item" data-id="11">
+          <div class="country-flag">🇦🇺</div>
+          <div class="country-name">Australia</div>
+          <div class="country-code">+61</div>
+        </div>
+        <div class="select-item" data-id="12">
+          <div class="country-flag">🇦🇹</div>
+          <div class="country-name">Austria</div>
+          <div class="country-code">+43</div>
+        </div>
+        <div class="select-item" data-id="13">
+          <div class="country-flag">🇦🇿</div>
+          <div class="country-name">Azerbaijan</div>
+          <div class="country-code">+994</div>
+        </div>
+        <div class="select-item" data-id="14">
+          <div class="country-flag">🇧🇸</div>
+          <div class="country-name">Bahamas</div>
+          <div class="country-code">+1</div>
+        </div>
+        <div class="select-item" data-id="15">
+          <div class="country-flag">🇧🇭</div>
+          <div class="country-name">Bahrain</div>
+          <div class="country-code">+973</div>
+        </div>
+        <div class="select-item" data-id="16">
+          <div class="country-flag">🇧🇩</div>
+          <div class="country-name">Bangladesh</div>
+          <div class="country-code">+880</div>
+        </div>
+        <div class="select-item" data-id="17">
+          <div class="country-flag">🇧🇧</div>
+          <div class="country-name">Barbados</div>
+          <div class="country-code">+1</div>
+        </div>
+        <div class="select-item" data-id="18">
+          <div class="country-flag">🇧🇾</div>
+          <div class="country-name">Belarus</div>
+          <div class="country-code">+375</div>
+        </div>
+        <div class="select-item" data-id="19">
+          <div class="country-flag">🇧🇪</div>
+          <div class="country-name">Belgium</div>
+          <div class="country-code">+32</div>
+        </div>
+        <div class="select-item" data-id="20">
+          <div class="country-flag">🇧🇿</div>
+          <div class="country-name">Belize</div>
+          <div class="country-code">+501</div>
+        </div>
+        <div class="select-item" data-id="21">
+          <div class="country-flag">🇧🇯</div>
+          <div class="country-name">Benin</div>
+          <div class="country-code">+229</div>
+        </div>
+        <div class="select-item" data-id="22">
+          <div class="country-flag">🇧🇲</div>
+          <div class="country-name">Bermuda</div>
+          <div class="country-code">+1</div>
+        </div>
+        <div class="select-item" data-id="23">
+          <div class="country-flag">🇧🇹</div>
+          <div class="country-name">Bhutan</div>
+          <div class="country-code">+975</div>
+        </div>
+        <div class="select-item" data-id="24">
+          <div class="country-flag">🇧🇴</div>
+          <div class="country-name">Bolivia</div>
+          <div class="country-code">+591</div>
+        </div>
+        <div class="select-item" data-id="25">
+          <div class="country-flag">🇧🇦</div>
+          <div class="country-name">Bosnia and Herzegovina</div>
+          <div class="country-code">+387</div>
+        </div>
+        <div class="select-item" data-id="26">
+          <div class="country-flag">🇧🇼</div>
+          <div class="country-name">Botswana</div>
+          <div class="country-code">+267</div>
+        </div>
+        <div class="select-item" data-id="27">
+          <div class="country-flag">🇧🇷</div>
+          <div class="country-name">Brazil</div>
+          <div class="country-code">+55</div>
+        </div>
+        <div class="select-item" data-id="28">
+          <div class="country-flag">🇮🇴</div>
+          <div class="country-name">British Indian Ocean Territory</div>
+          <div class="country-code">+246</div>
+        </div>
+        <div class="select-item" data-id="29">
+          <div class="country-flag">🇻🇬</div>
+          <div class="country-name">British Virgin Islands</div>
+          <div class="country-code">+1</div>
+        </div>
+        <div class="select-item" data-id="30">
+          <div class="country-flag">🇧🇳</div>
+          <div class="country-name">Brunei</div>
+          <div class="country-code">+673</div>
+        </div>
+        <div class="select-item" data-id="31">
+          <div class="country-flag">🇧🇬</div>
+          <div class="country-name">Bulgaria</div>
+          <div class="country-code">+359</div>
+        </div>
+        <div class="select-item" data-id="32">
+          <div class="country-flag">🇧🇫</div>
+          <div class="country-name">Burkina Faso</div>
+          <div class="country-code">+226</div>
+        </div>
+        <div class="select-item" data-id="33">
+          <div class="country-flag">🇧🇮</div>
+          <div class="country-name">Burundi</div>
+          <div class="country-code">+257</div>
+        </div>
+        <div class="select-item" data-id="34">
+          <div class="country-flag">🇰🇭</div>
+          <div class="country-name">Cambodia</div>
+          <div class="country-code">+855</div>
+        </div>
+        <div class="select-item" data-id="35">
+          <div class="country-flag">🇨🇲</div>
+          <div class="country-name">Cameroon</div>
+          <div class="country-code">+237</div>
+        </div>
+        <div class="select-item" data-id="36">
+          <div class="country-flag">🇨🇦</div>
+          <div class="country-name">Canada</div>
+          <div class="country-code">+1</div>
+        </div>
+        <div class="select-item" data-id="37">
+          <div class="country-flag">🇨🇻</div>
+          <div class="country-name">Cape Verde</div>
+          <div class="country-code">+238</div>
+        </div>
+        <div class="select-item" data-id="38">
+          <div class="country-flag">🇧🇶</div>
+          <div class="country-name">Caribbean Netherlands</div>
+          <div class="country-code">+599</div>
+        </div>
+        <div class="select-item" data-id="39">
+          <div class="country-flag">🇰🇾</div>
+          <div class="country-name">Cayman Islands</div>
+          <div class="country-code">+1</div>
+        </div>
+        <div class="select-item" data-id="40">
+          <div class="country-flag">🇨🇫</div>
+          <div class="country-name">Central African Republic</div>
+          <div class="country-code">+236</div>
+        </div>
+        <div class="select-item" data-id="41">
+          <div class="country-flag">🇹🇩</div>
+          <div class="country-name">Chad</div>
+          <div class="country-code">+235</div>
+        </div>
+        <div class="select-item" data-id="42">
+          <div class="country-flag">🇨🇱</div>
+          <div class="country-name">Chile</div>
+          <div class="country-code">+56</div>
+        </div>
+        <div class="select-item" data-id="43">
+          <div class="country-flag">🇨🇳</div>
+          <div class="country-name">China</div>
+          <div class="country-code">+86</div>
+        </div>
+        <div class="select-item" data-id="44">
+          <div class="country-flag">🇨🇽</div>
+          <div class="country-name">Christmas Island</div>
+          <div class="country-code">+61</div>
+        </div>
+        <div class="select-item" data-id="45">
+          <div class="country-flag">🇨🇨</div>
+          <div class="country-name">Cocos</div>
+          <div class="country-code">+61</div>
+        </div>
+        <div class="select-item" data-id="46">
+          <div class="country-flag">🇨🇴</div>
+          <div class="country-name">Colombia</div>
+          <div class="country-code">+57</div>
+        </div>
+        <div class="select-item" data-id="47">
+          <div class="country-flag">🇰🇲</div>
+          <div class="country-name">Comoros</div>
+          <div class="country-code">+269</div>
+        </div>
+        <div class="select-item" data-id="48">
+          <div class="country-flag">🇨🇩</div>
+          <div class="country-name">Congo</div>
+          <div class="country-code">+243</div>
+        </div>
+        <div class="select-item" data-id="49">
+          <div class="country-flag">🇨🇬</div>
+          <div class="country-name">Congo</div>
+          <div class="country-code">+242</div>
+        </div>
+        <div class="select-item" data-id="50">
+          <div class="country-flag">🇨🇰</div>
+          <div class="country-name">Cook Islands</div>
+          <div class="country-code">+682</div>
+        </div>
+        <div class="select-item" data-id="51">
+          <div class="country-flag">🇨🇷</div>
+          <div class="country-name">Costa Rica</div>
+          <div class="country-code">+506</div>
+        </div>
+        <div class="select-item" data-id="52">
+          <div class="country-flag">🇨🇮</div>
+          <div class="country-name">Côte d’Ivoire</div>
+          <div class="country-code">+225</div>
+        </div>
+        <div class="select-item" data-id="53">
+          <div class="country-flag">🇭🇷</div>
+          <div class="country-name">Croatia</div>
+          <div class="country-code">+385</div>
+        </div>
+        <div class="select-item" data-id="54">
+          <div class="country-flag">🇨🇺</div>
+          <div class="country-name">Cuba</div>
+          <div class="country-code">+53</div>
+        </div>
+        <div class="select-item" data-id="55">
+          <div class="country-flag">🇨🇼</div>
+          <div class="country-name">Curaçao</div>
+          <div class="country-code">+599</div>
+        </div>
+        <div class="select-item" data-id="56">
+          <div class="country-flag">🇨🇾</div>
+          <div class="country-name">Cyprus</div>
+          <div class="country-code">+357</div>
+        </div>
+        <div class="select-item" data-id="57">
+          <div class="country-flag">🇨🇿</div>
+          <div class="country-name">Czech Republic</div>
+          <div class="country-code">+420</div>
+        </div>
+        <div class="select-item" data-id="58">
+          <div class="country-flag">🇩🇰</div>
+          <div class="country-name">Denmark</div>
+          <div class="country-code">+45</div>
+        </div>
+        <div class="select-item" data-id="59">
+          <div class="country-flag">🇩🇯</div>
+          <div class="country-name">Djibouti</div>
+          <div class="country-code">+253</div>
+        </div>
+        <div class="select-item" data-id="60">
+          <div class="country-flag">🇩🇲</div>
+          <div class="country-name">Dominica</div>
+          <div class="country-code">+1</div>
+        </div>
+        <div class="select-item" data-id="61">
+          <div class="country-flag">🇩🇴</div>
+          <div class="country-name">Dominican Republic</div>
+          <div class="country-code">+1</div>
+        </div>
+        <div class="select-item" data-id="62">
+          <div class="country-flag">🇪🇨</div>
+          <div class="country-name">Ecuador</div>
+          <div class="country-code">+593</div>
+        </div>
+        <div class="select-item" data-id="63">
+          <div class="country-flag">🇪🇬</div>
+          <div class="country-name">Egypt</div>
+          <div class="country-code">+20</div>
+        </div>
+        <div class="select-item" data-id="64">
+          <div class="country-flag">🇸🇻</div>
+          <div class="country-name">El Salvador</div>
+          <div class="country-code">+503</div>
+        </div>
+        <div class="select-item" data-id="65">
+          <div class="country-flag">🇬🇶</div>
+          <div class="country-name">Equatorial Guinea</div>
+          <div class="country-code">+240</div>
+        </div>
+        <div class="select-item" data-id="66">
+          <div class="country-flag">🇪🇷</div>
+          <div class="country-name">Eritrea</div>
+          <div class="country-code">+291</div>
+        </div>
+        <div class="select-item" data-id="67">
+          <div class="country-flag">🇪🇪</div>
+          <div class="country-name">Estonia</div>
+          <div class="country-code">+372</div>
+        </div>
+        <div class="select-item" data-id="68">
+          <div class="country-flag">🇪🇹</div>
+          <div class="country-name">Ethiopia</div>
+          <div class="country-code">+251</div>
+        </div>
+        <div class="select-item" data-id="69">
+          <div class="country-flag">🇫🇰</div>
+          <div class="country-name">Falkland Islands</div>
+          <div class="country-code">+500</div>
+        </div>
+        <div class="select-item" data-id="70">
+          <div class="country-flag">🇫🇴</div>
+          <div class="country-name">Faroe Islands</div>
+          <div class="country-code">+298</div>
+        </div>
+        <div class="select-item" data-id="71">
+          <div class="country-flag">🇫🇯</div>
+          <div class="country-name">Fiji</div>
+          <div class="country-code">+679</div>
+        </div>
+        <div class="select-item" data-id="72">
+          <div class="country-flag">🇫🇮</div>
+          <div class="country-name">Finland</div>
+          <div class="country-code">+358</div>
+        </div>
+        <div class="select-item" data-id="73">
+          <div class="country-flag">🇫🇷</div>
+          <div class="country-name">France</div>
+          <div class="country-code">+33</div>
+        </div>
+        <div class="select-item" data-id="74">
+          <div class="country-flag">🇬🇫</div>
+          <div class="country-name">French Guiana</div>
+          <div class="country-code">+594</div>
+        </div>
+        <div class="select-item" data-id="75">
+          <div class="country-flag">🇵🇫</div>
+          <div class="country-name">French Polynesia</div>
+          <div class="country-code">+689</div>
+        </div>
+        <div class="select-item" data-id="76">
+          <div class="country-flag">🇬🇦</div>
+          <div class="country-name">Gabon</div>
+          <div class="country-code">+241</div>
+        </div>
+        <div class="select-item" data-id="77">
+          <div class="country-flag">🇬🇲</div>
+          <div class="country-name">Gambia</div>
+          <div class="country-code">+220</div>
+        </div>
+        <div class="select-item" data-id="78">
+          <div class="country-flag">🇬🇪</div>
+          <div class="country-name">Georgia</div>
+          <div class="country-code">+995</div>
+        </div>
+        <div class="select-item" data-id="79">
+          <div class="country-flag">🇩🇪</div>
+          <div class="country-name">Germany</div>
+          <div class="country-code">+49</div>
+        </div>
+        <div class="select-item" data-id="80">
+          <div class="country-flag">🇬🇭</div>
+          <div class="country-name">Ghana</div>
+          <div class="country-code">+233</div>
+        </div>
+        <div class="select-item" data-id="81">
+          <div class="country-flag">🇬🇮</div>
+          <div class="country-name">Gibraltar</div>
+          <div class="country-code">+350</div>
+        </div>
+        <div class="select-item" data-id="82">
+          <div class="country-flag">🇬🇷</div>
+          <div class="country-name">Greece</div>
+          <div class="country-code">+30</div>
+        </div>
+        <div class="select-item" data-id="83">
+          <div class="country-flag">🇬🇱</div>
+          <div class="country-name">Greenland</div>
+          <div class="country-code">+299</div>
+        </div>
+        <div class="select-item" data-id="84">
+          <div class="country-flag">🇬🇩</div>
+          <div class="country-name">Grenada</div>
+          <div class="country-code">+1</div>
+        </div>
+        <div class="select-item" data-id="85">
+          <div class="country-flag">🇬🇵</div>
+          <div class="country-name">Guadeloupe</div>
+          <div class="country-code">+590</div>
+        </div>
+        <div class="select-item" data-id="86">
+          <div class="country-flag">🇬🇺</div>
+          <div class="country-name">Guam</div>
+          <div class="country-code">+1</div>
+        </div>
+        <div class="select-item" data-id="87">
+          <div class="country-flag">🇬🇹</div>
+          <div class="country-name">Guatemala</div>
+          <div class="country-code">+502</div>
+        </div>
+        <div class="select-item" data-id="88">
+          <div class="country-flag">🇬🇬</div>
+          <div class="country-name">Guernsey</div>
+          <div class="country-code">+44</div>
+        </div>
+        <div class="select-item" data-id="89">
+          <div class="country-flag">🇬🇳</div>
+          <div class="country-name">Guinea</div>
+          <div class="country-code">+224</div>
+        </div>
+        <div class="select-item" data-id="90">
+          <div class="country-flag">🇬🇼</div>
+          <div class="country-name">Guinea-Bissau</div>
+          <div class="country-code">+245</div>
+        </div>
+        <div class="select-item" data-id="91">
+          <div class="country-flag">🇬🇾</div>
+          <div class="country-name">Guyana</div>
+          <div class="country-code">+592</div>
+        </div>
+        <div class="select-item" data-id="92">
+          <div class="country-flag">🇭🇹</div>
+          <div class="country-name">Haiti</div>
+          <div class="country-code">+509</div>
+        </div>
+        <div class="select-item" data-id="93">
+          <div class="country-flag">🇭🇳</div>
+          <div class="country-name">Honduras</div>
+          <div class="country-code">+504</div>
+        </div>
+        <div class="select-item" data-id="94">
+          <div class="country-flag">🇭🇰</div>
+          <div class="country-name">Hong Kong</div>
+          <div class="country-code">+852</div>
+        </div>
+        <div class="select-item" data-id="95">
+          <div class="country-flag">🇭🇺</div>
+          <div class="country-name">Hungary</div>
+          <div class="country-code">+36</div>
+        </div>
+        <div class="select-item" data-id="96">
+          <div class="country-flag">🇮🇸</div>
+          <div class="country-name">Iceland</div>
+          <div class="country-code">+354</div>
+        </div>
+        <div class="select-item" data-id="97">
+          <div class="country-flag">🇮🇳</div>
+          <div class="country-name">India</div>
+          <div class="country-code">+91</div>
+        </div>
+        <div class="select-item" data-id="98">
+          <div class="country-flag">🇮🇩</div>
+          <div class="country-name">Indonesia</div>
+          <div class="country-code">+62</div>
+        </div>
+        <div class="select-item" data-id="99">
+          <div class="country-flag">🇮🇷</div>
+          <div class="country-name">Iran</div>
+          <div class="country-code">+98</div>
+        </div>
+        <div class="select-item" data-id="100">
+          <div class="country-flag">🇮🇶</div>
+          <div class="country-name">Iraq</div>
+          <div class="country-code">+964</div>
+        </div>
+        <div class="select-item" data-id="101">
+          <div class="country-flag">🇮🇪</div>
+          <div class="country-name">Ireland</div>
+          <div class="country-code">+353</div>
+        </div>
+        <div class="select-item" data-id="102">
+          <div class="country-flag">🇮🇲</div>
+          <div class="country-name">Isle of Man</div>
+          <div class="country-code">+44</div>
+        </div>
+        <div class="select-item" data-id="103">
+          <div class="country-flag">🇮🇱</div>
+          <div class="country-name">Israel</div>
+          <div class="country-code">+972</div>
+        </div>
+        <div class="select-item" data-id="104">
+          <div class="country-flag">🇮🇹</div>
+          <div class="country-name">Italy</div>
+          <div class="country-code">+39</div>
+        </div>
+        <div class="select-item" data-id="105">
+          <div class="country-flag">🇯🇲</div>
+          <div class="country-name">Jamaica</div>
+          <div class="country-code">+1</div>
+        </div>
+        <div class="select-item" data-id="106">
+          <div class="country-flag">🇯🇵</div>
+          <div class="country-name">Japan</div>
+          <div class="country-code">+81</div>
+        </div>
+        <div class="select-item" data-id="107">
+          <div class="country-flag">🇯🇪</div>
+          <div class="country-name">Jersey</div>
+          <div class="country-code">+44</div>
+        </div>
+        <div class="select-item" data-id="108">
+          <div class="country-flag">🇯🇴</div>
+          <div class="country-name">Jordan</div>
+          <div class="country-code">+962</div>
+        </div>
+        <div class="select-item" data-id="109">
+          <div class="country-flag">🇰🇿</div>
+          <div class="country-name">Kazakhstan</div>
+          <div class="country-code">+7</div>
+        </div>
+        <div class="select-item" data-id="110">
+          <div class="country-flag">🇰🇪</div>
+          <div class="country-name">Kenya</div>
+          <div class="country-code">+254</div>
+        </div>
+        <div class="select-item" data-id="111">
+          <div class="country-flag">🇰🇮</div>
+          <div class="country-name">Kiribati</div>
+          <div class="country-code">+686</div>
+        </div>
+        <div class="select-item" data-id="112">
+          <div class="country-flag">🇽🇰</div>
+          <div class="country-name">Kosovo</div>
+          <div class="country-code">+383</div>
+        </div>
+        <div class="select-item" data-id="113">
+          <div class="country-flag">🇰🇼</div>
+          <div class="country-name">Kuwait</div>
+          <div class="country-code">+965</div>
+        </div>
+        <div class="select-item" data-id="114">
+          <div class="country-flag">🇰🇬</div>
+          <div class="country-name">Kyrgyzstan</div>
+          <div class="country-code">+996</div>
+        </div>
+        <div class="select-item" data-id="115">
+          <div class="country-flag">🇱🇦</div>
+          <div class="country-name">Laos</div>
+          <div class="country-code">+856</div>
+        </div>
+        <div class="select-item" data-id="116">
+          <div class="country-flag">🇱🇻</div>
+          <div class="country-name">Latvia</div>
+          <div class="country-code">+371</div>
+        </div>
+        <div class="select-item" data-id="117">
+          <div class="country-flag">🇱🇧</div>
+          <div class="country-name">Lebanon</div>
+          <div class="country-code">+961</div>
+        </div>
+        <div class="select-item" data-id="118">
+          <div class="country-flag">🇱🇸</div>
+          <div class="country-name">Lesotho</div>
+          <div class="country-code">+266</div>
+        </div>
+        <div class="select-item" data-id="119">
+          <div class="country-flag">🇱🇷</div>
+          <div class="country-name">Liberia</div>
+          <div class="country-code">+231</div>
+        </div>
+        <div class="select-item" data-id="120">
+          <div class="country-flag">🇱🇾</div>
+          <div class="country-name">Libya</div>
+          <div class="country-code">+218</div>
+        </div>
+        <div class="select-item" data-id="121">
+          <div class="country-flag">🇱🇮</div>
+          <div class="country-name">Liechtenstein</div>
+          <div class="country-code">+423</div>
+        </div>
+        <div class="select-item" data-id="122">
+          <div class="country-flag">🇱🇹</div>
+          <div class="country-name">Lithuania</div>
+          <div class="country-code">+370</div>
+        </div>
+        <div class="select-item" data-id="123">
+          <div class="country-flag">🇱🇺</div>
+          <div class="country-name">Luxembourg</div>
+          <div class="country-code">+352</div>
+        </div>
+        <div class="select-item" data-id="124">
+          <div class="country-flag">🇲🇴</div>
+          <div class="country-name">Macau</div>
+          <div class="country-code">+853</div>
+        </div>
+        <div class="select-item" data-id="125">
+          <div class="country-flag">🇲🇰</div>
+          <div class="country-name">Macedonia</div>
+          <div class="country-code">+389</div>
+        </div>
+        <div class="select-item" data-id="126">
+          <div class="country-flag">🇲🇬</div>
+          <div class="country-name">Madagascar</div>
+          <div class="country-code">+261</div>
+        </div>
+        <div class="select-item" data-id="127">
+          <div class="country-flag">🇲🇼</div>
+          <div class="country-name">Malawi</div>
+          <div class="country-code">+265</div>
+        </div>
+        <div class="select-item" data-id="128">
+          <div class="country-flag">🇲🇾</div>
+          <div class="country-name">Malaysia</div>
+          <div class="country-code">+60</div>
+        </div>
+        <div class="select-item" data-id="129">
+          <div class="country-flag">🇲🇻</div>
+          <div class="country-name">Maldives</div>
+          <div class="country-code">+960</div>
+        </div>
+        <div class="select-item" data-id="130">
+          <div class="country-flag">🇲🇱</div>
+          <div class="country-name">Mali</div>
+          <div class="country-code">+223</div>
+        </div>
+        <div class="select-item" data-id="131">
+          <div class="country-flag">🇲🇹</div>
+          <div class="country-name">Malta</div>
+          <div class="country-code">+356</div>
+        </div>
+        <div class="select-item" data-id="132">
+          <div class="country-flag">🇲🇭</div>
+          <div class="country-name">Marshall Islands</div>
+          <div class="country-code">+692</div>
+        </div>
+        <div class="select-item" data-id="133">
+          <div class="country-flag">🇲🇶</div>
+          <div class="country-name">Martinique</div>
+          <div class="country-code">+596</div>
+        </div>
+        <div class="select-item" data-id="134">
+          <div class="country-flag">🇲🇷</div>
+          <div class="country-name">Mauritania</div>
+          <div class="country-code">+222</div>
+        </div>
+        <div class="select-item" data-id="135">
+          <div class="country-flag">🇲🇺</div>
+          <div class="country-name">Mauritius</div>
+          <div class="country-code">+230</div>
+        </div>
+        <div class="select-item" data-id="136">
+          <div class="country-flag">🇾🇹</div>
+          <div class="country-name">Mayotte</div>
+          <div class="country-code">+262</div>
+        </div>
+        <div class="select-item" data-id="137">
+          <div class="country-flag">🇲🇽</div>
+          <div class="country-name">Mexico</div>
+          <div class="country-code">+52</div>
+        </div>
+        <div class="select-item" data-id="138">
+          <div class="country-flag">🇫🇲</div>
+          <div class="country-name">Micronesia</div>
+          <div class="country-code">+691</div>
+        </div>
+        <div class="select-item" data-id="139">
+          <div class="country-flag">🇲🇩</div>
+          <div class="country-name">Moldova</div>
+          <div class="country-code">+373</div>
+        </div>
+        <div class="select-item" data-id="140">
+          <div class="country-flag">🇲🇨</div>
+          <div class="country-name">Monaco</div>
+          <div class="country-code">+377</div>
+        </div>
+        <div class="select-item" data-id="141">
+          <div class="country-flag">🇲🇳</div>
+          <div class="country-name">Mongolia</div>
+          <div class="country-code">+976</div>
+        </div>
+        <div class="select-item" data-id="142">
+          <div class="country-flag">🇲🇪</div>
+          <div class="country-name">Montenegro</div>
+          <div class="country-code">+382</div>
+        </div>
+        <div class="select-item" data-id="143">
+          <div class="country-flag">🇲🇸</div>
+          <div class="country-name">Montserrat</div>
+          <div class="country-code">+1</div>
+        </div>
+        <div class="select-item" data-id="144">
+          <div class="country-flag">🇲🇦</div>
+          <div class="country-name">Morocco</div>
+          <div class="country-code">+212</div>
+        </div>
+        <div class="select-item" data-id="145">
+          <div class="country-flag">🇲🇿</div>
+          <div class="country-name">Mozambique</div>
+          <div class="country-code">+258</div>
+        </div>
+        <div class="select-item" data-id="146">
+          <div class="country-flag">🇲🇲</div>
+          <div class="country-name">Myanmar</div>
+          <div class="country-code">+95</div>
+        </div>
+        <div class="select-item" data-id="147">
+          <div class="country-flag">🇳🇦</div>
+          <div class="country-name">Namibia</div>
+          <div class="country-code">+264</div>
+        </div>
+        <div class="select-item" data-id="148">
+          <div class="country-flag">🇳🇷</div>
+          <div class="country-name">Nauru</div>
+          <div class="country-code">+674</div>
+        </div>
+        <div class="select-item" data-id="149">
+          <div class="country-flag">🇳🇵</div>
+          <div class="country-name">Nepal</div>
+          <div class="country-code">+977</div>
+        </div>
+        <div class="select-item" data-id="150">
+          <div class="country-flag">🇳🇱</div>
+          <div class="country-name">Netherlands</div>
+          <div class="country-code">+31</div>
+        </div>
+        <div class="select-item" data-id="151">
+          <div class="country-flag">🇳🇨</div>
+          <div class="country-name">New Caledonia</div>
+          <div class="country-code">+687</div>
+        </div>
+        <div class="select-item" data-id="152">
+          <div class="country-flag">🇳🇿</div>
+          <div class="country-name">New Zealand</div>
+          <div class="country-code">+64</div>
+        </div>
+        <div class="select-item" data-id="153">
+          <div class="country-flag">🇳🇮</div>
+          <div class="country-name">Nicaragua</div>
+          <div class="country-code">+505</div>
+        </div>
+        <div class="select-item" data-id="154">
+          <div class="country-flag">🇳🇪</div>
+          <div class="country-name">Niger</div>
+          <div class="country-code">+227</div>
+        </div>
+        <div class="select-item" data-id="155">
+          <div class="country-flag">🇳🇬</div>
+          <div class="country-name">Nigeria</div>
+          <div class="country-code">+234</div>
+        </div>
+        <div class="select-item" data-id="156">
+          <div class="country-flag">🇳🇺</div>
+          <div class="country-name">Niue</div>
+          <div class="country-code">+683</div>
+        </div>
+        <div class="select-item" data-id="157">
+          <div class="country-flag">🇳🇫</div>
+          <div class="country-name">Norfolk Island</div>
+          <div class="country-code">+672</div>
+        </div>
+        <div class="select-item" data-id="158">
+          <div class="country-flag">🇰🇵</div>
+          <div class="country-name">North Korea</div>
+          <div class="country-code">+850</div>
+        </div>
+        <div class="select-item" data-id="159">
+          <div class="country-flag">🇲🇵</div>
+          <div class="country-name">Northern Mariana Islands</div>
+          <div class="country-code">+1</div>
+        </div>
+        <div class="select-item" data-id="160">
+          <div class="country-flag">🇳🇴</div>
+          <div class="country-name">Norway</div>
+          <div class="country-code">+47</div>
+        </div>
+        <div class="select-item" data-id="161">
+          <div class="country-flag">🇴🇲</div>
+          <div class="country-name">Oman</div>
+          <div class="country-code">+968</div>
+        </div>
+        <div class="select-item" data-id="162">
+          <div class="country-flag">🇵🇰</div>
+          <div class="country-name">Pakistan</div>
+          <div class="country-code">+92</div>
+        </div>
+        <div class="select-item" data-id="163">
+          <div class="country-flag">🇵🇼</div>
+          <div class="country-name">Palau</div>
+          <div class="country-code">+680</div>
+        </div>
+        <div class="select-item" data-id="164">
+          <div class="country-flag">🇵🇸</div>
+          <div class="country-name">Palestine</div>
+          <div class="country-code">+970</div>
+        </div>
+        <div class="select-item" data-id="165">
+          <div class="country-flag">🇵🇦</div>
+          <div class="country-name">Panama</div>
+          <div class="country-code">+507</div>
+        </div>
+        <div class="select-item" data-id="166">
+          <div class="country-flag">🇵🇬</div>
+          <div class="country-name">Papua New Guinea</div>
+          <div class="country-code">+675</div>
+        </div>
+        <div class="select-item" data-id="167">
+          <div class="country-flag">🇵🇾</div>
+          <div class="country-name">Paraguay</div>
+          <div class="country-code">+595</div>
+        </div>
+        <div class="select-item" data-id="168">
+          <div class="country-flag">🇵🇪</div>
+          <div class="country-name">Peru</div>
+          <div class="country-code">+51</div>
+        </div>
+        <div class="select-item" data-id="169">
+          <div class="country-flag">🇵🇭</div>
+          <div class="country-name">Philippines</div>
+          <div class="country-code">+63</div>
+        </div>
+        <div class="select-item" data-id="170">
+          <div class="country-flag">🇵🇱</div>
+          <div class="country-name">Poland</div>
+          <div class="country-code">+48</div>
+        </div>
+        <div class="select-item" data-id="171">
+          <div class="country-flag">🇵🇹</div>
+          <div class="country-name">Portugal</div>
+          <div class="country-code">+351</div>
+        </div>
+        <div class="select-item" data-id="172">
+          <div class="country-flag">🇵🇷</div>
+          <div class="country-name">Puerto Rico</div>
+          <div class="country-code">+1</div>
+        </div>
+        <div class="select-item" data-id="173">
+          <div class="country-flag">🇶🇦</div>
+          <div class="country-name">Qatar</div>
+          <div class="country-code">+974</div>
+        </div>
+        <div class="select-item" data-id="174">
+          <div class="country-flag">🇷🇪</div>
+          <div class="country-name">Réunion</div>
+          <div class="country-code">+262</div>
+        </div>
+        <div class="select-item" data-id="175">
+          <div class="country-flag">🇷🇴</div>
+          <div class="country-name">Romania</div>
+          <div class="country-code">+40</div>
+        </div>
+        <div class="select-item" data-id="176">
+          <div class="country-flag">🇷🇺</div>
+          <div class="country-name">Russia</div>
+          <div class="country-code">+7</div>
+        </div>
+        <div class="select-item" data-id="177">
+          <div class="country-flag">🇷🇼</div>
+          <div class="country-name">Rwanda</div>
+          <div class="country-code">+250</div>
+        </div>
+        <div class="select-item" data-id="178">
+          <div class="country-flag">🇧🇱</div>
+          <div class="country-name">Saint Barthélemy</div>
+          <div class="country-code">+590</div>
+        </div>
+        <div class="select-item" data-id="179">
+          <div class="country-flag">🇸🇭</div>
+          <div class="country-name">Saint Helena</div>
+          <div class="country-code">+290</div>
+        </div>
+        <div class="select-item" data-id="180">
+          <div class="country-flag">🇰🇳</div>
+          <div class="country-name">Saint Kitts and Nevis</div>
+          <div class="country-code">+1</div>
+        </div>
+        <div class="select-item" data-id="181">
+          <div class="country-flag">🇱🇨</div>
+          <div class="country-name">Saint Lucia</div>
+          <div class="country-code">+1</div>
+        </div>
+        <div class="select-item" data-id="182">
+          <div class="country-flag">🇲🇫</div>
+          <div class="country-name">Saint Martin</div>
+          <div class="country-code">+590</div>
+        </div>
+        <div class="select-item" data-id="183">
+          <div class="country-flag">🇵🇲</div>
+          <div class="country-name">Saint Pierre and Miquelon</div>
+          <div class="country-code">+508</div>
+        </div>
+        <div class="select-item" data-id="184">
+          <div class="country-flag">🇻🇨</div>
+          <div class="country-name">Saint Vincent and the Grenadines</div>
+          <div class="country-code">+1</div>
+        </div>
+        <div class="select-item" data-id="185">
+          <div class="country-flag">🇼🇸</div>
+          <div class="country-name">Samoa</div>
+          <div class="country-code">+685</div>
+        </div>
+        <div class="select-item" data-id="186">
+          <div class="country-flag">🇸🇲</div>
+          <div class="country-name">San Marino</div>
+          <div class="country-code">+378</div>
+        </div>
+        <div class="select-item" data-id="187">
+          <div class="country-flag">🇸🇹</div>
+          <div class="country-name">São Tomé and Príncipe</div>
+          <div class="country-code">+239</div>
+        </div>
+        <div class="select-item" data-id="188">
+          <div class="country-flag">🇸🇦</div>
+          <div class="country-name">Saudi Arabia</div>
+          <div class="country-code">+966</div>
+        </div>
+        <div class="select-item" data-id="189">
+          <div class="country-flag">🇸🇳</div>
+          <div class="country-name">Senegal</div>
+          <div class="country-code">+221</div>
+        </div>
+        <div class="select-item" data-id="190">
+          <div class="country-flag">🇷🇸</div>
+          <div class="country-name">Serbia</div>
+          <div class="country-code">+381</div>
+        </div>
+        <div class="select-item" data-id="191">
+          <div class="country-flag">🇸🇨</div>
+          <div class="country-name">Seychelles</div>
+          <div class="country-code">+248</div>
+        </div>
+        <div class="select-item" data-id="192">
+          <div class="country-flag">🇸🇱</div>
+          <div class="country-name">Sierra Leone</div>
+          <div class="country-code">+232</div>
+        </div>
+        <div class="select-item" data-id="193">
+          <div class="country-flag">🇸🇬</div>
+          <div class="country-name">Singapore</div>
+          <div class="country-code">+65</div>
+        </div>
+        <div class="select-item" data-id="194">
+          <div class="country-flag">🇸🇽</div>
+          <div class="country-name">Sint Maarten</div>
+          <div class="country-code">+1</div>
+        </div>
+        <div class="select-item" data-id="195">
+          <div class="country-flag">🇸🇰</div>
+          <div class="country-name">Slovakia</div>
+          <div class="country-code">+421</div>
+        </div>
+        <div class="select-item" data-id="196">
+          <div class="country-flag">🇸🇮</div>
+          <div class="country-name">Slovenia</div>
+          <div class="country-code">+386</div>
+        </div>
+        <div class="select-item" data-id="197">
+          <div class="country-flag">🇸🇧</div>
+          <div class="country-name">Solomon Islands</div>
+          <div class="country-code">+677</div>
+        </div>
+        <div class="select-item" data-id="198">
+          <div class="country-flag">🇸🇴</div>
+          <div class="country-name">Somalia</div>
+          <div class="country-code">+252</div>
+        </div>
+        <div class="select-item" data-id="199">
+          <div class="country-flag">🇿🇦</div>
+          <div class="country-name">South Africa</div>
+          <div class="country-code">+27</div>
+        </div>
+        <div class="select-item" data-id="200">
+          <div class="country-flag">🇰🇷</div>
+          <div class="country-name">South Korea</div>
+          <div class="country-code">+82</div>
+        </div>
+        <div class="select-item" data-id="201">
+          <div class="country-flag">🇸🇸</div>
+          <div class="country-name">South Sudan</div>
+          <div class="country-code">+211</div>
+        </div>
+        <div class="select-item" data-id="202">
+          <div class="country-flag">🇪🇸</div>
+          <div class="country-name">Spain</div>
+          <div class="country-code">+34</div>
+        </div>
+        <div class="select-item" data-id="203">
+          <div class="country-flag">🇱🇰</div>
+          <div class="country-name">Sri Lanka</div>
+          <div class="country-code">+94</div>
+        </div>
+        <div class="select-item" data-id="204">
+          <div class="country-flag">🇸🇩</div>
+          <div class="country-name">Sudan</div>
+          <div class="country-code">+249</div>
+        </div>
+        <div class="select-item" data-id="205">
+          <div class="country-flag">🇸🇷</div>
+          <div class="country-name">Suriname</div>
+          <div class="country-code">+597</div>
+        </div>
+        <div class="select-item" data-id="206">
+          <div class="country-flag">🇸🇯</div>
+          <div class="country-name">Svalbard and Jan Mayen</div>
+          <div class="country-code">+47</div>
+        </div>
+        <div class="select-item" data-id="207">
+          <div class="country-flag">🇸🇿</div>
+          <div class="country-name">Swaziland</div>
+          <div class="country-code">+268</div>
+        </div>
+        <div class="select-item" data-id="208">
+          <div class="country-flag">🇸🇪</div>
+          <div class="country-name">Sweden</div>
+          <div class="country-code">+46</div>
+        </div>
+        <div class="select-item" data-id="209">
+          <div class="country-flag">🇨🇭</div>
+          <div class="country-name">Switzerland</div>
+          <div class="country-code">+41</div>
+        </div>
+        <div class="select-item" data-id="210">
+          <div class="country-flag">🇸🇾</div>
+          <div class="country-name">Syria</div>
+          <div class="country-code">+963</div>
+        </div>
+        <div class="select-item" data-id="211">
+          <div class="country-flag">🇹🇼</div>
+          <div class="country-name">Taiwan</div>
+          <div class="country-code">+886</div>
+        </div>
+        <div class="select-item" data-id="212">
+          <div class="country-flag">🇹🇯</div>
+          <div class="country-name">Tajikistan</div>
+          <div class="country-code">+992</div>
+        </div>
+        <div class="select-item" data-id="213">
+          <div class="country-flag">🇹🇿</div>
+          <div class="country-name">Tanzania</div>
+          <div class="country-code">+255</div>
+        </div>
+        <div class="select-item" data-id="214">
+          <div class="country-flag">🇹🇭</div>
+          <div class="country-name">Thailand</div>
+          <div class="country-code">+66</div>
+        </div>
+        <div class="select-item" data-id="215">
+          <div class="country-flag">🇹🇱</div>
+          <div class="country-name">Timor-Leste</div>
+          <div class="country-code">+670</div>
+        </div>
+        <div class="select-item" data-id="216">
+          <div class="country-flag">🇹🇬</div>
+          <div class="country-name">Togo</div>
+          <div class="country-code">+228</div>
+        </div>
+        <div class="select-item" data-id="217">
+          <div class="country-flag">🇹🇰</div>
+          <div class="country-name">Tokelau</div>
+          <div class="country-code">+690</div>
+        </div>
+        <div class="select-item" data-id="218">
+          <div class="country-flag">🇹🇴</div>
+          <div class="country-name">Tonga</div>
+          <div class="country-code">+676</div>
+        </div>
+        <div class="select-item" data-id="219">
+          <div class="country-flag">🇹🇹</div>
+          <div class="country-name">Trinidad and Tobago</div>
+          <div class="country-code">+1</div>
+        </div>
+        <div class="select-item" data-id="220">
+          <div class="country-flag">🇹🇳</div>
+          <div class="country-name">Tunisia</div>
+          <div class="country-code">+216</div>
+        </div>
+        <div class="select-item" data-id="221">
+          <div class="country-flag">🇹🇷</div>
+          <div class="country-name">Turkey</div>
+          <div class="country-code">+90</div>
+        </div>
+        <div class="select-item" data-id="222">
+          <div class="country-flag">🇹🇲</div>
+          <div class="country-name">Turkmenistan</div>
+          <div class="country-code">+993</div>
+        </div>
+        <div class="select-item" data-id="223">
+          <div class="country-flag">🇹🇨</div>
+          <div class="country-name">Turks and Caicos Islands</div>
+          <div class="country-code">+1</div>
+        </div>
+        <div class="select-item" data-id="224">
+          <div class="country-flag">🇹🇻</div>
+          <div class="country-name">Tuvalu</div>
+          <div class="country-code">+688</div>
+        </div>
+        <div class="select-item" data-id="225">
+          <div class="country-flag">🇻🇮</div>
+          <div class="country-name">U.S. Virgin Islands</div>
+          <div class="country-code">+1</div>
+        </div>
+        <div class="select-item" data-id="226">
+          <div class="country-flag">🇺🇬</div>
+          <div class="country-name">Uganda</div>
+          <div class="country-code">+256</div>
+        </div>
+        <div class="select-item" data-id="227">
+          <div class="country-flag">🇺🇦</div>
+          <div class="country-name">Ukraine</div>
+          <div class="country-code">+380</div>
+        </div>
+        <div class="select-item" data-id="228">
+          <div class="country-flag">🇦🇪</div>
+          <div class="country-name">United Arab Emirates</div>
+          <div class="country-code">+971</div>
+        </div>
+        <div class="select-item" data-id="229">
+          <div class="country-flag">🇬🇧</div>
+          <div class="country-name">United Kingdom</div>
+          <div class="country-code">+44</div>
+        </div>
+        <div class="select-item" data-id="230">
+          <div class="country-flag">🇺🇸</div>
+          <div class="country-name">United States</div>
+          <div class="country-code">+1</div>
+        </div>
+        <div class="select-item" data-id="231">
+          <div class="country-flag">🇺🇾</div>
+          <div class="country-name">Uruguay</div>
+          <div class="country-code">+598</div>
+        </div>
+        <div class="select-item" data-id="232">
+          <div class="country-flag">🇺🇿</div>
+          <div class="country-name">Uzbekistan</div>
+          <div class="country-code">+998</div>
+        </div>
+        <div class="select-item" data-id="233">
+          <div class="country-flag">🇻🇺</div>
+          <div class="country-name">Vanuatu</div>
+          <div class="country-code">+678</div>
+        </div>
+        <div class="select-item" data-id="234">
+          <div class="country-flag">🇻🇦</div>
+          <div class="country-name">Vatican City</div>
+          <div class="country-code">+39</div>
+        </div>
+        <div class="select-item" data-id="235">
+          <div class="country-flag">🇻🇪</div>
+          <div class="country-name">Venezuela</div>
+          <div class="country-code">+58</div>
+        </div>
+        <div class="select-item" data-id="236">
+          <div class="country-flag">🇻🇳</div>
+          <div class="country-name">Vietnam</div>
+          <div class="country-code">+84</div>
+        </div>
+        <div class="select-item" data-id="237">
+          <div class="country-flag">🇼🇫</div>
+          <div class="country-name">Wallis and Futuna</div>
+          <div class="country-code">+681</div>
+        </div>
+        <div class="select-item" data-id="238">
+          <div class="country-flag">🇪🇭</div>
+          <div class="country-name">Western Sahara</div>
+          <div class="country-code">+212</div>
+        </div>
+        <div class="select-item" data-id="239">
+          <div class="country-flag">🇾🇪</div>
+          <div class="country-name">Yemen</div>
+          <div class="country-code">+967</div>
+        </div>
+        <div class="select-item" data-id="240">
+          <div class="country-flag">🇿🇲</div>
+          <div class="country-name">Zambia</div>
+          <div class="country-code">+260</div>
+        </div>
+        <div class="select-item" data-id="241">
+          <div class="country-flag">🇿🇼</div>
+          <div class="country-name">Zimbabwe</div>
+          <div class="country-code">+263</div>
+        </div>
+        <div class="select-item" data-id="242">
+          <div class="country-flag">🇦🇽</div>
+          <div class="country-name">Åland Islands</div>
+          <div class="country-code">+358</div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>

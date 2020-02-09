@@ -1,5 +1,6 @@
 :host {
   display: block;
+  color: #62A4EF;
 }
 
 svg {
@@ -9,7 +10,7 @@ svg {
 }
 
 svg path {
-  fill: #62A4EF;
+  fill: currentColor;
 }
 
 @keyframes rotation {

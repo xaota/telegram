@@ -25,6 +25,13 @@ export default class LayoutSettings extends Component {
     const main = $('main', node);
     [...main.querySelectorAll('ui-item')]
       .forEach(e => e.addEventListener('click', _ => route(e.dataset.route)));
+
+    const logout = $('#logout', node);
+    logout.addEventListener('click', _ => {
+      // отписать все события и воспроизведение чего-либо
+      channel.send('user.loading');
+      setTimeout(() => channel.send('user.logout'), 2000);
+    });
     return this;
   }
 }

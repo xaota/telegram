@@ -24,14 +24,12 @@ div {
 }
 
 h1 {
-  font-family: var(--font);
   margin-top: 44px;
   font-size: 32px;
-  font-weight: bold;
+  font-weight: normal;
 }
 
 h2 {
-  font-family: var(--font);
   margin-top: 13px;
   margin-bottom: 49px;
   font-size: 16px;
@@ -42,4 +40,5 @@ h2 {
   margin-right: auto;
   font-weight: bold;
   max-width: 210px;
+  font-weight: normal;
 }

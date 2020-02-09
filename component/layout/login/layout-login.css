@@ -1,5 +1,5 @@
 :host {
-  display: block flex;
+  display: block;
   position: absolute;
   top: 0;
   left: 0;
@@ -13,20 +13,12 @@
   /* margin: 0 auto; */
 }
 
+form-confirm {
+  display: none;
+}
+
 tgs-player {
   display: none;
   width: 120px;
   height: 120px;
 }
-
-
-/*
-    width: 100%;
-    height: 100%;
-    font-family: 'Roboto', sans-serif;
-
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-*/

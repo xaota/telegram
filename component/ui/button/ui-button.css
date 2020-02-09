@@ -1,11 +1,14 @@
 :host {
   display: block;
+  position: relative;
 }
 
 button {
-  background: rgb(78, 164, 246);
+  outline: none;
+  background: var(--blueColor);
+  /* #4ea4f6; */
   border-radius: 10px;
-  color: rgb(255, 255, 255);
+  color: #fff;
   border: none;
   font-size: 16px;
   text-transform: uppercase;
@@ -13,5 +16,28 @@ button {
   display: block;
   width: 100%;
   height: 54px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: var(--blueColorHover);
+}
+
+button:active {
+  background: var(--blueColorActive);
+}
+
+ui-loading {
+  color: #fff;
+  width: 36px;
+  height: 36px;
+  right: 12px;
+  top: 8px;
+  position: absolute;
+  display: none;
+}
+
+:host([loading]) ui-loading {
+  display: block;
 }
 

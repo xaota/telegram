@@ -1,12 +1,14 @@
 import Component from '../../../script/Component.js';
 
+import UILoading from '../loading/ui-loading.js';
+
 const component = Component.meta(import.meta.url, 'ui-button');
 const attributes = {
 
   }
 
 const properties = {
-
+    loading(root, value) { } // !
   }
 
 export default class UIButton extends Component {
