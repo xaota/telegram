@@ -1,8 +1,10 @@
 import Component from '../../../script/Component.js';
+import $, {updateChildrenHTML} from '../../../script/DOM.js';
+import UIIcon from '../icon/ui-icon.js';
 
 const component = Component.meta(import.meta.url, 'ui-item');
 const attributes = {
-
+    icon(root, value) { updateChildrenHTML(root, 'ui-icon', value) }
   }
 
 const properties = {

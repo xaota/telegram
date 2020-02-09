@@ -19,8 +19,10 @@ export default class LayoutEmpty extends Component {
 
   mount(node) {
     super.mount(node, attributes, properties);
-    const group = $('#group ui-icon', node);
-    group.addEventListener('click', _ => channel.send('route-aside', {route: 'form-group'}));
+    const newGroup   = $('#group ui-icon', node);
+    const newChannel = $('#channel ui-icon', node);
+    newGroup  .addEventListener('click', _ => channel.send('route-aside', {route: 'form-group'}));
+    newChannel.addEventListener('click', _ => channel.send('route-aside', {route: 'form-channel'}));
     return this;
   }
 }

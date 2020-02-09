@@ -1,7 +1,7 @@
 import Component from '../../../script/Component.js';
 
-import UIIcon   from '../../ui/icon/ui-icon.js';
 import UIItem   from '../../ui/item/ui-item.js';
+import UIIcon   from '../../ui/icon/ui-icon.js';
 import UIHeader from '../../ui/header/ui-header.js';
 
 const component = Component.meta(import.meta.url, 'layout-icons');
@@ -30,8 +30,7 @@ export default class LayoutIcons extends Component {
       icon.remove();
       groups.forEach(e => {
         const item = new UIItem();
-        const icon = new UIIcon(e);
-        item.append(icon);
+        item.icon = e;
         item.append(document.createTextNode(e));
         main.append(item);
       });

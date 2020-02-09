@@ -23,26 +23,29 @@ span.checkmark {
   left: 0;
   width: 16px;
   height: 16px;
-  border-radius: 2px;
+  border-radius: 50%;
   border: 1px solid var(--grayTextColor);
+  /* box-shadow: var(--grayTextColor) 0 0 0 0.5px; */
 }
 
 input[type="checkbox"]:checked ~ span.checkmark {
   border-color: #4ea4f6;
-  background-color: #4ea4f6;
+  /* box-shadow: #4ea4f6 0 0 0 0.5px; */
 }
 
-input[type="checkbox"] ~ ui-icon {
-  display: none;
+input[type="checkbox"] ~ span.checkmark::after {
+  content: '';
+  width: 10px;
+  height: 10px;
   position: absolute;
-  left: 0;
-  top: 0px;
-  width: 18px;
-  height: 18px;
-  color: #fff;
+  background-color: #4ea4f6;
+  top: 3px;
+  left: 3px;
+  display: none;
+  border-radius: 50%;
 }
 
-input[type="checkbox"]:checked ~ ui-icon {
+input[type="checkbox"]:checked ~ span.checkmark::after {
   display: block;
 }
 
@@ -55,12 +58,4 @@ span.hint {
 
 :host([hint]) span.hint {
   display: block;
-}
-
-:host([hint]) input[type="checkbox"]:not(:checked) ~ span.hint:before {
-  content: 'Dis';
-}
-
-:host([hint]) input[type="checkbox"]:checked ~ span.hint:before {
-  content: 'En';
 }

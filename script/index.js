@@ -6,6 +6,7 @@ import LayoutMain    from '../component/layout/main/layout-main.js';
 
 const loading = $('layout-loading');
 let current = createLayout(new LayoutMain());
+// let current = createLayout(new LayoutLogin());
 
 channel.on('user.login', _ => {
   current.remove(); // layout-login
