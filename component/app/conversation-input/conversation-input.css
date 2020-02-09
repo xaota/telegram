@@ -133,14 +133,18 @@ textarea:focus {
   flex-direction: column;
   padding: 26px 18px;
 }
-.attach-list icon-photo,
-.attach-list icon-document,
-.attach-list icon-photo-add {
-  padding-right:35px;
+.attach-list ui-icon {
+  padding-right: 35px;
+}
+.attach-list ui-icon:hover {
+  color: var(--iconStatic);
 }
 .attach-list div {
   display: flex;
   align-items: center;
+}
+.attach-list div:hover {
+  cursor: pointer;
 }
 .attach-list div + div {
   padding-top: 20px;

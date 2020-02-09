@@ -30,6 +30,8 @@ div {
   /* white-space: nowrap; */
 }
 
+
+/* хвостик */
 :host(:last-child) div {
   border-bottom-left-radius: 0px;
 }
@@ -56,6 +58,13 @@ div:before {
   background-image: url(../../../asset/tail_shadow.svg);
   z-index: 0;
 }
+
+:host([reply]) div:after,
+:host([reply]) div:before {
+  content: none;
+}
+
+/* ----------------- */
 
 :host([reply]) div {
   border-left: 2px solid #4ea4f5;

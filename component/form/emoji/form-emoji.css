@@ -61,6 +61,6 @@ ui-tabs {
     padding: 0 5px;
 }
 
-.group .item[active="true"] {
-    background-color: red;
+.group .item[active="true"] ui-icon {
+    color: var(--iconHover);
 }
