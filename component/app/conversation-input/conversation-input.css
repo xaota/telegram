@@ -55,17 +55,26 @@
   box-shadow: 0 1px 2px 0 rgba(16,35,47,.15);
   /* width: 100%; */
   z-index: 1;
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-end;
   padding: .53333rem 1.06667rem;
   outline: none;
   position: relative;
   box-sizing: border-box;
 }
 
+.msg_block {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+}
+
+
+.reply {
+  display: flex;
+  align-items: center;
+}
+
 .wrap_textarea {
-  padding: 10px;
+  padding: 10px 0;
   flex-grow: 1;
 }
 
@@ -74,7 +83,6 @@ textarea {
   -moz-appearance: none;
   appearance: none;
   border: none;
-  font-family: Roboto;
   font-size: 1.06667rem;
   background: #fff;
   width: 100%;
@@ -89,15 +97,21 @@ textarea:focus {
   outline: none;
 }
 
-icon-emoji, icon-attach {
+icon-close, icon-emoji, icon-attach {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 1.86667rem;
+  width: 28px;
   height: 44px;
-  margin-right: 1.06667rem
+  margin-right: 16px;
 }
-
+icon-close {
+  cursor: pointer;
+  margin-right: 17px;
+}
+icon-attach {
+  margin-right: 0px;
+}
 .enter {
   background-color: #4ea4f5;
   background-image: url(../../../asset/voice.svg);
@@ -112,4 +126,22 @@ icon-emoji, icon-attach {
 
 .send {
   background-image: url(../../../asset/send.svg);
+}
+
+.attach-list {
+  display: flex;
+  flex-direction: column;
+  padding: 26px 18px;
+}
+.attach-list icon-photo,
+.attach-list icon-document,
+.attach-list icon-photo-add {
+  padding-right:35px;
+}
+.attach-list div {
+  display: flex;
+  align-items: center;
+}
+.attach-list div + div {
+  padding-top: 20px;
 }

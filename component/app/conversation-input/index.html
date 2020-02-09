@@ -4,19 +4,47 @@
   <div class="wrap">
     <div class="msginput__bubble_wrap">
       <div class="msginput__bubble">
-        <div style="position: relative">
-          <ui-drop up>
-            <form-emoji></form-emoji>
-          </ui-drop>
-          <icon-emoji></icon-emoji>
+
+        <div class="reply">
+          <icon-close></icon-close>
+          <message-text slot="content" timestamp="10:02" color="D77F7C" reply>
+            <span slot="author">Виктор Назаренко</span>
+            <span slot="content">По идее может же</span>
+          </message-text>
         </div>
-        <div class="wrap_textarea">
-          <textarea placeholder="Message" rows="1"></textarea>
+
+        <div class="msg_block">
+          <div style="position: relative">
+            <ui-drop id="drop-emoji" up>
+              <form-emoji></form-emoji>
+            </ui-drop>
+            <icon-emoji></icon-emoji>
+          </div>
+          <div class="wrap_textarea">
+            <textarea placeholder="Message" rows="1"></textarea>
+          </div>
+
+          <div style="position: relative">
+          <ui-drop id="drop-attach" up>
+              <div class="attach-list">
+                <div>
+                  <icon-photo></icon-photo>
+                  Photo or Video
+                </div>
+                <div>
+                  <icon-document></icon-document>
+                  Document
+                </div>
+                <div>
+                  <icon-photo-add></icon-photo-add>
+                  Poll
+                </div>
+              </div>
+            </ui-drop>
+            <icon-attach></icon-attach>
+          </div>
         </div>
-        <ui-drop>
-          123
-        </ui-drop>
-        <icon-attach></icon-attach>
+
       </div>
     </div>
     <div class="action enter"></div>

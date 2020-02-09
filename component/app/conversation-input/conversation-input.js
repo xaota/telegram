@@ -3,7 +3,12 @@ import $, {updateChildrenProperty} from '../../../script/DOM.js';
 
 import '../../icon/emoji/icon-emoji.js';
 import '../../icon/attach/icon-attach.js';
+import '../../icon/close/icon-close.js';
+import '../../icon/photo/icon-photo.js';
+import '../../icon/document/icon-document.js';
+
 import '../../ui/drop/ui-drop.js';
+import '../../message/text/message-text.js';
 import FormEmoji from '../../form/emoji/form-emoji.js';
 
 const component = Component.meta(import.meta.url, 'conversation-input');
@@ -36,8 +41,12 @@ export default class ConversationInput extends Component {
         .addEventListener('click', () => this.focus(input));
 
     const emoji = $('icon-emoji', node);
-    const drop = $('ui-drop', node);
-    emoji.addEventListener('click', () => drop.show = !drop.show);
+    const dropEmoji = $('#drop-emoji', node);
+    emoji.addEventListener('click', () => dropEmoji.show = !dropEmoji.show);
+
+    const attach = $('icon-attach', node)
+    const dropAttach = $('#drop-attach', node);
+    attach.addEventListener('click', () => dropAttach.show = !dropAttach.show);
     return this;
   }
 

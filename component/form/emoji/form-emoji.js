@@ -106,9 +106,7 @@ export default class FormEmoji extends Component {
       return;
     }
     this.group.style.display = 'flex';
-    console.log(tab.selectedGroup);
     this.group.innerHTML = unionElements(tab.groups, (el) => {
-        console.log(tab.selectedGroup === el);
         return `<div class="item" active="${tab.selectedGroup === el}"><icon-${el} id="${el}"></icon-${el}></div>`;
     });
   };
