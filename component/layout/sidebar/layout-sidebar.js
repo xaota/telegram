@@ -23,29 +23,44 @@ export default class LayoutSidebar extends Component {
 
   mount(node) {
     super.mount(node, attributes, properties);
-    const container = $('#container', node);
-    const wrap = $('.wrap', node);
+    this.container = $('#container', node);
+    this.wrap = $('.wrap', node);
 
     const profile = new LayoutProfile();
     const search = new LayoutSearch();
-    channel.on(events.CLOSE_SIDEBAR, () => {
-      wrap.style.width = '0px';
-      animation(400, () => container.innerHTML = '');
-    });
+    channel.on(events.CLOSE_SIDEBAR, this.close);
     channel.on(events.OPEN_PROFILE, () => {
-      container.appendChild(profile);
-      wrap.style.width = '420px';
+      this.open(profile);
     });
     channel.on(events.OPEN_SEARCH, () => {
-      container.appendChild(search);
-      wrap.style.width = '420px';
+      this.open(search);
     });
     return this;
+  }
+
+  open = async (layout) => {
+    const open = () => {
+      this.container.appendChild(layout);
+      this.wrap.style.width = '420px';
+    };
+    if (!this.container.children) {
+      open();
+    }
+    if (this.container.children[0] !== layout) {
+      await this.close();
+      open();
+    }
+  };
+
+  close = () => {
+    return new Promise(resolve => {
+      this.wrap.style.width = '0px';
+      setTimeout(() => {
+        this.container.innerHTML = '';
+        resolve();
+      }, 400);
+    })
   }
 }
 
 Component.init(LayoutSidebar, component, {attributes, properties});
-
-function animation(time, callback) {
-  setTimeout(callback, time);
-}

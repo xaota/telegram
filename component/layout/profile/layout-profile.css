@@ -61,7 +61,7 @@
     padding-right: 25px;
 }
 .profile .list .item .left ui-icon {
-    height:16px;
+    height: 24px;
 }
 .profile .list .item .right .desc {
     color: var(--grayTextColor);
