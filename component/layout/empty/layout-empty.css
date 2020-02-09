@@ -29,6 +29,11 @@ ui-icon {
   color: #C5C9CC;
 }
 
+:host > ui-icon {
+  width: 144px;
+  height: 144px;
+}
+
 div {
   text-align: center;
 }

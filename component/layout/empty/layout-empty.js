@@ -1,4 +1,5 @@
 import Component from '../../../script/Component.js';
+import $, {channel} from '../../../script/DOM.js';
 
 import UIIcon from '../../ui/icon/ui-icon.js';
 
@@ -18,7 +19,8 @@ export default class LayoutEmpty extends Component {
 
   mount(node) {
     super.mount(node, attributes, properties);
-
+    const group = $('#group ui-icon', node);
+    group.addEventListener('click', _ => channel.send('route-aside', {route: 'form-group'}));
     return this;
   }
 }

@@ -18,7 +18,9 @@ export default class UIIcon extends Component {
     const icon = $('use',  svg);
 
     slot.addEventListener('slotchange', _ => {
-      const id = '#' + this.innerText;
+      const name = this.innerText || this.innerHTML;
+      if (!name) return icon.removeAttributeNS('http://www.w3.org/1999/xlink', 'href');
+      const id = '#' + name;
       icon.setAttributeNS('http://www.w3.org/1999/xlink', 'href', id);
       const g = $(id, svg);
       const viewBox = g.getAttribute('viewBox') || '0 0 24 24';
