@@ -13,47 +13,9 @@
 .search #close {
     color: var(--iconStatic);
 }
-.search .header ui-icon {
-    left: 16px;
-    color: var(--iconHover);
-}
-.search .header input {
-    left: 16px;
-    width: 100%;
-    padding: 0;
-    height: 35px;
-    border: none;
-    outline-offset: 0;
-    outline: none;
-    font-size: 20px;
-}
-.search .header input:focus {
-    left: 16px;
-    width: 100%;
-    padding: 0;
-    height: 35px;
-    border: none;
-}
 
-.search .header div {
-    flex: 1 50%;
+form-search {
     margin-left: 20px;
-    height: 2.93333rem;
-    padding: 0 .8rem;
-    background-color: white;
-    color: #8d969c;
-    border-radius: 1.46667rem;
-    border: 2px var(--blueColor) solid;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-}
-
-#search {
-    width: 1.6rem;
-    height: 1.6rem;
-    margin-right: .4rem;
-    flex: none;
 }
 
 .result {

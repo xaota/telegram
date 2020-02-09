@@ -4,6 +4,7 @@ import $, {channel} from '../../../script/DOM.js';
 import UIDrop from '../../ui/drop/ui-drop.js';
 import UIItem from '../../ui/item/ui-item.js';
 import UIIcon from '../../ui/icon/ui-icon.js';
+import '../../form/search/form-search.js';
 
 const component = Component.meta(import.meta.url, 'chats-header');
 const attributes = {

@@ -3,6 +3,8 @@ import $, {channel} from '../../../script/DOM.js';
 
 import sidebarEvents from '../sidebar/events.js';
 
+import '../../form/search/form-search.js';
+
 const component = Component.meta(import.meta.url, 'layout-search');
 const attributes = {
 
