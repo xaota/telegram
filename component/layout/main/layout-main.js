@@ -4,6 +4,7 @@ import $, {channel} from '../../../script/DOM.js';
 import LayoutChat from '../chats/layout-chats.js';
 
 import FormGroup from '../../form/group/form-group.js';
+import FormChannel from '../../form/channel/form-channel.js';
 
 import LayoutSettings from '../settings/layout-settings.js';
 import FormGeneral  from '../../form/general/form-general.js';
@@ -34,6 +35,8 @@ export default class LayoutMain extends Component {
   mount(node) {
     super.mount(node, attributes, properties);
     const aside = $('aside', node);
+    const main  = $('main', node);
+
     this.store({
       aside: {
         path: [],
@@ -44,6 +47,17 @@ export default class LayoutMain extends Component {
 
     route.call(this, 'aside');
     channel.on('route-aside', e => route.call(this, 'aside', e.route));
+
+    //
+    channel.on('conversation.open', e => {
+      // console.log(e.id)
+      const temp = $('layout-conversation, layout-empty', main);
+      if (temp) temp.remove();
+      // loader?
+      const conversation = new LayoutConversation(e.id);
+      main.append(conversation);
+    });
+
     return this;
   }
 }

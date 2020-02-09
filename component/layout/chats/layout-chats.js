@@ -26,6 +26,10 @@ export default class LayoutChats extends Component {
   mount(node) {
     super.mount(node, attributes, properties);
 
+    const list = $('ui-list', node);
+    const items = [...list.querySelectorAll('chat-item')];
+    items.forEach(item => item.addEventListener('click', e => channel.send('conversation.open', {id: item.dataset.id})));
+
     const fab =  $('ui-fab',  node);
     const drop = $('ui-drop', node);
     fab.addEventListener('click', _ => {
@@ -34,9 +38,16 @@ export default class LayoutChats extends Component {
       fab.innerText = show ? 'close' : 'edit';
     });
 
-    const group = $('#fab-group', drop);
-    group.addEventListener('click', _ => {
+    const newGroup = $('#fab-group', drop);
+    newGroup.addEventListener('click', _ => {
       channel.send('route-aside', {route: 'form-group'});
+      drop.show = false;
+      fab.innerText = 'edit';
+    });
+
+    const newChannel = $('#fab-channel', drop);
+    newChannel.addEventListener('click', _ => {
+      channel.send('route-aside', {route: 'form-channel'});
       drop.show = false;
       fab.innerText = 'edit';
     });

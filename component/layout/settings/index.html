@@ -3,10 +3,7 @@
 
   <ui-header back="route-aside">
     Settings
-    <ui-item slot="more" id="logout">
-      <ui-icon>exit</ui-icon>
-      Log Out
-    </ui-item>
+    <ui-item icon="exit" slot="more" id="logout">Log Out</ui-item>
   </ui-header>
 
   <main>
@@ -15,30 +12,11 @@
     <h2>+79610433909</h2>
 
     <div style="padding: 0px 8px">
-      <ui-item data-route="form-settings">
-        <ui-icon>edit</ui-icon>
-        Edit Profile
-      </ui-item>
-
-      <ui-item data-route="form-general">
-        <ui-icon>settings</ui-icon>
-        General Settings
-      </ui-item>
-
-      <ui-item data-route="form-notifications">
-        <ui-icon>notifications</ui-icon>
-        Notifications
-      </ui-item>
-
-      <ui-item data-route="form-privacy">
-        <ui-icon>security</ui-icon>
-        Privacy and Security
-      </ui-item>
-
-      <ui-item data-route="form-language">
-        <ui-icon>language</ui-icon>
-        Language
-      </ui-item>
+      <ui-item icon="edit" data-route="form-settings">Edit Profile</ui-item>
+      <ui-item icon="settings" data-route="form-general">General Settings</ui-item>
+      <ui-item icon="notifications" data-route="form-notifications">Notifications</ui-item>
+      <ui-item icon="security" data-route="form-privacy">Privacy and Security</ui-item>
+      <ui-item icon="language" data-route="form-language">Language</ui-item>
     </div>
   </main>
 </template>

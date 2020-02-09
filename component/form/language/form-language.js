@@ -1,5 +1,7 @@
 import Component from '../../../script/Component.js';
 
+import UIRadio from '../../ui/radio/ui-radio.js';
+
 const component = Component.meta(import.meta.url, 'form-language');
 const attributes = {
 

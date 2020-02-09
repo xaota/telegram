@@ -1,14 +1,6 @@
 @charset "utf-8";
 
 :host {
-  display: block;
-}
-
-:host(:hover) {
-  background-color: #F4F4F5;
-}
-
-slot {
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -21,17 +13,21 @@ slot {
   color: rgb(7, 7, 7);
 }
 
-:host slot::slotted(ui-icon:first-child) {
+:host(:hover) {
+  background-color: #F4F4F5;
+}
+
+ui-icon {
   height: 24px;
   width: 24px;
   margin-right: 30px;
   color: var(--iconStatic);
 }
 
-:host(:hover) slot::slotted(ui-icon:first-child) {
+:host(:hover) ui-icon {
   color: var(--iconHover);
 }
 
-:host(:focus-within) slot::slotted(ui-icon:first-child) {
+:host(:focus-within) ui-icon {
   color: var(--iconActive);
 }

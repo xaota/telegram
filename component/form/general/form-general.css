@@ -15,7 +15,7 @@ main {
   padding: 0px 18px;
 }
 
-ui-checkbox {
+ui-checkbox, ui-radio {
   margin-bottom: 32px;
 }
 
