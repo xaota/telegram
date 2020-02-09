@@ -30,7 +30,7 @@ export default class LayoutSidebar extends Component {
     const search = new LayoutSearch();
     channel.on(events.CLOSE_SIDEBAR, () => {
       wrap.style.width = '0px';
-      animation(100, () => container.innerHTML = '');
+      animation(400, () => container.innerHTML = '');
     });
     channel.on(events.OPEN_PROFILE, () => {
       container.appendChild(profile);

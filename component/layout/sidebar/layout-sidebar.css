@@ -5,8 +5,8 @@
 .wrap {
     width: 0;
     transition-property: width;
-    transition-duration: 100ms;
-    transition-timing-function: ease-in, ease, linear;
+    transition-duration: 400ms;
+    transition-timing-function: ease-in;
     overflow: hidden;
 }
 
