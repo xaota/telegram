@@ -11,6 +11,7 @@ import ConversationHeader from '../../app/conversation-header/conversation-heade
 import MessageText  from '../../message/text/message-text.js';
 import MessageEmoji from '../../message/emoji/message-emoji.js';
 
+import '../sidebar/layout-sidebar.js';
 import '../../ui/tabs/ui-tabs.js';
 import '../../ui/tab/ui-tab.js';
 
@@ -33,13 +34,14 @@ export default class LayoutConversation extends Component {
   mount(node) {
     super.mount(node, attributes, properties);
     const aside = $('aside', node);
-    $('#close', node)
-        .addEventListener('click', () => {
-          aside.style.display = 'none';
-        });
+    const sidebar = $('layout-sidebar', node)
     $('conversation-header', node)
         .addEventListener('open-profile', e => {
           aside.style.display = 'flex';
+        });
+    sidebar
+        .addEventListener('close-sidebar', e => {
+          aside.style.display = 'none';
         });
     return this;
   }

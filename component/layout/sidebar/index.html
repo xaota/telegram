@@ -1,5 +1,110 @@
 <template>
   <link rel="stylesheet" href="./layout-sidebar.css" />
 
-  <slot></slot>
+<!--  <div class="header">
+    <ui-icon id="close">close</ui-icon>
+    <div class="info">Info</div>
+    <ui-icon id="more">more</ui-icon>
+  </div>
+
+  <div class="profile">
+    <ui-avatar slot="avatar" src="./content/7df97dad-26f3-4d32-bd61-b63c100c2504.jpeg" color="D77F7C"></ui-avatar>
+    <div class="name">Karen Stanford</div>
+    <div class="status online">online</div>
+    <div class="list">
+
+      <div class="item">
+        <div class="left">
+          <ui-icon>close</ui-icon>
+        </div>
+        <div class="right">
+          <div>Live location</div>
+          <div class="desc">Karen is sharing live location</div>
+        </div>
+      </div>
+
+      <div class="item">
+        <div class="left">
+          <ui-icon>close</ui-icon>
+        </div>
+        <div class="right">
+          <div>25 y.o. traveler</div>
+          <div class="desc">Bio</div>
+        </div>
+      </div>
+
+      <div class="item">
+        <div class="left">
+          <ui-icon>close</ui-icon>
+        </div>
+        <div class="right">
+          <div>kare</div>
+          <div class="desc">Username</div>
+        </div>
+      </div>
+
+      <div class="item">
+        <div class="left">
+          <ui-icon>phone</ui-icon>
+        </div>
+        <div class="right">
+          <div>+1 123 23232323</div>
+          <div class="desc">Phone</div>
+        </div>
+      </div>
+
+      <div class="item">
+        <div class="left">
+          <ui-icon>close</ui-icon>
+        </div>
+        <div class="right">
+          <div>Notifications</div>
+          <div class="desc">Enabled</div>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <ui-tabs>
+        <ui-tab selected>Media</ui-tab>
+        <ui-tab>Docs</ui-tab>
+        <ui-tab>Links</ui-tab>
+        <ui-tab>Audio</ui-tab>
+      </ui-tabs>
+    </div>
+  </div>-->
+
+  <div class="search">
+    <div class="header">
+      <ui-icon id="close">close</ui-icon>
+      <div>
+        <ui-icon id="search">search</ui-icon>
+        <input type="text" placeholder="Search">
+      </div>
+    </div>
+
+    <div class="result">
+      <div class="count">2 messages found</div>
+      <div class="list">
+
+        <div class="item">
+          <ui-avatar slot="avatar" src="./content/7df97dad-26f3-4d32-bd61-b63c100c2504.jpeg" color="D77F7C"></ui-avatar>
+          <div class="content">
+            <div>Little Sister</div>
+            <div class="desc">Party abrakadabra lorem ipsum pipsum asdasdas  asdasda asdas</div>
+          </div>
+          <div class="time">May 8</div>
+        </div>
+
+        <div class="item">
+          <ui-avatar slot="avatar" src="./content/7df97dad-26f3-4d32-bd61-b63c100c2504.jpeg" color="D77F7C"></ui-avatar>
+          <div class="content">
+            <div>Monika Parker</div>
+            <div class="desc">Party is</div>
+          </div>
+          <div class="time">Jan 28</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
 </template>

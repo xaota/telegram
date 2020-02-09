@@ -33,75 +33,9 @@ conversation-input {
 
 aside {
   border-left: 1px solid var(--grayBorderColor);
-  display: none;
+  display: flex; /* TODO none */
   flex-direction: column;
   position: relative;
   background: #fff;
   width: 420px;
-}
-
-aside .header {
-  display: flex;
-  align-items: center;
-  padding: 22px;
-}
-aside .header ui-icon {
-  cursor: pointer;
-}
-
-aside .info {
-  flex-grow: 1;
-  font-weight: 500;
-  font-size: 19px;
-  padding-left: 34px;
-}
-
-aside .profile {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-aside .profile ui-avatar {
-  width: 120px;
-  margin-bottom: 28px;
-}
-
-aside .profile .name {
-  font-weight: 500;
-  font-size: 15px;
-}
-aside .profile .status {
-  color: #707579;
-  font-size: .93333rem;
-}
-aside .profile .online {
-  color: #1da1f1
-}
-
-aside .profile .list {
-  display: flex;
-  padding: 20px;
-  font-size: 12px;
-  flex-direction: column;
-  align-self: flex-start;
-}
-aside .profile .list .item {
-  display: flex;
-}
-aside .profile .list .item + .item {
-  padding-top: 40px;
-}
-aside .profile .list .item .left {
-  padding-right: 25px;
-}
-aside .profile .list .item .left ui-icon {
-  height:16px;
-}
-aside .profile .list .item .right .desc {
-  color: var(--grayTextColor);
-  font-size: 10px;
-}
-aside .footer {
-  font-size: 10px;
 }

@@ -129,7 +129,7 @@ export default class FormEmoji extends Component {
 
   onSelectElement = (e) => {
       if (e.target.classList.toString().indexOf('list') === -1) {
-        this.event('emoji-select', {emoji: e.target.innerHTML})
+        this.event('emoji-select', {emoji: e.target.innerHTML});
       }
   };
 }
