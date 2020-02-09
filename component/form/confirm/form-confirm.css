@@ -11,9 +11,10 @@ ui-sticker {
   margin: 0 auto;
 }
 
-icon-edit {
+ui-icon {
   margin-left: 10px;
   cursor: pointer;
+  color: #707579;
 }
 
 div {

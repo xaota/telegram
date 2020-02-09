@@ -1,18 +1,9 @@
 import Component from '../../../script/Component.js';
-import $ from '../../../script/DOM.js';
+import $, {channel} from '../../../script/DOM.js';
 
 import UIDrop from '../../ui/drop/ui-drop.js';
 import UIItem from '../../ui/item/ui-item.js';
-
-import IconMenu     from '../../icon/menu/icon-menu.js';
-import IconSearch   from '../../icon/search/icon-search.js';
-
-import IconHelp     from '../../icon/help/icon-help.js';
-import IconGroup    from '../../icon/group/icon-group.js';
-import IconPrivate  from '../../icon/private/icon-private.js';
-import IconArchive  from '../../icon/archive/icon-archive.js';
-import IconFavorite from '../../icon/favorite/icon-favorite.js';
-import IconSettings from '../../icon/settings/icon-settings.js';
+import UIIcon from '../../ui/icon/ui-icon.js';
 
 const component = Component.meta(import.meta.url, 'chats-header');
 const attributes = {
@@ -30,11 +21,23 @@ export default class ChatsHeader extends Component {
 
   mount(node) {
     super.mount(node, attributes, properties);
-    const menu = $('icon-menu', node);
+    const menu = $('#menu', node);
     const drop = $('ui-drop', node);
     menu.addEventListener('click', () => drop.show = !drop.show);
+    [...drop.children]
+      .filter(e => UIItem.is(e))
+      .forEach(e => e.addEventListener('click', _ => route(drop, e.dataset.route)));
     return this;
   }
 }
 
 Component.init(ChatsHeader, component, {attributes, properties});
+
+/** */
+  function route(drop, route = '') {
+    drop.show = false;
+    if (!route) return;
+    route.startsWith('//')
+      ? window.open(route)
+      : channel.send('route-aside', {route});
+  }

@@ -1,9 +1,0 @@
-@charset "utf-8";
-
-:host {
-  display: inline-block;
-}
-
-svg {
-  display: block;
-}

@@ -1,8 +1,8 @@
 import Component from '../../../script/Component.js';
 
-import UIInput from '../../ui/input/ui-input.js';
-import UIButton from '../../ui/button/ui-button.js';
-import IconEdit from '../../icon/edit/icon-edit.js';
+import UIIcon    from '../../ui/icon/ui-icon.js';
+import UIInput   from '../../ui/input/ui-input.js';
+import UIButton  from '../../ui/button/ui-button.js';
 import UISticker from '../../ui/sticker/ui-sticker.js';
 
 const component = Component.meta(import.meta.url, 'form-confirm');

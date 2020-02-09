@@ -1,10 +1,10 @@
 <template>
   <link rel="stylesheet" href="./layout-settings.css" />
 
-  <ui-header back>
+  <ui-header back="route-aside">
     Settings
     <ui-item slot="more">
-      <icon-exit></icon-exit>
+      <ui-icon>exit</ui-icon>
       Log Out
     </ui-item>
   </ui-header>
@@ -15,24 +15,28 @@
     <h2>+79610433909</h2>
 
     <div style="padding: 0px 8px">
-      <ui-item>
-        <icon-edit></icon-edit>
+      <ui-item data-route="form-settings">
+        <ui-icon>edit</ui-icon>
         Edit Profile
       </ui-item>
-      <ui-item>
-        <icon-settings></icon-settings>
+
+      <ui-item data-route="form-general">
+        <ui-icon>settings</ui-icon>
         General Settings
       </ui-item>
-      <ui-item>
-        <icon-notifications></icon-notifications>
+
+      <ui-item data-route="form-notifications">
+        <ui-icon>notifications</ui-icon>
         Notifications
       </ui-item>
-      <ui-item>
-        <icon-security></icon-security>
+
+      <ui-item data-route="form-privacy">
+        <ui-icon>security</ui-icon>
         Privacy and Security
       </ui-item>
-      <ui-item>
-        <icon-language></icon-language>
+
+      <ui-item data-route="form-language">
+        <ui-icon>language</ui-icon>
         Language
       </ui-item>
     </div>

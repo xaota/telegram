@@ -1,13 +1,12 @@
 import Component from '../../../script/Component.js';
 
-import UIFAB      from '../../ui/fab/ui-fab.js';
-import UIInput    from '../../ui/input/ui-input.js';
+import UIIcon     from '../../ui/icon/ui-icon.js';
+// radio
 import UIHeader   from '../../ui/header/ui-header.js';
+import UICheckbox from '../../ui/checkbox/ui-checkbox.js';
 import UIFieldset from '../../ui/fieldset/ui-fieldset.js';
 
-import AvatarEdit from '../../app/avatar-edit/avatar-edit.js';
-
-const component = Component.meta(import.meta.url, 'form-settings');
+const component = Component.meta(import.meta.url, 'form-general');
 const attributes = {
 
   }
@@ -16,7 +15,7 @@ const properties = {
 
   }
 
-export default class FormSettings extends Component {
+export default class FormGeneral extends Component {
   constructor() {
     super(component);
   }
@@ -28,4 +27,4 @@ export default class FormSettings extends Component {
   }
 }
 
-Component.init(FormSettings, component, {attributes, properties});
+Component.init(FormGeneral, component, {attributes, properties});

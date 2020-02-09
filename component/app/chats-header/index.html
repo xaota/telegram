@@ -1,36 +1,45 @@
 <template>
   <link rel="stylesheet" href="./chats-header.css" />
 
-  <icon-menu></icon-menu>
+  <ui-icon id="menu">menu</ui-icon>
   <ui-drop>
-    <ui-item>
-      <icon-group></icon-group>
+    <ui-item data-route="form-group">
+      <ui-icon>group</ui-icon>
       New group
     </ui-item>
+
     <ui-item>
-      <icon-private></icon-private>
+      <ui-icon>private</ui-icon>
       Contacts
     </ui-item>
+
     <ui-item>
-      <icon-archive></icon-archive>
+      <ui-icon>archive</ui-icon>
       Archived
     </ui-item>
+
     <ui-item>
-      <icon-favorite></icon-favorite>
+      <ui-icon>favorite</ui-icon>
       Saved
     </ui-item>
-    <ui-item>
-      <icon-settings></icon-settings>
+
+    <ui-item data-route="layout-settings">
+      <ui-icon>settings</ui-icon>
       Settings
     </ui-item>
-    <ui-item>
-      <icon-help></icon-help>
+
+    <ui-item data-route="//telegram.org/support">
+      <ui-icon>help</ui-icon>
       Help
+    </ui-item>
+
+    <ui-item data-route="layout-icons">
+      Icons
     </ui-item>
   </ui-drop>
 
   <div>
-    <icon-search></icon-search>
+    <ui-icon id="search">search</ui-icon>
     Search
   </div>
 </template>

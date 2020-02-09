@@ -1,12 +1,12 @@
 <template>
   <link rel="stylesheet" href="./ui-header.css" />
 
-  <icon-back></icon-back>
+  <ui-icon id="back">back</ui-icon>
   <slot></slot>
 
-  <ui-drop>
+  <ui-drop right>
     <slot name="more"></slot>
   </ui-drop>
 
-  <icon-more></icon-more>
+  <ui-icon id="more">more</ui-icon>
 </template>

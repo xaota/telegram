@@ -1,9 +1,16 @@
 @charset "utf-8";
 
 :host {
-
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  position: relative;
 }
 
-slot {
-
+main {
+  display: block;
+  height: 100%;
+  overflow-y: auto;
+  padding: 0px 18px;
 }

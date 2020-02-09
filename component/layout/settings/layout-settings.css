@@ -38,3 +38,12 @@ h2 {
 main ui-item {
   border-radius: 8px;
 }
+
+main ui-item ui-icon {
+  color: #707579;
+}
+
+main ui-item:hover ui-icon {
+  color: #63A4EF;
+}
+

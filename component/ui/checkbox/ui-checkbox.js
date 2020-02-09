@@ -1,7 +1,7 @@
 import Component from '../../../script/Component.js';
 import $, {updateChildrenProperty} from '../../../script/DOM.js';
 
-import IconCheck from '../../icon/check/icon-check.js';
+import UIIcon from '../icon/ui-icon.js';
 
 const component = Component.meta(import.meta.url, 'ui-checkbox');
 const properties = {

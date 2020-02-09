@@ -1,8 +1,6 @@
 import Component from '../../../script/Component.js';
 
-import UIIcon from '../../ui/icon/ui-icon.js';
-
-const component = Component.meta(import.meta.url, 'chat-item');
+const component = Component.meta(import.meta.url, 'avatar-edit');
 const attributes = {
 
   }
@@ -11,7 +9,7 @@ const properties = {
 
   }
 
-export default class ChatItem extends Component {
+export default class AvatarEdit extends Component {
   constructor() {
     super(component);
   }
@@ -23,4 +21,4 @@ export default class ChatItem extends Component {
   }
 }
 
-Component.init(ChatItem, component, {attributes, properties});
+Component.init(AvatarEdit, component, {attributes, properties});

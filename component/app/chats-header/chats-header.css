@@ -6,13 +6,13 @@
   position: relative;
 }
 
-:host, icon-menu {
+:host, #menu {
   display: flex;
   align-items: center;
 }
 
-icon-menu {
-  padding: 8PX;
+#menu {
+  padding: 10px;
   margin-right: 1.06667rem;
   justify-content: left;
   width: 24px;
@@ -21,8 +21,12 @@ icon-menu {
   border-radius: 50%;
 }
 
-icon-menu:hover {
+#menu:hover {
   background-color: #f4f4f5;
+}
+
+ui-drop {
+  left: 16px;
 }
 
 div {
@@ -38,7 +42,7 @@ div {
   align-items: center;
 }
 
-icon-search {
+#search {
   width: 1.6rem;
   height: 1.6rem;
   margin-right: .4rem;

@@ -1,205 +1,178 @@
 <template>
   <link rel="stylesheet" href="./form-language.css" />
 
-  <div style="display: flex; flex-direction: column; justify-content: space-between; height: 100%; position: relative;">
-    <div>
-      <div style="height: 60px; display: flex; align-items: center; padding: 0px 20px 0px 14px; width: 100%;">
-        <div>
-          <div
-            style="cursor: pointer; height: 44px; width: 44px; display: flex; align-items: center; justify-content: center; background: rgb(255, 255, 255); border-radius: 50%; line-height: 44px;">
-            <div class="icon-wrap"><svg width="24" height="24" viewBox="0 0 24 24">
-                <g fill="none" fill-rule="evenodd">
-                  <polygon points="0 0 24 0 24 24 0 24"></polygon>
-                  <path fill="#707579" fill-rule="nonzero"
-                    d="M4.29289322,11.2928932 L11.2928932,4.29289322 C11.6834175,3.90236893 12.3165825,3.90236893 12.7071068,4.29289322 C13.0675907,4.65337718 13.0953203,5.22060824 12.7902954,5.61289944 L12.7071068,5.70710678 L7.414,11 L19,11 C19.5128358,11 19.9355072,11.3860402 19.9932723,11.8833789 L20,12 C20,12.5128358 19.6139598,12.9355072 19.1166211,12.9932723 L19,13 L7.414,13 L12.7071068,18.2928932 C13.0675907,18.6533772 13.0953203,19.2206082 12.7902954,19.6128994 L12.7071068,19.7071068 C12.3466228,20.0675907 11.7793918,20.0953203 11.3871006,19.7902954 L11.2928932,19.7071068 L4.29289322,12.7071068 C3.93240926,12.3466228 3.90467972,11.7793918 4.20970461,11.3871006 L4.29289322,11.2928932 L11.2928932,4.29289322 L4.29289322,11.2928932 Z">
-                  </path>
-                </g>
-              </svg></div>
-          </div>
-        </div>
-        <div></div>
-        <div style="">
-          <div style="font-size: 20px; font-weight: 500; margin-left: 22px;">Language</div>
-          <div></div>
-        </div>
-      </div>
-    </div>
-    <div style="height: 100%; overflow-y: auto;">
-      <div style="padding: 0px 24px; border-top: 1px solid rgb(218, 220, 224);">
-        <div style="margin-top: 26px; margin-bottom: 35px;"><label
-            style="cursor: pointer; display: flex; align-items: flex-start; margin-bottom: 32px;"><input type="radio"
-              style="position: absolute; left: -9999px; opacity: 0; visibility: hidden;"><span style="height: 24px;">
-              <div class="icon-wrap"><svg width="24" height="24" viewBox="0 0 24 24">
-                  <g fill="none" fill-rule="evenodd">
-                    <polygon points="0 0 24 0 24 24 0 24"></polygon>
-                    <path fill="#707579" fill-rule="nonzero"
-                      d="M12,2 C6.5,2 2,6.5 2,12 C2,17.5 6.5,22 12,22 C17.5,22 22,17.5 22,12 C22,6.5 17.5,2 12,2 L12,2 Z M12,20 C7.6,20 4,16.4 4,12 C4,7.6 7.6,4 12,4 C16.4,4 20,7.6 20,12 C20,16.4 16.4,20 12,20 L12,20 Z">
-                    </path>
-                  </g>
-                </svg></div>
-            </span><span style="display: block; margin-left: 32px;"><span
-                style="display: block; font-size: 16px; color: rgb(7, 7, 7);">English</span><span
-                style="display: block; font-size: 14px; color: rgb(112, 117, 121); margin-top: 5px;">English</span></span></label><label
-            style="cursor: pointer; display: flex; align-items: flex-start; margin-bottom: 32px;"><input type="radio"
-              style="position: absolute; left: -9999px; opacity: 0; visibility: hidden;"><span style="height: 24px;">
-              <div class="icon-wrap"><svg width="24" height="24" viewBox="0 0 24 24">
-                  <g fill="none" fill-rule="evenodd">
-                    <polygon points="0 0 24 0 24 24 0 24"></polygon>
-                    <path fill="#707579" fill-rule="nonzero"
-                      d="M12,2 C6.5,2 2,6.5 2,12 C2,17.5 6.5,22 12,22 C17.5,22 22,17.5 22,12 C22,6.5 17.5,2 12,2 L12,2 Z M12,20 C7.6,20 4,16.4 4,12 C4,7.6 7.6,4 12,4 C16.4,4 20,7.6 20,12 C20,16.4 16.4,20 12,20 L12,20 Z">
-                    </path>
-                  </g>
-                </svg></div>
-            </span><span style="display: block; margin-left: 32px;"><span
-                style="display: block; font-size: 16px; color: rgb(7, 7, 7);">Català</span><span
-                style="display: block; font-size: 14px; color: rgb(112, 117, 121); margin-top: 5px;">Catalan</span></span></label><label
-            style="cursor: pointer; display: flex; align-items: flex-start; margin-bottom: 32px;"><input type="radio"
-              style="position: absolute; left: -9999px; opacity: 0; visibility: hidden;"><span style="height: 24px;">
-              <div class="icon-wrap"><svg width="24" height="24" viewBox="0 0 24 24">
-                  <g fill="none" fill-rule="evenodd">
-                    <polygon points="0 0 24 0 24 24 0 24"></polygon>
-                    <path fill="#707579" fill-rule="nonzero"
-                      d="M12,2 C6.5,2 2,6.5 2,12 C2,17.5 6.5,22 12,22 C17.5,22 22,17.5 22,12 C22,6.5 17.5,2 12,2 L12,2 Z M12,20 C7.6,20 4,16.4 4,12 C4,7.6 7.6,4 12,4 C16.4,4 20,7.6 20,12 C20,16.4 16.4,20 12,20 L12,20 Z">
-                    </path>
-                  </g>
-                </svg></div>
-            </span><span style="display: block; margin-left: 32px;"><span
-                style="display: block; font-size: 16px; color: rgb(7, 7, 7);">Nederlands</span><span
-                style="display: block; font-size: 14px; color: rgb(112, 117, 121); margin-top: 5px;">Dutch</span></span></label><label
-            style="cursor: pointer; display: flex; align-items: flex-start; margin-bottom: 32px;"><input type="radio"
-              style="position: absolute; left: -9999px; opacity: 0; visibility: hidden;"><span style="height: 24px;">
-              <div class="icon-wrap"><svg width="24" height="24" viewBox="0 0 24 24">
-                  <g fill="none" fill-rule="evenodd">
-                    <polygon points="0 0 24 0 24 24 0 24"></polygon>
-                    <path fill="#707579" fill-rule="nonzero"
-                      d="M12,2 C6.5,2 2,6.5 2,12 C2,17.5 6.5,22 12,22 C17.5,22 22,17.5 22,12 C22,6.5 17.5,2 12,2 L12,2 Z M12,20 C7.6,20 4,16.4 4,12 C4,7.6 7.6,4 12,4 C16.4,4 20,7.6 20,12 C20,16.4 16.4,20 12,20 L12,20 Z">
-                    </path>
-                  </g>
-                </svg></div>
-            </span><span style="display: block; margin-left: 32px;"><span
-                style="display: block; font-size: 16px; color: rgb(7, 7, 7);">Français</span><span
-                style="display: block; font-size: 14px; color: rgb(112, 117, 121); margin-top: 5px;">French</span></span></label><label
-            style="cursor: pointer; display: flex; align-items: flex-start; margin-bottom: 32px;"><input type="radio"
-              style="position: absolute; left: -9999px; opacity: 0; visibility: hidden;"><span style="height: 24px;">
-              <div class="icon-wrap"><svg width="24" height="24" viewBox="0 0 24 24">
-                  <g fill="none" fill-rule="evenodd">
-                    <polygon points="0 0 24 0 24 24 0 24"></polygon>
-                    <path fill="#707579" fill-rule="nonzero"
-                      d="M12,2 C6.5,2 2,6.5 2,12 C2,17.5 6.5,22 12,22 C17.5,22 22,17.5 22,12 C22,6.5 17.5,2 12,2 L12,2 Z M12,20 C7.6,20 4,16.4 4,12 C4,7.6 7.6,4 12,4 C16.4,4 20,7.6 20,12 C20,16.4 16.4,20 12,20 L12,20 Z">
-                    </path>
-                  </g>
-                </svg></div>
-            </span><span style="display: block; margin-left: 32px;"><span
-                style="display: block; font-size: 16px; color: rgb(7, 7, 7);">Deutsch</span><span
-                style="display: block; font-size: 14px; color: rgb(112, 117, 121); margin-top: 5px;">German</span></span></label><label
-            style="cursor: pointer; display: flex; align-items: flex-start; margin-bottom: 32px;"><input type="radio"
-              style="position: absolute; left: -9999px; opacity: 0; visibility: hidden;"><span style="height: 24px;">
-              <div class="icon-wrap"><svg width="24" height="24" viewBox="0 0 24 24">
-                  <g fill="none" fill-rule="evenodd">
-                    <polygon points="0 0 24 0 24 24 0 24"></polygon>
-                    <path fill="#707579" fill-rule="nonzero"
-                      d="M12,2 C6.5,2 2,6.5 2,12 C2,17.5 6.5,22 12,22 C17.5,22 22,17.5 22,12 C22,6.5 17.5,2 12,2 L12,2 Z M12,20 C7.6,20 4,16.4 4,12 C4,7.6 7.6,4 12,4 C16.4,4 20,7.6 20,12 C20,16.4 16.4,20 12,20 L12,20 Z">
-                    </path>
-                  </g>
-                </svg></div>
-            </span><span style="display: block; margin-left: 32px;"><span
-                style="display: block; font-size: 16px; color: rgb(7, 7, 7);">Italiano</span><span
-                style="display: block; font-size: 14px; color: rgb(112, 117, 121); margin-top: 5px;">Italian</span></span></label><label
-            style="cursor: pointer; display: flex; align-items: flex-start; margin-bottom: 32px;"><input type="radio"
-              style="position: absolute; left: -9999px; opacity: 0; visibility: hidden;"><span style="height: 24px;">
-              <div class="icon-wrap"><svg width="24" height="24" viewBox="0 0 24 24">
-                  <g fill="none" fill-rule="evenodd">
-                    <polygon points="0 0 24 0 24 24 0 24"></polygon>
-                    <path fill="#707579" fill-rule="nonzero"
-                      d="M12,2 C6.5,2 2,6.5 2,12 C2,17.5 6.5,22 12,22 C17.5,22 22,17.5 22,12 C22,6.5 17.5,2 12,2 L12,2 Z M12,20 C7.6,20 4,16.4 4,12 C4,7.6 7.6,4 12,4 C16.4,4 20,7.6 20,12 C20,16.4 16.4,20 12,20 L12,20 Z">
-                    </path>
-                  </g>
-                </svg></div>
-            </span><span style="display: block; margin-left: 32px;"><span
-                style="display: block; font-size: 16px; color: rgb(7, 7, 7);">한국어</span><span
-                style="display: block; font-size: 14px; color: rgb(112, 117, 121); margin-top: 5px;">Korean</span></span></label><label
-            style="cursor: pointer; display: flex; align-items: flex-start; margin-bottom: 32px;"><input type="radio"
-              style="position: absolute; left: -9999px; opacity: 0; visibility: hidden;"><span style="height: 24px;">
-              <div class="icon-wrap"><svg width="24" height="24" viewBox="0 0 24 24">
-                  <g fill="none" fill-rule="evenodd">
-                    <polygon points="0 0 24 0 24 24 0 24"></polygon>
-                    <path fill="#707579" fill-rule="nonzero"
-                      d="M12,2 C6.5,2 2,6.5 2,12 C2,17.5 6.5,22 12,22 C17.5,22 22,17.5 22,12 C22,6.5 17.5,2 12,2 L12,2 Z M12,20 C7.6,20 4,16.4 4,12 C4,7.6 7.6,4 12,4 C16.4,4 20,7.6 20,12 C20,16.4 16.4,20 12,20 L12,20 Z">
-                    </path>
-                  </g>
-                </svg></div>
-            </span><span style="display: block; margin-left: 32px;"><span
-                style="display: block; font-size: 16px; color: rgb(7, 7, 7);">Bahasa Melayu</span><span
-                style="display: block; font-size: 14px; color: rgb(112, 117, 121); margin-top: 5px;">Malay</span></span></label><label
-            style="cursor: pointer; display: flex; align-items: flex-start; margin-bottom: 32px;"><input type="radio"
-              style="position: absolute; left: -9999px; opacity: 0; visibility: hidden;"><span style="height: 24px;">
-              <div class="icon-wrap"><svg width="24" height="24" viewBox="0 0 24 24">
-                  <g fill="none" fill-rule="evenodd">
-                    <polygon points="0 0 24 0 24 24 0 24"></polygon>
-                    <path fill="#707579" fill-rule="nonzero"
-                      d="M12,2 C6.5,2 2,6.5 2,12 C2,17.5 6.5,22 12,22 C17.5,22 22,17.5 22,12 C22,6.5 17.5,2 12,2 L12,2 Z M12,20 C7.6,20 4,16.4 4,12 C4,7.6 7.6,4 12,4 C16.4,4 20,7.6 20,12 C20,16.4 16.4,20 12,20 L12,20 Z">
-                    </path>
-                  </g>
-                </svg></div>
-            </span><span style="display: block; margin-left: 32px;"><span
-                style="display: block; font-size: 16px; color: rgb(7, 7, 7);">Português (Brasil)</span><span
-                style="display: block; font-size: 14px; color: rgb(112, 117, 121); margin-top: 5px;">Portuguese
-                (Brazil)</span></span></label><label
-            style="cursor: pointer; display: flex; align-items: flex-start; margin-bottom: 32px;"><input type="radio"
-              style="position: absolute; left: -9999px; opacity: 0; visibility: hidden;"><span style="height: 24px;">
-              <div class="icon-wrap"><svg width="24" height="24" viewBox="0 0 24 24">
-                  <g fill="none" fill-rule="evenodd">
-                    <polygon points="0 0 24 0 24 24 0 24"></polygon>
-                    <path fill="#4EA4F6" fill-rule="nonzero"
-                      d="M12,7 C9.2,7 7,9.2 7,12 C7,14.8 9.2,17 12,17 C14.8,17 17,14.8 17,12 C17,9.2 14.8,7 12,7 L12,7 Z M12,2 C6.5,2 2,6.5 2,12 C2,17.5 6.5,22 12,22 C17.5,22 22,17.5 22,12 C22,6.5 17.5,2 12,2 L12,2 Z M12,20 C7.6,20 4,16.4 4,12 C4,7.6 7.6,4 12,4 C16.4,4 20,7.6 20,12 C20,16.4 16.4,20 12,20 L12,20 Z">
-                    </path>
-                  </g>
-                </svg></div>
-            </span><span style="display: block; margin-left: 32px;"><span
-                style="display: block; font-size: 16px; color: rgb(7, 7, 7);">Русский</span><span
-                style="display: block; font-size: 14px; color: rgb(112, 117, 121); margin-top: 5px;">Russian</span></span></label><label
-            style="cursor: pointer; display: flex; align-items: flex-start; margin-bottom: 32px;"><input type="radio"
-              style="position: absolute; left: -9999px; opacity: 0; visibility: hidden;"><span style="height: 24px;">
-              <div class="icon-wrap"><svg width="24" height="24" viewBox="0 0 24 24">
-                  <g fill="none" fill-rule="evenodd">
-                    <polygon points="0 0 24 0 24 24 0 24"></polygon>
-                    <path fill="#707579" fill-rule="nonzero"
-                      d="M12,2 C6.5,2 2,6.5 2,12 C2,17.5 6.5,22 12,22 C17.5,22 22,17.5 22,12 C22,6.5 17.5,2 12,2 L12,2 Z M12,20 C7.6,20 4,16.4 4,12 C4,7.6 7.6,4 12,4 C16.4,4 20,7.6 20,12 C20,16.4 16.4,20 12,20 L12,20 Z">
-                    </path>
-                  </g>
-                </svg></div>
-            </span><span style="display: block; margin-left: 32px;"><span
-                style="display: block; font-size: 16px; color: rgb(7, 7, 7);">Español</span><span
-                style="display: block; font-size: 14px; color: rgb(112, 117, 121); margin-top: 5px;">Spanish</span></span></label><label
-            style="cursor: pointer; display: flex; align-items: flex-start; margin-bottom: 32px;"><input type="radio"
-              style="position: absolute; left: -9999px; opacity: 0; visibility: hidden;"><span style="height: 24px;">
-              <div class="icon-wrap"><svg width="24" height="24" viewBox="0 0 24 24">
-                  <g fill="none" fill-rule="evenodd">
-                    <polygon points="0 0 24 0 24 24 0 24"></polygon>
-                    <path fill="#707579" fill-rule="nonzero"
-                      d="M12,2 C6.5,2 2,6.5 2,12 C2,17.5 6.5,22 12,22 C17.5,22 22,17.5 22,12 C22,6.5 17.5,2 12,2 L12,2 Z M12,20 C7.6,20 4,16.4 4,12 C4,7.6 7.6,4 12,4 C16.4,4 20,7.6 20,12 C20,16.4 16.4,20 12,20 L12,20 Z">
-                    </path>
-                  </g>
-                </svg></div>
-            </span><span style="display: block; margin-left: 32px;"><span
-                style="display: block; font-size: 16px; color: rgb(7, 7, 7);">Türkçe</span><span
-                style="display: block; font-size: 14px; color: rgb(112, 117, 121); margin-top: 5px;">Turkish</span></span></label><label
-            style="cursor: pointer; display: flex; align-items: flex-start; margin-bottom: 32px;"><input type="radio"
-              style="position: absolute; left: -9999px; opacity: 0; visibility: hidden;"><span style="height: 24px;">
-              <div class="icon-wrap"><svg width="24" height="24" viewBox="0 0 24 24">
-                  <g fill="none" fill-rule="evenodd">
-                    <polygon points="0 0 24 0 24 24 0 24"></polygon>
-                    <path fill="#707579" fill-rule="nonzero"
-                      d="M12,2 C6.5,2 2,6.5 2,12 C2,17.5 6.5,22 12,22 C17.5,22 22,17.5 22,12 C22,6.5 17.5,2 12,2 L12,2 Z M12,20 C7.6,20 4,16.4 4,12 C4,7.6 7.6,4 12,4 C16.4,4 20,7.6 20,12 C20,16.4 16.4,20 12,20 L12,20 Z">
-                    </path>
-                  </g>
-                </svg></div>
-            </span><span style="display: block; margin-left: 32px;"><span
-                style="display: block; font-size: 16px; color: rgb(7, 7, 7);">Українська</span><span
-                style="display: block; font-size: 14px; color: rgb(112, 117, 121); margin-top: 5px;">Ukrainian</span></span></label>
-        </div>
-      </div>
-    </div>
-    <div></div>
-  </div>
+  <ui-header back="route-aside">Language</ui-header>
+  <main>
+    <label style="cursor: pointer; display: flex; align-items: flex-start; margin-bottom: 32px;"><input type="radio"
+        style="position: absolute; left: -9999px; opacity: 0; visibility: hidden;"><span style="height: 24px;">
+        <div class="icon-wrap"><svg width="24" height="24" viewBox="0 0 24 24">
+            <g fill="none" fill-rule="evenodd">
+              <polygon points="0 0 24 0 24 24 0 24"></polygon>
+              <path fill="#707579" fill-rule="nonzero"
+                d="M12,2 C6.5,2 2,6.5 2,12 C2,17.5 6.5,22 12,22 C17.5,22 22,17.5 22,12 C22,6.5 17.5,2 12,2 L12,2 Z M12,20 C7.6,20 4,16.4 4,12 C4,7.6 7.6,4 12,4 C16.4,4 20,7.6 20,12 C20,16.4 16.4,20 12,20 L12,20 Z">
+              </path>
+            </g>
+          </svg></div>
+      </span>
+      <span style="display: block; margin-left: 32px;"><span
+          style="display: block; font-size: 16px; color: rgb(7, 7, 7);">English</span><span
+          style="display: block; font-size: 14px; color: rgb(112, 117, 121); margin-top: 5px;">English</span></span></label><label
+      style="cursor: pointer; display: flex; align-items: flex-start; margin-bottom: 32px;"><input type="radio"
+        style="position: absolute; left: -9999px; opacity: 0; visibility: hidden;"><span style="height: 24px;">
+        <div class="icon-wrap"><svg width="24" height="24" viewBox="0 0 24 24">
+            <g fill="none" fill-rule="evenodd">
+              <polygon points="0 0 24 0 24 24 0 24"></polygon>
+              <path fill="#707579" fill-rule="nonzero"
+                d="M12,2 C6.5,2 2,6.5 2,12 C2,17.5 6.5,22 12,22 C17.5,22 22,17.5 22,12 C22,6.5 17.5,2 12,2 L12,2 Z M12,20 C7.6,20 4,16.4 4,12 C4,7.6 7.6,4 12,4 C16.4,4 20,7.6 20,12 C20,16.4 16.4,20 12,20 L12,20 Z">
+              </path>
+            </g>
+          </svg></div>
+      </span><span style="display: block; margin-left: 32px;"><span
+          style="display: block; font-size: 16px; color: rgb(7, 7, 7);">Català</span><span
+          style="display: block; font-size: 14px; color: rgb(112, 117, 121); margin-top: 5px;">Catalan</span></span></label><label
+      style="cursor: pointer; display: flex; align-items: flex-start; margin-bottom: 32px;"><input type="radio"
+        style="position: absolute; left: -9999px; opacity: 0; visibility: hidden;"><span style="height: 24px;">
+        <div class="icon-wrap"><svg width="24" height="24" viewBox="0 0 24 24">
+            <g fill="none" fill-rule="evenodd">
+              <polygon points="0 0 24 0 24 24 0 24"></polygon>
+              <path fill="#707579" fill-rule="nonzero"
+                d="M12,2 C6.5,2 2,6.5 2,12 C2,17.5 6.5,22 12,22 C17.5,22 22,17.5 22,12 C22,6.5 17.5,2 12,2 L12,2 Z M12,20 C7.6,20 4,16.4 4,12 C4,7.6 7.6,4 12,4 C16.4,4 20,7.6 20,12 C20,16.4 16.4,20 12,20 L12,20 Z">
+              </path>
+            </g>
+          </svg></div>
+      </span><span style="display: block; margin-left: 32px;"><span
+          style="display: block; font-size: 16px; color: rgb(7, 7, 7);">Nederlands</span><span
+          style="display: block; font-size: 14px; color: rgb(112, 117, 121); margin-top: 5px;">Dutch</span></span></label><label
+      style="cursor: pointer; display: flex; align-items: flex-start; margin-bottom: 32px;"><input type="radio"
+        style="position: absolute; left: -9999px; opacity: 0; visibility: hidden;"><span style="height: 24px;">
+        <div class="icon-wrap"><svg width="24" height="24" viewBox="0 0 24 24">
+            <g fill="none" fill-rule="evenodd">
+              <polygon points="0 0 24 0 24 24 0 24"></polygon>
+              <path fill="#707579" fill-rule="nonzero"
+                d="M12,2 C6.5,2 2,6.5 2,12 C2,17.5 6.5,22 12,22 C17.5,22 22,17.5 22,12 C22,6.5 17.5,2 12,2 L12,2 Z M12,20 C7.6,20 4,16.4 4,12 C4,7.6 7.6,4 12,4 C16.4,4 20,7.6 20,12 C20,16.4 16.4,20 12,20 L12,20 Z">
+              </path>
+            </g>
+          </svg></div>
+      </span><span style="display: block; margin-left: 32px;"><span
+          style="display: block; font-size: 16px; color: rgb(7, 7, 7);">Français</span><span
+          style="display: block; font-size: 14px; color: rgb(112, 117, 121); margin-top: 5px;">French</span></span></label><label
+      style="cursor: pointer; display: flex; align-items: flex-start; margin-bottom: 32px;"><input type="radio"
+        style="position: absolute; left: -9999px; opacity: 0; visibility: hidden;"><span style="height: 24px;">
+        <div class="icon-wrap"><svg width="24" height="24" viewBox="0 0 24 24">
+            <g fill="none" fill-rule="evenodd">
+              <polygon points="0 0 24 0 24 24 0 24"></polygon>
+              <path fill="#707579" fill-rule="nonzero"
+                d="M12,2 C6.5,2 2,6.5 2,12 C2,17.5 6.5,22 12,22 C17.5,22 22,17.5 22,12 C22,6.5 17.5,2 12,2 L12,2 Z M12,20 C7.6,20 4,16.4 4,12 C4,7.6 7.6,4 12,4 C16.4,4 20,7.6 20,12 C20,16.4 16.4,20 12,20 L12,20 Z">
+              </path>
+            </g>
+          </svg></div>
+      </span><span style="display: block; margin-left: 32px;"><span
+          style="display: block; font-size: 16px; color: rgb(7, 7, 7);">Deutsch</span><span
+          style="display: block; font-size: 14px; color: rgb(112, 117, 121); margin-top: 5px;">German</span></span></label><label
+      style="cursor: pointer; display: flex; align-items: flex-start; margin-bottom: 32px;"><input type="radio"
+        style="position: absolute; left: -9999px; opacity: 0; visibility: hidden;"><span style="height: 24px;">
+        <div class="icon-wrap"><svg width="24" height="24" viewBox="0 0 24 24">
+            <g fill="none" fill-rule="evenodd">
+              <polygon points="0 0 24 0 24 24 0 24"></polygon>
+              <path fill="#707579" fill-rule="nonzero"
+                d="M12,2 C6.5,2 2,6.5 2,12 C2,17.5 6.5,22 12,22 C17.5,22 22,17.5 22,12 C22,6.5 17.5,2 12,2 L12,2 Z M12,20 C7.6,20 4,16.4 4,12 C4,7.6 7.6,4 12,4 C16.4,4 20,7.6 20,12 C20,16.4 16.4,20 12,20 L12,20 Z">
+              </path>
+            </g>
+          </svg></div>
+      </span><span style="display: block; margin-left: 32px;"><span
+          style="display: block; font-size: 16px; color: rgb(7, 7, 7);">Italiano</span><span
+          style="display: block; font-size: 14px; color: rgb(112, 117, 121); margin-top: 5px;">Italian</span></span></label><label
+      style="cursor: pointer; display: flex; align-items: flex-start; margin-bottom: 32px;"><input type="radio"
+        style="position: absolute; left: -9999px; opacity: 0; visibility: hidden;"><span style="height: 24px;">
+        <div class="icon-wrap"><svg width="24" height="24" viewBox="0 0 24 24">
+            <g fill="none" fill-rule="evenodd">
+              <polygon points="0 0 24 0 24 24 0 24"></polygon>
+              <path fill="#707579" fill-rule="nonzero"
+                d="M12,2 C6.5,2 2,6.5 2,12 C2,17.5 6.5,22 12,22 C17.5,22 22,17.5 22,12 C22,6.5 17.5,2 12,2 L12,2 Z M12,20 C7.6,20 4,16.4 4,12 C4,7.6 7.6,4 12,4 C16.4,4 20,7.6 20,12 C20,16.4 16.4,20 12,20 L12,20 Z">
+              </path>
+            </g>
+          </svg></div>
+      </span><span style="display: block; margin-left: 32px;"><span
+          style="display: block; font-size: 16px; color: rgb(7, 7, 7);">한국어</span><span
+          style="display: block; font-size: 14px; color: rgb(112, 117, 121); margin-top: 5px;">Korean</span></span></label><label
+      style="cursor: pointer; display: flex; align-items: flex-start; margin-bottom: 32px;"><input type="radio"
+        style="position: absolute; left: -9999px; opacity: 0; visibility: hidden;"><span style="height: 24px;">
+        <div class="icon-wrap"><svg width="24" height="24" viewBox="0 0 24 24">
+            <g fill="none" fill-rule="evenodd">
+              <polygon points="0 0 24 0 24 24 0 24"></polygon>
+              <path fill="#707579" fill-rule="nonzero"
+                d="M12,2 C6.5,2 2,6.5 2,12 C2,17.5 6.5,22 12,22 C17.5,22 22,17.5 22,12 C22,6.5 17.5,2 12,2 L12,2 Z M12,20 C7.6,20 4,16.4 4,12 C4,7.6 7.6,4 12,4 C16.4,4 20,7.6 20,12 C20,16.4 16.4,20 12,20 L12,20 Z">
+              </path>
+            </g>
+          </svg></div>
+      </span><span style="display: block; margin-left: 32px;"><span
+          style="display: block; font-size: 16px; color: rgb(7, 7, 7);">Bahasa Melayu</span><span
+          style="display: block; font-size: 14px; color: rgb(112, 117, 121); margin-top: 5px;">Malay</span></span></label><label
+      style="cursor: pointer; display: flex; align-items: flex-start; margin-bottom: 32px;"><input type="radio"
+        style="position: absolute; left: -9999px; opacity: 0; visibility: hidden;"><span style="height: 24px;">
+        <div class="icon-wrap"><svg width="24" height="24" viewBox="0 0 24 24">
+            <g fill="none" fill-rule="evenodd">
+              <polygon points="0 0 24 0 24 24 0 24"></polygon>
+              <path fill="#707579" fill-rule="nonzero"
+                d="M12,2 C6.5,2 2,6.5 2,12 C2,17.5 6.5,22 12,22 C17.5,22 22,17.5 22,12 C22,6.5 17.5,2 12,2 L12,2 Z M12,20 C7.6,20 4,16.4 4,12 C4,7.6 7.6,4 12,4 C16.4,4 20,7.6 20,12 C20,16.4 16.4,20 12,20 L12,20 Z">
+              </path>
+            </g>
+          </svg></div>
+      </span><span style="display: block; margin-left: 32px;"><span
+          style="display: block; font-size: 16px; color: rgb(7, 7, 7);">Português (Brasil)</span><span
+          style="display: block; font-size: 14px; color: rgb(112, 117, 121); margin-top: 5px;">Portuguese
+          (Brazil)</span></span></label><label
+      style="cursor: pointer; display: flex; align-items: flex-start; margin-bottom: 32px;"><input type="radio"
+        style="position: absolute; left: -9999px; opacity: 0; visibility: hidden;"><span style="height: 24px;">
+        <div class="icon-wrap"><svg width="24" height="24" viewBox="0 0 24 24">
+            <g fill="none" fill-rule="evenodd">
+              <polygon points="0 0 24 0 24 24 0 24"></polygon>
+              <path fill="#4EA4F6" fill-rule="nonzero"
+                d="M12,7 C9.2,7 7,9.2 7,12 C7,14.8 9.2,17 12,17 C14.8,17 17,14.8 17,12 C17,9.2 14.8,7 12,7 L12,7 Z M12,2 C6.5,2 2,6.5 2,12 C2,17.5 6.5,22 12,22 C17.5,22 22,17.5 22,12 C22,6.5 17.5,2 12,2 L12,2 Z M12,20 C7.6,20 4,16.4 4,12 C4,7.6 7.6,4 12,4 C16.4,4 20,7.6 20,12 C20,16.4 16.4,20 12,20 L12,20 Z">
+              </path>
+            </g>
+          </svg></div>
+      </span><span style="display: block; margin-left: 32px;"><span
+          style="display: block; font-size: 16px; color: rgb(7, 7, 7);">Русский</span><span
+          style="display: block; font-size: 14px; color: rgb(112, 117, 121); margin-top: 5px;">Russian</span></span></label><label
+      style="cursor: pointer; display: flex; align-items: flex-start; margin-bottom: 32px;"><input type="radio"
+        style="position: absolute; left: -9999px; opacity: 0; visibility: hidden;"><span style="height: 24px;">
+        <div class="icon-wrap"><svg width="24" height="24" viewBox="0 0 24 24">
+            <g fill="none" fill-rule="evenodd">
+              <polygon points="0 0 24 0 24 24 0 24"></polygon>
+              <path fill="#707579" fill-rule="nonzero"
+                d="M12,2 C6.5,2 2,6.5 2,12 C2,17.5 6.5,22 12,22 C17.5,22 22,17.5 22,12 C22,6.5 17.5,2 12,2 L12,2 Z M12,20 C7.6,20 4,16.4 4,12 C4,7.6 7.6,4 12,4 C16.4,4 20,7.6 20,12 C20,16.4 16.4,20 12,20 L12,20 Z">
+              </path>
+            </g>
+          </svg></div>
+      </span><span style="display: block; margin-left: 32px;"><span
+          style="display: block; font-size: 16px; color: rgb(7, 7, 7);">Español</span><span
+          style="display: block; font-size: 14px; color: rgb(112, 117, 121); margin-top: 5px;">Spanish</span></span></label><label
+      style="cursor: pointer; display: flex; align-items: flex-start; margin-bottom: 32px;"><input type="radio"
+        style="position: absolute; left: -9999px; opacity: 0; visibility: hidden;"><span style="height: 24px;">
+        <div class="icon-wrap"><svg width="24" height="24" viewBox="0 0 24 24">
+            <g fill="none" fill-rule="evenodd">
+              <polygon points="0 0 24 0 24 24 0 24"></polygon>
+              <path fill="#707579" fill-rule="nonzero"
+                d="M12,2 C6.5,2 2,6.5 2,12 C2,17.5 6.5,22 12,22 C17.5,22 22,17.5 22,12 C22,6.5 17.5,2 12,2 L12,2 Z M12,20 C7.6,20 4,16.4 4,12 C4,7.6 7.6,4 12,4 C16.4,4 20,7.6 20,12 C20,16.4 16.4,20 12,20 L12,20 Z">
+              </path>
+            </g>
+          </svg></div>
+      </span><span style="display: block; margin-left: 32px;"><span
+          style="display: block; font-size: 16px; color: rgb(7, 7, 7);">Türkçe</span><span
+          style="display: block; font-size: 14px; color: rgb(112, 117, 121); margin-top: 5px;">Turkish</span></span></label><label
+      style="cursor: pointer; display: flex; align-items: flex-start; margin-bottom: 32px;"><input type="radio"
+        style="position: absolute; left: -9999px; opacity: 0; visibility: hidden;"><span style="height: 24px;">
+        <div class="icon-wrap"><svg width="24" height="24" viewBox="0 0 24 24">
+            <g fill="none" fill-rule="evenodd">
+              <polygon points="0 0 24 0 24 24 0 24"></polygon>
+              <path fill="#707579" fill-rule="nonzero"
+                d="M12,2 C6.5,2 2,6.5 2,12 C2,17.5 6.5,22 12,22 C17.5,22 22,17.5 22,12 C22,6.5 17.5,2 12,2 L12,2 Z M12,20 C7.6,20 4,16.4 4,12 C4,7.6 7.6,4 12,4 C16.4,4 20,7.6 20,12 C20,16.4 16.4,20 12,20 L12,20 Z">
+              </path>
+            </g>
+          </svg></div>
+      </span><span style="display: block; margin-left: 32px;"><span
+          style="display: block; font-size: 16px; color: rgb(7, 7, 7);">Українська</span><span
+          style="display: block; font-size: 14px; color: rgb(112, 117, 121); margin-top: 5px;">Ukrainian</span></span></label>
+  </main>
 </template>

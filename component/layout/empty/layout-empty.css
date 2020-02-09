@@ -25,6 +25,10 @@ main {
   justify-content: space-between;
 }
 
+ui-icon {
+  color: #C5C9CC;
+}
+
 div {
   text-align: center;
 }

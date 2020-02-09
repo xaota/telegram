@@ -4,7 +4,7 @@
   position: absolute;
   bottom: 20px;
   right: 20px;
-  background-color: rgb(218, 220, 224);
+  background-color: #dadce0;
   border-radius: 50%;
   width: 54px;
   height: 54px;
@@ -16,7 +16,10 @@
 }
 
 slot {
-  display: block;
+  display: none;
+}
+
+ui-icon {
   width: 24px;
   height: 24px;
 }

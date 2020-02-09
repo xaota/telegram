@@ -3,14 +3,7 @@ import Component from '../../../script/Component.js';
 import '../../ui/tab/ui-tab.js';
 import '../../ui/tabs/ui-tabs.js';
 
-import '../../icon/emoji/icon-emoji.js';
-import '../../icon/time/icon-time.js';
-import '../../icon/cat/icon-cat.js';
-import '../../icon/apple/icon-apple.js';
-import '../../icon/car/icon-car.js';
-import '../../icon/ball/icon-ball.js';
-import '../../icon/bulb/icon-bulb.js';
-import '../../icon/flag/icon-flag.js';
+import '../../ui/icon/ui-icon.js';
 import $ from '../../../script/DOM.js';
 
 // import {emojies} from './emojies.js';
@@ -107,7 +100,7 @@ export default class FormEmoji extends Component {
     }
     this.group.style.display = 'flex';
     this.group.innerHTML = unionElements(tab.groups, (el) => {
-        return `<div class="item" active="${tab.selectedGroup === el}"><icon-${el} id="${el}"></icon-${el}></div>`;
+        return `<div class="item" active="${tab.selectedGroup === el}"><ui-icon id="${el}">${el}</ui-icon></div>`;
     });
   };
 

@@ -1,12 +1,7 @@
 import Component from '../../../script/Component.js';
 import $, {updateChildrenProperty} from '../../../script/DOM.js';
 
-import '../../icon/emoji/icon-emoji.js';
-import '../../icon/attach/icon-attach.js';
-import '../../icon/close/icon-close.js';
-import '../../icon/photo/icon-photo.js';
-import '../../icon/document/icon-document.js';
-
+import '../../ui/icon/ui-icon.js';
 import '../../ui/drop/ui-drop.js';
 import '../../message/text/message-text.js';
 import FormEmoji from '../../form/emoji/form-emoji.js';
@@ -40,11 +35,11 @@ export default class ConversationInput extends Component {
     $('.wrap_textarea', node)
         .addEventListener('click', () => this.focus(input));
 
-    const emoji = $('icon-emoji', node);
+    const emoji = $('#emoji', node);
     const dropEmoji = $('#drop-emoji', node);
     emoji.addEventListener('click', () => dropEmoji.show = !dropEmoji.show);
 
-    const attach = $('icon-attach', node)
+    const attach = $('#attach', node)
     const dropAttach = $('#drop-attach', node);
     attach.addEventListener('click', () => dropAttach.show = !dropAttach.show);
     return this;

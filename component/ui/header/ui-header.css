@@ -16,11 +16,8 @@
   position: relative;
 }
 
-icon-back,
-icon-more {
+ui-icon {
   cursor: pointer;
-  height: 44px;
-  width: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -28,14 +25,23 @@ icon-more {
   border-radius: 50%;
   line-height: 44px;
   flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  padding: 10px;
+  color: var(--iconStatic);
 }
 
-icon-back:hover, icon-more:hover {
+ui-icon:hover {
   background-color: #F4F4F5;
+  color: var(--iconHover);
 }
 
-icon-more {
+#more {
   display: none;
+}
+
+ui-drop {
+  right: 8px;
 }
 
 slot:not([name]) {
@@ -43,4 +49,5 @@ slot:not([name]) {
   width: 100%;
   /* padding-left: 36px; */
   padding-left: 24px;
+  user-select: none;
 }

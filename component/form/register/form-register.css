@@ -20,7 +20,7 @@
   cursor: pointer;
 }
 
-icon-photo-add {
+ui-icon#photo-add {
   position: absolute;
   left: 0;
   top: 0;

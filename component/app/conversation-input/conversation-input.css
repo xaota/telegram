@@ -97,7 +97,7 @@ textarea:focus {
   outline: none;
 }
 
-icon-close, icon-emoji, icon-attach {
+#close, #emoji, #attach {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -105,11 +105,11 @@ icon-close, icon-emoji, icon-attach {
   height: 44px;
   margin-right: 16px;
 }
-icon-close {
+#close {
   cursor: pointer;
   margin-right: 17px;
 }
-icon-attach {
+#attach {
   margin-right: 0px;
 }
 .enter {

@@ -8,12 +8,6 @@
   position: relative;
 }
 
-avatar-edit {
-  width: 120px;
-  height: 120px;
-  margin: 0 auto 34px;
-}
-
 main {
   display: block;
   height: 100%;
@@ -21,7 +15,7 @@ main {
   padding: 0px 18px;
 }
 
-p {
-  font-size: 14px;
-  color: rgb(112, 117, 121);
+ui-checkbox {
+  margin-bottom: 32px;
 }
+

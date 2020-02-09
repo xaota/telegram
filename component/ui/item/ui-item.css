@@ -21,8 +21,17 @@ slot {
   color: rgb(7, 7, 7);
 }
 
-slot::slotted(*:first-child) {
+:host slot::slotted(ui-icon:first-child) {
   height: 24px;
   width: 24px;
   margin-right: 30px;
+  color: var(--iconStatic);
+}
+
+:host(:hover) slot::slotted(ui-icon:first-child) {
+  color: var(--iconHover);
+}
+
+:host(:focus-within) slot::slotted(ui-icon:first-child) {
+  color: var(--iconActive);
 }

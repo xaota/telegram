@@ -31,16 +31,17 @@ input[type="checkbox"]:checked ~ span.checkmark {
   background-color: #4ea4f6;
 }
 
-input[type="checkbox"] ~ icon-check {
+input[type="checkbox"] ~ ui-icon {
   display: none;
   position: absolute;
   left: 0;
   top: 0px;
   width: 18px;
   height: 18px;
+  color: #fff;
 }
 
-input[type="checkbox"]:checked ~ icon-check {
+input[type="checkbox"]:checked ~ ui-icon {
   display: block;
 }
 
