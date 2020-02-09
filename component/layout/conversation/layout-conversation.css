@@ -5,6 +5,8 @@
   flex-direction: column;
   height: 100%;
   background-image: url(../../../asset/chamomile.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 conversation-header {
