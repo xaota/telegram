@@ -33,12 +33,12 @@ div {
 
 /* хвостик */
 :host(:last-child) div {
-  border-bottom-left-radius: 0px;
+  border-bottom-left-radius: 0;
 }
 
 :host(:last-child) div:after {
   left: -9px;
-  bottom: 0px;
+  bottom: 0;
   z-index: 2;
   background-image: url(../../../asset/tail.svg);
 }

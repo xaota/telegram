@@ -42,6 +42,16 @@ export default class ConversationInput extends Component {
     const attach = $('#attach', node)
     const dropAttach = $('#drop-attach', node);
     attach.addEventListener('click', () => dropAttach.show = !dropAttach.show);
+
+    const formEmoji = $('form-emoji', node);
+    formEmoji.addEventListener('emoji-select', e => {
+      let value = input.value;
+      const start = input.selectionStart;
+      const end = input.selectionEnd;
+      value = value.slice(0, start) + e.detail.emoji + value.slice(end, value.length)
+      input.value = value;
+      input.selectionEnd = start + 2;
+    });
     return this;
   }
 
