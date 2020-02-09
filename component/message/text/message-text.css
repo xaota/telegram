@@ -15,7 +15,7 @@
 
 div {
   display: inline-block;
-  background: #fff;
+  background: var(--background-message-in);
   border-radius: 10px;
   border-bottom-left-radius: 5px;
   border-top-left-radius: 5px;

@@ -5,9 +5,9 @@
   position: absolute;
   min-width: 218px;
   border-radius: 10px;
-  box-shadow: rgba(0, 0, 0, 0.4) 0px 0px 10px;
+  box-shadow: var(--shadow) 0px 0px 10px;
   z-index: 40;
-  background-color: rgb(255, 255, 255);
+  background-color: var(--drop);
   padding: 8px 0;
   overflow: hidden;
   opacity: 0;
@@ -33,6 +33,4 @@
   opacity: 1;
   visibility: visible;
   transform: translateY(0px);
-  /* left: 0px; */
-  /* top: 100%; */
 }

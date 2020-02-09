@@ -3,8 +3,6 @@
 }
 
 .dialog {
-  /* width: 100%; */
-  background: #fff;
   padding: 0 .53333rem 2px;
   border-bottom: 1px solid transparent;
 }
@@ -20,13 +18,12 @@
   border-radius: .66667rem;
   cursor: pointer;
   width: 100%;
-  background-color: #fff;
   transition: background-color .2s ease;
   box-sizing: border-box;
 }
 
 .dialog__clickable .-selected, .dialog__clickable:hover {
-  background-color: #f1f3f4;
+  background-color: var(--background-aside-hover);
 }
 
 .ripple__content {
@@ -60,7 +57,7 @@ slot[name="avatar"]::slotted(ui-avatar) {
 }
 
 .dialog__title {
-  color: #000;
+  color: var(--foreground);
   font-weight: 500;
   font-size: 1rem;
   line-height: 190%;
@@ -100,7 +97,7 @@ slot[name="avatar"]::slotted(ui-avatar) {
 
 .dialog__message_title {
   font-weight: 400;
-  color: #000;
+  color: var(--foreground-accent);
 }
 
 .dialog__badge {

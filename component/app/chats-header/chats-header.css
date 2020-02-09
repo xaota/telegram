@@ -22,7 +22,7 @@
 }
 
 #menu:hover {
-  background-color: #f4f4f5;
+  background-color: var(--background-field);
 }
 
 ui-drop {
@@ -33,7 +33,7 @@ div {
   flex: 1 50%;
   height: 2.93333rem;
   padding: 0 .8rem;
-  background-color: #f4f4f5;
+  background-color: var(--background-field);
   color: #8d969c;
   border-radius: 1.46667rem;
   cursor: not-allowed;

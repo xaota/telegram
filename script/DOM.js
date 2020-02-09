@@ -56,3 +56,7 @@ export function cssVariable(element, name, value) {
   if (value) element.style.setProperty(name, value);
   return getComputedStyle(element).getPropertyValue(name);
 }
+
+export function nightTheme() {
+  document.body.classList.toggle('dark');
+}

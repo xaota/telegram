@@ -41,7 +41,7 @@ div {
 div > ui-icon {
   display: flex;
   border-radius: 100%;
-  background: #fff;
+  background: var(--background-field);
   width: 36px;
   height: 36px;
   padding: 18px;

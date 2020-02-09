@@ -1,5 +1,5 @@
 import Component from '../../../script/Component.js';
-import $, {channel} from '../../../script/DOM.js';
+import $, {channel, nightTheme} from '../../../script/DOM.js';
 
 import UIDrop from '../../ui/drop/ui-drop.js';
 import UIItem from '../../ui/item/ui-item.js';
@@ -40,5 +40,15 @@ Component.init(ChatsHeader, component, {attributes, properties});
     if (!route) return;
     route.startsWith('//')
       ? window.open(route)
-      : channel.send('route-aside', {route});
+      : route.startsWith('#')
+        ? action(route.slice(1))
+        : channel.send('route-aside', {route})
+  }
+
+/** */
+  function action(route) {
+    console.log('action', route);
+    switch (route) {
+      case 'night-mode': return nightTheme();
+    }
   }

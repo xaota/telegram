@@ -19,7 +19,7 @@ label {
   top: -13px;
   left: 10px;
   z-index: 20;
-  background: #fff;
+  background: var(--background);
   padding: 4px;
   font-size: 12px;
   color: #8d969c;
@@ -39,6 +39,7 @@ div {
 }
 
 input {
+  color: var(--foreground);
   outline: none;
   display: block;
   width: 100%;

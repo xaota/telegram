@@ -21,7 +21,6 @@ ui-icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgb(255, 255, 255);
   border-radius: 50%;
   line-height: 44px;
   flex-shrink: 0;
@@ -32,7 +31,7 @@ ui-icon {
 }
 
 ui-icon:hover {
-  background-color: #F4F4F5;
+  background-color: var(--background-field);
   color: var(--iconHover);
 }
 

@@ -1,8 +1,7 @@
 :host {
   display: block;
   width: 360px;
-  font-family: var(--font);
-  color: #070707;
+  color: var(--foreground-accent);
   margin: 0 auto;
 }
 
@@ -23,7 +22,7 @@ h2 {
   margin-bottom: 49px;
   font-size: 16px;
   line-height: 21px;
-  color: #707579;
+  color: var(--foreground-label);
   max-width: 260px;
   margin-left: auto;
   margin-right: auto;

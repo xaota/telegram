@@ -13,10 +13,12 @@ aside {
   width: 26%;
   max-width: 28rem;
   min-width: 21.33333rem;
-  background: #fff;
+  color:      var(--foreground);
+  background: var(--background-aside);
 }
 
 main {
   width: 100%;
-  background-color: #e6ebee;
+  color:      var(--foreground);
+  background-color: var(--background);
 }

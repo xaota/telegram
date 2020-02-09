@@ -1,5 +1,7 @@
 :host {
-  background: #fff;
+  background: var(--background-aside);
+  color: var(--foreground);
+
   border-bottom: 1px solid #edeef0;
   padding: .33333rem 1.33333rem;
   display: flex;
