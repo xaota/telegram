@@ -33,7 +33,7 @@ conversation-input {
 
 aside {
   border-left: 1px solid var(--grayBorderColor);
-  display: flex; /* TODO none */
+  display: none;
   flex-direction: column;
   position: relative;
   background: #fff;

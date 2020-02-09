@@ -3,7 +3,7 @@
   border-bottom: 1px solid #edeef0;
   padding: .33333rem 1.33333rem;
   display: flex;
-  /* justify-content: space-between; */
+  justify-content: space-between;
   align-items: center;
   flex-direction: row;
   font-size: 15px;
@@ -20,6 +20,11 @@ ui-avatar {
   /* 46x46px */
 }
 
+.left {
+  flex-direction: row;
+  display: flex;
+  cursor: pointer;
+}
 .header__info {
   padding-left: .8rem;
   display: flex;
@@ -40,4 +45,13 @@ ui-avatar {
 
 .header__status.online {
   color: #1da1f1
+}
+
+.right {
+  position: relative;
+  right: 0;
+}
+
+.right ui-icon:hover {
+  cursor: pointer;
 }

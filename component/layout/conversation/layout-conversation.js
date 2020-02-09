@@ -39,6 +39,10 @@ export default class LayoutConversation extends Component {
         .addEventListener('open-profile', e => {
           aside.style.display = 'flex';
         });
+    $('conversation-header', node)
+        .addEventListener('open-search', e => {
+          aside.style.display = 'flex';
+        });
     sidebar
         .addEventListener('close-sidebar', e => {
           aside.style.display = 'none';
