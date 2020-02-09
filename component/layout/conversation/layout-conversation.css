@@ -30,11 +30,7 @@ conversation-input {
 }
 
 aside {
-  border-left: 1px solid var(--grayBorderColor);
-  display: flex;
   overflow: hidden;
-  flex-direction: column;
-  position: relative;
   background: var(--background-aside);
   flex-shrink: 0;
 }
