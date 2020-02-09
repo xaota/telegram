@@ -1,5 +1,7 @@
 import Component from '../../../script/Component.js';
-import $ from '../../../script/DOM.js';
+import $, {channel} from '../../../script/DOM.js';
+
+import sidebarEvents from '../../layout/sidebar/events.js';
 
 import UIAvatar from '../../ui/avatar/ui-avatar.js';
 import '../../ui/icon/ui-icon.js';
@@ -22,11 +24,11 @@ export default class ConversationHeader extends Component {
     super.mount(node, attributes, properties);
     $('.left', node)
         .addEventListener('click', () => {
-          this.event('open-profile', {id: 1})
+          channel.send(sidebarEvents.OPEN_PROFILE);
         });
     $('#search', node)
         .addEventListener('click', () => {
-          this.event('open-search', {id: 1})
+            channel.send(sidebarEvents.OPEN_SEARCH);
         });
     return this;
   }

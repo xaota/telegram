@@ -1,0 +1,72 @@
+:host {
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    padding: 5px 15px;
+}
+.header ui-icon {
+    cursor: pointer;
+}
+
+.info {
+    flex-grow: 1;
+    font-weight: 500;
+    font-size: 19px;
+    padding-left: 34px;
+}
+
+.profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile ui-icon:hover {
+    color: var(--iconStatic);
+}
+
+.profile ui-avatar {
+    width: 120px;
+    margin-bottom: 28px;
+}
+
+.profile .name {
+    font-weight: 500;
+    font-size: 15px;
+}
+.profile .status {
+    color: #707579;
+    font-size: .93333rem;
+}
+.profile .online {
+    color: #1da1f1
+}
+
+.profile .list {
+    display: flex;
+    padding: 20px;
+    font-size: 12px;
+    flex-direction: column;
+    align-self: flex-start;
+}
+.profile .list .item {
+    display: flex;
+}
+.profile .list .item + .item {
+    padding-top: 40px;
+}
+.profile .list .item .left {
+    padding-right: 25px;
+}
+.profile .list .item .left ui-icon {
+    height:16px;
+}
+.profile .list .item .right .desc {
+    color: var(--grayTextColor);
+    font-size: 10px;
+}
+.footer {
+    font-size: 10px;
+}
