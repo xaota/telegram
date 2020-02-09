@@ -5,6 +5,7 @@
   border-right: 1px solid #dadce0;
   font-size: 15px;
   height: 100%;
+  position: relative;
 }
 
 chats-header {
@@ -24,4 +25,18 @@ chat-item[lastpin] {
   border-bottom: 1px solid #edeef0;
   padding-bottom: .1rem;
   margin-bottom: calc(.3rem - 1px);
+}
+
+ui-fab {
+  bottom: -54px;
+  transition: .3s ease bottom;
+}
+
+ui-list:hover ~ ui-fab, ui-fab:hover, ui-drop:hover ~ ui-fab {
+  bottom: 20px;
+}
+
+ui-drop {
+  right: 16px;
+  bottom: 84px;
 }

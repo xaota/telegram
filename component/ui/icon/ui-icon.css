@@ -2,6 +2,13 @@
 
 :host {
   display: inline-block;
+  width: 24px;
+  height: 24px;
+  color: var(--iconStatic);
+}
+
+:host(:hover) {
+  color: var(--iconHover);
 }
 
 slot {

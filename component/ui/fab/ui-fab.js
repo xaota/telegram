@@ -21,7 +21,7 @@ export default class UIFAB extends Component {
     super.mount(node, attributes, properties);
     const slot = $('slot', node);
     const icon = $('ui-icon', node);
-    slot.addEventListener('slotchange', _ => icon.innerText = this.innerText);
+    slot.addEventListener('slotchange', _ => icon.innerText = this.innerText || this.innerHTML);
     return this;
   }
 }
