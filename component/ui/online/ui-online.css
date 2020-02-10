@@ -1,0 +1,16 @@
+:host {
+  display: flex;
+  align-items: center;
+}
+
+div {
+  color: var(--grayTextColor);
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.online {
+  color: var(--blueColor);
+}

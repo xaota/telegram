@@ -48,9 +48,10 @@ export default class ConversationInput extends Component {
       let value = input.value;
       const start = input.selectionStart;
       const end = input.selectionEnd;
-      value = value.slice(0, start) + e.detail.emoji + value.slice(end, value.length)
+      value = value.slice(0, start) + e.detail.emoji + value.slice(end, value.length);
       input.value = value;
       input.selectionEnd = start + 2;
+      this.calculateRows(input);
     });
     return this;
   }
@@ -68,6 +69,10 @@ export default class ConversationInput extends Component {
     }
     const el = e.target;
     // скидываем заранее заданное значение
+    this.calculateRows(el);
+  };
+
+  calculateRows = (el) => {
     el.style.height = 'inherit';
 
     const computed = window.getComputedStyle(el);
@@ -86,7 +91,7 @@ export default class ConversationInput extends Component {
 
     const newHeight = Math.min(preferredHeight, maxAllowedHeight);
     el.style.height = `${newHeight}px`;
-  }
+  };
 }
 
 Component.init(ConversationInput, component, {attributes, properties});

@@ -33,10 +33,6 @@ form-search {
     flex-direction: column;
     align-self: flex-start;
 }
-.result .list ui-avatar {
-    width: 60px;
-    flex-shrink: 0;
-}
 .result .list .item {
     display: flex;
     align-items: center;
@@ -44,22 +40,11 @@ form-search {
 .result .list .item + .item {
     padding-top: 20px;
 }
-.result .list .content {
-    flex-grow: 1;
-    padding: 0 0 0 20px;
-    flex-direction: column;
-    overflow: hidden;
-}
-.result .list .item .content .desc {
+.result .list .item  .desc {
     padding-top: 6px;
     color: var(--grayTextColor);
     font-size: 14px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-}
-
-.result .list .item .time {
-    white-space: nowrap;
-    flex-shrink: 0;
 }
