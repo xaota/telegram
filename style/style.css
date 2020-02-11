@@ -15,6 +15,7 @@ body {
   --foreground-label:       var(--light-foreground-label);
   --foreground-accent:      var(--light-foreground-accent);
   --background:             var(--light-background);
+  --background-alpha:       var(--light-background-alpha);
   --background-field:       var(--light-background-field);
   --background-aside:       var(--light-background-aside);
   --background-aside-hover: var(--light-background-aside-hover);
@@ -31,6 +32,7 @@ body.dark {
   --foreground-label:       var(--dark-foreground-label);
   --foreground-accent:      var(--dark-foreground-accent);
   --background:             var(--dark-background);
+  --background-alpha:       var(--dark-background-alpha);
   --background-field:       var(--dark-background-field);
   --background-aside:       var(--dark-background-aside);
   --background-aside-hover: var(--dark-background-aside-hover);

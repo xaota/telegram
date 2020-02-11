@@ -1,3 +1,5 @@
+import telegram, {config, storage} from '../../../tdweb/Telegram.js';
+
 import Component from '../../../script/Component.js';
 import $, {channel} from '../../../script/DOM.js';
 
@@ -8,13 +10,8 @@ import UICountry  from '../../ui/country/ui-country.js';
 import UICheckbox from '../../ui/checkbox/ui-checkbox.js';
 
 const component = Component.meta(import.meta.url, 'form-login');
-const attributes = {
-
-  }
-
-const properties = {
-
-  }
+const attributes = {}
+const properties = {}
 
 export default class FormLogin extends Component {
   constructor() {
@@ -31,13 +28,21 @@ export default class FormLogin extends Component {
       button.style.display = phone.value.length > 0 ? 'block' : 'none';
     });
 
-    button.addEventListener('click', _ => {
+    button.addEventListener('click', async _ => {
       phone.disabled = true;
       button.loading = true;
-      setTimeout(_ => {
-        channel.send('login-success', {phone: phone.value});
+
+      const phone_number = phone.value;
+      // console.log('auth', phone_number);
+      try {
+        storage.set('phone_number', phone_number);
+        await telegram.api('setAuthenticationPhoneNumber', {phone_number});
         wipe.call(this, phone, button);
-      }, 3000);
+      } catch (e) {
+        console.error(e);
+        phone.disabled = false;
+        button.loading = false;
+      }
     });
 
     return this;

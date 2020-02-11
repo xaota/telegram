@@ -30,6 +30,7 @@
   --light-foreground-label:       #707579;
   --light-foreground-accent:      #000;
   --light-background:             #E7EBEE;
+  --light-background-alpha:       rgba(255,255,255,0.7);
   --light-background-field:       #f4f4f5;
   --light-background-aside:       #fff;
   --light-background-aside-hover: #f1f3f4;
@@ -44,6 +45,7 @@
   --dark-foreground-label:       #707579;
   --dark-foreground-accent:      #ABCAEE;
   --dark-background:             #111419;
+  --dark-background-alpha:       rgba(0,0,0,0.7);
   --dark-background-field:       #25282f;
   --dark-background-accent:      #495F77;
   --dark-background-aside:       #191C21;

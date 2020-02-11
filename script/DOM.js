@@ -59,4 +59,6 @@ export function cssVariable(element, name, value) {
 
 export function nightTheme() {
   document.body.classList.toggle('dark');
+  const contains = document.body.classList.contains('dark');
+  localStorage.setItem('dark', contains ? '1' : '0');
 }

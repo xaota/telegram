@@ -1,7 +1,7 @@
 import Component from '../../../script/Component.js';
 import $, {channel} from '../../../script/DOM.js';
 
-import LayoutChat from '../chats/layout-chats.js';
+import LayoutChats from '../chats/layout-chats.js';
 
 import FormGroup from '../../form/group/form-group.js';
 import FormChannel from '../../form/channel/form-channel.js';
@@ -28,7 +28,7 @@ const properties = {
   }
 
 export default class LayoutMain extends Component {
-  constructor() {
+  constructor(user) {
     super(component);
   }
 
@@ -41,23 +41,23 @@ export default class LayoutMain extends Component {
       aside: {
         path: [],
         root: aside,
-        href: 'layout-chats'
+        href: 'layout-chats',
+        base: LayoutChats
       }
     });
 
-    route.call(this, 'aside');
-    channel.on('route-aside', e => route.call(this, 'aside', e.route));
 
-    //
+    channel.on('route-aside', e => route.call(this, 'aside', e.route));
     channel.on('conversation.open', e => {
       // console.log(e.id)
       const temp = $('layout-conversation, layout-empty', main);
       if (temp) temp.remove();
       // loader?
-      const conversation = new LayoutConversation(e.id);
+      const conversation = new LayoutConversation(e);
       main.append(conversation);
     });
 
+    route.call(this, 'aside'); // let current =
     return this;
   }
 }
@@ -67,20 +67,26 @@ Component.init(LayoutMain, component, {attributes, properties});
 /** */
   function route(root, route) {
     const store = this.store()[root];
-    const {path, root: node, href} = store;
+    const {path, root: node, href, base} = store;
 
     if (!route) {
       path.pop(); //
       route = path.pop() || href;
     }
 
-    const target = $(route, node);
-    if (!target) return console.error('route not found:', root, route);
+    let target = $(route, node);
+    if (!target) {
+      if (!base) return console.error('route not found:', root, route);
+      target = new base();
+      node.append(target);
+    }
+
     [...node.children].forEach(e => e.style.display = 'none');
     target.style.display = '';
 
     path.push(route);
     store.path = path;
     this.store({[root]: store});
-    console.log('store', this.store()[root].path);
+    console.log(root, 'route', this.store()[root].path);
+    return target;
   }

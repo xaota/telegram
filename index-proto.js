@@ -1,4 +1,4 @@
-import AppStorage from './Storage.js';
+import AppStorage from './script/Storage.js/index.js';
 // in window: mtproto.MTProto, vendor, bundle/hash.worker?
 
 const phone = {
