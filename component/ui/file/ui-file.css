@@ -1,0 +1,68 @@
+:host {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  width: 100%;
+s}
+
+
+.img {
+  width: 60px;
+  height: 60px;
+  border-radius: 10px;
+  position: relative;
+  color: #fff;
+  text-align: center;
+  clip-path: polygon(68% 0, 100% 32%, 100% 100%, 13% 100%, 0 100%, 0 0);
+  background: var(--file-color);
+  display: flex;
+
+  cursor: pointer;
+  align-items: flex-end;
+  padding-bottom: 15px;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.img:hover ui-icon {
+  display: flex;
+}
+
+.img:hover .type {
+  display: none;
+}
+
+.img:before {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: -1px;
+  width: 0px;
+  height: 0px;
+  border-bottom: 20px solid;
+  border-right: 20px solid;
+  clip-path: polygon(0 0, 100% 100%, 79% 91%, 17% 90%, 8% 80%, 7% 16%);
+  border-color: var(--bent-color);
+}
+
+ui-icon {
+  position: absolute;
+  bottom: 20px;
+  color: white;
+  display: none;
+}
+
+.content {
+  flex-grow: 1;
+  padding: 0 0 0 20px;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.desc {
+  display: inline-flex;
+}
+
+.size:after {
+  content: ':';
+}

@@ -4,7 +4,8 @@ import $, {channel} from '../../../script/DOM.js';
 import sidebarEvents from '../sidebar/events.js';
 import '../../ui/grid/ui-grid.js';
 import UiMember from '../../ui/member/ui-member.js';
-import '../../ui/online/ui-online.js';
+import UiFile from '../../ui/file/ui-file.js';
+import UiGrid from '../../ui/online/ui-online.js';
 
 const component = Component.meta(import.meta.url, 'layout-profile');
 const attributes = {
@@ -19,6 +20,7 @@ export default class LayoutProfile extends Component {
   constructor() {
     super(component);
     this.selectedTab = 'media';
+    this.grid = new UiGrid();
   }
 
   mount(node) {
@@ -43,7 +45,10 @@ export default class LayoutProfile extends Component {
   };
 
   renderTabContent = () => {
-    // if (this.tabContainer === 'member')
+    // if (this.selectedTab === 'media') {
+    //   this.grid.appendChild();
+    //   this.tabContainer.appendChild(this.grid);
+    // }
   };
 }
 
