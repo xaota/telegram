@@ -27,20 +27,7 @@ form-search {
     padding-bottom: 20px;
 }
 
-.result .list {
-    display: flex;
-    font-size: 14px;
-    flex-direction: column;
-    align-self: flex-start;
-}
-.result .list .item {
-    display: flex;
-    align-items: center;
-}
-.result .list .item + .item {
-    padding-top: 20px;
-}
-.result .list .item  .desc {
+.desc {
     padding-top: 6px;
     color: var(--grayTextColor);
     font-size: 14px;

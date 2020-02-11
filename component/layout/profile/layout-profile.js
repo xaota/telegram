@@ -2,7 +2,7 @@ import Component from '../../../script/Component.js';
 import $, {channel} from '../../../script/DOM.js';
 
 import sidebarEvents from '../sidebar/events.js';
-
+import '../../ui/grid/ui-grid.js';
 import UiMember from '../../ui/member/ui-member.js';
 import '../../ui/online/ui-online.js';
 

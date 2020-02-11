@@ -9,21 +9,14 @@
 
     <div class="result">
       <div class="count">2 messages found</div>
-      <div class="list">
-
-        <div class="item">
-          <ui-member src="./content/7df97dad-26f3-4d32-bd61-b63c100c2504.jpeg" name="Raaid El Syed" right="May 8">
-            <div class="desc">Party abrakadabra lorem ipsum pipsum asdasdas  asdasda asdas</div>
-          </ui-member>
-        </div>
-
-        <div class="item">
-          <ui-member src="./content/7df97dad-26f3-4d32-bd61-b63c100c2504.jpeg" name="Raaid El Syed" right="May 8">
-            <div class="desc">Party aasdasda asdas</div>
-          </ui-member>
-        </div>
-
-      </div>
+      <ui-grid rows="auto" columns="100%" row-gap="20px">
+        <ui-member src="./content/7df97dad-26f3-4d32-bd61-b63c100c2504.jpeg" name="Raaid El Syed" right="May 8">
+          <div class="desc">Party abrakadabra lorem ipsum pipsum asdasdas  asdasda asdas</div>
+        </ui-member>
+        <ui-member src="./content/7df97dad-26f3-4d32-bd61-b63c100c2504.jpeg" name="Raaid El Syed" right="May 8">
+          <div class="desc">Party aasdasda asdas</div>
+        </ui-member>
+      </ui-grid>
     </div>
   </div>
 </template>
