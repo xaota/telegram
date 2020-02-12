@@ -52,6 +52,6 @@ div {
 :host-context(aside[collapsed]) #menu {
   margin: 0 auto;
 }
-:host-context(aside[collapsed]) form-search {
+:host-context(aside[collapsed]) ui-search {
   display: none;
 }

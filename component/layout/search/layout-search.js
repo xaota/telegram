@@ -3,7 +3,7 @@ import $, {channel} from '../../../script/DOM.js';
 
 import sidebarEvents from '../sidebar/events.js';
 
-import '../../form/search/form-search.js';
+import '../../ui/search/ui-search.js';
 import '../../ui/grid/ui-grid.js';
 
 const component = Component.meta(import.meta.url, 'layout-search');

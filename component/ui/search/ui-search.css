@@ -13,10 +13,14 @@
   color: #8d969c;
 }
 
-:host([active]) {
+:host(:focus-within) {
   background-color: white;
   color: #8d969c;
   border: 2px var(--blueColor) solid;
+}
+
+slot {
+  display: none;
 }
 
 input {
@@ -31,7 +35,7 @@ input {
   opacity: 1;
   background-color: #f4f4f5;
 }
-:host([active]) input {
+:host(:focus-within) input {
   background-color: white;
 }
 
@@ -52,6 +56,7 @@ ui-icon {
   left: 16px;
 }
 
-:host([active]) ui-icon {
+:host(:focus-within) ui-icon {
   color: var(--iconHover);
 }
+
