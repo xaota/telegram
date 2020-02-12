@@ -40,3 +40,8 @@ ui-drop {
   right: 16px;
   bottom: 84px;
 }
+
+:host-context(aside[collapsed]) ui-drop {
+  right: auto;
+  left: 16px;
+}

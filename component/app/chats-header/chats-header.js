@@ -4,7 +4,7 @@ import $, {channel, nightTheme} from '../../../script/DOM.js';
 import UIDrop from '../../ui/drop/ui-drop.js';
 import UIItem from '../../ui/item/ui-item.js';
 import UIIcon from '../../ui/icon/ui-icon.js';
-import '../../form/search/form-search.js';
+import UISearch from '../../ui/search/ui-search.js';
 
 const component = Component.meta(import.meta.url, 'chats-header');
 const attributes = {
@@ -50,5 +50,6 @@ Component.init(ChatsHeader, component, {attributes, properties});
     console.log('action', route);
     switch (route) {
       case 'night-mode': return nightTheme();
+      case 'collapse': return channel.send('aside-collapse');
     }
   }

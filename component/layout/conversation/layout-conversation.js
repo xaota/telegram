@@ -5,7 +5,7 @@ import telegram from '../../../tdweb/Telegram.js';
 
 import UIList             from '../../ui/list/ui-list.js';
 import UIAvatar           from '../../ui/avatar/ui-avatar.js';
-import UIMessage          from '../../ui/message/ui-message.js';
+import AppMessage         from '../../app/message/app-message.js';
 import LayoutLoading      from '../loading/layout-loading.js';
 import ConversationInput  from '../../app/conversation-input/conversation-input.js';
 import ConversationHeader from '../../app/conversation-header/conversation-header.js';
@@ -78,14 +78,21 @@ async function getHistory(chat_id, from_message_id, list, loading) {
       ? message.author.first_name + ' ' + message.author.last_name
       : '';
 
-    const avatar = new UIAvatar();
-    avatar.innerHTML = UIAvatar.letter(sender);
-    avatar.color = UIAvatar.color();
-    avatar.slot = 'avatar';
+    const item = new AppMessage();
+    if (sender) item.setAttribute(message.is_outgoing ? 'right' : 'left', '');
+
+    let avatar;
+    if (sender) {
+      avatar = new UIAvatar();
+      avatar.innerHTML = UIAvatar.letter(sender);
+      avatar.color = UIAvatar.color();
+      avatar.setAttribute('slot', 'avatar');
+      item.append(avatar);
+    }
 
     const content = new MessageText();
-    content.setAttribute('timestamp', new Date(message.date * 1000).toLocaleString())
-    content.setAttribute('color', avatar.color);
+    content.setAttribute('timestamp', AppMessage.timestamp(message.date));
+    if (sender && avatar) content.setAttribute('color', avatar.color);
     const author = document.createElement('span');
     author.innerText = sender;
     author.slot = 'author';
@@ -97,10 +104,6 @@ async function getHistory(chat_id, from_message_id, list, loading) {
 
     content.append(author);
     content.append(span);
-
-    const item = new UIMessage();
-    if (!message.is_outgoing) item.setAttribute('left', '');
-    item.append(avatar);
     item.append(content);
 
     node.append(item);

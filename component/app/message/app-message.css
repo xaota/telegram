@@ -51,10 +51,13 @@ slot:not([name])::slotted(*) {
 }
 
 slot[name="avatar"] {
-  display: block;
+  grid-area: avatar;
+
   /* width: 2rem;
   height: 2rem; */
 }
+
+
 
 slot[name="markup"] {
   display: inline-block;

@@ -49,6 +49,10 @@ slot[name="avatar"]::slotted(ui-avatar) {
   box-sizing: border-box;
 }
 
+:host-context(aside[collapsed]) .dialog__content {
+  display: none;
+}
+
 .dialog__header {
   display: flex;
   flex-direction: row;

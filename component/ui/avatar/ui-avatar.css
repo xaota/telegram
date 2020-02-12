@@ -1,7 +1,7 @@
 :host {
-  font-size: 16px;
+  /* font-size: 16px; */
 
-  min-width: 2rem;
+  width: 2rem;
   min-height: 2rem;
   border-radius: 50%;
   overflow: hidden;
@@ -15,6 +15,10 @@
   font-size: 1.33333rem;
   text-transform: uppercase;
   isolation: isolate;
+}
+
+:host-context(app-message) {
+  font-size: 12px;
 }
 
 img {

@@ -48,6 +48,8 @@ export default class LayoutMain extends Component {
 
 
     channel.on('route-aside', e => route.call(this, 'aside', e.route));
+    channel.on('aside-collapse', e => aside.hasAttribute('collapsed') ? aside.removeAttribute('collapsed') : aside.setAttribute('collapsed', ''));
+
     channel.on('conversation.open', e => {
       // console.log(e.id)
       const temp = $('layout-conversation, layout-empty', main);
@@ -74,6 +76,7 @@ Component.init(LayoutMain, component, {attributes, properties});
       route = path.pop() || href;
     }
 
+    node.removeAttribute('collapsed'); // todo: if node === aside
     let target = $(route, node);
     if (!target) {
       if (!base) return console.error('route not found:', root, route);

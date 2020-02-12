@@ -17,6 +17,11 @@ aside {
   background: var(--background-aside);
 }
 
+aside[collapsed] {
+  min-width: auto;
+  width: 6rem;
+}
+
 main {
   width: 100%;
   color:      var(--foreground);
