@@ -1,6 +1,8 @@
 import Component from '../../../script/Component.js';
 import $, {updateChildrenAttribute, updateChildrenHTML} from '../../../script/DOM.js';
 
+import '../loading-percent/ui-percent.js';
+
 const component = Component.meta(import.meta.url, 'ui-file');
 const types = {
     pdf: {
