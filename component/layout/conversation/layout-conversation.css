@@ -24,9 +24,13 @@ conversation-header {
 
 ui-list {
   padding-left: 20px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  max-width: 700px;
+  padding-right: 24px;
 }
 
-ui-message {
+app-message {
   margin-bottom: 2px;
 }
 

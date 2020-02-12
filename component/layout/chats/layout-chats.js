@@ -8,6 +8,7 @@ import UIDrop        from '../../ui/drop/ui-drop.js';
 import UIList        from '../../ui/list/ui-list.js';
 import UIAvatar      from '../../ui/avatar/ui-avatar.js';
 import ChatItem      from '../../app/chat-item/chat-item.js';
+import AppMessage    from '../../app/message/app-message.js';
 import ChatsHeader   from '../../app/chats-header/chats-header.js';
 import LayoutLoading from '../loading/layout-loading.js';
 
@@ -77,7 +78,7 @@ function createDialogItem(d, node) {
   // author.slot = 'author';
 
   const last = document.createElement('span');
-  last.innerText = getMessagePreview(d.last_message);
+  last.innerText = AppMessage.preview(d.last_message);
   last.slot = 'message';
 
   const item = new ChatItem();
@@ -93,26 +94,6 @@ function createDialogItem(d, node) {
   // item.dataset.id = d.id;
   item.addEventListener('click', e => channel.send('conversation.open', {chat: d.id, message: d.last_message.id}));
   node.append(item);
-}
-
-function getMessagePreview(message) {
-  const type = message.content['@type'];
-  const handlers = {
-    messageText:      c => c.text.text,
-    messagePoll:      c => '📊 Poll',
-    messagePhoto:     c => '🖼 ' + (c.caption && c.caption.text || 'Photo'),
-    messageVideo:     c => '🎥 ' + (c.caption && c.caption.text || 'Video'),
-    messageAudio:     c => '🎵 ' + c.audio.title || 'Audio',
-    messageSticker:   c => c.sticker.emoji + ' Sticker',
-    messageDocument:  c => 'Document ' + c.document.file_name,
-    messageAnimation: c => 'GIF',
-    messageChatAddMembers:    c => 'добавление в чат',
-    messageContactRegistered: c => 'теперь в телеграм',
-  };
-  const text = typeof handlers[type] === 'function'
-    ? handlers[type](message.content)
-    : 'неподдерживаемое сообщение (' + type + ')';
-  return text.split(/\n/)[0];
 }
 
 /** */

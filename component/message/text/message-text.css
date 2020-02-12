@@ -26,10 +26,14 @@ div {
   max-width: 40rem;
   /* overflow: hidden; */
   text-align: left;
-  padding: 5px;
+  padding: 8px 6px;
+  word-break: break-all;
   /* white-space: nowrap; */
 }
 
+:host-context(app-message[right]) div {
+  background-color: var(--background-message-out);
+}
 
 /* хвостик */
 :host(:last-child) div {
@@ -89,6 +93,7 @@ slot[name="author"] {
   /* color: #1da1f1; */
   line-height: 150%;
   color: var(--color);
+  margin-bottom: 2px;
 }
 
 slot[name="content"] {

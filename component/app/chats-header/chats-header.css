@@ -48,3 +48,10 @@ div {
   margin-right: .4rem;
   flex: none;
 }
+
+:host-context(aside[collapsed]) #menu {
+  margin: 0 auto;
+}
+:host-context(aside[collapsed]) form-search {
+  display: none;
+}
