@@ -40,6 +40,11 @@ div {
   border-bottom-left-radius: 0;
 }
 
+:host([right]:last-child) div {
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 5px;
+}
+
 :host(:last-child) div:after {
   left: -9px;
   bottom: 0;
@@ -61,6 +66,20 @@ div:before {
   bottom: -1px;
   background-image: url(../../../asset/tail_shadow.svg);
   z-index: 0;
+}
+
+:host([right]) div:after, div:before {
+  transform: scaleX(-1);
+}
+
+:host([right]) div:after {
+  right: -9px;
+  left: inherit;
+}
+
+:host([right]) div:before {
+  right: -9px;
+  left: inherit;
 }
 
 :host([reply]) div:after,

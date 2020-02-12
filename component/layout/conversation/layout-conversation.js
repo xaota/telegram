@@ -91,6 +91,9 @@ async function getHistory(chat_id, from_message_id, list, loading) {
     }
 
     const content = new MessageText();
+    if (sender) {
+      content.setAttribute(message.is_outgoing ? 'right' : 'left', '');
+    }
     content.setAttribute('timestamp', AppMessage.timestamp(message.date));
     if (sender && avatar) content.setAttribute('color', avatar.color);
     const author = document.createElement('span');
