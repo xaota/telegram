@@ -30,3 +30,11 @@ div {
 slot {
   margin-bottom: 10px;
 }
+
+:host(:first-child) {
+  margin-left: 25px;
+}
+
+:host(:last-child) {
+  margin-right: 25px;
+}
