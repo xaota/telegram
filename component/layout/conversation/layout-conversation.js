@@ -54,7 +54,6 @@ export default class LayoutConversation extends Component {
     const {chat, message} = this.store();
     $('conversation-input', node).setAttribute('chat', chat);
     getHistory(chat, message, $('ui-list', node));
-
     return this;
   }
 }

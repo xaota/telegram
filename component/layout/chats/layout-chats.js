@@ -93,6 +93,9 @@ function createDialogItem(d, node) {
   // item.append(author);
   item.append(last);
 
+  // last_read_inbox_message_id: 2620391424
+  // last_read_outbox_message_id: 2619342848
+
   // item.dataset.id = d.id;
   item.addEventListener('click', e => channel.send('conversation.open', {chat: d.id, message: d.last_message.id}));
   node.append(item);
@@ -141,32 +144,6 @@ function createDialogItem(d, node) {
 
     // setTimeout(() => createChatsList(list, loading, timeout), timeout);
   }
-
-  // _: "user"
-  // flags: 1107
-  // self: true
-  // id: 170106
-  // access_hash: "16859688971042092518"
-  // first_name: "xaota"
-  // phone: "79610433909"
-  // status: {_: "userStatusOffline", was_online: 1581337382}
-
-//   _: "dialog"
-// flags: 0
-// peer:
-// _: "peerUser"
-// user_id: 777000
-
-// top_message: 45
-// read_inbox_max_id: 0
-// read_outbox_max_id: 0
-// unread_count: 45
-// notify_settings:
-  // _: "peerNotifySettings"
-  // flags: 1
-  // show_previews: true
-  // mute_until: 0
-  // sound: "default"
 
 /** getDialogs */
   async function getDialogs(offset_date = 0, limit = 20) {

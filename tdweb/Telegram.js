@@ -168,6 +168,5 @@ const telegram = new Telegram();
 const storage = new Storage();
 
 window.telegram = telegram; // TODO убрать
-
 export default telegram;
 export {config, storage};
