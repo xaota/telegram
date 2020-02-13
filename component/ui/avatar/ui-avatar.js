@@ -16,17 +16,17 @@ const attributes = {
 const properties = {}
 
 export default class UIAvatar extends Component {
-  constructor({fileId} = {}) {
+  constructor({file} = {}) {
     super(component);
-    this.fileId = fileId;
+    this.file = file;
   }
 
   mount(node) {
-    if (this.fileId) {
-      const remoteImage = new FileImage(this.fileId);
+    if (this.file) {
+      const image = new FileImage(this.file);
       const img = $('img', node);
       if (img) {
-        img.replaceWith(remoteImage);
+        img.replaceWith(image);
       }
     }
     return super.mount(node, attributes, properties);

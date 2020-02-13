@@ -1,3 +1,5 @@
+import File from './File.js';
+
 export default class App {
   constructor(telegram, channel) {
     this.telegram = telegram;
@@ -14,7 +16,7 @@ export default class App {
     const type = update['@type'];
 
     const handlers = {
-      updateFile:               u => console.log('update@file', u),
+      updateFile:               File.update,
       updateConnectionState:    u => this.connection(u.state['@type']),
       updateAuthorizationState: u => this.authorization(u.authorization_state['@type'], u.authorization_state)
     };

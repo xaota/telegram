@@ -1,6 +1,6 @@
 import Component from '../../../script/Component.js';
 
-import file from '../file.js';
+import File from '../../../script/File.js';
 
 import $, {updateChildrenAttribute} from '../../../script/DOM.js';
 
@@ -14,17 +14,18 @@ const properties = {
 };
 
 export default class FileImage extends Component {
-   constructor(remote) {
+   constructor(file) {
        super(component);
-       this.remote = remote;
+       this.file = file;
   }
 
   mount(node) {
     super.mount(node, attributes, properties);
-    file.getFile(this.remote)
+    File.getFile(this.file)
         .then(blob => {
             updateChildrenAttribute(node, 'img', 'src', blob);
-        })
+            $('img', node).style.visibility = 'visible';
+        });
     return this;
   }
 

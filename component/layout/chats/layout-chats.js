@@ -65,7 +65,7 @@ Component.init(LayoutChats, component, {attributes, properties});
 
 function createDialogItem(d, node) {
   const avatar = new UIAvatar({
-    fileId: d.photo && d.photo.small.id
+    file: d.photo && d.photo.small
   });
   avatar.innerHTML = UIAvatar.letter(d.title);
   avatar.color = UIAvatar.color();
