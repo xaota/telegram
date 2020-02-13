@@ -12,7 +12,7 @@ import ConversationInput  from '../../app/conversation-input/conversation-input.
 import ConversationHeader from '../../app/conversation-header/conversation-header.js';
 
 import MessageText  from '../../message/text/message-text.js';
-import MessageEmoji from '../../message/emoji/message-emoji.js';
+import MessageSticker from '../../message/sticker/message-sticker.js';
 
 import '../sidebar/layout-sidebar.js';
 import '../../ui/tabs/ui-tabs.js';
@@ -82,6 +82,13 @@ async function getHistory(chat_id, from_message_id, list, loading) {
 
     const item = new AppMessage();
     if (sender) item.setAttribute(message.is_outgoing ? 'right' : 'left', '');
+
+
+    if (message.content['@type'] === 'messageSticker') {
+      const uiSticker = new MessageSticker(message.content.sticker);
+      item.append(uiSticker);
+      return node.append(item);
+    }
 
     let avatar;
     if (sender) {

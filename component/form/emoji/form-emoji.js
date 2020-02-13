@@ -130,6 +130,7 @@ export default class FormEmoji extends Component {
                   const img = document.createElement('img');
                   img.setAttribute('id', 'g' + group.id);
                   div.append(img);
+                  console.log(11, tab.list[group.id][0]);
                   File.getFile(tab.list[group.id][0].thumbnail.photo)
                       .then((blob) => {
                           img.setAttribute('src', blob);
@@ -200,9 +201,9 @@ export default class FormEmoji extends Component {
 Component.init(FormEmoji, component, {attributes, properties});
 
 const getStickers = async () => {
-    const recent = await telegram.api('getRecentStickers', {
-        is_attached: false
-    });
+    // const recent = await telegram.api('getRecentStickers', {
+    //     is_attached: false
+    // });
     const result = await telegram.api('getInstalledStickerSets', {
         s_masks: false
     });
