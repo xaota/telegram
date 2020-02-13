@@ -1,6 +1,8 @@
 import Component from '../../../script/Component.js';
 import $, {updateChildrenAttribute} from '../../../script/DOM.js';
 
+import UIBadge from '../badge/ui-badge.js';
+
 const component = Component.meta(import.meta.url, 'ui-avatar');
 const attributes = {
     src(root, value) {

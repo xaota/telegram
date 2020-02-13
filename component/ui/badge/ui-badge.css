@@ -35,6 +35,10 @@ span {
   background-color: #c4c9cc;
 }
 
+:host([outline]) span {
+  box-shadow: 0 0 0 2px var(--background-aside);
+}
+
 :host([x="left"]) span {
   right: auto;
   left: 0;
@@ -62,6 +66,10 @@ span {
   font-size: 0;
   color: transparent;
 }
+
+/* :host([dot][outline]) {
+  box-sizing: content-box;
+} */
 
 :host([count="0"]) span, :host([hidden]) span {
   display: none;

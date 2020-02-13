@@ -67,6 +67,11 @@ export default class ChatItem extends Component {
     if (type in types) {
       const {is_verified} = await types[type]();
       if (is_verified) title.append(new UIIcon('verify'));
+
+      if (type === 'chatTypePrivate') { // || type === 'chatTypeSecret'
+        const peer = await telegram.api('getUser', {user_id: model.id})
+        if (peer.status['@type'] === 'userStatusOnline') avatar.setAttribute('online', '');
+      }
     }
     // console.log('USER VERIFY INFO', model, user);
     // if (user.is_verified) author.appendChild(new UIIcon('verify'));
