@@ -1,6 +1,7 @@
 import Component from '../../../script/Component.js';
 
 import $, {updateChildrenElement} from '../../../script/DOM.js';
+import File from '../../../script/File.js';
 import telegram from '../../../tdweb/Telegram.js';
 
 import UIList             from '../../ui/list/ui-list.js';
@@ -89,6 +90,9 @@ async function getHistory(chat_id, from_message_id, list, loading) {
       avatar.color = UIAvatar.color();
       avatar.setAttribute('slot', 'avatar');
       item.append(avatar);
+
+      const d = message.author && message.author.profile_photo && message.author.profile_photo.small;
+      if (d) File.getFile(d).then(src => avatar.src = src); // не оч круто
     }
 
     const content = new MessageText();

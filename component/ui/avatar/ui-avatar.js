@@ -1,8 +1,6 @@
 import Component from '../../../script/Component.js';
 import $, {updateChildrenAttribute} from '../../../script/DOM.js';
 
-import FileImage from '../../file/image/file-image.js';
-
 const component = Component.meta(import.meta.url, 'ui-avatar');
 const attributes = {
     src(root, value) {
@@ -16,19 +14,11 @@ const attributes = {
 const properties = {}
 
 export default class UIAvatar extends Component {
-  constructor({file} = {}) {
+  constructor() {
     super(component);
-    this.file = file;
   }
 
   mount(node) {
-    if (this.file) {
-      const image = new FileImage(this.file);
-      const img = $('img', node);
-      if (img) {
-        img.replaceWith(image);
-      }
-    }
     return super.mount(node, attributes, properties);
   }
 

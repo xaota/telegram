@@ -2,6 +2,7 @@ import telegram, {storage} from '../../../tdweb/Telegram.js';
 
 import Component from '../../../script/Component.js';
 import $, {channel} from '../../../script/DOM.js';
+import File from '../../../script/File.js';
 
 import UIFAB         from '../../ui/fab/ui-fab.js';
 import UIDrop        from '../../ui/drop/ui-drop.js';
@@ -64,12 +65,11 @@ export default class LayoutChats extends Component {
 Component.init(LayoutChats, component, {attributes, properties});
 
 function createDialogItem(d, node) {
-  const avatar = new UIAvatar({
-    file: d.photo && d.photo.small
-  });
+  const avatar = new UIAvatar();
   avatar.innerHTML = UIAvatar.letter(d.title);
   avatar.color = UIAvatar.color();
   avatar.slot = 'avatar';
+  if (d.photo && d.photo.small) File.getFile(d.photo.small).then(src => avatar.src = src)
 
   const title = document.createElement('span');
   title.innerText = d.title;
