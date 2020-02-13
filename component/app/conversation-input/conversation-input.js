@@ -131,7 +131,7 @@ export default class ConversationInput extends Component {
       clear_draft: true
     };
 
-    sendMessage(content);
+    this.sendMessage(inputContent);
     this.input.value = '';
   }
 
