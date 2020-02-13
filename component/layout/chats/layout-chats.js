@@ -64,7 +64,9 @@ export default class LayoutChats extends Component {
 Component.init(LayoutChats, component, {attributes, properties});
 
 function createDialogItem(d, node) {
-  const avatar = new UIAvatar();
+  const avatar = new UIAvatar({
+    fileId: d.photo && d.photo.small.id
+  });
   avatar.innerHTML = UIAvatar.letter(d.title);
   avatar.color = UIAvatar.color();
   avatar.slot = 'avatar';

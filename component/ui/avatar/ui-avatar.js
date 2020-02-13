@@ -1,25 +1,34 @@
 import Component from '../../../script/Component.js';
 import $, {updateChildrenAttribute} from '../../../script/DOM.js';
 
+import FileImage from '../../file/image/file-image.js';
+
 const component = Component.meta(import.meta.url, 'ui-avatar');
 const attributes = {
     src(root, value) {
       updateChildrenAttribute(root, 'img', 'src', value);
     },
-
     color(root, value) {
       this.style.backgroundColor = '#' + value;
     }
-  }
+  };
 
 const properties = {}
 
 export default class UIAvatar extends Component {
-  constructor() {
+  constructor({fileId}) {
     super(component);
+    this.fileId = fileId;
   }
 
   mount(node) {
+    if (this.fileId) {
+      const remoteImage = new FileImage(this.fileId);
+      const img = $('img', node);
+      if (img) {
+        img.replaceWith(remoteImage);
+      }
+    }
     return super.mount(node, attributes, properties);
   }
 

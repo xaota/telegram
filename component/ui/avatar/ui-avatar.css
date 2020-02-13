@@ -34,3 +34,11 @@ slot + img[src] {
 :host([src]) slot {
   display: none;
 }
+
+file-image {
+  width: 54px;
+  height: 54px;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
