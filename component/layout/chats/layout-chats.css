@@ -21,10 +21,10 @@ ui-list {
   height: 100%;
 }
 
-chat-item[lastpin] {
-  border-bottom: 1px solid #edeef0;
-  padding-bottom: .1rem;
-  margin-bottom: calc(.3rem - 1px);
+chat-item[pin] + chat-item:not([pin]) {
+  border-top: 1px solid #edeef0;
+  margin-top: .1rem;
+  padding-top: calc(.3rem - 1px);
 }
 
 ui-fab {
