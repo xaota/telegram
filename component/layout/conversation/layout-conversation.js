@@ -53,8 +53,8 @@ export default class LayoutConversation extends Component {
         });
 
     const {chat, me} = this.store();
-    console.log('CONVERSATION', chat);
-    $('conversation-input', node).setAttribute('chat', chat);
+    $('conversation-input', node).setAttribute('chat', chat.id);
+    $('conversation-header', node).setAttribute('chat', chat.id);
     getHistory(chat, me, $('ui-list', node));
     return this;
   }
