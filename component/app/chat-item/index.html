@@ -1,38 +1,25 @@
 <template>
   <link rel="stylesheet" href="./chat-item.css" />
 
-  <!-- <slot name="picture"></slot>
-  <slot name="title"></slot>
-  <slot name="message"></slot>
-  <slot name="author"></slot>
-  <slot name="bage"></slot> -->
-
   <div class="dialog">
     <div class="ripple dialog__clickable -selected">
       <div class="ripple__content">
-        <!-- <div class="dialog__picture">
-          <div class="avatar">
-            <div class="avatar__picture">
-              <slot name="picture"></slot>
-            </div>
-          </div>
-        </div> -->
         <slot name="avatar"></slot>
         <div class="dialog__content">
           <div class="dialog__header">
-            <div class="dialog__title">
-              <slot name="title"></slot>
-            </div>
+            <slot name="title"></slot>
             <div class="dialog__date">
-              <span class="">Tue</span>
+              <ui-icon id="status"></ui-icon>
+              <span class="timestamp">timestamp</span>
             </div>
           </div>
           <div class="dialog__preview">
             <div class="dialog__message">
-              <strong class="dialog__message_title"><slot name="author"></slot>:</strong>
+              <slot name="author" class="dialog__message_title"></slot>
               <slot name="message"></slot>
             </div>
-            <div class="dialog__badge">37</div>
+            <!-- <div class="dialog__badge"></div> -->
+            <ui-badge></ui-badge>
             <div class="dialog__pin">
               <ui-icon>pin</ui-icon>
             </div>
