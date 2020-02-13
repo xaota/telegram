@@ -1,7 +1,7 @@
 :host {
   /* font-size: 16px; */
 
-  width: 2rem;
+  min-width: 2rem;
   min-height: 2rem;
   border-radius: 50%;
   overflow: hidden;
@@ -33,12 +33,4 @@ slot + img[src] {
 
 :host([src]) slot {
   display: none;
-}
-
-file-image {
-  width: 54px;
-  height: 54px;
-  position: absolute;
-  top: 0;
-  left: 0;
 }

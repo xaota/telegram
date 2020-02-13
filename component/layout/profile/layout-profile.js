@@ -21,8 +21,10 @@ const properties = {
   }
 
 export default class LayoutProfile extends Component {
-  constructor() {
+  constructor({chatId, profileId} = {}) {
     super(component);
+    this.chatId = chatId;
+    this.profileId = profileId;
     this.selectedTab = 'media';
     this.grid = new UiGrid();
   }
@@ -61,7 +63,7 @@ export default class LayoutProfile extends Component {
     }
 
     telegram.api('getChat', {
-      chat_id: -1001439848029// 304888926// 213592202
+      chat_id: this.chatId, // 304888926// 213592202
     }).then(res => {
       console.log(1, res);
       this.renderPhoto(res.photo);
@@ -99,17 +101,17 @@ export default class LayoutProfile extends Component {
         });
       } else if (res.type['@type'] === 'chatTypeSupergroup') {
         telegram.api('getSupergroupFullInfo', {
-          supergroup_id: 1439848029
-        }).then(res => {
+          supergroup_id: res.type.supergroup_id
+        }).then(groupFull => {
           const list = $('.list', node);
-          if (res.description) {
-            list.append(createItem('info', res.description, 'About'));
+          if (groupFull.description) {
+            list.append(createItem('info', groupFull.description, 'About'));
           }
-          if (res.invite_link) {
-            list.append(createItem('username', res.invite_link, 'Link'));
+          if (groupFull.invite_link) {
+            list.append(createItem('username', groupFull.invite_link, 'Link'));
           }
           const statusBlock = $('.status', node);
-          statusBlock.innerText = `${res.member_count} members, TODO online`;
+          statusBlock.innerText = `${groupFull.member_count} members, TODO online`;
         });
       }
     });
@@ -118,8 +120,10 @@ export default class LayoutProfile extends Component {
   }
 
   renderPhoto = (photo) => {
-    File.getFile(photo.small)
-        .then(blob => updateChildrenAttribute(this.shadowRoot, '.profile ui-avatar', 'src', blob));
+    if (photo) {
+      File.getFile(photo.small)
+          .then(blob => updateChildrenAttribute(this.shadowRoot, '.profile ui-avatar', 'src', blob));
+    }
   };
 
   setTitle = (title) => {

@@ -9,7 +9,9 @@ import '../../ui/drop/ui-drop.js';
 
 const component = Component.meta(import.meta.url, 'conversation-header');
 const attributes = {
-
+    chat(root, value) {
+        root.chat = value;
+    }
   }
 
 const properties = {
@@ -25,7 +27,9 @@ export default class ConversationHeader extends Component {
     super.mount(node, attributes, properties);
     $('.left', node)
         .addEventListener('click', () => {
-          channel.send(sidebarEvents.OPEN_PROFILE);
+          channel.send(sidebarEvents.OPEN_PROFILE, {
+              chatId: +this.chat,
+          });
         });
     $('#search', node)
         .addEventListener('click', () => {
