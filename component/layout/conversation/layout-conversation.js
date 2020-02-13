@@ -52,17 +52,19 @@ export default class LayoutConversation extends Component {
           aside.style.display = 'none';
         });
 
-    const {chat, message} = this.store();
+    const {chat, me} = this.store();
     $('conversation-input', node).setAttribute('chat', chat);
-    getHistory(chat, message, $('ui-list', node));
+    getHistory(chat, me, $('ui-list', node));
     return this;
   }
 }
 
 Component.init(LayoutConversation, component, {attributes, properties});
 
-async function getHistory(chat_id, from_message_id, list, loading) {
+async function getHistory(chat, me, list, loading) {
   const root = document.createDocumentFragment();
+  const chat_id = chat.id;
+  const from_message_id = chat.last_message.id;
   const last = await getChatHistory(chat_id); // from_message_id
   const prev = await getChatHistory(chat_id, from_message_id);
   const messages = [...last.messages, ...prev.messages];

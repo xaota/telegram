@@ -60,7 +60,8 @@ slot[name="avatar"]::slotted(ui-avatar) {
   align-items: flex-start;
 }
 
-.dialog__title {
+slot[name="title"] {
+  display: block;
   color: var(--foreground);
   font-weight: 500;
   font-size: 1rem;
@@ -70,12 +71,31 @@ slot[name="avatar"]::slotted(ui-avatar) {
   text-overflow: ellipsis;
 }
 
+slot[name="title"]::slotted(ui-icon), .dialog__date > ui-icon {
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
+
+slot[name="title"]::slotted(ui-icon) {
+  margin-left: 4px;
+}
+
+.dialog__date > ui-icon {
+  margin-right: 4px;
+}
+
+.dialog__date > ui-icon:empty {
+  display: none;
+}
+
 .dialog__date {
   font-size: .8rem;
   font-weight: 300;
   padding-left: 1rem;
   color: #5f6369;
-  margin-top: .2rem;
+  margin-top: 8px;
+  white-space: nowrap;
 }
 
 .dialog__preview {
@@ -103,24 +123,28 @@ slot[name="avatar"]::slotted(ui-avatar) {
   font-weight: 400;
   color: var(--foreground-accent);
 }
+.dialog__message_title::slotted(*)::after {
+  content: ':';
+}
 
-.dialog__badge {
-  background-color: #4ccd5e;
-  color: #fff;
-  padding: 0 7PX;
-  height: 22PX;
-  min-width: 22PX;
-  line-height: 1.46667rem;
-  font-size: 12PX;
-  font-weight: 500;
-  border-radius: 11PX;
-  text-align: center;
-  margin-left: .66667rem;
+ui-badge {
+  /* background-color: #4ccd5e; */
+  /* color: #fff; */
+  /* padding: 0 7PX; */
+  /* height: 22PX; */
+  /* min-width: 22PX; */
+  /* line-height: 1.46667rem; */
+  /* font-size: 12PX; */
+  /* font-weight: 500; */
+  /* border-radius: 11PX; */
+  /* text-align: center; */
+  /* margin-left: .66667rem; */
+  margin-top: 3px;
 }
 
 :host([badge]) .dialog__pin,
 :host(:not([pin])) .dialog__pin,
-:host(:not([badge])) .dialog__badge {
+:host(:not([badge])) ui-badge {
   display: none;
 }
 
@@ -133,7 +157,7 @@ slot[name="avatar"]::slotted(ui-avatar) {
   border-radius: 50%;
 }
 
-.dialog__pin,
-:host([muted]) .dialog__badge {
+/* .dialog__pin,
+:host([muted]) ui-badge {
   background-color: #c4c9cc;
-}
+} */
