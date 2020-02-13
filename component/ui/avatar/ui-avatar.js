@@ -16,7 +16,7 @@ const attributes = {
 const properties = {}
 
 export default class UIAvatar extends Component {
-  constructor({fileId}) {
+  constructor({fileId} = {}) {
     super(component);
     this.fileId = fileId;
   }
