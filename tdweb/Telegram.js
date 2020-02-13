@@ -97,14 +97,14 @@ class Telegram {
   api(method, params) {
     if (!this.client) return console.error(`tdlib@${method}: !tdlib.init`, params);
 
-    console.log(`tdlib@${method}.request`, params);
+    // console.log(`tdlib@${method}.request`, params);
     return this.client.send({'@type': method, ...params})
       .then(result => {
-        console.log(`tdlib@${method}.response`, result);
+        // console.log(`tdlib@${method}.response`, result);
         return result;
       })
       .catch(error => {
-        console.error(`tdlib@${method}.error`, error);
+        // console.error(`tdlib@${method}.error`, error);
         throw error;
       })
   }

@@ -62,16 +62,15 @@ export default class ConversationInput extends Component {
       this.replaceActionIcon();
     });
     formEmoji.addEventListener('sticker-select', e => {
-      const id = e.detail.emoji;
+      const sticker = e.detail.sticker;
       const content = {
         '@type': 'inputMessageSticker',
         sticker: {
           '@type': 'inputFileId',
-          id,
+          id: sticker.sticker.id,
         },
-        width: 100,
-        height: 100,
       };
+      dropEmoji.show = false;
       this.sendMessage(content)
     });
 

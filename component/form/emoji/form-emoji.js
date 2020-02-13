@@ -1,5 +1,6 @@
 import Component from '../../../script/Component.js';
 import telegram from '../../../tdweb/Telegram.js';
+import File from '../../../script/File.js';
 
 import '../../ui/tab/ui-tab.js';
 import '../../ui/tabs/ui-tabs.js';
@@ -82,49 +83,91 @@ export default class FormEmoji extends Component {
 
   renderList = () => {
     const tab = tabs[this.selectedTab];
-      const selectedGroup = tab.selectedGroup;
-      if (this.selectedTab === 'stickers') {
-        this.list.innerHTML = unionElements(tab.list[selectedGroup], (el) => {
-            return `<div id="${el.sticker.id}">${el.emoji}</div>`;
-        });
-        return;
+    const selectedGroup = tab.selectedGroup;
+    this.list.innerHTML = '';
+    switch (this.selectedTab) {
+        case 'stickers':
+            tab.list[selectedGroup].forEach((el, i) => {
+                const img = document.createElement('img');
+                img.setAttribute('id', 'g' + i);
+                File.getFile(el.thumbnail.photo)
+                    .then((blob) => {
+                        img.setAttribute('src', blob);
+                        this.list.append(img);
+                    });
+            });
+            break;
+        case 'emojies':
+            tab.list[selectedGroup].forEach(el => {
+                const div = document.createElement('div');
+                div.innerHTML = el;
+                this.list.append(div);
+            });
+            break;
     }
-    if (!tab.groups) {
-        this.list.innerHTML = unionElements(tab.list);
-        return;
-    }
-    this.list.innerHTML = unionElements(tab.list[selectedGroup]);
   };
 
   renderGroup = () => {
     const tab = tabs[this.selectedTab];
-    if (this.selectedTab === 'emojies' || this.selectedTab === 'gifs') {
-        if (!tab.groups) {
-            this.group.innerHTML = '';
-            this.group.style.display = 'none';
-            return;
-        }
-        this.group.style.display = 'flex';
-        this.group.innerHTML = unionElements(tab.groups, (el) => {
-            return `<div class="item" active="${tab.selectedGroup === el}"><ui-icon id="${el}">${el}</ui-icon></div>`;
-        });
-    } else if (this.selectedTab === 'stickers') {
-        this.group.innerHTML = unionElements(tab.groups, (el) => {
-            return `<div class="item">${el.title}</div>`;
-        });
-    }
+      this.group.innerHTML = '';
+      if (!tab.groups) {
+          this.group.style.display = 'none';
+          return;
+      } else {
+          this.group.style.display = 'flex';
+      }
+      switch (this.selectedTab) {
+          case 'emojies':
+              this.group.innerHTML = unionElements(tab.groups, (el) => {
+                  return `<div class="item" active="${tab.selectedGroup === el}"><ui-icon id="${el}">${el}</ui-icon></div>`;
+              });
+              break;
+          case 'stickers':
+              tab.groups.forEach((group) => {
+                  const div = document.createElement('div');
+                  div.setAttribute('active', tab.selectedGroup === group.id)
+                  div.setAttribute('class', 'item')
+                  const img = document.createElement('img');
+                  img.setAttribute('id', 'g' + group.id);
+                  div.append(img);
+                  File.getFile(tab.list[group.id][0].thumbnail.photo)
+                      .then((blob) => {
+                          img.setAttribute('src', blob);
+                          // img.setAttribute('width', '50px');
+                          // img.setAttribute('height', '50px');
+                      });
+                  this.group.append(div);
+              });
+
+      }
+    // if (this.selectedTab === 'emojies' || this.selectedTab === 'gifs') {
+    //
+    //
+    //
+    // } else if (this.selectedTab === 'stickers') {
+    //     this.group.innerHTML = '';
+    //
+    //     unionElements(tab.groups, (el) => {
+    //         return `<div class="item">${el.title}</div>`;
+    //     });
+    // }
   };
 
   onSelectGroup = (e) => {
       if (!e.target.getAttribute("id")) {
           return;
       }
-      $(`#${tabs[this.selectedTab].selectedGroup}`, this.group)
+      const selector = this.selectedTab === 'stickers' ? `#g${tabs[this.selectedTab].selectedGroup}` : `#${tabs[this.selectedTab].selectedGroup}`;
+      $(selector, this.group)
           .parentNode
           .removeAttribute('active');
 
       e.target.parentNode.setAttribute('active', 'true');
-      tabs[this.selectedTab].selectedGroup = e.target.getAttribute("id");
+      let newGroup = e.target.getAttribute("id");
+      if (this.selectedTab === 'stickers') {
+          newGroup = newGroup.slice(1);
+      }
+      tabs[this.selectedTab].selectedGroup = newGroup;
       this.renderList();
   };
 
@@ -146,7 +189,8 @@ export default class FormEmoji extends Component {
                   this.event('emoji-select', {emoji: e.target.innerHTML});
                   break;
               case 'stickers':
-                  this.event('sticker-select', {id: e.target.getAttribute('id')});
+                  const sticker = tabs.stickers.list[tabs.stickers.selectedGroup][e.target.getAttribute('id').slice(1)];
+                  this.event('sticker-select', {sticker});
                   break;
           }
       }
@@ -191,6 +235,4 @@ const getStickers = async () => {
             title: set.title
         });
     });
-
-    console.log(tabs);
 };

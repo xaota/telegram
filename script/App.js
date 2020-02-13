@@ -23,7 +23,7 @@ export default class App {
 
     typeof handlers[type] === 'function'
       ? handlers[type](update)
-      : console.log('update@' + type, update);
+      : {};// console.log('update@' + type, update);
   }
 
   async connection(type) {
