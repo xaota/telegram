@@ -1,6 +1,6 @@
 import Component from '../../../script/Component.js';
 
-import $ from '../../../script/DOM.js';
+import $, {updateChildrenElement} from '../../../script/DOM.js';
 import telegram from '../../../tdweb/Telegram.js';
 
 import UIList             from '../../ui/list/ui-list.js';
@@ -52,7 +52,9 @@ export default class LayoutConversation extends Component {
         });
 
     const {chat, message} = this.store();
+    $('conversation-input', node).setAttribute('chat', chat);
     getHistory(chat, message, $('ui-list', node));
+
     return this;
   }
 }

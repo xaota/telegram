@@ -114,20 +114,21 @@ textarea:focus {
 #attach {
   margin-right: 0px;
 }
-.enter {
-  background-color: #4ea4f5;
-  background-image: url(../../../asset/voice.svg);
-  background-repeat: no-repeat;
-  background-position: 50%;
+
+.action {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  background-color: white;
   border-radius: 50%;
   width: 3.6rem;
   height: 3.6rem;
   box-shadow: 0 1px 2px 0 rgba(16,35,47,.15);
-  margin-left: .53333rem
+  margin-left: .53333rem;
 }
-
-.send {
-  background-image: url(../../../asset/send.svg);
+.action:hover ui-icon {
+  color: var(--iconHover)
 }
 
 .attach-list {

@@ -1,6 +1,7 @@
 :host {
   display: block;
   overflow: hidden;
+  -webkit-mask: linear-gradient(to top, rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 1) 15px);
 }
 
 slot {
