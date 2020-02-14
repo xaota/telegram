@@ -27,7 +27,7 @@ export default class App {
   }
 
   async connection(type) {
-    console.log('connectionState@' + type);
+    this.channel.send('connection.state', {type: type.slice(15).toLowerCase()});
   }
 
   async authorization(type, state) {
