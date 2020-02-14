@@ -52,11 +52,13 @@ function hasAuth() {
   });
 }
 
-channel.on('authorizationStateReady', async user => {
+channel.on('authorizationStateReady', async () => {
   current.remove(); // layout-login
   loading.style.display = '';
-  await storage.set('user', user);
-  current = createLayout(new LayoutMain(user));
+  // await storage.set('user', user);
+  const me = await telegram.api('getMe');
+  storage.set('me', me);
+  current = createLayout(new LayoutMain());
 });
 
 channel.on('user.logout', async _ => {

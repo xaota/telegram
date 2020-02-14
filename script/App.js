@@ -17,16 +17,50 @@ export default class App {
 
     const handlers = {
       updateFile:               File.update,
-      updateConnectionState:    u => this.connection(u.state['@type']),
-      updateAuthorizationState: u => this.authorization(u.authorization_state['@type'], u.authorization_state)
+      updateNewChat:            u => this.updateNewChat(u.chat), // новый чат (вообще среди всех списков)
+      updateChatChatList:       u => this.updateChatChatList({chat_id: u.chat_id, chat_list: u.chat_list['@type']}), // помещение чата в список чатов
+
+      updateUserStatus:         u => this.updateUserStatus(u), // изер в сети / оффлайн
+      updateChatReadInbox:      u => this.updateChatReadInbox(u), // прочитанно / непрочитано в чате из списка
+      updateChatReadOutbox:     u => this.updateChatReadOutbox(u), // пользователь прочитал исходящее сообщение
+      updateChatLastMessage:    u => this.updateChatLastMessage(u), // превью сообщения в списке чатов
+      updateConnectionState:    u => this.connection(u.state['@type']), // интернет
+      updateAuthorizationState: u => this.authorization(u.authorization_state['@type'], u.authorization_state) // шаги авторизации
     };
 
     typeof handlers[type] === 'function'
       ? handlers[type](update)
-      : {};// console.log('update@' + type, update);
+      : true; // console.log('update@' + type, update);
   }
 
-  async connection(type) {
+  updateNewChat(chat) {
+    this.channel.send('chat.new', chat);
+  }
+
+  updateChatChatList({chat_id, chat_list}) {
+    this.channel.send('list.chat', {chat_id, chat_list});
+  }
+
+  updateChatReadInbox({chat_id, last_read_inbox_message_id, unread_count}) {
+    this.channel.send('chat.counter', {chat_id, last_read_inbox_message_id, unread_count});
+  }
+
+  updateChatReadOutbox({chat_id, last_read_outbox_message_id}) {
+    console.log('todo: updateChatReadOutbox', {chat_id, last_read_outbox_message_id}); //
+  }
+
+  updateChatLastMessage({chat_id, last_message, order}) {
+    this.channel.send('chat.message', {chat_id, last_message}); // order?
+  }
+
+  updateUserStatus({user_id, status}) {
+    const online = status['@type'].slice(10).toLowerCase() === 'online';
+    const was_online = status.was_online;
+    const expires = status.expires;
+    this.channel.send('user.status', {user_id, online, was_online, expires});
+  }
+
+  connection(type) {
     this.channel.send('connection.state', {type: type.slice(15).toLowerCase()});
   }
 

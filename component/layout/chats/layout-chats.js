@@ -50,7 +50,32 @@ export default class LayoutChats extends Component {
     });
 
 
-    createChatsList(list, $('layout-loading', node));
+    // const chats = {};
+    const lists = {
+      chatListMain:    new Set(),
+      chatListArchive: new Set()
+    }
+
+    const type = 'chatListMain';
+    const me = storage.get('me');
+
+    list.store({list: type}); // .setAttribute('list', type);
+
+    channel.on('chat.new', chat => {
+      // if (!chats[chat.id]) chats[chat.id] = chat;
+    });
+
+    channel.on('list.chat', async ({chat_id, chat_list}) => {
+      lists[chat_list].add(chat_id);
+
+      // if (!chats[chat_id] || list.store().list !== chat_list) return;
+      // if ($('chat-item[dataset-id="'+chat_id+'"]', list)) return; // !
+
+      // const item = await ChatItem.from({model: chats[chat_id], me});
+      // list.append(item);
+    });
+
+    createChatsList(list, $('layout-loading', node), {lists, type}); // chats,
     return this;
   }
 }
@@ -58,24 +83,34 @@ export default class LayoutChats extends Component {
 Component.init(LayoutChats, component, {attributes, properties});
 
 /** */
-  async function createChatsList(list, loading) {
-      const me = await telegram.api('getMe');
-      // storage.set('user', me);
+  async function createChatsList(list, loading, {lists, type}) { // chats
+    const me = storage.get('me');
 
-      const root = document.createDocumentFragment();
-      const {chat_ids} = await getDialogs();
-      for (const id of chat_ids) {
-        const item = await ChatItem.fromId(id, me);
-        root.append(item);
-      }
+    const root = document.createDocumentFragment();
+    const {chat_ids} = await getDialogs();
+    for (const chat_id of chat_ids) {
+      const model = await telegram.api('getChat', {chat_id});
+      // chats[chat_id] = model;
+      lists[type].add(chat_id);
+      const item  = await ChatItem.from({model, me});
+      root.append(item);
+    }
 
-      list.innerHTML = '';
-      list.append(root);
-      loading.style.display = 'none';
+    list.innerHTML = '';
+    list.store({list: type}); // .setAttribute('list', type);
+    list.append(root);
+    loading.style.display = 'none';
   }
 
-/** getDialogs @async */
-  function getDialogs(offset_chat_id = 0, limit = 20) {
-    const options = {offset_order: '9223372036854775807', offset_chat_id, limit};
+/** getDialogs @async
+  * @param {string} [type="chatListMain"] one of 'chatListMain', 'chatListArchive'
+  */
+  function getDialogs(offset_chat_id = 0, limit = 20, type = "chatListMain") {
+    const options = {
+      chat_list: {'@type': type},
+      offset_order: '9223372036854775807',
+      offset_chat_id,
+      limit
+    };
     return telegram.api('getChats', options);
   }

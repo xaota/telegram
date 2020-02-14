@@ -28,7 +28,7 @@ const properties = {
   }
 
 export default class LayoutMain extends Component {
-  constructor(user) {
+  constructor() {
     super(component);
   }
 

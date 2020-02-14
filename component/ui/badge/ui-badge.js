@@ -14,11 +14,15 @@ export default class UIBadge extends Component {
   mount(node) {
     super.mount(node, attributes, properties);
     const slot = $('slot', node);
+    const span = $('span', node);
     slot.addEventListener('slotchange', _ => {
       const value = parseInt(this.innerText || this.innerHTML);
       const count = badge(value);
       this.store({value});
-      updateChildrenHTML(node, 'span', count);
+      span.innerText = count;
+      span.style.display = value !== 0
+        ? ''
+        : 'none';
     });
     return this;
   }
