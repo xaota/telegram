@@ -9,10 +9,12 @@
     transition-duration: 300ms;
     transition-timing-function: linear;
     overflow: hidden;
+    display: flex;
 }
 
 #container {
     border-left: 1px solid var(--grayBorderColor);
     height: 100%;
     width: 420px;
+    display: flex;
 }

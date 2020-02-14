@@ -15,6 +15,9 @@ s}
   text-align: center;
   clip-path: polygon(66% 0, 99% 33%, 100% 100%, 3% 100%, 0 100%, 0 0);
   background: var(--file-color);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
   display: flex;
 
   cursor: pointer;
@@ -48,6 +51,16 @@ s}
   border-color: var(--bent-color);
 }
 
+/* если у нас превью картинка */
+.preview {
+  clip-path: none;
+}
+
+.preview:before, .preview:after {
+  content: none;
+}
+
+
 ui-icon {
   position: absolute;
   bottom: 12px;
@@ -75,5 +88,6 @@ ui-loading-percent {
 }
 
 .size:after {
-  content: ':';
+  content: '·';
+  padding: 0 3px;
 }

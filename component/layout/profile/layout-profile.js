@@ -25,7 +25,7 @@ export default class LayoutProfile extends Component {
     super(component);
     this.chatId = chatId;
     this.profileId = profileId;
-    this.selectedTab = 'media';
+    this.selectedTab = 'docs';
     this.grid = new UiGrid();
   }
 
@@ -63,9 +63,8 @@ export default class LayoutProfile extends Component {
     }
 
     telegram.api('getChat', {
-      chat_id: this.chatId, // 304888926// 213592202
+      chat_id: this.chatId,
     }).then(res => {
-      console.log(1, res);
       this.renderPhoto(res.photo);
       this.setTitle(res.title);
 
@@ -75,7 +74,6 @@ export default class LayoutProfile extends Component {
         telegram.api('getUser', {
           user_id: res.type.user_id
         }).then((user) => {
-          console.log(2, user);
 
           // online
           if (user.status['@type'] === 'userStatusOnline') {
@@ -111,11 +109,16 @@ export default class LayoutProfile extends Component {
             list.append(createItem('username', groupFull.invite_link, 'Link'));
           }
           const statusBlock = $('.status', node);
-          statusBlock.innerText = `${groupFull.member_count} members, TODO online`;
+          if (res.type.is_channel) {
+            statusBlock.innerText = `${groupFull.member_count} members`;
+          } else {
+            statusBlock.innerText = `${groupFull.member_count} members, TODO online`;
+          }
         });
       }
     });
     this.tabContainer = $('#tabContainer', node);
+    this.renderTabContent();
     return this;
   }
 
@@ -141,11 +144,61 @@ export default class LayoutProfile extends Component {
   };
 
   renderTabContent = () => {
-    // if (this.selectedTab === 'media') {
-    //   this.grid.appendChild();
-    //   this.tabContainer.appendChild(this.grid);
-    // }
+    const types = {
+      media: {
+        type: 'searchMessagesFilterPhoto',
+        render: this.renderMedia,
+      },
+      docs: {
+        type: 'searchMessagesFilterDocument',
+        render: this.renderFiles,
+      },
+    };
+    telegram.api('searchChatMessages', {
+      chat_id: this.chatId,
+      query: '',
+      sender_user_id: 0,
+      from_message_id: 0,
+      offset: 0,
+      limit: 20,
+      filter: {
+        '@type': types[this.selectedTab].type,
+      }
+    }).then(types[this.selectedTab].render)
+      // this.grid.appendChild();
+      // this.tabContainer.appendChild(this.grid);
   };
+
+    renderMedia = ({messages}) => {
+      const grid = $('#media-grid', this.shadowRoot);
+      messages.forEach((message) => {
+        const div = document.createElement('div');
+        grid.append(div)
+        File.getFile(message.content.photo.sizes[0].photo)
+            .then((blob) => {
+              div.style.backgroundImage = `url(${blob})`;
+            });
+      })
+    };
+
+    renderFiles = ({messages}) => {
+      console.log(messages);
+      const grid = $('#docs-grid', this.shadowRoot);
+      messages.forEach((message) => {
+        const file = new UiFile({
+          file: message.content.document,
+          date: message.date,
+        });
+        grid.append(file);
+        // file.setAttribute('name', message.content.document.file_name);
+        // file.setAttribute('size', message.content.document.document.size);
+        // file.setAttribute('date', message.date);
+        // File.getFile(item.content.photo.sizes[0].photo)
+        //     .then((blob) => {
+        //       file
+        //     });
+      })
+    };
 }
 
 Component.init(LayoutProfile, component, {attributes, properties});

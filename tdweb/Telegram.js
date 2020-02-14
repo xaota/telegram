@@ -100,7 +100,7 @@ class Telegram {
     // console.log(`tdlib@${method}.request`, params);
     return this.client.send({'@type': method, ...params})
       .then(result => {
-        console.log(`tdlib@${method}.response`, result);
+        // console.log(`tdlib@${method}.response`, result);
         return result;
       })
       .catch(error => {

@@ -17,6 +17,7 @@ import MessageSticker from '../../message/sticker/message-sticker.js';
 import '../sidebar/layout-sidebar.js';
 import '../../ui/tabs/ui-tabs.js';
 import '../../ui/tab/ui-tab.js';
+import '../../ui/list/ui-list.js';
 
 import '../../ui/icon/ui-icon.js';
 
@@ -53,7 +54,11 @@ export default class LayoutConversation extends Component {
         });
 
     const {chat, me} = this.store();
-    $('conversation-input', node).setAttribute('chat', chat.id);
+    if (chat.type.is_channel) {
+      $('conversation-input', node).style.display = 'none';
+    } else {
+      $('conversation-input', node).setAttribute('chat', chat.id);
+    }
     $('conversation-header', node).setAttribute('chat', chat.id);
     getHistory(chat, me, $('ui-list', node));
     return this;
