@@ -13,7 +13,9 @@ const attributes = {
     }
   };
 
-const properties = {}
+const properties = {
+  online(root, value) { /* do nothing */ }
+}
 
 export default class UIAvatar extends Component {
   constructor() {

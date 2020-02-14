@@ -27,6 +27,33 @@ export default class ChatItem extends Component {
   mount(node) {
     super.mount(node, attributes, properties);
 
+    const store = this.store();
+    const me = store.me; // !
+    const peer = store && store.peer;
+    const id = store.id;
+
+    const slotAvatar = $('slot[name="avatar"]', node);
+    const avatar = [...slotAvatar.assignedNodes()].find(e => UIAvatar.is(e));
+
+    if (peer) {
+      channel.on('user.status', e => {
+        if (e.user_id !== peer) return;
+        avatar.online = e.online;
+      });
+    }
+
+    channel.on('chat.message', async ({chat_id, last_message}) => {
+      if (chat_id !== id) return;
+      lastMessage(this, last_message);
+      await lastAuthor(this, {me: me.id, peer, sender: last_message.sender_user_id});
+    });
+
+    channel.on('chat.counter', ({chat_id, last_read_inbox_message_id, unread_count}) => {
+      if (chat_id !== id) return;
+      this.setAttribute('badge', unread_count);
+      // !
+    });
+
     return this;
   }
 
@@ -41,20 +68,17 @@ export default class ChatItem extends Component {
     title.innerText = model.title;
     title.slot      = 'title';
 
-    const last     = document.createElement('span');
-    last.innerText = AppMessage.preview(model.last_message);
-    last.slot      = 'message';
-
     const item = new ChatItem();
-    if (model.unread_count > 0) item.setAttribute('badge', model.unread_count);
+    item.dataset.id = model.id;
+    item.store({id: model.id, me});
+
+    if (model.unread_count > 0) item.setAttribute('badge', model.unread_count); //
+
     if (model.notification_settings.mute_for !== 0) item.setAttribute('muted', '');
     if (model.is_pinned) item.setAttribute('pin', '');
-    item.setAttribute('timestamp', AppMessage.timestamp(model.last_message.date));
-    if (model.last_message.is_outgoing) item.status = (model.type.is_channel && model.last_read_inbox_message_id === model.last_message.id) || (!model.type.is_channel && model.last_read_outbox_message_id === model.last_message.id) ? 'receive' : 'sent';
 
     item.append(avatar);
     item.append(title);
-    item.append(last);
 
     // chatTypeBasicGroup, chatTypePrivate, , and chatTypeSupergroup.
     // ! chatTypeSecret
@@ -70,32 +94,55 @@ export default class ChatItem extends Component {
 
       if (type === 'chatTypePrivate') { // || type === 'chatTypeSecret'
         const peer = await telegram.api('getUser', {user_id: model.id})
-        if (peer.status['@type'] === 'userStatusOnline') avatar.setAttribute('online', '');
+        avatar.online = peer.status['@type'] === 'userStatusOnline';
+        item.store({peer: peer.id});
       }
     }
-    // console.log('USER VERIFY INFO', model, user);
-    // if (user.is_verified) author.appendChild(new UIIcon('verify'));
 
-    if (user && model.type.user_id !== user.id) {
-      const author = document.createElement('span');
-      author.innerText = (user.first_name + ' ' + user.last_name).trim();
-      author.slot = 'author';
-      item.append(author);
-    }
-
-    item.dataset.id = model.id;
-    item.addEventListener('click', e => channel.send('conversation.open', {chat: model, me}));
+    if (model.last_message) last(item, model.last_message, model, me);
+    item.addEventListener('click', e => channel.send('conversation.open', {chat: model, me})); // todo: #110
 
     return item;
-  }
-
-  static async fromId(chat_id, me) {
-    const model = await telegram.api('getChat', {chat_id});
-    const user_id = model.last_message.sender_user_id;
-    let user;
-    if (user_id !== 0 && user_id !== me.id) user = await telegram.api('getUser', {user_id})
-    return ChatItem.from({model, user, me});
   }
 }
 
 Component.init(ChatItem, component, {attributes, properties});
+
+/** */
+  async function last(root, message, model, me) {
+    root.setAttribute('timestamp', AppMessage.timestamp(message.date));
+    if (message.is_outgoing) {
+      root.status = (model.type.is_channel && model.last_read_inbox_message_id === message.id) || (!model.type.is_channel && model.last_read_outbox_message_id === message.id)
+        ? 'receive' : 'sent';
+    }
+    lastMessage(root, message, true);
+    await lastAuthor(root, {me: me.id, peer: model.type.user_id, sender: message.sender_user_id});
+  }
+
+/** lastAuthor */
+  async function lastAuthor(root, {me, peer, sender}) {
+    if (sender === 0 || sender === me.id || peer === sender) return;
+    const user = await telegram.api('getUser', {user_id: sender});
+
+    const author = document.createElement('span');
+    author.innerText = (user.first_name + ' ' + user.last_name).trim();
+    author.slot = 'author';
+
+    const authorSlot = $('slot[name="author"]', root.shadowRoot);
+    if (authorSlot) [...authorSlot.assignedNodes()].forEach(e => e.remove());
+
+    root.append(author);
+  }
+
+/** lastMessage */
+  function lastMessage(root, message) {
+    const element     = document.createElement('span');
+    element.innerText = AppMessage.preview(message);
+    element.slot      = 'message';
+
+    const slotMessage = $('slot[name="message"]', root.shadowRoot);
+    if (slotMessage) [...slotMessage.assignedNodes()].forEach(e => e.remove());
+
+    root.append(element);
+    root.store({point: message.id});
+  }
