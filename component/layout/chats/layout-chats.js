@@ -7,6 +7,7 @@ import UIFAB         from '../../ui/fab/ui-fab.js';
 import UIDrop        from '../../ui/drop/ui-drop.js';
 import UIList        from '../../ui/list/ui-list.js';
 import ChatItem      from '../../app/chat-item/chat-item.js';
+import UINetwork     from '../../ui/network/ui-network.js';
 import ChatsHeader   from '../../app/chats-header/chats-header.js';
 import LayoutLoading from '../loading/layout-loading.js';
 
