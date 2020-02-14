@@ -9,7 +9,7 @@ const attributes = {
       updateChildrenAttribute(root, 'img', 'src', value);
     },
     color(root, value) {
-      this.style.backgroundColor = '#' + value;
+      this.style.backgroundColor = value;
     }
   };
 
@@ -35,10 +35,21 @@ export default class UIAvatar extends Component {
       .toUpperCase();
   }
 
-  static color(min = 75, max = 225) {
-    const major = rand(min, max);
-    const [r,g,b] = shuffle([min, max, major]); // перемешиваем компоненты цвета
-    return rgb2hex(r) + rgb2hex(g) + rgb2hex(b);
+  static color(id) {
+    const colors = [
+      "#EB4F60",
+      "#FF9157",
+      "#997AE8",
+      "#50C541",
+      "#3DC2C1",
+      "#409ADB",
+      "#FC55A0"
+    ];
+    if (id >= 0 && id < 7) {
+      return id;
+    }
+    const colorIndex = Math.abs(id % colors.length);
+    return colors[colorIndex];
   }
 }
 

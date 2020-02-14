@@ -102,7 +102,7 @@ async function getHistory(chat, me, list, loading) {
     if (sender) {
       avatar = new UIAvatar();
       avatar.innerHTML = UIAvatar.letter(sender);
-      avatar.color = UIAvatar.color();
+      avatar.color = UIAvatar.color(message.author.id);
       avatar.setAttribute('slot', 'avatar');
       item.append(avatar);
 

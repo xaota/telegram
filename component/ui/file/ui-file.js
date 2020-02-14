@@ -29,6 +29,21 @@ const attributes = {}
 
 const properties = {}
 
+// const mimeTypes = {
+//     application: {
+//         color: '#8C171B',
+//         bent: '#70000B',
+//     },
+//     audio: {
+//         color: '#8C171B',
+//         bent: '#70000B',
+//     },
+//     font: {
+//         color: '#8C171B',
+//         bent: '#70000B',
+//     },
+//
+// };
 const typesPreview = {
     pdf: {
         color: '#8C171B',

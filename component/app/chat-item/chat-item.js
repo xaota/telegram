@@ -33,7 +33,7 @@ export default class ChatItem extends Component {
   static async from({model, user, me}) {
     const avatar     = new UIAvatar();
     avatar.innerHTML = UIAvatar.letter(model.title);
-    avatar.color     = UIAvatar.color();
+    avatar.color     = UIAvatar.color(model.type.supergroup_id || model.id);
     avatar.slot      = 'avatar';
     if (model.photo && model.photo.small) File.getFile(model.photo.small).then(src => avatar.src = src);
 
