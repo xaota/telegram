@@ -17,20 +17,24 @@ export default class UIList extends Component {
   mount(node) {
     super.mount(node, attributes, properties);
     let options = {
-      root: this,
-      rootMargin: '0px',
+      root: null,
+      rootMargin: '50px',
       threshold: 1,
     };
 
     let observer = new IntersectionObserver((changes, observer) => {
       changes.forEach(change => {
         if (change.intersectionRatio > 0) {
-          // console.log(3, change.target);
+          this.event('list-overscroll', {up: true});
           // observer.unobserve(change.target);
         }
       });
     }, options);
-    observer.observe($('#end', node));
+    const div = document.createElement('div')
+    setTimeout(() => {
+      this.shadowRoot.appendChild(div);
+    }, 3000); // TODO дикий костыль, считаем что дочерние элементы отрендерятся, иначе лишний раз отрабатывает событие
+    observer.observe(div);
     return this;
   }
 }

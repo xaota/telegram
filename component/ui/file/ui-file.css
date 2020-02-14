@@ -34,7 +34,7 @@ s}
   margin-bottom: 10px;
   font-size: 15px;
 }
-.img:hover .type {
+.img:hover .typeHover {
   display: none;
 }
 
@@ -66,6 +66,10 @@ ui-icon {
   bottom: 12px;
   color: white;
   display: none;
+}
+
+#close {
+  display: flex;
 }
 
 ui-loading-percent {

@@ -6,9 +6,10 @@ import File from '../../../script/File.js';
 
 import sidebarEvents from '../sidebar/events.js';
 import '../../ui/grid/ui-grid.js';
+import '../../ui/list/ui-list.js';
 import UiMember from '../../ui/member/ui-member.js';
 import UiFile from '../../ui/file/ui-file.js';
-import UiGrid from '../../ui/online/ui-online.js';
+import UiGrid from '../../ui/grid/ui-grid.js';
 import UiIcon from '../../ui/icon/ui-icon.js';
 
 const component = Component.meta(import.meta.url, 'layout-profile');
@@ -25,8 +26,16 @@ export default class LayoutProfile extends Component {
     super(component);
     this.chatId = chatId;
     this.profileId = profileId;
-    this.selectedTab = 'docs';
-    this.grid = new UiGrid();
+    this.selectedTab = 'media';
+    this.loadedItems = {
+      media: [],
+      docs: [],
+    };
+    this.totalCount = {
+      media: 0,
+      docs: 0,
+    };
+    this.cancelLoading = () => {};
   }
 
   mount(node) {
@@ -117,8 +126,15 @@ export default class LayoutProfile extends Component {
         });
       }
     });
-    this.tabContainer = $('#tabContainer', node);
-    this.renderTabContent();
+    this.tabContainer = $('ui-list', node);
+    this.tabContainer.addEventListener('list-overscroll', e => {
+      if (e.detail.up) {
+        if (this.totalCount[this.selectedTab] !== this.loadedItems[this.selectedTab].length) {
+          this.loadData(true);
+        }
+      }
+    });
+    this.loadData();
     return this;
   }
 
@@ -136,14 +152,15 @@ export default class LayoutProfile extends Component {
   onSelectTab = (e) => {
     const id = e.target.getAttribute('id');
     if (id && id !== this.selectedTab) {
+      this.cancelLoading();
       $(`#${this.selectedTab}`, this.shadowRoot).removeAttribute('selected');
       e.target.setAttribute('selected', '');
       this.selectedTab = id;
-      this.renderTabContent();
+      this.loadData();
     }
   };
 
-  renderTabContent = () => {
+  loadData = (append) => {
     const types = {
       media: {
         type: 'searchMessagesFilterPhoto',
@@ -154,50 +171,81 @@ export default class LayoutProfile extends Component {
         render: this.renderFiles,
       },
     };
+    if (!append && this.loadedItems[this.selectedTab].length > 0) {
+      types[this.selectedTab].render(this.loadedItems[this.selectedTab]);
+      return;
+    }
+    let cancel = false;
+    this.cancelLoading = () => cancel = true;
     telegram.api('searchChatMessages', {
       chat_id: this.chatId,
       query: '',
       sender_user_id: 0,
-      from_message_id: 0,
+      from_message_id: this.loadedItems[this.selectedTab].length > 0 ?
+          this.loadedItems[this.selectedTab][this.loadedItems[this.selectedTab].length - 1].id
+          : 0,
       offset: 0,
       limit: 20,
       filter: {
         '@type': types[this.selectedTab].type,
       }
-    }).then(types[this.selectedTab].render)
-      // this.grid.appendChild();
-      // this.tabContainer.appendChild(this.grid);
+    }).then((res) => {
+      if (cancel) {
+        return;
+      }
+      this.totalCount[this.selectedTab] = res.total_count;
+      this.loadedItems[this.selectedTab] = this.loadedItems[this.selectedTab].concat(res.messages);
+      types[this.selectedTab].render(append ? res.messages : this.loadedItems[this.selectedTab], append);
+    })
   };
 
-    renderMedia = ({messages}) => {
-      const grid = $('#media-grid', this.shadowRoot);
+    renderMedia = (messages, append) => {
+      let grid;
+      if (append) {
+        grid = $('#media-grid', this.shadowRoot);
+      } else {
+        grid = new UiGrid();
+      }
+      grid.setAttribute('id', 'media-grid');
+      grid.setAttribute('columns', 'repeat(3, 133px)');
+      grid.setAttribute('row-gap', '5px');
+      grid.setAttribute('column-gap', '5px');
       messages.forEach((message) => {
         const div = document.createElement('div');
-        grid.append(div)
+        grid.append(div);
         File.getFile(message.content.photo.sizes[0].photo)
             .then((blob) => {
               div.style.backgroundImage = `url(${blob})`;
             });
-      })
+      });
+      if (!append) {
+        this.tabContainer.innerHTML = '';
+        this.tabContainer.append(grid);
+      }
     };
 
-    renderFiles = ({messages}) => {
-      console.log(messages);
-      const grid = $('#docs-grid', this.shadowRoot);
+    renderFiles = (messages, append) => {
+      let grid;
+      if (append) {
+        grid = $('#docs-grid', this.shadowRoot);
+      } else {
+        grid = new UiGrid();
+      }
+      grid.setAttribute('id', 'docs-grid');
+      grid.setAttribute('rows', 'auto');
+      grid.setAttribute('columns', '100%');
+      grid.setAttribute('row-gap', '24px');
       messages.forEach((message) => {
         const file = new UiFile({
           file: message.content.document,
           date: message.date,
         });
         grid.append(file);
-        // file.setAttribute('name', message.content.document.file_name);
-        // file.setAttribute('size', message.content.document.document.size);
-        // file.setAttribute('date', message.date);
-        // File.getFile(item.content.photo.sizes[0].photo)
-        //     .then((blob) => {
-        //       file
-        //     });
-      })
+      });
+      if (!append) {
+        this.tabContainer.innerHTML = '';
+        this.tabContainer.append(grid);
+      }
     };
 }
 

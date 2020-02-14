@@ -1,7 +1,11 @@
 import {channel} from './DOM.js';
 
 export class File {
-  async getFile(file, priority = 32) {
+  async stopLoading(file_id) {
+    await telegram.api('cancelDownloadFile', {file_id})
+  }
+
+  async getFile(file, getFileState, loadingProcess, priority = 32) {
     return new Promise((resolve, reject) => {
       if (!file || !file.id) return reject(new Error('no file id'));
       if (file.local.is_downloading_completed) {
@@ -11,8 +15,14 @@ export class File {
       channel.on('updateFile', (loadFile) => { // @todo: вынести в синглколл/отписаться / подписка на загрузку файла
         if (file.local.is_downloading_completed) return this.readFile(file.id);
         if (loadFile.id !== file.id) return;
+        if (loadingProcess) loadingProcess(loadFile);
         // TODO: также отобразить в канале промежуточный результат загрузки
-        if (loadFile.local.is_downloading_completed) return this.readFile(loadFile.id).then(blob => resolve(blob)); // todo: отписаться бы
+        if (loadFile.local.is_downloading_completed) {
+          if (getFileState) {
+            return resolve(loadFile);
+          }
+          return this.readFile(loadFile.id).then(blob => resolve(blob));
+        } // todo: отписаться бы
       });
 
       telegram.api('downloadFile', {file_id: file.id, priority});

@@ -2,12 +2,13 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    width: 100%;
 }
 
 .header {
     display: flex;
     align-items: center;
-    padding: 19px 23px;
+    padding: 16px 23px;
 }
 .header ui-icon {
     cursor: pointer;
@@ -21,10 +22,14 @@
 }
 
 .profile {
-    height: calc(100vh - 62px);
+    height: 100%;
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
+    overflow: scroll;
+    padding-top: 3px;
+    -webkit-mask: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 1) 3px);
 }
 
 .profile ui-icon:hover {
@@ -81,15 +86,10 @@
 .footer {
     font-size: 10px;
     width: 100%;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
 }
 
 .container {
     padding: 5px;
-    height: 100%;
-    overflow: auto;
 }
 
 #media-grid {
@@ -103,6 +103,13 @@
     background-position: center;
 }
 
-.docs {
+#docs-grid {
     padding: 15px 14px;
+}
+
+ui-tabs {
+    position: sticky;
+    top: -3px;
+    z-index: 100;
+    background: var(--background-aside);
 }
