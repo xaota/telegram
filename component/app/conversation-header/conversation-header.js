@@ -45,7 +45,7 @@ export default class ConversationHeader extends Component {
           chat_id: this.chat,
       }).then(res => {
           $('.title', node).innerText = res.title;
-          this.renderPhoto(res.photo, res.type.user_id || res.type.supergroup_id, res.title);
+          this.renderPhoto(res.photo, res.type.user_id || res.type.supergroup_id || res.type.basic_group_id, res.title);
           if (res.type['@type'] === 'chatTypePrivate') {
               // user profile getUserFullInfo
               telegram.api('getUser', {

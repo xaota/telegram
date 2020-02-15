@@ -20,7 +20,7 @@ export default class MessageSticker extends Component {
   mount(node) {
     super.mount(node, attributes, properties);
     const data = this.store();
-    File.getFile(data.sticker).then(blob => updateChildrenAttribute(node, 'img', 'src', blob));
+    File.getFile(data.is_animated ? data.thumbnail.photo : data.sticker).then(blob => updateChildrenAttribute(node, 'img', 'src', blob));
     return this;
   }
 

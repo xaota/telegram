@@ -42,6 +42,43 @@ export default class LayoutProfile extends Component {
 
   mount(node) {
     super.mount(node, attributes, properties);
+    telegram.api('searchChatMessages', {
+      chat_id: this.chatId,
+      query: '',
+      sender_user_id: 0,
+      from_message_id: 0,
+      offset: 0,
+      limit: 1,
+      filter: {
+        '@type': 'searchMessagesFilterPhoto',
+      }
+    }).then((p) => {
+      telegram.api('searchChatMessages', {
+        chat_id: this.chatId,
+        query: '',
+        sender_user_id: 0,
+        from_message_id: 0,
+        offset: 0,
+        limit: 1,
+        filter: {
+          '@type': 'searchMessagesFilterDocument',
+        }
+      }).then((d) => {
+        if (p.total_count + d.total_count) {
+          this.tabContainer = $('ui-list', node);
+          this.tabContainer.addEventListener('list-overscroll', e => {
+            if (e.detail.up) {
+              if (this.totalCount[this.selectedTab] !== this.loadedItems[this.selectedTab].length) {
+                this.loadData(true);
+              }
+            }
+          });
+          this.loadData();
+        } else {
+          $('.footer', node).style.display = 'none';
+        }
+      })
+    });
     $('#close', node)
         .addEventListener('click', () => {
           channel.send(sidebarEvents.CLOSE_SIDEBAR);
@@ -77,7 +114,7 @@ export default class LayoutProfile extends Component {
       chat_id: this.chatId,
     }).then(res => {
       this.setTitle(res.title);
-      this.renderPhoto(res.photo, res.type.user_id || res.type.supergroup_id, res.title);
+      this.renderPhoto(res.photo, res.type.user_id || res.type.supergroup_id || res.type.basic_group_id, res.title);
 
       if (res.type['@type'] === 'chatTypePrivate') {
         // user profile getUserFullInfo
@@ -133,15 +170,6 @@ export default class LayoutProfile extends Component {
           });
       }
     });
-    this.tabContainer = $('ui-list', node);
-    this.tabContainer.addEventListener('list-overscroll', e => {
-      if (e.detail.up) {
-        if (this.totalCount[this.selectedTab] !== this.loadedItems[this.selectedTab].length) {
-          this.loadData(true);
-        }
-      }
-    });
-    this.loadData();
     return this;
   }
 
