@@ -21,7 +21,7 @@ const attributes = {
 const properties = {
 
   }
-
+const formatter = new Intl.NumberFormat('en');
 export default class LayoutProfile extends Component {
   constructor({chatId, profileId} = {}) {
     super(component);
@@ -118,11 +118,18 @@ export default class LayoutProfile extends Component {
           }
           const statusBlock = $('.status', node);
           if (res.type.is_channel) {
-            statusBlock.innerText = `${groupFull.member_count} members`;
+            statusBlock.innerText = `${formatter.format(groupFull.member_count)} subscribers`;
           } else {
-            statusBlock.innerText = `${groupFull.member_count} members, TODO online`;
+            statusBlock.innerText = `${formatter.format(groupFull.member_count)} members, TODO online`;
           }
         });
+      } else if (res.type['@type'] === 'chatTypeBasicGroup') {
+          telegram.api('getBasicGroupFullInfo', {
+            basic_group_id: res.type.basic_group_id
+          }).then(groupFull => {
+            const statusBlock = $('.status', node);
+            statusBlock.innerText = `${formatter.format(groupFull.members.length)} members, TODO online`;
+          });
       }
     });
     this.tabContainer = $('ui-list', node);

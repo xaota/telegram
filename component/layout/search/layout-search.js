@@ -73,7 +73,6 @@ export default class LayoutSearch extends Component {
           filter: null
       })
           .then((res) =>{
-              console.log(1);
               if (cancel) {
                   return;
               }

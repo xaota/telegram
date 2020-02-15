@@ -27,7 +27,7 @@ ui-avatar {
   display: flex;
   cursor: pointer;
 }
-.header__info {
+.header {
   padding-left: .8rem;
   display: flex;
   flex-direction: column;
@@ -35,18 +35,17 @@ ui-avatar {
   justify-content: center
 }
 
-.header__title {
+.header {
   font-weight: 500;
   font-size: 1rem
 }
 
-.header__status {
+.header {
   font-size: .93333rem;
-  color: #707579
 }
 
-.header__status.online {
-  color: #1da1f1
+.status {
+  color: #707579
 }
 
 .right {
