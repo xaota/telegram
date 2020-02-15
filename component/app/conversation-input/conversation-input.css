@@ -109,6 +109,9 @@ textarea:focus {
 #attach {
   margin-right: 0px;
 }
+#attach:hover {
+  cursor: pointer;
+}
 
 .action {
   background: var(--field);
@@ -146,4 +149,41 @@ textarea:focus {
 }
 .attach-list div + div {
   padding-top: 20px;
+}
+
+
+.web {
+  padding-left: 1px;
+  display: flex;
+  flex-direction: column;
+  padding-left: 5px;
+}
+
+.web img {
+  padding-bottom: 5px;
+  width: 50%;
+}
+
+.web .name {
+  color: #539CE6;
+  font-weight: 500;
+  padding-bottom: 5px;
+}
+.web .title {
+  font-weight: 600;
+  padding-bottom: 5px;
+}
+.web .descr {
+  font-weight: 400;
+}
+
+a {
+  color: #358EE3;
+}
+
+#url {
+  cursor: pointer;
+  border-left: 2px solid #4ea4f5;
+  display: flex;
+  margin-top: 5px;
 }

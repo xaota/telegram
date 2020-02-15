@@ -151,7 +151,6 @@ async function getHistory(chat, me, list, loading) {
   function createMessageItem(message, index, root, sender, outgoing, color) {
     let content;
     const timestamp = AppMessage.timestamp(message.date);
-
     if (message.content['@type'] === 'messageSticker') {
       content = MessageSticker.from(message.content.sticker, timestamp);
       return root.append(content);
@@ -170,7 +169,7 @@ async function getHistory(chat, me, list, loading) {
     // messageVoiceNote
     // messageVideo?
 
-    const text = message.content['@type'] === 'messageText'
+    let text = message.content['@type'] === 'messageText'
       ? message.content.text.text
       : `Doesn't supported `+ message.content['@type'].slice(7, message.content['@type'].length) + ' messages';
 
@@ -191,10 +190,62 @@ async function getHistory(chat, me, list, loading) {
       content.append(author);
     }
 
-    const span = document.createElement('span');
-    span.innerText = text;
-    span.slot = 'content';
-    content.append(span);
+
+    if (message.content.web_page) {
+
+      const web_page = message.content.web_page;
+      const web = document.createElement('div');
+      web.setAttribute('class', 'web');
+      web.slot = 'web-page';
+      web.addEventListener('click', () => {
+        window.open(web_page.url,'_blank');
+      });
+      const img = document.createElement('img');
+      if (web_page.photo && web_page.photo.sizes[0].photo) {
+        File.getFile(web_page.photo.sizes[0].photo)
+            .then(blob => img.setAttribute('src', blob));
+      }
+      web.append(img);
+
+      if (web_page.site_name) {
+        const name = document.createElement('span');
+        name.innerText = web_page.site_name;
+        name.setAttribute('class', 'name');
+        web.append(name);
+      }
+
+
+      if (web_page.title) {
+        const title = document.createElement('span');
+        title.innerText = web_page.title;
+        title.setAttribute('class', 'title');
+        web.append(title);
+      }
+
+      if (web_page.description) {
+        const descr = document.createElement('span');
+        descr.innerText = web_page.description;
+        descr.setAttribute('class', 'descr');
+        web.append(descr);
+      }
+
+      content.append(web);
+
+      text = text.replace(
+          /((http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?)/g,
+          '<a href="$1">$1</a>'
+      );
+
+      const span = document.createElement('span');
+      span.innerHTML = text;
+      span.slot = 'content';
+      content.append(span);
+    } else {
+      const span = document.createElement('span');
+      span.innerText = text;
+      span.slot = 'content';
+      content.append(span);
+    }
 
     root.append(content);
   }

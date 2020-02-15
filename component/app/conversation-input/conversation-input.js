@@ -6,6 +6,7 @@ import UiIcon from '../../ui/icon/ui-icon.js';
 import '../../ui/drop/ui-drop.js';
 import '../../message/text/message-text.js';
 import FormEmoji from '../../form/emoji/form-emoji.js';
+import File from "../../../script/File.js";
 
 
 const component = Component.meta(import.meta.url, 'conversation-input');
@@ -127,7 +128,64 @@ export default class ConversationInput extends Component {
     }
   };
 
+  appendUrl = (web_page) => {
+    const d = $('#url', this.shadowRoot);
+    if (this.url === web_page.url) {
+      return;
+    } else {
+      d.innerHTML = '';
+    }
+    this.url = web_page.url;
+    const web = document.createElement('div');
+    web.setAttribute('class', 'web');
+    web.slot = 'web-page';
+    web.addEventListener('click', () => {
+      window.open(web_page.url,'_blank');
+    });
+    const img = document.createElement('img');
+    if (web_page.photo && web_page.photo.sizes[0].photo) {
+      File.getFile(web_page.photo.sizes[0].photo)
+          .then(blob => img.setAttribute('src', blob));
+    }
+    web.append(img);
+
+    if (web_page.site_name) {
+      const name = document.createElement('span');
+      name.innerText = web_page.site_name;
+      name.setAttribute('class', 'name');
+      web.append(name);
+    }
+
+
+    if (web_page.title) {
+      const title = document.createElement('span');
+      title.innerText = web_page.title;
+      title.setAttribute('class', 'title');
+      web.append(title);
+    }
+
+    if (web_page.description) {
+      const descr = document.createElement('span');
+      descr.innerText = web_page.description;
+      descr.setAttribute('class', 'descr');
+      web.append(descr);
+    }
+
+    d.append(web);
+  };
+
   onChange = (e) => {
+      getDataFromUrl(e.target.value)
+          .then(res => {
+            if (res) {
+              this.appendUrl(res);
+            } else {
+              $('#url', this.shadowRoot).innerHTML = '';
+            }
+          })
+          .catch((err) => {
+            $('#url', this.shadowRoot).innerHTML = ''
+          });
     this.replaceActionIcon();
     this.calculateRows(this.input);
   };
@@ -178,3 +236,11 @@ export default class ConversationInput extends Component {
 }
 
 Component.init(ConversationInput, component, {attributes, properties});
+
+
+function getDataFromUrl(text) {
+    return telegram.api('getWebPagePreview', {
+      text: {'@type': 'formattedText',
+        text: text},
+    });
+}

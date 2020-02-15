@@ -54,3 +54,31 @@ ui-fab {
   right: -62px;
   background: none;
 }
+
+.web {
+  padding-left: 1px;
+  display: flex;
+  flex-direction: column;
+}
+
+.web img {
+  width: 100%;
+  padding-bottom: 5px;
+}
+
+.web .name {
+  color: #539CE6;
+  font-weight: 500;
+  padding-bottom: 5px;
+}
+.web .title {
+  font-weight: 600;
+  padding-bottom: 5px;
+}
+.web .descr {
+  font-weight: 400;
+}
+
+a {
+  color: #358EE3;
+}
