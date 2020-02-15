@@ -69,7 +69,7 @@ export default class ConversationHeader extends Component {
                   if (res.type.is_channel) {
                       statusBlock.innerText = `${formatter.format(groupFull.member_count)} subscribers`;
                   } else {
-                      statusBlock.innerText = `${formatter.format(groupFull.member_count)} members, TODO online`;
+                      statusBlock.innerText = `${formatter.format(groupFull.member_count)} members`;
                   }
               });
           } else if (res.type['@type'] === 'chatTypeBasicGroup') {
@@ -78,7 +78,7 @@ export default class ConversationHeader extends Component {
               }).then(groupFull => {
                   $('ui-online', node).style.display = 'none';
                   const statusBlock = $('.status', node);
-                  statusBlock.innerText = `${formatter.format(groupFull.members.length)} members, TODO online`;
+                  statusBlock.innerText = `${formatter.format(groupFull.members.length)} members`;
               });
           }
 

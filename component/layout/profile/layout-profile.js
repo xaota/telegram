@@ -162,7 +162,7 @@ export default class LayoutProfile extends Component {
           if (res.type.is_channel) {
             statusBlock.innerText = `${formatter.format(groupFull.member_count)} subscribers`;
           } else {
-            statusBlock.innerText = `${formatter.format(groupFull.member_count)} members, TODO online`;
+            statusBlock.innerText = `${formatter.format(groupFull.member_count)} members`;
           }
         });
       } else if (res.type['@type'] === 'chatTypeBasicGroup') {
@@ -170,7 +170,7 @@ export default class LayoutProfile extends Component {
             basic_group_id: res.type.basic_group_id
           }).then(groupFull => {
             const statusBlock = $('.status', node);
-            statusBlock.innerText = `${formatter.format(groupFull.members.length)} members, TODO online`;
+            statusBlock.innerText = `${formatter.format(groupFull.members.length)} members`;
           });
       }
     });
