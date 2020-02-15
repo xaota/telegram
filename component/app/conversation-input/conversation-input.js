@@ -1,5 +1,6 @@
 import Component from '../../../script/Component.js';
 import $, {updateChildrenProperty} from '../../../script/DOM.js';
+import {debounce} from '../../../script/helpers.js';
 import telegram from '../../../tdweb/Telegram.js';
 
 import UiIcon from '../../ui/icon/ui-icon.js';
@@ -174,18 +175,21 @@ export default class ConversationInput extends Component {
     d.append(web);
   };
 
+  debouncedSearch = debounce((value) => {
+    getDataFromUrl(value)
+        .then(res => {
+          if (res) {
+            this.appendUrl(res);
+          } else {
+            $('#url', this.shadowRoot).innerHTML = '';
+          }
+        })
+        .catch((err) => {
+          $('#url', this.shadowRoot).innerHTML = ''
+        });
+  }, 500)
   onChange = (e) => {
-      getDataFromUrl(e.target.value)
-          .then(res => {
-            if (res) {
-              this.appendUrl(res);
-            } else {
-              $('#url', this.shadowRoot).innerHTML = '';
-            }
-          })
-          .catch((err) => {
-            $('#url', this.shadowRoot).innerHTML = ''
-          });
+    this.debouncedSearch(e.target.value)
     this.replaceActionIcon();
     this.calculateRows(this.input);
   };
