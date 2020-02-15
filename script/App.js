@@ -14,13 +14,14 @@ export default class App {
 
   update(update) {
     const type = update['@type'];
-
+    // console.log(update);
     const handlers = {
       updateFile:               File.update,
       updateNewChat:            u => this.updateNewChat(u.chat), // новый чат (вообще среди всех списков)
       updateChatChatList:       u => this.updateChatChatList({chat_id: u.chat_id, chat_list: u.chat_list['@type']}), // помещение чата в список чатов
 
       updateUserStatus:         u => this.updateUserStatus(u), // изер в сети / оффлайн
+      updateChatOnlineMemberCount:         u => this.updateChatOnlineMemberCount(u), // изер в сети / оффлайн
       updateChatReadInbox:      u => this.updateChatReadInbox(u), // прочитанно / непрочитано в чате из списка
       updateChatReadOutbox:     u => this.updateChatReadOutbox(u), // пользователь прочитал исходящее сообщение
       updateChatLastMessage:    u => this.updateChatLastMessage(u), // превью сообщения в списке чатов
@@ -58,6 +59,15 @@ export default class App {
     const was_online = status.was_online;
     const expires = status.expires;
     this.channel.send('user.status', {user_id, online, was_online, expires});
+  }
+
+  updateChatOnlineMemberCount(e) {
+    // TODO теоретически для онлайн пользователей
+    console.log(100, e);
+    // const online = status['@type'].slice(10).toLowerCase() === 'online';
+    // const was_online = status.was_online;
+    // const expires = status.expires;
+    // this.channel.send('user.status', {user_id, online, was_online, expires});
   }
 
   connection(type) {
