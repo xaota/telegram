@@ -9,7 +9,7 @@ export default class Storage {
     // return new Promise((resolve, reject) => {
       const data = this.load();
       const value = data[key];
-      console.log(this.name, 'storage get', {key, value}, data);
+      // console.log(this.name, 'storage get', {key, value}, data);
       return value;
       // resolve(value);
     // });
@@ -20,7 +20,7 @@ export default class Storage {
       const data = this.load();
       data[key] = value;
       this.save(data);
-      console.log(this.name, 'storage set', {key, value}, data);
+      // console.log(this.name, 'storage set', {key, value}, data);
       // resolve();
     // });
   }
@@ -30,14 +30,14 @@ export default class Storage {
       const data = this.load();
       keys.forEach(key => delete data[key]);
       this.save(data);
-      console.log(this.name, 'storage remove', keys, data);
+      // console.log(this.name, 'storage remove', keys, data);
       // resolve();
     // });
   }
 
   clear() {
     // return new Promise((resolve, reject) => {
-      console.log(this.name, 'storage clear');
+      // console.log(this.name, 'storage clear');
       this.save();
       // resolve();
     // });

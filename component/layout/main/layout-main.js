@@ -90,6 +90,6 @@ Component.init(LayoutMain, component, {attributes, properties});
     path.push(route);
     store.path = path;
     this.store({[root]: store});
-    console.log(root, 'route', this.store()[root].path);
+    // console.log(root, 'route', this.store()[root].path);
     return target;
   }

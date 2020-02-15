@@ -47,7 +47,7 @@ Component.init(ChatsHeader, component, {attributes, properties});
 
 /** */
   function action(route) {
-    console.log('action', route);
+    // console.log('action', route);
     switch (route) {
       case 'night-mode': return nightTheme();
       case 'collapse': return channel.send('aside-collapse');

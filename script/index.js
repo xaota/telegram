@@ -29,29 +29,6 @@ async function main() {
   current = createLayout(layout);
 }
 
-function hasAuth() {
-  return new Promise(async (resolve, reject) => {
-    const auth = await storage.get('auth').then(r => Boolean(r));
-    console.log('auth', auth);
-    // todo: test api call - check session is alive (NearestDC?)
-    if (!auth) return reject();
-    try {
-      const config = await telegram.api('help.getConfig'); // telegram.api('help.getNearestDc');
-      console.log('config', config);
-      resolve();
-    } catch (e) {
-      console.log('no config', e);
-      // debugger;
-      // await mtproto.clear();
-      await storage.clear();
-      // await telegram.drop();
-      // await telegram.init();
-      // telegram.on('*', e => { console.log('telegram update2', e) });
-      reject();
-    }
-  });
-}
-
 channel.on('authorizationStateReady', async () => {
   current.remove(); // layout-login
   loading.style.display = '';

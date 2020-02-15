@@ -89,22 +89,21 @@ class Telegram {
   }
 
   clientUpdate(update) {
-    if (!this.disableLog) console.log('update client channel', update);
     channel.send('telegram', update);
     return this;
   }
 
   api(method, params) {
-    if (!this.client) return console.error(`tdlib@${method}: !tdlib.init`, params);
+    if (!this.client) return; // console.error(`tdlib@${method}: !tdlib.init`, params);
 
-    console.log(`tdlib@${method}.request`, params);
+    // console.log(`tdlib@${method}.request`, params);
     return this.client.send({'@type': method, ...params})
       .then(result => {
-        console.log(`tdlib@${method}.response`, result);
+        // console.log(`tdlib@${method}.response`, result);
         return result;
       })
       .catch(error => {
-        console.error(`tdlib@${method}.error`, error, params);
+        // console.error(`tdlib@${method}.error`, error, params);
         throw error;
       })
   }
