@@ -17,6 +17,7 @@ import MessageText    from '../../message/text/message-text.js';
 import MessageEmoji   from '../../message/emoji/message-emoji.js';
 import MessageSticker from '../../message/sticker/message-sticker.js';
 import MessageDocument from '../../message/document/message-document.js';
+import MessagePhoto from '../../message/photo/message-photo.js';
 
 import '../sidebar/layout-sidebar.js';
 import '../../ui/tabs/ui-tabs.js';
@@ -158,6 +159,15 @@ async function getHistory(chat, me, list, loading) {
 
     if (message.content['@type'] === 'messageDocument') {
       content = MessageDocument.from(message.content.document, timestamp);
+      content.setAttribute(outgoing ? 'right' : 'left', '')
+      return root.append(content);
+    }
+    if (message.content['@type'] === 'messagePhoto') {
+      content = MessagePhoto.from({
+        photo: message.content.photo,
+        timestamp,
+        caption: message.content.caption,
+      });
       content.setAttribute(outgoing ? 'right' : 'left', '')
       return root.append(content);
     }

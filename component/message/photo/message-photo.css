@@ -1,0 +1,78 @@
+@charset "utf-8";
+
+:host {
+  display: block;
+  position: relative;
+}
+
+img {
+  height: 100%;
+  width: 100%;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+.img {
+  min-width: 200px;
+}
+.solo img {
+  border-radius: 5px;
+}
+:host {
+  display: block;
+  font-size: 14px;
+  --color: var(--foreground-label);
+}
+
+:host([reply]) {
+  font-size: 13px;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  background: var(--field);
+  border-radius: 5px;
+  position: relative;
+  box-shadow: 0 1px 2px 0 rgba(16, 35, 47, 0.15);
+  max-width: 40rem;
+  text-align: left;
+  padding: 0;
+  /*padding: 8px 6px;*/
+  word-break: break-word;
+}
+
+.solo {
+  flex-direction: row;
+}
+:host([left]) .main {
+  border-bottom-left-radius: 5px;
+  border-top-left-radius: 5px;
+  background: var(--background-message-in);
+}
+
+:host([right]) .main {
+  border-bottom-right-radius: 5px;
+  border-top-right-radius: 5px;
+  background: var(--background-message-out);
+}
+
+:host([timestamp]) slot[name="content"]::slotted(span):after {
+  content: "";
+  display: inline-block;
+  width: 1.8rem;
+}
+
+#time { /* timestamp */
+  position: absolute;
+  /* display: block;
+  text-align: right; */
+  font-size: 0.73333rem;
+  color: #a3adb6;
+  font-weight: 400;
+  right: 4px;
+  bottom: 1px;
+}
+
+:host([reply]) span {
+  display: none;
+}
