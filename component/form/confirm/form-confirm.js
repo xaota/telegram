@@ -27,7 +27,7 @@ export default class FormConfirm extends Component {
     input.addEventListener('input', async _ => {
       // console.log(input.value);
       if (input.value.length < 5) return;
-      console.log('sms', input.value);
+      // console.log('sms', input.value);
       input.disabled = true;
       // loader ?
 
@@ -51,7 +51,7 @@ export default class FormConfirm extends Component {
         // channel.send('login-confirm', user);
         wipe.call(this, input);
       } catch (error) {
-        console.log('error', error.message); // "PHONE_CODE_INVALID"
+        // console.log('error', error.message); // "PHONE_CODE_INVALID"
         input.value = '';
         input.disabled = false;
       }

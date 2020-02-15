@@ -53,7 +53,7 @@ export default class App {
   }
 
   updateChatReadOutbox({chat_id, last_read_outbox_message_id}) {
-    console.log('todo: updateChatReadOutbox', {chat_id, last_read_outbox_message_id}); //
+    // console.log('todo: updateChatReadOutbox', {chat_id, last_read_outbox_message_id}); //
   }
 
   updateChatLastMessage({chat_id, last_message, order}) {
@@ -69,7 +69,7 @@ export default class App {
 
   updateChatOnlineMemberCount(e) {
     // TODO теоретически для онлайн пользователей
-    console.log(100, e);
+    // console.log(100, e);
     // const online = status['@type'].slice(10).toLowerCase() === 'online';
     // const was_online = status.was_online;
     // const expires = status.expires;
