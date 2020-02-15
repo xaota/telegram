@@ -162,7 +162,7 @@ async function getHistory(chat, me, list, loading) {
     // messageAudio
     // messageVoiceNote
     // messageVideo?
-    // document?
+    // messageDocument
 
     const text = message.content['@type'] === 'messageText'
       ? message.content.text.text
