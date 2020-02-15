@@ -36,6 +36,7 @@ export default class AppMessage extends Component {
   }
 
   static timestamp(timestamp) {
+    if (!timestamp) return '';
     try{
       timestamp = new Date(timestamp * 1000);
       return [timestamp.getHours(), timestamp.getMinutes()]

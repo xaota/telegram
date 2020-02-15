@@ -44,7 +44,7 @@ body.dark {
 }
 
 body {
-  background: var(--background);
+  background: var(--background-aside);
   color:      var(--foreground);
   margin: 0;
   padding: 0;

@@ -2,9 +2,23 @@
 
 :host {
   display: block;
+  position: relative;
 }
 
 img {
   width: 200px;
   height: 200px;
+}
+
+span {
+  position: absolute;
+  font-size: .73333rem;
+  /* color: #a3adb6; */
+  font-weight: 400;
+  right: 4PX;
+  bottom: 1PX;
+
+  background: rgba(0,0,0,.2);
+  border-radius: .73333rem;
+  padding: 2PX 6PX;
 }

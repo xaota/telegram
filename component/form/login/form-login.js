@@ -21,7 +21,7 @@ export default class FormLogin extends Component {
   mount(node) {
     super.mount(node, attributes, properties);
 
-    const phone = $('ui-input', node);
+    const phone = $('#phone', node);
     const button = $('ui-button', node);
 
     phone.addEventListener('change', _ => {
