@@ -19,6 +19,11 @@ export function formatDate(_date, short) {
     return `${monthNames[monthIndex]} ${day}, ${year} at ${hours}:${minutes}`;
 }
 
+export function dateDay(date = new Date()) {
+    date = new Date(+date);
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+}
+
 export function debounce(func, wait, immediate) {
     var timeout;
     return function() {

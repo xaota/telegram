@@ -2,6 +2,7 @@ import Component from '../../../script/Component.js';
 
 import $, {channel, updateChildrenHTML, updateChildrenText} from '../../../script/DOM.js';
 import File       from '../../../script/File.js';
+import {dateDay, formatDate} from '../../../script/helpers.js';
 
 import UIIcon     from '../../ui/icon/ui-icon.js';
 import UIBadge    from '../../ui/badge/ui-badge.js';
@@ -90,7 +91,11 @@ export default class ChatItem extends Component {
     };
     if (type in types) {
       const {is_verified} = await types[type]();
-      if (is_verified) title.append(new UIIcon('verify'));
+      if (is_verified) {
+        const verify = new UIIcon('verify');
+        verify.slot = 'title';
+        item.append(verify);
+      };
 
       if (type === 'chatTypePrivate') { // || type === 'chatTypeSecret'
         const peer = await telegram.api('getUser', {user_id: model.id})
@@ -110,7 +115,11 @@ Component.init(ChatItem, component, {attributes, properties});
 
 /** */
   async function last(root, message, model, me) {
-    root.setAttribute('timestamp', AppMessage.timestamp(message.date));
+    const current = formatDate(dateDay(), true);
+    const updated = formatDate(dateDay(message.date * 1000), true);
+    const timestamp = current === updated ? AppMessage.timestamp(message.date) : updated;
+    root.setAttribute('timestamp', timestamp);
+
     if (message.is_outgoing) {
       root.status = (model.type.is_channel && model.last_read_inbox_message_id === message.id) || (!model.type.is_channel && model.last_read_outbox_message_id === message.id)
         ? 'receive' : 'sent';

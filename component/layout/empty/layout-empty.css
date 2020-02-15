@@ -16,6 +16,7 @@ h1 {
   width: 200px;
   text-align: center;
   line-height: 32px;
+  font-weight: normal;
 }
 
 main {
@@ -48,6 +49,7 @@ div > ui-icon {
   margin-bottom: 8px;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 }
 
 div > span {

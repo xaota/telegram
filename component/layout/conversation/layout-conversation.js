@@ -3,6 +3,7 @@ import Component from '../../../script/Component.js';
 import $, {updateChildrenElement} from '../../../script/DOM.js';
 import File from '../../../script/File.js';
 import telegram from '../../../tdweb/Telegram.js';
+import {formatDate, dateDay} from '../../../script/helpers.js';
 
 import UIFAB              from '../../ui/fab/ui-fab.js';
 import UIList             from '../../ui/list/ui-list.js';
@@ -57,7 +58,7 @@ export default class LayoutConversation extends Component {
         });
 
     $('ui-fab', node).addEventListener('click', _ => {
-      if (list.lastElementChild) list.lastElementChild.scrollIntoView({block: 'end', behavior: 'smooth'});
+      if (list.firstElementChild) list.firstElementChild.scrollIntoView({block: 'end', behavior: 'smooth'});
     });
 
     const {chat, me} = this.store();
@@ -83,11 +84,31 @@ async function getHistory(chat, me, list, loading) {
   const messages = [...last.messages, ...prev.messages];
   const members = await getUsers([...new Set(messages.map(m => m.sender_user_id))]);
   messages.forEach(m => m.author = members[m.sender_user_id]);
+
+  insertDates(messages);
   messages.forEach(m => createMessageItem(m, root));
   list.innerHTML = '';
   list.append(root);
     // loading.style.display = 'none';
 }
+
+/** */
+  function insertDates(messages) {
+    let current = dateDay(messages[0].date * 1000);
+    let message = formatDate(current, true);
+    for (let i = 1; i < messages.length; ++i) {
+      const day  = dateDay(messages[i].date * 1000);
+      const temp = formatDate(day, true);
+      if (temp !== message) {
+        messages.splice(i, 0, {content: {'@type': 'messageText', text: {text: message}}});
+
+        message = temp;
+        current = day;
+        ++i;
+      }
+    }
+    messages.push({content: {'@type': 'messageText', text: {text: message}}});
+  }
 
 /** */
   function createMessageItem(message, node) {
@@ -101,7 +122,7 @@ async function getHistory(chat, me, list, loading) {
     let color;
     if (sender) color = UIAvatar.color(message.author.id);
     if (sender) item.setAttribute(message.is_outgoing ? 'right' : 'left', '');
-    if (sender) item.append(UIAvatar.from(sender, color, message.author && message.author.profile_photo && message.author.profile_photo.small));
+    if (sender && !message.is_outgoing) item.append(UIAvatar.from(sender, color, message.author && message.author.profile_photo && message.author.profile_photo.small));
 
     let content;
 
@@ -130,10 +151,10 @@ async function getHistory(chat, me, list, loading) {
       : new MessageText();
 
     if (sender) content.setAttribute(message.is_outgoing ? 'right' : 'left', '');
-    content.setAttribute('timestamp', timestamp);
+    if (timestamp) content.setAttribute('timestamp', timestamp);
     if (sender && color) content.setAttribute('color', color);
 
-    if (!emoji) {
+    if (!emoji && !message.is_outgoing) {
       const author = document.createElement('span');
       author.innerText = sender;
       author.slot = 'author';

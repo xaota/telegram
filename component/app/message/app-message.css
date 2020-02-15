@@ -20,11 +20,14 @@
   grid-template-columns: fit-content(var(--avatar)) fit-content(80%) auto;
   justify-items: start;
 }
+
 :host([right]) {
   grid-template-areas:". content avatar"
                       ". markup .";
   grid-template-columns: auto fit-content(80%) fit-content(var(--avatar));
   justify-items: end;
+
+  margin-right: 3em; /* зато нет аватарки */
 }
 
 slot {
