@@ -12,7 +12,7 @@
 div {
   display: inline-block;
   background: var(--field);
-  border-radius: 10px;
+  border-radius: 5px;
   position: relative;
   box-shadow: 0 1px 2px 0 rgba(16, 35, 47, 0.15);
   max-width: 40rem;
@@ -142,6 +142,6 @@ span { /* timestamp */
 }
 
 ui-file {
-  padding-right: 5px;
+  padding-right: 3px;
   padding-left: 3px;
 }
