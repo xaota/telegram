@@ -105,7 +105,7 @@ export default class ChatItem extends Component {
     }
 
     if (model.last_message) last(item, model.last_message, model, me);
-    item.addEventListener('click', e => channel.send('conversation.open', {chat: model, me})); // todo: #110
+    item.addEventListener('click', e => channel.send('conversation.open', {chat_id: model.id})); // todo: #110
 
     return item;
   }

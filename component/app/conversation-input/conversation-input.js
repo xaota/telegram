@@ -34,8 +34,6 @@ export default class ConversationInput extends Component {
 
   mount(node) {
     super.mount(node, attributes, properties);
-    this.chat = this.getAttribute('chat');
-
     this.action = $('.action', this.shadowRoot);
 
     this.input = $('textarea', node);
@@ -233,11 +231,12 @@ export default class ConversationInput extends Component {
     this.replaceActionIcon();
   };
 
-  sendMessage = (content) => {
-    telegram.api('sendMessage', {
-      chat_id: this.chat,
-      input_message_content: content
-    });
+  sendMessage = (input_message_content) => {
+    const store = this.store();
+    if (!store) return;
+    const {chat_id} = store;
+    if (!chat_id) return;
+    telegram.api('sendMessage', {chat_id, input_message_content});
   }
 }
 

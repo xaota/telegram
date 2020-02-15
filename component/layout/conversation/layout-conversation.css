@@ -11,6 +11,7 @@
   background: url(../../../asset/chamomile.jpg) no-repeat;
   background-size: cover;
   width: 100%;
+  position: relative;
 }
 
 :host-context(body.dark) .mid {
