@@ -36,16 +36,18 @@ slot {
 }
 
 slot:not([name]) { /* содержимое сообщения */
-  /* display: inline-block; */
   grid-area: content;
-  /* background: var(--color-default-light);
-  border: 1px solid #eee;
-  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12);
-  box-sizing: border-box;
-  position: relative;
-  border-radius: .4em;
-  padding: 1em;
-  max-width: 100%; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+:host([left]) slot:not([name]) {
+  align-items: flex-start;
+}
+
+:host([right]) slot:not([name]) {
+  align-items: flex-end;
 }
 
 slot:not([name])::slotted(*) {
@@ -57,6 +59,11 @@ slot[name="avatar"] {
 
   /* width: 2rem;
   height: 2rem; */
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
 }
 
 

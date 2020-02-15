@@ -81,16 +81,34 @@ async function getHistory(chat, me, list, loading) {
   const from_message_id = chat.last_message.id;
   const last = await getChatHistory(chat_id); // from_message_id
   const prev = await getChatHistory(chat_id, from_message_id);
-  const messages = [...last.messages, ...prev.messages];
-  const members = await getUsers([...new Set(messages.map(m => m.sender_user_id))]);
-  messages.forEach(m => m.author = members[m.sender_user_id]);
+  const history = [...last.messages, ...prev.messages];
+  const members = await getUsers([...new Set(history.map(m => m.sender_user_id))]);
+  history.forEach(m => m.author = members[m.sender_user_id]);
 
-  insertDates(messages);
-  messages.forEach(m => createMessageItem(m, root));
+  insertDates(history);
+  const messages = collapseMessages(history);
+
+  messages.forEach(m => createMessage(m, root));
   list.innerHTML = '';
   list.append(root);
     // loading.style.display = 'none';
 }
+
+/** */
+  function collapseMessages(history) {
+    const messages = [];
+    let current;
+    let message = [];
+    history.forEach(h => {
+      const sender = h.author && h.author.id || undefined;
+      if (sender === current) return message.push(h);
+      if (message.length) messages.push(message);
+      current = sender;
+      message = [h];
+    });
+    if (message.length) messages.push(message);
+    return messages;
+  }
 
 /** */
   function insertDates(messages) {
@@ -111,25 +129,31 @@ async function getHistory(chat, me, list, loading) {
   }
 
 /** */
-  function createMessageItem(message, node) {
-    const sender = message.author
-      ? message.author.first_name + ' ' + message.author.last_name
+  function createMessage(messages, node) {
+    const sender = messages[0].author
+      ? messages[0].author.first_name + ' ' + messages[0].author.last_name
       : '';
 
-    const timestamp = AppMessage.timestamp(message.date);
-
     const item = new AppMessage();
+    const outgoing = messages[0].is_outgoing;
     let color;
-    if (sender) color = UIAvatar.color(message.author.id);
-    if (sender) item.setAttribute(message.is_outgoing ? 'right' : 'left', '');
-    if (sender && !message.is_outgoing) item.append(UIAvatar.from(sender, color, message.author && message.author.profile_photo && message.author.profile_photo.small));
+    if (sender) color = UIAvatar.color(messages[0].author.id);
+    if (sender) item.setAttribute(outgoing ? 'right' : 'left', '');
+    if (sender && !outgoing) item.append(UIAvatar.from(sender, color, messages[0].author && messages[0].author.profile_photo && messages[0].author.profile_photo.small));
 
+    messages.forEach((message, index) => createMessageItem(message, index, item, sender, outgoing, color));
+
+    node.append(item);
+  }
+
+/** */
+  function createMessageItem(message, index, root, sender, outgoing, color) {
     let content;
+    const timestamp = AppMessage.timestamp(message.date);
 
     if (message.content['@type'] === 'messageSticker') {
       content = MessageSticker.from(message.content.sticker, timestamp);
-      item.append(content);
-      return node.append(item);
+      return root.append(content);
     }
 
     // TODO:
@@ -150,11 +174,11 @@ async function getHistory(chat, me, list, loading) {
       ? new MessageEmoji()
       : new MessageText();
 
-    if (sender) content.setAttribute(message.is_outgoing ? 'right' : 'left', '');
+    if (sender) content.setAttribute(outgoing ? 'right' : 'left', '');
     if (timestamp) content.setAttribute('timestamp', timestamp);
     if (sender && color) content.setAttribute('color', color);
 
-    if (!emoji && !message.is_outgoing) {
+    if (index === 0 && !emoji && !outgoing) {
       const author = document.createElement('span');
       author.innerText = sender;
       author.slot = 'author';
@@ -166,8 +190,7 @@ async function getHistory(chat, me, list, loading) {
     span.slot = 'content';
     content.append(span);
 
-    item.append(content);
-    node.append(item);
+    root.append(content);
   }
 
 /** getUsers */
