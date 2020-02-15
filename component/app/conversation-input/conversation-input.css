@@ -26,27 +26,23 @@
   flex: 1 50%
 }
 
-.msginput__bubble_wrap:after {
-  right: -8.5PX;
-  bottom: -1PX;
-  z-index: 2;
-  background-image: url(../../../asset/tail.svg)
-}
-
 .msginput__bubble_wrap:after,.msginput__bubble_wrap:before {
   position: absolute;
-  width: 11PX;
-  height: 20PX;
+  width: 12px;
+  right: 0;
+  transform: translateX(calc(100% - 2px));
+  bottom: 0;
   content: "";
-  background-size: 100%;
-  transform: scaleX(-1)
 }
 
-.msginput__bubble_wrap:before {
-  right: -9.5PX;
-  bottom: -2PX;
-  background-image: url(../../../asset/tail_shadow.svg);
-  z-index: 0
+.msginput__bubble_wrap:before { /* тень хвостика (только вниз пусть будет) */
+  height: 1px; /* 0 */
+  box-shadow: 0 1px 2px 0 rgba(16, 35, 47, 0.15);
+}
+
+.msginput__bubble_wrap:after {
+  height: 24px;
+  background: radial-gradient(ellipse farthest-side at top right, transparent 100%, var(--field) 100%);
 }
 
 .msginput__bubble {

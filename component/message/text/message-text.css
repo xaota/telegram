@@ -21,14 +21,10 @@ div {
   border-top-left-radius: 5px;
   position: relative;
   box-shadow: 0 1px 2px 0 rgba(16, 35, 47, 0.15);
-  /* z-index: 1; */
-  /* width: auto; */
   max-width: 40rem;
-  /* overflow: hidden; */
   text-align: left;
   padding: 8px 6px;
-  word-break: break-all;
-  /* white-space: nowrap; */
+  word-break: break-word;
 }
 
 :host-context(app-message[right]) div {
@@ -45,46 +41,39 @@ div {
   border-bottom-left-radius: 5px;
 }
 
-:host(:last-child) div:after {
-  left: -9px;
-  bottom: 0;
-  z-index: 2;
-  background-image: url(../../../asset/tail.svg);
-}
-
 :host(:last-child) div:after, :host(:last-child) div:before {
   position: absolute;
-  width: 11px;
-  height: 18px;
+  width: 12px;
+  left: 0;
+  transform: translateX(calc(-100% + 2px));
+  bottom: 0;
   content: "";
-  background-size: 100%;
-  background-repeat: no-repeat;
 }
 
-div:before {
-  left: -10px;
-  bottom: -1px;
-  background-image: url(../../../asset/tail_shadow.svg);
-  z-index: 0;
+:host(:last-child) div::before { /* тень хвостика (только вниз пусть будет) */
+  height: 1px; /* 0 */
+  box-shadow: 0 1px 2px 0 rgba(16, 35, 47, 0.15);
 }
 
-:host([right]) div:after, div:before {
-  transform: scaleX(-1);
+:host(:last-child) div:after { /* хвостик */
+  height: 24px;
+  background: radial-gradient(ellipse farthest-side at top left, transparent 100%, var(--background-message-in) 100%);
+}
+
+:host([right]) div:before,
+:host([right]) div:after {
+  right: 0;
+  transform: translateX(calc(100% - 2px));
+  left: inherit;
 }
 
 :host([right]) div:after {
-  right: -9px;
-  left: inherit;
+  background: radial-gradient(ellipse farthest-side at top right, transparent 100%, var(--background-message-out) 100%);
 }
 
-:host([right]) div:before {
-  right: -9px;
-  left: inherit;
-}
-
-:host([reply]) div:after,
-:host([reply]) div:before {
-  content: none;
+:host([reply]) div:before,
+:host([reply]) div:after {
+  display: none;
 }
 
 /* ----------------- */
