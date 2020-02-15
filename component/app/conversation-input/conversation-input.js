@@ -225,7 +225,9 @@ export default class ConversationInput extends Component {
 
     this.sendMessage(inputContent);
     this.input.value = '';
-  }
+    this.calculateRows(this.input);
+    this.replaceActionIcon();
+  };
 
   sendMessage = (content) => {
     telegram.api('sendMessage', {
