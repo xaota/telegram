@@ -12,6 +12,7 @@ import UiFile from '../../ui/file/ui-file.js';
 import UiGrid from '../../ui/grid/ui-grid.js';
 import UiIcon from '../../ui/icon/ui-icon.js';
 import UIAvatar from "../../ui/avatar/ui-avatar.js";
+import UIOnline from "../../ui/online/ui-online.js";
 
 const component = Component.meta(import.meta.url, 'layout-profile');
 const attributes = {
@@ -84,11 +85,11 @@ export default class LayoutProfile extends Component {
           user_id: res.type.user_id
         }).then((user) => {
           // online
-          if (user.status['@type'] === 'userStatusOnline') {
-            const statusBlock = $('.status', node);
-            statusBlock.innerText = 'online';
-            statusBlock.classList.add('online');
-          }
+            const statusBlock = $('ui-online', node);
+             statusBlock
+                .setAttribute('status', user.status['@type'] === 'userStatusOnline' ? 'online' : user.status.was_online);
+            statusBlock
+                .setAttribute('id', user.id);
           // profile
           const list = $('.list', node);
           list.append(createItem('username', user.username, 'Username'));

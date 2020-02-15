@@ -50,10 +50,9 @@
 .profile .status {
     color: #707579;
     font-size: 14px;
-    margin-top: 5px;
 }
-.profile .online {
-    color: #1da1f1
+ui-online {
+    margin-top: 5px;
 }
 
 .profile .list {

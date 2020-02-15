@@ -9,6 +9,7 @@ import '../../ui/drop/ui-drop.js';
 import '../../ui/online/ui-online.js';
 import telegram from "../../../tdweb/Telegram.js";
 import File from "../../../script/File.js";
+import {updateChildrenHTML} from "../../../script/DOM.js";
 
 const component = Component.meta(import.meta.url, 'conversation-header');
 const attributes = {
@@ -52,6 +53,8 @@ export default class ConversationHeader extends Component {
               }).then((user) => {
                   $('ui-online', node)
                       .setAttribute('status', user.status['@type'] === 'userStatusOnline' ? 'online' : user.status.was_online);
+                  $('ui-online', node)
+                      .setAttribute('id', user.id);
               });
           } else if (res.type['@type'] === 'chatTypeSupergroup') {
               telegram.api('getSupergroupFullInfo', {
@@ -76,6 +79,7 @@ export default class ConversationHeader extends Component {
           }
 
       });
+
     const drop = $('ui-drop', node);
     $('#more', node)
         .addEventListener('click', () => drop.show = !drop.show);
