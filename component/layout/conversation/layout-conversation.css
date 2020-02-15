@@ -44,3 +44,9 @@ aside {
   background: var(--background-aside);
   flex-shrink: 0;
 }
+
+ui-fab {
+  top: -60px;
+  right: -62px;
+  background: none;
+}

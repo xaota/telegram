@@ -8,8 +8,8 @@ import {formatDate} from '../../../script/helpers.js';
 
 import '../../ui/search/ui-search.js';
 import '../../ui/grid/ui-grid.js';
-import UiMember from '../../ui/member/ui-member.js';
-import UiAvatar from '../../ui/avatar/ui-avatar.js';
+import UIMember from '../../ui/member/ui-member.js';
+import UIAvatar from '../../ui/avatar/ui-avatar.js';
 import '../../ui/list/ui-list.js';
 
 const component = Component.meta(import.meta.url, 'layout-search');
@@ -91,7 +91,7 @@ export default class LayoutSearch extends Component {
           return;
       }
       messages.forEach(message => {
-      const block = new UiMember();
+      const block = new UIMember();
       // запрос за пользователем
       telegram.api('getUser', {
         user_id: message.sender_user_id
@@ -105,8 +105,8 @@ export default class LayoutSearch extends Component {
             }
             block.setAttribute('name', user.first_name + ' ' + user.last_name);
             block.setAttribute('right', formatDate(message.date, true));
-            block.setAttribute('color', UiAvatar.color(user.id));
-            block.setAttribute('letter', UiAvatar.letter(user.first_name + ' ' + user.last_name));
+            block.setAttribute('color', UIAvatar.color(user.id));
+            block.setAttribute('letter', UIAvatar.letter(user.first_name + ' ' + user.last_name));
           });
       const div = document.createElement('div');
       div.setAttribute('class', 'desc');

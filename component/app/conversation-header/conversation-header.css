@@ -2,7 +2,7 @@
   background: var(--background-aside);
   color: var(--foreground);
 
-  border-bottom: 1px solid #edeef0;
+  border-bottom: 1px solid var(--edge);
   padding: .33333rem 1.33333rem;
   display: flex;
   justify-content: space-between;

@@ -4,6 +4,7 @@ import $, {updateChildrenElement} from '../../../script/DOM.js';
 import File from '../../../script/File.js';
 import telegram from '../../../tdweb/Telegram.js';
 
+import UIFAB              from '../../ui/fab/ui-fab.js';
 import UIList             from '../../ui/list/ui-list.js';
 import UIAvatar           from '../../ui/avatar/ui-avatar.js';
 import AppMessage         from '../../app/message/app-message.js';
@@ -11,7 +12,8 @@ import LayoutLoading      from '../loading/layout-loading.js';
 import ConversationInput  from '../../app/conversation-input/conversation-input.js';
 import ConversationHeader from '../../app/conversation-header/conversation-header.js';
 
-import MessageText  from '../../message/text/message-text.js';
+import MessageText    from '../../message/text/message-text.js';
+import MessageEmoji   from '../../message/emoji/message-emoji.js';
 import MessageSticker from '../../message/sticker/message-sticker.js';
 
 import '../sidebar/layout-sidebar.js';
@@ -39,6 +41,7 @@ export default class LayoutConversation extends Component {
   mount(node) {
     super.mount(node, attributes, properties);
     const aside = $('aside', node);
+    const list = $('ui-list', node);
     const sidebar = $('layout-sidebar', node)
     $('conversation-header', node)
         .addEventListener('open-profile', e => {
@@ -53,6 +56,10 @@ export default class LayoutConversation extends Component {
           aside.style.display = 'none';
         });
 
+    $('ui-fab', node).addEventListener('click', _ => {
+      if (list.lastElementChild) list.lastElementChild.scrollIntoView({block: 'end', behavior: 'smooth'});
+    });
+
     const {chat, me} = this.store();
     if (chat.type.is_channel) {
       $('conversation-input', node).style.display = 'none';
@@ -60,7 +67,7 @@ export default class LayoutConversation extends Component {
       $('conversation-input', node).setAttribute('chat', chat.id);
     }
     $('conversation-header', node).setAttribute('chat', chat.id);
-    getHistory(chat, me, $('ui-list', node));
+    getHistory(chat, me, list);
     return this;
   }
 }
@@ -88,47 +95,57 @@ async function getHistory(chat, me, list, loading) {
       ? message.author.first_name + ' ' + message.author.last_name
       : '';
 
-    const item = new AppMessage();
-    if (sender) item.setAttribute(message.is_outgoing ? 'right' : 'left', '');
+    const timestamp = AppMessage.timestamp(message.date);
 
+    const item = new AppMessage();
+    let color;
+    if (sender) color = UIAvatar.color(message.author.id);
+    if (sender) item.setAttribute(message.is_outgoing ? 'right' : 'left', '');
+    if (sender) item.append(UIAvatar.from(sender, color, message.author && message.author.profile_photo && message.author.profile_photo.small));
+
+    let content;
 
     if (message.content['@type'] === 'messageSticker') {
-      const uiSticker = new MessageSticker(message.content.sticker);
-      item.append(uiSticker);
+      content = MessageSticker.from(message.content.sticker, timestamp);
+      item.append(content);
       return node.append(item);
     }
 
-    let avatar;
-    if (sender) {
-      avatar = new UIAvatar();
-      avatar.innerHTML = UIAvatar.letter(sender);
-      avatar.color = UIAvatar.color(message.author.id);
-      avatar.setAttribute('slot', 'avatar');
-      item.append(avatar);
+    // TODO:
+    // messagePhoto
+    // messageAnimation
+    // messageAudio
+    // messageVoiceNote
+    // messageVideo?
+    // document?
 
-      const d = message.author && message.author.profile_photo && message.author.profile_photo.small;
-      if (d) File.getFile(d).then(src => avatar.src = src); // не оч круто
-    }
-
-    const content = new MessageText();
-    if (sender) {
-      content.setAttribute(message.is_outgoing ? 'right' : 'left', '');
-    }
-    content.setAttribute('timestamp', AppMessage.timestamp(message.date));
-    if (sender && avatar) content.setAttribute('color', avatar.color);
-    const author = document.createElement('span');
-    author.innerText = sender;
-    author.slot = 'author';
-    const span = document.createElement('span');
-    span.innerText = message.content['@type'] === 'messageText'
+    const text = message.content['@type'] === 'messageText'
       ? message.content.text.text
       : 'не поддерживается '+ message.content['@type'];
+
+    const emoji = MessageEmoji.test(text);
+
+    content = emoji
+      ? new MessageEmoji()
+      : new MessageText();
+
+    if (sender) content.setAttribute(message.is_outgoing ? 'right' : 'left', '');
+    content.setAttribute('timestamp', timestamp);
+    if (sender && color) content.setAttribute('color', color);
+
+    if (!emoji) {
+      const author = document.createElement('span');
+      author.innerText = sender;
+      author.slot = 'author';
+      content.append(author);
+    }
+
+    const span = document.createElement('span');
+    span.innerText = text;
     span.slot = 'content';
-
-    content.append(author);
     content.append(span);
-    item.append(content);
 
+    item.append(content);
     node.append(item);
   }
 

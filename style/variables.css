@@ -9,7 +9,7 @@
   --grayColor:        #DADCE0;
   --chatBgColor:      #E7EBEE;
 
-  --grayBorderColor:   #DADCE0;
+  /* --grayBorderColor:   #DADCE0; */
   --grayBgColor:       #F4F4F5;
   --grayAvatarBgColor: #e8e8e8;
   --grayIconColor:     #C5C9CC;
@@ -24,6 +24,7 @@
   --iconActive: #000;
 
   --light-drop:                   #fff;
+  --light-edge:                   #DBDCE0;
   --light-field:                  #fff;
   --light-shadow:                 rgba(0, 0, 0, 0.4);
   --light-foreground:             #222;
@@ -39,6 +40,7 @@
   --light-background-message-out: #F1FEE1;
 
   --dark-drop:                   #202124;
+  --dark-edge:                   #383838;
   --dark-field:                  #25282F;
   --dark-shadow:                 rgba(55, 55, 55, 0.4);
   --dark-foreground:             #C6C9CC;

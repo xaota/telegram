@@ -23,7 +23,7 @@ const attributes = {
 
 const properties = {}
 
-export default class UiMember extends Component {
+export default class UIMember extends Component {
   constructor() {
     super(component);
   }
@@ -33,4 +33,4 @@ export default class UiMember extends Component {
   }
 }
 
-Component.init(UiMember, component, {attributes, properties});
+Component.init(UIMember, component, {attributes, properties});

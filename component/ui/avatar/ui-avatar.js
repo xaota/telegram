@@ -1,5 +1,6 @@
 import Component from '../../../script/Component.js';
 import $, {updateChildrenAttribute} from '../../../script/DOM.js';
+import File from '../../../script/File.js';
 
 import UIBadge from '../badge/ui-badge.js';
 
@@ -10,10 +11,6 @@ const attributes = {
     },
     color(root, value) {
       this.style.backgroundColor = value;
-    },
-    letter(root, value) {
-      // TODO не обновляется
-      $('slot', root).innerHTML = value;
     }
   };
 
@@ -28,6 +25,16 @@ export default class UIAvatar extends Component {
 
   mount(node) {
     return super.mount(node, attributes, properties);
+  }
+
+  static from(sender, color, image) { // создание аватара в сообщении
+    const avatar = new UIAvatar();
+    avatar.innerText = UIAvatar.letter(sender);
+    avatar.color = color;
+    avatar.setAttribute('slot', 'avatar');
+
+    if (image) File.getFile(image).then(src => avatar.src = src);
+    return avatar;
   }
 
   static letter(value) {

@@ -1,9 +1,4 @@
 :host {
-  /* position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0; */
   display: flex;
   flex-direction: row;
   height: 100vh;
@@ -15,6 +10,7 @@ aside {
   min-width: 21.33333rem;
   color:      var(--foreground);
   background: var(--background-aside);
+  border-right: 1px solid var(--edge);
 }
 
 aside[collapsed] {

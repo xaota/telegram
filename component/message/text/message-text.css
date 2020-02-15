@@ -2,11 +2,8 @@
 
 :host {
   display: block;
-  font: var(--font);
-
-  --color: red;
-
   font-size: 14px;
+  --color: var(--foreground-label);
 }
 
 :host([reply]) {
@@ -32,7 +29,7 @@ div {
 }
 
 /* хвостик */
-:host(:last-child) div {
+:host([left]:last-child) div {
   border-bottom-left-radius: 0;
 }
 
@@ -41,7 +38,8 @@ div {
   border-bottom-left-radius: 5px;
 }
 
-:host(:last-child) div:after, :host(:last-child) div:before {
+:host([left]:last-child) div::after, :host([left]:last-child) div::before,
+:host([right]:last-child) div::after, :host([right]:last-child) div::before {
   position: absolute;
   width: 12px;
   left: 0;
@@ -50,29 +48,31 @@ div {
   content: "";
 }
 
-:host(:last-child) div::before { /* тень хвостика (только вниз пусть будет) */
+:host([left]:last-child) div::before,
+:host([right]:last-child) div::before { /* тень хвостика (только вниз пусть будет) */
   height: 1px; /* 0 */
   box-shadow: 0 1px 2px 0 rgba(16, 35, 47, 0.15);
 }
 
-:host(:last-child) div:after { /* хвостик */
+:host([left]:last-child) div::after,
+:host([right]:last-child) div::after { /* хвостик */
   height: 24px;
   background: radial-gradient(ellipse farthest-side at top left, transparent 100%, var(--background-message-in) 100%);
 }
 
-:host([right]) div:before,
-:host([right]) div:after {
+:host([right]:last-child) div::before,
+:host([right]:last-child) div::after {
   right: 0;
   transform: translateX(calc(100% - 2px));
   left: inherit;
 }
 
-:host([right]) div:after {
+:host([right]:last-child) div::after {
   background: radial-gradient(ellipse farthest-side at top right, transparent 100%, var(--background-message-out) 100%);
 }
 
-:host([reply]) div:before,
-:host([reply]) div:after {
+:host([reply]) div::before,
+:host([reply]) div::after {
   display: none;
 }
 
@@ -96,12 +96,15 @@ slot {
 }
 
 slot[name="author"] {
+  display: block;
+}
+
+slot[name="author"]::slotted(span) {
   font-size: 0.93333rem;
-  font-weight: 500;
-  /* color: #1da1f1; */
+  margin-bottom: 2px;
+  font-weight: 600;
   line-height: 150%;
   color: var(--color);
-  margin-bottom: 2px;
 }
 
 slot[name="content"] {

@@ -9,24 +9,25 @@ const attributes = {
     color(root, value) { cssVariable(this, 'color', '#' + value); },
     timestamp(root, value) { updateChildrenHTML(root, 'span', value) }
   }
-
-const properties = {
-
-  }
+const properties = {}
 
 export default class MessageSticker extends Component {
-  constructor(sticker) {
+  constructor(data) {
     super(component);
-    this.sticker = sticker;
+    this.store(data);
   }
 
   mount(node) {
     super.mount(node, attributes, properties);
-    File.getFile(this.sticker.sticker)
-        .then((blob) => {
-          updateChildrenAttribute(node, 'img', 'src', blob);
-        });
+    const data = this.store();
+    File.getFile(data.sticker).then(blob => updateChildrenAttribute(node, 'img', 'src', blob));
     return this;
+  }
+
+  static from(sticker, time) {
+    const content = new MessageSticker(sticker);
+    content.timestamp = time;
+    return content;
   }
 }
 

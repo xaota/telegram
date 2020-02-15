@@ -3,18 +3,17 @@ import Template from './Template.js';
 export default class Component extends HTMLElement {
   constructor(component, mode = 'open') {
     super();
+    this[Symbol.store] = null;
     this.attachShadow({mode});
     this.component = component;
   }
 
-  #store = null;
-
   store(...data) { // component.store({что-то}) - запись, store = component.store() - чтение
-    if (data.length === 0) return this.#store;
+    if (data.length === 0) return this[Symbol.store];
 
-    this.#store = data.length === 1 && data[0] === null
+    this[Symbol.store] = data.length === 1 && data[0] === null
       ? null
-      : Object.assign({}, this.#store, ...data);
+      : Object.assign({}, this[Symbol.store], ...data);
 
     return this.render(this.shadowRoot);
   }

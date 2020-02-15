@@ -18,7 +18,6 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-end;
-  font-family: var(--font);
 }
 
 .msginput__bubble_wrap {

@@ -4,7 +4,7 @@
   display: block;
   padding: 0 18px 0 24px;
   margin: 0 -18px;
-  border-top: 1px solid rgb(218, 220, 224);
+  border-top: 1px solid var(--edge);
 }
 
 h1 {
@@ -12,5 +12,4 @@ h1 {
   margin-bottom: 35px;
   font-size: 16px;
   font-weight: 500;
-  color: rgb(112, 117, 121);
-}
+  color: var(--foreground-label);

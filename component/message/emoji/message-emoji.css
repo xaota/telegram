@@ -2,9 +2,8 @@
 
 :host {
   display: block;
-  font: var(--font);
 
-  --color: red;
+  --color: var(--foreground-label);
 
   padding-top: .66667rem;
   position: relative;
@@ -27,7 +26,6 @@ span {
   bottom: 1PX;
 
   background: rgba(0,0,0,.2);
-  color: #fff;
   border-radius: .73333rem;
   padding: 2PX 6PX;
 }

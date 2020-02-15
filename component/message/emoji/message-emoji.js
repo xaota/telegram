@@ -21,6 +21,15 @@ export default class MessageEmoji extends Component {
 
     return this;
   }
+
+  static test(text = '', max = 3) {
+    const symbols = [...text]; // memory!
+    const length = text.length, count = symbols.length;
+    // todo
+    if (length === count || count > max) return false; // точно строка, либо длинее, чем надо
+    const test = symbols.slice(0, max);
+    return test.every(c => c.charCodeAt(0) !== c.codePointAt(0));
+  }
 }
 
 Component.init(MessageEmoji, component, {attributes, properties});

@@ -28,7 +28,6 @@
 }
 
 slot {
-  font-family: var(--font);
   display: block;
   /* max-width: 80%; */
 }

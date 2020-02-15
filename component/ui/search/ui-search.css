@@ -8,15 +8,16 @@
   justify-content: flex-start;
   align-items: center;
   border-radius: 1.46667rem;
-  border: 2px transparent solid;
-  background-color: #f4f4f5;
-  color: #8d969c;
+  border: 1px var(--edge) solid;
+  background-color: var(--field);
+}
+
+:host(:hover) {
+  border-color: var(--foreground-label);
 }
 
 :host(:focus-within) {
-  background-color: white;
-  color: #8d969c;
-  border: 2px var(--blueColor) solid;
+  border-color: var(--iconHover);
 }
 
 slot {
@@ -32,11 +33,9 @@ input {
   outline-offset: 0;
   outline: none;
   font-size: 20px;
-  opacity: 1;
-  background-color: #f4f4f5;
-}
-:host(:focus-within) input {
-  background-color: white;
+  background-color: transparent;
+  color: var(--foreground);
+  font-weight: 100;
 }
 
 input:focus {

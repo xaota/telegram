@@ -1,7 +1,6 @@
 :host {
   display: block;
   width: 360px;
-  font-family: var(--font);
   color: #070707;
   margin: 0 auto;
 }
@@ -32,14 +31,12 @@ ui-icon#photo-add {
 }
 
 h1 {
-  font-family: var(--font);
   margin-top: 44px;
   font-size: 32px;
   font-weight: bold;
 }
 
 h2 {
-  font-family: var(--font);
   margin-top: 13px;
   margin-bottom: 49px;
   font-size: 16px;

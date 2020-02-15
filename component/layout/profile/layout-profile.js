@@ -7,7 +7,7 @@ import File from '../../../script/File.js';
 import sidebarEvents from '../sidebar/events.js';
 import '../../ui/grid/ui-grid.js';
 import '../../ui/list/ui-list.js';
-import UiMember from '../../ui/member/ui-member.js';
+import UIMember from '../../ui/member/ui-member.js';
 import UiFile from '../../ui/file/ui-file.js';
 import UiGrid from '../../ui/grid/ui-grid.js';
 import UiIcon from '../../ui/icon/ui-icon.js';
@@ -153,7 +153,7 @@ export default class LayoutProfile extends Component {
           });
     }
     avatar.setAttribute('color', UIAvatar.color(id));
-    avatar.setAttribute('letter', UIAvatar.letter(letter));
+    avatar.innerText = UIAvatar.letter(letter);
   };
 
   setTitle = (title) => {

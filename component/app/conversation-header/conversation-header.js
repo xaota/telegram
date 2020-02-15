@@ -90,7 +90,7 @@ export default class ConversationHeader extends Component {
                 });
         }
         avatar.setAttribute('color', UIAvatar.color(id));
-        avatar.setAttribute('letter', UIAvatar.letter(letter));
+        avatar.innerText = UIAvatar.letter(letter);
     };
 }
 

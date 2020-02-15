@@ -9,6 +9,7 @@
 
 body {
   --drop:                   var(--light-drop);
+  --edge:                   var(--light-edge);
   --field:                  var(--light-field);
   --shadow:                 var(--light-shadow);
   --foreground:             var(--light-foreground);
@@ -26,6 +27,7 @@ body {
 
 body.dark {
   --drop:                   var(--dark-drop);
+  --edge:                   var(--dark-edge);
   --field:                  var(--dark-field);
   --shadow:                 var(--dark-shadow);
   --foreground:             var(--dark-foreground);
