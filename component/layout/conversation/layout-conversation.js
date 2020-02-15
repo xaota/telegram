@@ -83,7 +83,7 @@ async function getHistory(chat, me, list, loading) {
   const messages = [...last.messages, ...prev.messages];
   const members = await getUsers([...new Set(messages.map(m => m.sender_user_id))]);
   messages.forEach(m => m.author = members[m.sender_user_id]);
-  messages.reverse().forEach(m => createMessageItem(m, root));
+  messages.forEach(m => createMessageItem(m, root));
   list.innerHTML = '';
   list.append(root);
     // loading.style.display = 'none';
