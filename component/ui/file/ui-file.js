@@ -26,8 +26,9 @@ const colors = [
 ];
 
 export default class UiFile extends Component {
-  constructor({file, date}) {
+  constructor({file, date, message}) {
     super(component);
+    this.message = message;
     this.file = file;
     this.date = date;
   }
@@ -35,7 +36,11 @@ export default class UiFile extends Component {
   mount(node) {
     updateChildrenHTML(node, '.name', this.file.file_name);
     updateChildrenHTML(node, '.size', normalizeSize(+this.file.document.size));
-    updateChildrenHTML(node, '.date', formatDate(this.date));
+    $( '.size', node)
+        .setAttribute('class', 'size noafter');
+    if (!this.message) {
+        updateChildrenHTML(node, '.date', formatDate(this.date));
+    }
     // icon content
     const type = this.getType();
     this.img = $('.img', node);

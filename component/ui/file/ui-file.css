@@ -95,3 +95,6 @@ ui-loading-percent {
   content: '·';
   padding: 0 3px;
 }
+.noafter:after {
+  content: none;
+}

@@ -16,6 +16,7 @@ import ConversationHeader from '../../app/conversation-header/conversation-heade
 import MessageText    from '../../message/text/message-text.js';
 import MessageEmoji   from '../../message/emoji/message-emoji.js';
 import MessageSticker from '../../message/sticker/message-sticker.js';
+import MessageDocument from '../../message/document/message-document.js';
 
 import '../sidebar/layout-sidebar.js';
 import '../../ui/tabs/ui-tabs.js';
@@ -156,17 +157,21 @@ async function getHistory(chat, me, list, loading) {
       return root.append(content);
     }
 
+    if (message.content['@type'] === 'messageDocument') {
+      content = MessageDocument.from(message.content.document, timestamp);
+      return root.append(content);
+    }
+
     // TODO:
     // messagePhoto
     // messageAnimation
     // messageAudio
     // messageVoiceNote
     // messageVideo?
-    // messageDocument
 
     const text = message.content['@type'] === 'messageText'
       ? message.content.text.text
-      : 'не поддерживается '+ message.content['@type'];
+      : `Doesn't supported `+ message.content['@type'].slice(7, message.content['@type'].length) + ' messages';
 
     const emoji = MessageEmoji.test(text);
 

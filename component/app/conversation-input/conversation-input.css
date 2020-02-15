@@ -111,11 +111,11 @@ textarea:focus {
 }
 
 .action {
+  background: var(--field);
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  background-color: white;
   border-radius: 50%;
   width: 3.6rem;
   height: 3.6rem;
