@@ -20,6 +20,8 @@ export default class App {
       updateNewChat:            u => this.updateNewChat(u.chat), // новый чат (вообще среди всех списков)
       updateChatChatList:       u => this.updateChatChatList({chat_id: u.chat_id, chat_list: u.chat_list['@type']}), // помещение чата в список чатов
 
+      updateNewMessage:         u => this.updateNewMessage(u.message),
+
       updateUserStatus:         u => this.updateUserStatus(u), // изер в сети / оффлайн
       updateChatOnlineMemberCount:         u => this.updateChatOnlineMemberCount(u), // изер в сети / оффлайн
       updateChatReadInbox:      u => this.updateChatReadInbox(u), // прочитанно / непрочитано в чате из списка
@@ -31,7 +33,11 @@ export default class App {
 
     typeof handlers[type] === 'function'
       ? handlers[type](update)
-      : true; // console.log('update@' + type, update);
+      : true; //console.log('update@' + type, update); // true;
+  }
+
+  updateNewMessage(message) {
+    this.channel.send('message.new', message);
   }
 
   updateNewChat(chat) {

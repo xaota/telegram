@@ -1,6 +1,6 @@
 import Component from '../../../script/Component.js';
 
-import $, {updateChildrenElement} from '../../../script/DOM.js';
+import $, {updateChildrenElement, channel} from '../../../script/DOM.js';
 import File from '../../../script/File.js';
 import telegram from '../../../tdweb/Telegram.js';
 import {formatDate, dateDay} from '../../../script/helpers.js';
@@ -27,13 +27,8 @@ import '../../ui/list/ui-list.js';
 import '../../ui/icon/ui-icon.js';
 
 const component = Component.meta(import.meta.url, 'layout-conversation');
-const attributes = {
-
-  }
-
-const properties = {
-
-  }
+const attributes = {}
+const properties = {}
 
 export default class LayoutConversation extends Component {
   constructor(data) {
@@ -43,76 +38,104 @@ export default class LayoutConversation extends Component {
 
   mount(node) {
     super.mount(node, attributes, properties);
-    const aside = $('aside', node);
-    const list = $('ui-list', node);
+    const aside   = $('aside', node);
+    const list    = $('ui-list', node);
     const sidebar = $('layout-sidebar', node)
-    $('conversation-header', node)
-        .addEventListener('open-profile', e => {
-          aside.style.display = 'flex';
-        });
-    $('conversation-header', node)
-        .addEventListener('open-search', e => {
-          aside.style.display = 'flex';
-        });
-    sidebar
-        .addEventListener('close-sidebar', e => {
-          aside.style.display = 'none';
-        });
+
+    $('conversation-header', node).addEventListener('open-profile', _ => aside.style.display = 'flex');
+    $('conversation-header', node).addEventListener('open-search', _ => aside.style.display = 'flex');
+    sidebar.addEventListener('close-sidebar', _ => aside.style.display = 'none');
 
     $('ui-fab', node).addEventListener('click', _ => {
       if (list.firstElementChild) list.firstElementChild.scrollIntoView({block: 'end', behavior: 'smooth'});
     });
 
-    const {chat, me} = this.store();
-    if (chat.type.is_channel) {
-      $('conversation-input', node).style.display = 'none';
-    } else {
-      $('conversation-input', node).setAttribute('chat', chat.id);
-    }
-    $('conversation-header', node).setAttribute('chat', chat.id);
-    getHistory(chat, me, list);
+    init.call(this, node, list);
+    return this;
+  }
+
+  unmount(node) {
+    const {chat_id} = this.store();
+    telegram.api('closeChat', {chat_id});
     return this;
   }
 }
 
 Component.init(LayoutConversation, component, {attributes, properties});
 
-async function getHistory(chat, me, list, loading) {
+async function init(node, list) {
+  const {chat_id} = this.store();
+  const chat = await telegram.api('getChat', {chat_id});
+
+  $('conversation-header', node).store({chat_id, chat});
+
+  const input = $('conversation-input', node);
+  input.store({chat_id});
+  if (!chat.permissions.can_send_messages) input.style.display = 'none';
+
+  getHistory(chat_id, list);
+  telegram.api('openChat', {chat_id}); // await?
+
+  channel.on('message.new', message => {
+    if (message.chat_id !== chat_id) return;
+    getHistory(chat_id, list);
+  });
+
+  $('layout-loading', node).remove();
+}
+
+async function getHistory(chat_id, list) {
   const root = document.createDocumentFragment();
-  const chat_id = chat.id;
+  const chat = await telegram.api('getChat', {chat_id});
   const from_message_id = chat.last_message.id;
-  const last = await getChatHistory(chat_id); // from_message_id
-  const prev = await getChatHistory(chat_id, from_message_id);
-  const history = [...last.messages, ...prev.messages];
+
+  const buffer = await Promise.all([ // faster!
+    getChatHistory(chat_id),
+    getChatHistory(chat_id, from_message_id)
+  ]).then(([last, prev]) => [...last.messages, ...prev.messages]);
+
+  const temp = {};
+  buffer.forEach(h => temp[h.id] = h);
+  const history = Object.values(temp).sort((a, b) => b.date - a.date);
+
   const members = await getUsers([...new Set(history.map(m => m.sender_user_id))]);
   history.forEach(m => m.author = members[m.sender_user_id]);
 
   insertDates(history);
   const messages = collapseMessages(history);
 
-  messages.forEach(m => createMessage(m, root));
+  const items = messages.map(createMessage);
+  items.forEach(e => root.append(e));
+
   list.innerHTML = '';
   list.append(root);
-    // loading.style.display = 'none';
+
+  const ids = history.map(h => h.id);
+  const index = ids.indexOf(chat.last_read_inbox_message_id);
+  if (index > 0) telegram.api('viewMessages', {chat_id, message_ids: ids.slice(0, index)}); // "юзер читает" входящие
+
+  // loading.style.display = 'none';
+
+  list.firstElementChild.scrollIntoView({block: 'end', behavior: 'smooth'});
 }
 
-/** */
+/** collapseMessages */
   function collapseMessages(history) {
     const messages = [];
     let current;
     let message = [];
     history.forEach(h => {
-      const sender = h.author && h.author.id || undefined;
+      const sender = h.author && h.author.id || h.is_channel_post || undefined;
       if (sender === current) return message.push(h);
-      if (message.length) messages.push(message);
+      if (message.length) messages.push({hash: message[0].id + 'x' + message.length, messages: message});
       current = sender;
       message = [h];
     });
-    if (message.length) messages.push(message);
+    if (message.length) messages.push({hash: message[0].id + 'x' + message.length, messages: message});
     return messages;
   }
 
-/** */
+/** insertDates */
   function insertDates(messages) {
     let current = dateDay(messages[0].date * 1000);
     let message = formatDate(current, true);
@@ -120,36 +143,47 @@ async function getHistory(chat, me, list, loading) {
       const day  = dateDay(messages[i].date * 1000);
       const temp = formatDate(day, true);
       if (temp !== message) {
-        messages.splice(i, 0, {content: {'@type': 'messageText', text: {text: message}}});
+        messages.splice(i, 0, {id: current.valueOf(), content: {'@type': 'messageText', text: {text: message}}});
 
         message = temp;
         current = day;
         ++i;
       }
     }
-    messages.push({content: {'@type': 'messageText', text: {text: message}}});
+    messages.push({id: current.valueOf(), content: {'@type': 'messageText', text: {text: message}}});
   }
 
 /** */
-  function createMessage(messages, node) {
+  function createMessage({hash, messages}) {
+    messages = messages.reverse();
+
     const sender = messages[0].author
       ? messages[0].author.first_name + ' ' + messages[0].author.last_name
       : '';
 
     const item = new AppMessage();
     const outgoing = messages[0].is_outgoing;
+    const side = messages[0].is_channel_post
+      ? 'left'
+      : outgoing
+        ? 'right'
+        : sender
+          ? 'left'
+          : '';
+
     let color;
     if (sender) color = UIAvatar.color(messages[0].author.id);
-    if (sender) item.setAttribute(outgoing ? 'right' : 'left', '');
+    if (side) item.setAttribute(side, '');
     if (sender && !outgoing) item.append(UIAvatar.from(sender, color, messages[0].author && messages[0].author.profile_photo && messages[0].author.profile_photo.small));
 
-    messages.forEach((message, index) => createMessageItem(message, index, item, sender, outgoing, color));
+    messages.forEach((message, index) => createMessageItem(message, index, item, sender, outgoing, side, color));
 
-    node.append(item);
+    item.dataset.hash = hash;
+    return item;
   }
 
 /** */
-  function createMessageItem(message, index, root, sender, outgoing, color) {
+  function createMessageItem(message, index, root, sender, outgoing, side, color) {
     let content;
     const timestamp = AppMessage.timestamp(message.date);
     if (message.content['@type'] === 'messageSticker') {
@@ -159,7 +193,7 @@ async function getHistory(chat, me, list, loading) {
 
     if (message.content['@type'] === 'messageDocument') {
       content = MessageDocument.from(message.content.document, timestamp);
-      content.setAttribute(outgoing ? 'right' : 'left', '')
+      content.setAttribute(side, '')
       return root.append(content);
     }
     if (message.content['@type'] === 'messagePhoto') {
@@ -179,9 +213,18 @@ async function getHistory(chat, me, list, loading) {
     // messageVoiceNote
     // messageVideo?
 
-    let text = message.content['@type'] === 'messageText'
-      ? message.content.text.text
-      : `Doesn't supported `+ message.content['@type'].slice(7, message.content['@type'].length) + ' messages';
+    let text;
+    const type = message.content['@type'];
+    switch (type) {
+      case 'messageText':
+        text = message.content.text.text;
+        break;
+      case 'messageBasicGroupChatCreate':
+        text = 'Created Group';
+        break;
+      default:
+        text = `Doesn't supported ${type.slice(7)} messages`;
+    }
 
     const emoji = MessageEmoji.test(text);
 
@@ -189,7 +232,7 @@ async function getHistory(chat, me, list, loading) {
       ? new MessageEmoji()
       : new MessageText();
 
-    if (sender) content.setAttribute(outgoing ? 'right' : 'left', '');
+    if (sender) content.setAttribute(side, '');
     if (timestamp) content.setAttribute('timestamp', timestamp);
     if (sender && color) content.setAttribute('color', color);
 
@@ -272,7 +315,7 @@ async function getHistory(chat, me, list, loading) {
   }
 
 /** getChatHistory */
-  async function getChatHistory(chat_id, from_message_id = 0, offset = 0, limit = 80) {
+  async function getChatHistory(chat_id, from_message_id = 0, offset = 0, limit = 30) {
     const options = {chat_id, from_message_id, offset, limit, only_local: false};
     return telegram.api('getChatHistory', options);
   }

@@ -88,8 +88,11 @@ Component.init(LayoutChats, component, {attributes, properties});
 
     const root = document.createDocumentFragment();
     const {chat_ids} = await getDialogs();
-    for (const chat_id of chat_ids) {
+    const start = BigInt(9223372036854775807);
+    for (let i = 0; i < chat_ids.length; ++i) {
+      const chat_id = chat_ids[i];
       const model = await telegram.api('getChat', {chat_id});
+      model.order = start - BigInt(i);
       // chats[chat_id] = model;
       lists[type].add(chat_id);
       const item  = await ChatItem.from({model, me});
