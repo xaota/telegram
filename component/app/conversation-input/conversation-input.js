@@ -201,7 +201,7 @@ export default class ConversationInput extends Component {
     const padding =
         parseInt(computed.getPropertyValue('padding-top'), 10) +
         parseInt(computed.getPropertyValue('padding-bottom'), 10);
-    const maxRows = 10;
+    const maxRows = 18;
 
     // с учетом вертикальных padding'ов
     const preferredHeight = el.scrollHeight;

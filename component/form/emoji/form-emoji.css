@@ -75,3 +75,13 @@ ui-tabs {
 .group .item[active="true"] ui-icon {
     color: var(--iconHover);
 }
+ui-tabs {
+    padding-top: 10px;
+}
+#emojies {
+    margin-left: 100px;
+}
+
+#gifs {
+    margin-right: 100px;
+}

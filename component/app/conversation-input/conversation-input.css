@@ -20,12 +20,12 @@
   align-items: flex-end;
 }
 
-.msginput__bubble_wrap {
+.wra2 {
   position: relative;
   flex: 1 50%
 }
 
-.msginput__bubble_wrap:after,.msginput__bubble_wrap:before {
+.wra2:after,.wra2:before {
   position: absolute;
   width: 12px;
   right: 0;
@@ -34,17 +34,17 @@
   content: "";
 }
 
-.msginput__bubble_wrap:before { /* тень хвостика (только вниз пусть будет) */
+.wra2:before { /* тень хвостика (только вниз пусть будет) */
   height: 1px; /* 0 */
   box-shadow: 0 1px 2px 0 rgba(16, 35, 47, 0.15);
 }
 
-.msginput__bubble_wrap:after {
+.wra2:after {
   height: 24px;
   background: radial-gradient(ellipse farthest-side at top right, transparent 100%, var(--field) 100%);
 }
 
-.msginput__bubble {
+.inp {
   background: var(--field);
   border-radius: .66667rem;
   border-bottom-right-radius: 0;
