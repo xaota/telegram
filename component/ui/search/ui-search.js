@@ -1,6 +1,7 @@
 import Component from '../../../script/Component.js';
 import $, {updateChildrenElement, updateChildrenProperty, updateChildrenAttribute} from '../../../script/DOM.js';
 import UIIcon from '../../ui/icon/ui-icon.js';
+import {debounce} from '../../../script/helpers.js';
 
 const component = Component.meta(import.meta.url, 'ui-search');
 const attributes = {
@@ -27,6 +28,9 @@ export default class UISearch extends Component {
     input.addEventListener('change', _ => this.event('change'));
     input.addEventListener('keydown', e => { if (e.key === 'Enter') return this.event('enter') });
     this.addEventListener('focus', _ => input.focus());
+    this.debounced = debounce((value) => {
+      this.event('ui-search', {value});
+    }, 300);
     return this;
   }
 }
@@ -37,6 +41,10 @@ Component.init(UISearch, component, {attributes, properties});
   function inputHandler(input, e) {
     e.stopPropagation();
     this.value = input.value;
+    if (input.value.trim()) {
+      input.value = input.value.startsWith('@') ? input.value.substr(1) : input.value;
+      this.debounced(input.value);
+    }
     this.event('input');
   }
 

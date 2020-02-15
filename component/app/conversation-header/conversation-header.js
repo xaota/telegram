@@ -33,7 +33,7 @@ export default class ConversationHeader extends Component {
         });
     $('#search', node)
         .addEventListener('click', () => {
-            channel.send(sidebarEvents.OPEN_SEARCH);
+            channel.send(sidebarEvents.OPEN_SEARCH, {chatId: +this.chat});
         });
 
     const drop = $('ui-drop', node);

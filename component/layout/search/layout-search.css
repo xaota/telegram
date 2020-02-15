@@ -1,4 +1,5 @@
 :host {
+    width: 100%;
 }
 
 .header {
@@ -19,7 +20,9 @@ ui-search {
 }
 
 .result {
-    padding: 0 20px;
+    padding: 0 20px 10px 20px;
+    height: calc(100vh - 68px);
+    overflow: scroll;
 }
 
 .result .count {
@@ -34,4 +37,8 @@ ui-search {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+span {
+    color: #4092E4;
 }

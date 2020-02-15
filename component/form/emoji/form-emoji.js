@@ -141,17 +141,6 @@ export default class FormEmoji extends Component {
               });
 
       }
-    // if (this.selectedTab === 'emojies' || this.selectedTab === 'gifs') {
-    //
-    //
-    //
-    // } else if (this.selectedTab === 'stickers') {
-    //     this.group.innerHTML = '';
-    //
-    //     unionElements(tab.groups, (el) => {
-    //         return `<div class="item">${el.title}</div>`;
-    //     });
-    // }
   };
 
   onSelectGroup = (e) => {

@@ -11,6 +11,7 @@ import UiMember from '../../ui/member/ui-member.js';
 import UiFile from '../../ui/file/ui-file.js';
 import UiGrid from '../../ui/grid/ui-grid.js';
 import UiIcon from '../../ui/icon/ui-icon.js';
+import UIAvatar from "../../ui/avatar/ui-avatar.js";
 
 const component = Component.meta(import.meta.url, 'layout-profile');
 const attributes = {
@@ -74,16 +75,14 @@ export default class LayoutProfile extends Component {
     telegram.api('getChat', {
       chat_id: this.chatId,
     }).then(res => {
-      this.renderPhoto(res.photo);
       this.setTitle(res.title);
+      this.renderPhoto(res.photo, res.type.user_id || res.type.supergroup_id, res.title);
 
       if (res.type['@type'] === 'chatTypePrivate') {
-        this.renderPhoto(res.photo);
         // user profile getUserFullInfo
         telegram.api('getUser', {
           user_id: res.type.user_id
         }).then((user) => {
-
           // online
           if (user.status['@type'] === 'userStatusOnline') {
             const statusBlock = $('.status', node);
@@ -138,11 +137,16 @@ export default class LayoutProfile extends Component {
     return this;
   }
 
-  renderPhoto = (photo) => {
+  renderPhoto = (photo, id, letter) => {
+    const avatar = $('.profile ui-avatar', this.shadowRoot);
     if (photo) {
       File.getFile(photo.small)
-          .then(blob => updateChildrenAttribute(this.shadowRoot, '.profile ui-avatar', 'src', blob));
+          .then(blob => {
+            avatar.setAttribute('src', blob);
+          });
     }
+    avatar.setAttribute('color', UIAvatar.color(id));
+    avatar.setAttribute('letter', UIAvatar.letter(letter));
   };
 
   setTitle = (title) => {
@@ -157,6 +161,7 @@ export default class LayoutProfile extends Component {
       e.target.setAttribute('selected', '');
       this.selectedTab = id;
       this.loadData();
+      // this.scrollTop = 0; TODO сделать какой-то скролл до стики элемента
     }
   };
 

@@ -10,6 +10,10 @@ const attributes = {
     },
     color(root, value) {
       this.style.backgroundColor = value;
+    },
+    letter(root, value) {
+      // TODO не обновляется
+      $('slot', root).innerHTML = value;
     }
   };
 

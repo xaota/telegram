@@ -1,4 +1,4 @@
-export function formatDate(_date) {
+export function formatDate(_date, short) {
     const date = new Date(+_date);
     const monthNames = [
         "Jan", "Feb", "Mar",
@@ -13,5 +13,23 @@ export function formatDate(_date) {
     const hours = date.getHours();
     const minutes = date.getMinutes();
 
+    if (short) {
+        return `${monthNames[monthIndex]} ${day}`;
+    }
     return `${monthNames[monthIndex]} ${day}, ${year} at ${hours}:${minutes}`;
 }
+
+export function debounce(func, wait, immediate) {
+    var timeout;
+    return function() {
+        var context = this, args = arguments;
+        var later = function() {
+            timeout = null;
+            if (!immediate) func.apply(context, args);
+        };
+        var callNow = immediate && !timeout;
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+        if (callNow) func.apply(context, args);
+    };
+};

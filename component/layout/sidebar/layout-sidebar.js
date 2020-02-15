@@ -26,14 +26,13 @@ export default class LayoutSidebar extends Component {
     this.container = $('#container', node);
     this.wrap = $('.wrap', node);
 
-
-    const search = new LayoutSearch();
     channel.on(events.CLOSE_SIDEBAR, this.close);
     channel.on(events.OPEN_PROFILE, (e) => {
       const profile = new LayoutProfile(e);
       this.open(profile);
     });
-    channel.on(events.OPEN_SEARCH, () => {
+    channel.on(events.OPEN_SEARCH, ({chatId}) => {
+      const search = new LayoutSearch({chatId});
       this.open(search);
     });
     return this;
