@@ -24,11 +24,11 @@
           <div class="wrap_textarea">
             <textarea placeholder="Message" rows="1"></textarea>
           </div>
-
+          <input type="file" id="fileInput" style="display: none">
           <div style="position: relative">
             <ui-drop id="drop-attach" up right>
-              <ui-item icon="photo">Photo or Video</ui-item>
-              <ui-item icon="document">Document</ui-item>
+              <ui-item icon="photo" id="photo">Photo or Video</ui-item>
+              <ui-item icon="document" id="document">Document</ui-item>
               <ui-item icon="poll">Poll</ui-item>
             </ui-drop>
             <ui-icon id="attach">attach</ui-icon>

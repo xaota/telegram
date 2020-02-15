@@ -5,9 +5,8 @@
 }
 
 aside {
-  width: 26%;
-  max-width: 28rem;
-  min-width: 21.33333rem;
+  max-width: 420px;
+  min-width: 420px;
   color:      var(--foreground);
   background: var(--background-aside);
   border-right: 1px solid var(--edge);

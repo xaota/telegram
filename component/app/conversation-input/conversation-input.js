@@ -76,8 +76,42 @@ export default class ConversationInput extends Component {
 
     $('.action', node)
         .addEventListener('click', this.onAction);
+    $('#photo', node)
+        .addEventListener('click', () => {
+          this.onLoadFile('image');
+        });
+    $('#document', node)
+        .addEventListener('click', () => {
+          this.onLoadFile('document');
+        });
+    $('#fileInput', this.shadowRoot)
+        .addEventListener('change', this.selectFile)
     return this;
   }
+
+  selectFile = (e) => {
+    const files = e.target.files;
+    if (files.length === 0) {
+      return;
+    }
+    Array.from(files).forEach((file) => {
+      if (file) {
+        const content = {
+          '@type': 'inputMessageDocument',
+          document: { '@type': 'inputFileBlob', name: file.name, data: file }
+        };
+        this.sendMessage(content);
+      }
+    });
+    e.target.value = '';
+  };
+
+  onLoadFile = (type) => {
+    const input = $('#fileInput', this.shadowRoot);
+    input.setAttribute('accept', type === 'image' ? 'image/*' : 'multiple')
+    input.click();
+
+  };
 
   replaceActionIcon = () => {
     const inner = this.action.children[0].innerHTML;
