@@ -46,6 +46,8 @@
 .profile .name {
     font-weight: 500;
     font-size: 24px;
+    max-width: 80%;
+    display: inline-block;
 }
 .profile .status {
     color: #707579;

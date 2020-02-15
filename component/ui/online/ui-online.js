@@ -8,6 +8,8 @@ const attributes = {
         if (value === 'online') {
             updateChildrenAttribute(root, '#status', 'class', 'online');
             updateChildrenHTML(root, '#status', value);
+        } else if (value === 'hidden') {
+            updateChildrenHTML(root, '#status', 'last seen recently');
         } else {
             if (value && value !== 'undefined') {
                 const text = getText(value);

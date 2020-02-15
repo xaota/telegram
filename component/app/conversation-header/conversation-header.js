@@ -51,8 +51,12 @@ export default class ConversationHeader extends Component {
               telegram.api('getUser', {
                   user_id: res.type.user_id
               }).then((user) => {
+                  let status = user.status['@type'] === 'userStatusOnline' ? 'online' : user.status.was_online;
+                  if (user.status['@type'] ===  'userStatusRecently') {
+                      status = 'hidden';
+                  }
                   $('ui-online', node)
-                      .setAttribute('status', user.status['@type'] === 'userStatusOnline' ? 'online' : user.status.was_online);
+                      .setAttribute('status', status);
                   $('ui-online', node)
                       .setAttribute('id', user.id);
               });

@@ -123,8 +123,12 @@ export default class LayoutProfile extends Component {
         }).then((user) => {
           // online
             const statusBlock = $('ui-online', node);
+          let status = user.status['@type'] === 'userStatusOnline' ? 'online' : user.status.was_online;
+          if (user.status['@type'] ===  'userStatusRecently') {
+            status = 'hidden';
+          }
              statusBlock
-                .setAttribute('status', user.status['@type'] === 'userStatusOnline' ? 'online' : user.status.was_online);
+                .setAttribute('status', status);
             statusBlock
                 .setAttribute('id', user.id);
           // profile
