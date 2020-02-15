@@ -159,6 +159,7 @@ async function getHistory(chat, me, list, loading) {
 
     if (message.content['@type'] === 'messageDocument') {
       content = MessageDocument.from(message.content.document, timestamp);
+      content.setAttribute(outgoing ? 'right' : 'left', '')
       return root.append(content);
     }
 
