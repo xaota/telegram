@@ -227,6 +227,7 @@ export default class ConversationInput extends Component {
 
     this.sendMessage(inputContent);
     this.input.value = '';
+    $('#url', this.shadowRoot).innerHTML = '';
     this.calculateRows(this.input);
     this.replaceActionIcon();
   };
