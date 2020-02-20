@@ -1,8 +1,5 @@
 :host {
   display: block;
-}
-
-.dialog {
   padding: 0 .53333rem 2px;
   border-bottom: 1px solid transparent;
 }

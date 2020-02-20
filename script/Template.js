@@ -15,6 +15,12 @@ const templates = Object.create(null);
     return new URL(href, base).href;
   }
 
+  /** */
+  export function get(name) {
+    const template = dom(name);
+    return template.content.cloneNode(true);
+  }
+
 // #region [Private]
   /** */
     async function load(name, href, base) {
@@ -27,12 +33,6 @@ const templates = Object.create(null);
   /** */
     function has(name) {
       return dom(name) !== null;
-    }
-
-  /** */
-    function get(name) {
-      const template = dom(name);
-      return template.content.cloneNode(true);
     }
 
   /** */

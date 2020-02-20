@@ -27,11 +27,7 @@ export default class ChatItem extends Component {
 
   mount(node) {
     super.mount(node, attributes, properties);
-
-    const store = this.store();
-    const me = store.me; // !
-    const peer = store && store.peer;
-    const id = store.id;
+    const {me, peer, id} = this.store();
 
     const slotAvatar = $('slot[name="avatar"]', node);
     const avatar = [...slotAvatar.assignedNodes()].find(e => UIAvatar.is(e));

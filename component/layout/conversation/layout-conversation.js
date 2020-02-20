@@ -13,11 +13,11 @@ import LayoutLoading      from '../loading/layout-loading.js';
 import ConversationInput  from '../../app/conversation-input/conversation-input.js';
 import ConversationHeader from '../../app/conversation-header/conversation-header.js';
 
-import MessageText    from '../../message/text/message-text.js';
-import MessageEmoji   from '../../message/emoji/message-emoji.js';
-import MessageSticker from '../../message/sticker/message-sticker.js';
+import MessageText     from '../../message/text/message-text.js';
+import MessageEmoji    from '../../message/emoji/message-emoji.js';
+import MessageSticker  from '../../message/sticker/message-sticker.js';
 import MessageDocument from '../../message/document/message-document.js';
-import MessagePhoto from '../../message/photo/message-photo.js';
+import MessagePhoto    from '../../message/photo/message-photo.js';
 
 import '../sidebar/layout-sidebar.js';
 import '../../ui/tabs/ui-tabs.js';
@@ -50,6 +50,11 @@ export default class LayoutConversation extends Component {
       if (list.firstElementChild) list.firstElementChild.scrollIntoView({block: 'end', behavior: 'smooth'});
     });
 
+    return this;
+  }
+
+  render(node) {
+    const list = $('ui-list', node);
     init.call(this, node, list);
     return this;
   }
@@ -66,6 +71,7 @@ Component.init(LayoutConversation, component, {attributes, properties});
 async function init(node, list) {
   const {chat_id} = this.store();
   const chat = await telegram.api('getChat', {chat_id});
+  console.log('CHAT', chat);
 
   $('conversation-header', node).store({chat_id, chat});
 
@@ -75,6 +81,10 @@ async function init(node, list) {
 
   getHistory(chat_id, list);
   telegram.api('openChat', {chat_id}); // await?
+
+  channel.on('chat.permissions', ({chat_id, permissions}) => {
+    debugger;
+  });
 
   channel.on('message.new', message => {
     if (message.chat_id !== chat_id) return;
@@ -211,13 +221,16 @@ async function getHistory(chat_id, list) {
     // messageAnimation
     // messageAudio
     // messageVoiceNote
-    // messageVideo?
+    // messageVideoNote
 
     let text;
     const type = message.content['@type'];
     switch (type) {
       case 'messageText':
         text = message.content.text.text;
+        break;
+      case 'ChatAddMembers':
+        text = 'Added (user_ids) to chat: ' + message.content.member_user_ids.join(', ');
         break;
       case 'messageBasicGroupChatCreate':
         text = 'Created Group';

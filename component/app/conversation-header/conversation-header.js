@@ -31,12 +31,16 @@ export default class ConversationHeader extends Component {
     const drop = $('ui-drop', node);
     $('#more', node).addEventListener('click', () => drop.show = !drop.show);
 
-    init.call(this, node);
+    // channel.on('chat.online', ({chat_id, online_member_count}) => {
+    //  ...
+    //});
+
     return this;
   }
 
   render(node) {
     init.call(this, node);
+    return this;
   }
 
   renderPhoto = (photo, id, letter) => {
@@ -56,12 +60,7 @@ Component.init(ConversationHeader, component, {attributes, properties});
 
 /** */
 async function init(node) {
-  const store = this.store();
-  if (!store) return;
-  const {chat} = store;
-  if (!chat) return;
-
-  if (node.childElementCount === 0) return;
+  const {chat} = this.store();
 
   $('.title', node).innerText = chat.title;
   this.renderPhoto(chat.photo, chat.type.user_id || chat.type.supergroup_id || chat.type.basic_group_id, chat.title);

@@ -9,16 +9,15 @@ import '../../message/text/message-text.js';
 import FormEmoji from '../../form/emoji/form-emoji.js';
 import File from "../../../script/File.js";
 
-
 const component = Component.meta(import.meta.url, 'conversation-input');
 const attributes = {
 
 };
 
 const properties = {
-    disabled(root, value) {
-      updateChildrenProperty(root, 'input', 'disabled', value)
-    }
+  disabled(root, value) {
+    updateChildrenProperty(root, 'input', 'disabled', value)
+  }
 };
 
 focus = (input) => {

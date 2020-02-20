@@ -1,28 +1,26 @@
 <template>
   <link rel="stylesheet" href="./chat-item.css" />
 
-  <div class="dialog">
-    <div class="ripple dialog__clickable -selected">
-      <div class="ripple__content">
-        <slot name="avatar"></slot>
-        <div class="dialog__content">
-          <div class="dialog__header">
-            <slot name="title"></slot>
-            <div class="dialog__date">
-              <ui-icon id="status"></ui-icon>
-              <span class="timestamp">timestamp</span>
-            </div>
+  <div class="ripple dialog__clickable -selected">
+    <div class="ripple__content">
+      <slot name="avatar"></slot>
+      <div class="dialog__content">
+        <div class="dialog__header">
+          <slot name="title"></slot>
+          <div class="dialog__date">
+            <ui-icon id="status"></ui-icon>
+            <span class="timestamp">timestamp</span>
           </div>
-          <div class="dialog__preview">
-            <div class="dialog__message">
-              <slot name="author" class="dialog__message_title"></slot>
-              <slot name="message"></slot>
-            </div>
-            <!-- <div class="dialog__badge"></div> -->
-            <ui-badge></ui-badge>
-            <div class="dialog__pin">
-              <ui-icon>pin</ui-icon>
-            </div>
+        </div>
+        <div class="dialog__preview">
+          <div class="dialog__message">
+            <slot name="author" class="dialog__message_title"></slot>
+            <slot name="message"></slot>
+          </div>
+          <!-- <div class="dialog__badge"></div> -->
+          <ui-badge></ui-badge>
+          <div class="dialog__pin">
+            <ui-icon>pin</ui-icon>
           </div>
         </div>
       </div>

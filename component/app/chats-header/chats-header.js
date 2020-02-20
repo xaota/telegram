@@ -1,5 +1,6 @@
 import Component from '../../../script/Component.js';
 import $, {channel, nightTheme} from '../../../script/DOM.js';
+import {storage} from '../../../tdweb/Telegram.js';
 
 import UIDrop from '../../ui/drop/ui-drop.js';
 import UIItem from '../../ui/item/ui-item.js';
@@ -51,5 +52,7 @@ Component.init(ChatsHeader, component, {attributes, properties});
     switch (route) {
       case 'night-mode': return nightTheme();
       case 'collapse': return channel.send('aside-collapse');
+      case 'favorite': return channel.send('conversation.open', {chat_id: storage.get('me').id});
+      case 'conversation': return channel.send('conversation.open', {chat_id: prompt('укажите ID чата')});
     }
   }

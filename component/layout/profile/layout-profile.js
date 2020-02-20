@@ -148,9 +148,15 @@ export default class LayoutProfile extends Component {
           });
         });
       } else if (res.type['@type'] === 'chatTypeSupergroup') {
+        telegram.api('getSupergroup', {
+          supergroup_id: res.type.supergroup_id
+        }).then(d => console.log('supergroup', d));
+
         telegram.api('getSupergroupFullInfo', {
           supergroup_id: res.type.supergroup_id
         }).then(groupFull => {
+          console.log('getSupergroupFullInfo', groupFull);
+
           const list = $('.list', node);
           if (groupFull.description) {
             list.append(createItem('info', groupFull.description, 'About'));

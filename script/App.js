@@ -16,24 +16,32 @@ export default class App {
     const type = update['@type'];
     // console.log(update);
     const handlers = {
-      updateFile:               File.update,
-      updateNewChat:            u => this.updateNewChat(u.chat), // новый чат (вообще среди всех списков)
-      updateChatChatList:       u => this.updateChatChatList({chat_id: u.chat_id, chat_list: u.chat_list['@type']}), // помещение чата в список чатов
+      updateFile:                  File.update,
 
-      updateNewMessage:         u => this.updateNewMessage(u.message),
+      chatEvent:                   u => console.log('chatEvent', u),
 
-      updateUserStatus:         u => this.updateUserStatus(u), // изер в сети / оффлайн
-      updateChatOnlineMemberCount:         u => this.updateChatOnlineMemberCount(u), // изер в сети / оффлайн
-      updateChatReadInbox:      u => this.updateChatReadInbox(u), // прочитанно / непрочитано в чате из списка
-      updateChatReadOutbox:     u => this.updateChatReadOutbox(u), // пользователь прочитал исходящее сообщение
-      updateChatLastMessage:    u => this.updateChatLastMessage(u), // превью сообщения в списке чатов
-      updateConnectionState:    u => this.connection(u.state['@type']), // интернет
-      updateAuthorizationState: u => this.authorization(u.authorization_state['@type'], u.authorization_state) // шаги авторизации
+      updateNewChat:               u => this.updateNewChat(u.chat), // новый чат (вообще среди всех списков)
+      updateChatChatList:          u => this.updateChatChatList({chat_id: u.chat_id, chat_list: u.chat_list['@type']}), // помещение чата в список чатов
+
+      updateNewMessage:            u => this.updateNewMessage(u.message),
+
+      chatEventPermissionsChanged: u => console.log('chatEventPermissionsChanged', u),
+      updateSupergroup:            u => console.log('updateSupergroup', u),
+
+      updateUserStatus:            u => this.updateUserStatus(u), // изер в сети / оффлайн
+      updateChatOnlineMemberCount: u => this.updateChatOnlineMemberCount(u), // юзер в сети / оффлайн
+      updateChatPermissions:       u => this.updateChatPermissions(u),
+
+      updateChatReadInbox:         u => this.updateChatReadInbox(u), // прочитанно / непрочитано в чате из списка
+      updateChatReadOutbox:        u => this.updateChatReadOutbox(u), // пользователь прочитал исходящее сообщение
+      updateChatLastMessage:       u => this.updateChatLastMessage(u), // превью сообщения в списке чатов
+      updateConnectionState:       u => this.connection(u.state['@type']), // интернет
+      updateAuthorizationState:    u => this.authorization(u.authorization_state['@type'], u.authorization_state) // шаги авторизации
     };
 
     typeof handlers[type] === 'function'
       ? handlers[type](update)
-      : true; //console.log('update@' + type, update); // true;
+      : true; // console.log('update@' + type, update); // true;
   }
 
   updateNewMessage(message) {
@@ -57,6 +65,7 @@ export default class App {
   }
 
   updateChatLastMessage({chat_id, last_message, order}) {
+    console.log('updateChatLastMessage');
     this.channel.send('chat.message', {chat_id, last_message}); // order?
   }
 
@@ -67,13 +76,14 @@ export default class App {
     this.channel.send('user.status', {user_id, online, was_online, expires});
   }
 
-  updateChatOnlineMemberCount(e) {
-    // TODO теоретически для онлайн пользователей
-    // console.log(100, e);
-    // const online = status['@type'].slice(10).toLowerCase() === 'online';
-    // const was_online = status.was_online;
-    // const expires = status.expires;
-    // this.channel.send('user.status', {user_id, online, was_online, expires});
+  updateChatOnlineMemberCount({chat_id, online_member_count}) {
+    console.log('update@ChatOnlineMemberCount -> chat.online', {chat_id, online_member_count});
+    this.channel.send('chat.online', {chat_id, online_member_count});
+  }
+
+  updateChatPermissions({chat_id, permissions}) {
+    console.log('update@ChatPermissions', {chat_id, permissions});
+    this.channel.send('chat.permissions', {chat_id, permissions});
   }
 
   connection(type) {

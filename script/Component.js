@@ -1,23 +1,36 @@
 import Template from './Template.js';
 
+const store = Symbol('store');
+const state = Symbol('state');
+
 export default class Component extends HTMLElement {
   constructor(component, mode = 'open') {
     super();
-    this[Symbol.store] = null;
+    this[store] = null;
+    this[state] = 'created';
     this.attachShadow({mode});
     this.component = component;
   }
 
-  store(...data) { // component.store({что-то}) - запись, store = component.store() - чтение
-    if (data.length === 0) return this[Symbol.store];
-
-    this[Symbol.store] = data.length === 1 && data[0] === null
-      ? null
-      : Object.assign({}, this[Symbol.store], ...data);
-
-    return this.render(this.shadowRoot);
+/** state @readonly */
+  get state() {
+    return this[state];
   }
 
+/** store */
+  store(...data) { // component.store({что-то}) - запись, store = component.store() - чтение
+    if (data.length === 0) return this[store] || {};
+
+    this[store] = data.length === 1 && data[0] === null
+      ? null
+      : Object.assign({}, this[store], ...data);
+
+    return this.state === 'mounted'
+      ? this.render(this.shadowRoot)
+      : this;
+  }
+
+/** event */
   event(event, detail = null) { // Отправка событий во внешний DOM // component.event('custom-event', {data: value})
     const options = {bubbles: true, composed: true};
     event = detail !== null || (!event.type && event.includes('-'))
@@ -26,6 +39,7 @@ export default class Component extends HTMLElement {
     return this.dispatchEvent(event);
   }
 
+/** connectedCallback */
   async connectedCallback() { // не юзать напрямую
     if (!this.ownerDocument.defaultView) return; // !
     if (this.shadowRoot.firstChild) return; // ! loaded @TODO: перенос узла
@@ -34,13 +48,17 @@ export default class Component extends HTMLElement {
     this
       .ready(template)
       .attach(template)
-      .mount(this.shadowRoot)
-      .event('DOMContentLoaded');
+      .mount(this.shadowRoot);
+
+    this[state] = 'mounted';
+    if (this[store]) this.render(this.shadowRoot);
+    this.event('DOMContentLoaded');
   }
 
-  /** */
+/** disconnectedCallback */
   disconnectedCallback() { // удаление элемента из DOM
     this.unmount();
+    this[state] = 'unmounted';
     // this.event('unload?');
     // if (!this.ownerDocument.defaultView) return; // !
     // полное удаление
@@ -48,11 +66,12 @@ export default class Component extends HTMLElement {
     // while (root.firstChild) root.removeChild(root.firstChild);
   }
 
+/** ready */
   ready(template) { // доступ к фрагмменту перед вставкой в DOM (если нужно)
     return this;
   }
 
-/** */
+/** attach */
   attach(template) { // вставка фрагмента в DOM
     this.shadowRoot.appendChild(template);
     return this;
@@ -73,14 +92,17 @@ export default class Component extends HTMLElement {
     return this;
   }
 
-  render(node) { // перерендеринг компонента, если требуется
+/** render */
+  render(node, previous) { // перерендеринг компонента, если требуется
     return this;
   }
 
+/** unmount */
   unmount() { // тут типа можно отписаться от событий, но вроде пофиг
     return this;
   }
 
+/** is @static */
   static is(component, ...constructors) { // Является ли узел элементом определенного класса
     if (typeof component !== 'object') component = document.createElement(component);
     const is = constructor => constructor
@@ -89,35 +111,38 @@ export default class Component extends HTMLElement {
     return constructors.some(is);
   }
 
+/** define @static */
   static define({name}, constructor, options = undefined) { // сохраняет привязку класса-компонента к html-тегу
     if (Component.exist(name)) return;
     window.customElements.define(name, constructor, options);
   }
 
+/** exist @static */
   static exist(component) { // проверка существования привязки
     return Boolean(customElements.get(component));
   }
 
+/** defined @static */
   static defined(components = []) { // шляпа
     return Promise.all(components.map(e => customElements.whenDefined(e)));
   }
 
+/** meta @static */
   static meta(base, name, href = './index.html') {
     return {name, href, base};
   }
 
+/** properties @static */
   static properties(constructor, ...list) { // навешивает свойства (boolean) элемента + геттеры и сеттеры
-    // const properties = constructor.observedAttributes || [];
-    // if (list.length === 0 && property) list = property;
     list.forEach(property => setProperty(constructor.prototype, property));
   }
 
+/** attributes @static */
   static attributes(constructor, ...list) { // навешивает атрибуты (string) элемента + геттеры и сеттеры
-    // const attributes = constructor.observedAttributes || [];
-    // if (list.length === 0 && attributes) list = attributes;
     list.forEach(attribute => setAttribute(constructor.prototype, attribute));
   }
 
+/** init @static */
   static init(constructor, component, {attributes = {}, properties = {}}) { // сокращенная инициализация компонента
     const fields = [...Object.keys(attributes), ...Object.keys(properties)];
 
