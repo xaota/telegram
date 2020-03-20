@@ -20,13 +20,10 @@ async function main() {
   new App(telegram, channel);
 
   // this.emit('update', update)
-  const layout = new LayoutLogin();
-
-  // const layout = await hasAuth()
-  //   .then(_ => new LayoutMain())
-  //   .catch(_ => new LayoutLogin());
-
-  current = createLayout(layout);
+  window.customElements.whenDefined('layout-login').then(() => {
+    const layout = new LayoutLogin();
+    current = createLayout(layout);
+  })
 }
 
 channel.on('authorizationStateReady', async () => {

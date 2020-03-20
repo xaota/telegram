@@ -7,7 +7,7 @@ const templates = Object.create(null);
   export default async function Template({name, href, base}, prefix = 'template-') {
     name = prefix + name;
     if (!has(name)) await load(name, href, base);
-    return get(name);
+    // return get(name);
   }
 
 /** path */
@@ -16,9 +16,15 @@ const templates = Object.create(null);
   }
 
   /** */
-  export function get(name) {
-    const template = dom(name);
+  export function get(name, prefix = 'template-') {
+    const template = dom(prefix + name);
     return template.content.cloneNode(true);
+  }
+
+  /** */
+  export function init({template, base, name}) {
+    stylesheets(template, base);
+    add(name, template);
   }
 
 // #region [Private]
@@ -26,8 +32,7 @@ const templates = Object.create(null);
     async function load(name, href, base) {
       if (name in templates) return await templates[name];
       const template = await web(href, base, name);
-      stylesheets(template, base);
-      add(name, template);
+      init({template, base, name});
     }
 
   /** */

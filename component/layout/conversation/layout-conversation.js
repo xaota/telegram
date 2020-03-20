@@ -229,7 +229,7 @@ async function getHistory(chat_id, list) {
       case 'messageText':
         text = message.content.text.text;
         break;
-      case 'ChatAddMembers':
+      case 'messageChatAddMembers':
         text = 'Added (user_ids) to chat: ' + message.content.member_user_ids.join(', ');
         break;
       case 'messageBasicGroupChatCreate':

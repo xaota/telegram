@@ -1,4 +1,4 @@
-import Template from './Template.js';
+import Template, {get, init} from './Template.js';
 
 const store = Symbol('store');
 const state = Symbol('state');
@@ -40,11 +40,11 @@ export default class Component extends HTMLElement {
   }
 
 /** connectedCallback */
-  async connectedCallback() { // не юзать напрямую
+  connectedCallback() { // не юзать напрямую
     if (!this.ownerDocument.defaultView) return; // !
     if (this.shadowRoot.firstChild) return; // ! loaded @TODO: перенос узла
 
-    const template = await Template(this.component); // шаблон @TODO: сборка
+    const template = get(this.component.name); // шаблон @TODO: сборка
     this
       .ready(template)
       .attach(template)
@@ -112,9 +112,12 @@ export default class Component extends HTMLElement {
   }
 
 /** define @static */
-  static define({name}, constructor, options = undefined) { // сохраняет привязку класса-компонента к html-тегу
-    if (Component.exist(name)) return;
-    window.customElements.define(name, constructor, options);
+  static async define(component, constructor, template = '', options = undefined) { // сохраняет привязку класса-компонента к html-тегу
+    if (Component.exist(component.name)) return;
+    template === ''
+      ? await Template(component)
+      : init({template, name: '#template-' + component.name, base: component.base});
+    window.customElements.define(component.name, constructor, options);
   }
 
 /** exist @static */
@@ -143,7 +146,7 @@ export default class Component extends HTMLElement {
   }
 
 /** init @static */
-  static init(constructor, component, {attributes = {}, properties = {}}) { // сокращенная инициализация компонента
+  static async init(constructor, component, {attributes = {}, properties = {}}) { // сокращенная инициализация компонента
     const fields = [...Object.keys(attributes), ...Object.keys(properties)];
 
     Object.defineProperties(constructor, {
