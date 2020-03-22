@@ -69,7 +69,7 @@ class Telegram {
       ),
     }
 
-    this.api('invokeWithLayer', parameters,)
+    this.api('invokeWithLayer', parameters)
       .then(this.handleTdParamsHasBeenSet.bind(this))
       .catch(this.handleTdParamsSetError.bind(this));
   }

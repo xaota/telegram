@@ -9,6 +9,8 @@ import UIButton   from '../../ui/button/ui-button.js';
 import UICountry  from '../../ui/country/ui-country.js';
 import UICheckbox from '../../ui/checkbox/ui-checkbox.js';
 
+const construct = zagram.constructor;
+
 const component = Component.meta(import.meta.url, 'form-login');
 const attributes = {}
 const properties = {}
@@ -33,10 +35,28 @@ export default class FormLogin extends Component {
       button.loading = true;
 
       const phone_number = phone.value;
-      // console.log('auth', phone_number);
+      console.log('auth', phone_number);
       try {
         storage.set('phone_number', phone_number);
-        await telegram.api('setAuthenticationPhoneNumber', {phone_number});
+        const result = await telegram.api(
+          'auth.sendCode',
+          {
+            phone_number,
+            ...config,
+            settings: construct('codeSettings', {}),
+          }
+        );
+        storage.set('phone_code_hash', result.phone_code_hash)
+        telegram.emit(
+          'update',
+          {
+            '@type': 'updateAuthorizationState',
+            authorization_state: {
+              '@type': 'authorizationStateWaitCode',
+              ...result,
+            }
+          }
+        );
         wipe.call(this, phone, button);
       } catch (e) {
         console.error(e);
