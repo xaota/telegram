@@ -1,7 +1,7 @@
 import Component from '../../../script/Component.js';
 import $, {channel} from '../../../script/DOM.js';
-import telegram from '../../../tdweb/Telegram.js';
 import File from '../../../script/File.js';
+import { storage } from '../../../tdweb/Telegram.js';
 
 import UIItem   from '../../ui/item/ui-item.js';
 import UIIcon   from '../../ui/icon/ui-icon.js';
@@ -40,7 +40,8 @@ Component.init(LayoutSettings, component, {attributes, properties});
 
 /** */
   async function init(node) {
-    const me = await telegram.api('getMe');
+    const me = storage.get('me');
+    console.log(me);
 
     const h1 = $('h1', node);
     const h2 = $('h2', node);

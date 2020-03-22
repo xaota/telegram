@@ -11,6 +11,7 @@ import UINetwork     from '../../ui/network/ui-network.js';
 import ChatsHeader   from '../../app/chats-header/chats-header.js';
 import LayoutLoading from '../loading/layout-loading.js';
 
+const { construct } = zagram;
 const component = Component.meta(import.meta.url, 'layout-chats');
 const attributes = {}
 const properties = {}
@@ -87,16 +88,19 @@ Component.init(LayoutChats, component, {attributes, properties});
     const me = storage.get('me');
 
     const root = document.createDocumentFragment();
-    const {chat_ids} = await getDialogs();
+    const response = await getDialogs();
+    console.log(response);
+    const { chats } = response;
     const start = BigInt(9223372036854775807);
-    for (let i = 0; i < chat_ids.length; ++i) {
-      const chat_id = chat_ids[i];
-      const model = await telegram.api('getChat', {chat_id});
-      model.order = start - BigInt(i);
-      // chats[chat_id] = model;
-      lists[type].add(chat_id);
-      const item  = await ChatItem.from({model, me});
-      root.append(item);
+    for (let i = 0; i < chats.length; ++i) {
+      console.log(chats[i]);
+      // const chat_id = chat_ids[i];
+      // const model = await telegram.api('messages.getFullChat', {chat_id});
+      // model.order = start - BigInt(i);
+      // // chats[chat_id] = model;
+      // lists[type].add(chat_id);
+      // const item  = await ChatItem.from({model, me});
+      // root.append(item);
     }
 
     list.innerHTML = '';
@@ -108,12 +112,15 @@ Component.init(LayoutChats, component, {attributes, properties});
 /** getDialogs @async
   * @param {string} [type="chatListMain"] one of 'chatListMain', 'chatListArchive'
   */
-  function getDialogs(offset_chat_id = 0, limit = 20, type = "chatListMain") {
-    const options = {
-      chat_list: {'@type': type},
-      offset_order: '9223372036854775807',
-      offset_chat_id,
-      limit
-    };
-    return telegram.api('getChats', options);
+  function getDialogs(offset_chat_id = 0, limit = 20) {
+    return telegram.api(
+      'messages.getDialogs',
+      {
+        limit,
+        offset_date: 0,
+        offset_id: offset_chat_id,
+        offset_peer: construct('inputPeerEmpty'),
+        hash:  0
+      },
+    );
   }
