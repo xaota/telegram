@@ -15,11 +15,11 @@ let current;
 main();
 
 async function main() {
-  // await telegram.init();
-  // telegram.on('*', e => { console.log('telegram update', e) });
   new App(telegram, channel);
 
-  // this.emit('update', update)
+  // const loadingLayout = new LayoutLoading();
+  // current = createLayout(loadingLayout);
+
   window.customElements.whenDefined('layout-login').then(() => {
     const layout = new LayoutLogin();
     current = createLayout(layout);

@@ -4,6 +4,7 @@ export default class App {
   constructor(telegram, channel) {
     this.telegram = telegram;
     this.channel = channel;
+    this.config = undefined;
     this.init();
   }
 
@@ -14,7 +15,11 @@ export default class App {
 
   update(update) {
     const type = update['@type'];
-    // console.log(update);
+
+    console.group(`[APP] Update: ${type}`);
+    console.log(update);
+    console.groupEnd();
+
     const handlers = {
       updateFile:                  File.update,
 
@@ -91,6 +96,7 @@ export default class App {
   }
 
   async authorization(type, state) {
+    console.log(`[APP] authorization ${type}`);
     const telegram = this.telegram;
     const channel  = this.channel;
 
