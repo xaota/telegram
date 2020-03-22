@@ -9,7 +9,7 @@ import UIButton   from '../../ui/button/ui-button.js';
 import UICountry  from '../../ui/country/ui-country.js';
 import UICheckbox from '../../ui/checkbox/ui-checkbox.js';
 
-const construct = zagram.constructor;
+const { construct } = zagram;
 
 const component = Component.meta(import.meta.url, 'form-login');
 const attributes = {}
@@ -35,7 +35,6 @@ export default class FormLogin extends Component {
       button.loading = true;
 
       const phone_number = phone.value;
-      console.log('auth', phone_number);
       try {
         storage.set('phone_number', phone_number);
         const result = await telegram.api(

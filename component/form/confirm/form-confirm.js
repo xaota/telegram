@@ -3,10 +3,7 @@ import telegram, {storage} from '../../../tdweb/Telegram.js';
 import Component from '../../../script/Component.js';
 import $, {channel} from '../../../script/DOM.js';
 
-import UIIcon    from '../../ui/icon/ui-icon.js';
-import UIInput   from '../../ui/input/ui-input.js';
-import UIButton  from '../../ui/button/ui-button.js';
-import UISticker from '../../ui/sticker/ui-sticker.js';
+const { isObjectOf } = zagram;
 
 const component = Component.meta(import.meta.url, 'form-confirm');
 const attributes = {}
@@ -31,27 +28,29 @@ export default class FormConfirm extends Component {
       input.disabled = true;
       // loader ?
 
-      // const phone_code_hash = await storage.get('phone_code_hash');
-      // const phone_number    = await storage.get('phone_number');
-      // const phone_code      = input.value;
+      const phone_code_hash = await storage.get('phone_code_hash');
+      const phone_number    = await storage.get('phone_number');
+      const phone_code      = input.value;
 
       try {
-        // const temp = await telegram.api('auth.signIn', {phone_code_hash, phone_number, phone_code});
+        const response = await telegram.api(
+          'auth.signIn',
+          { phone_code_hash, phone_number, phone_code }
+        );
 
-        // const {user} = temp;
-        // console.log('AUTH', temp);
+        console.log('Response', response);
 
-        // if (user._ === 'user') {
-        //   await storage.set('auth', user.id);
-        //   await storage.remove('phone_code_hash', 'phone_number');
-        // }
+        if (isObjectOf('auth.authorization', response)) {
+          console.log('User successfully authorized, go to chat!');
+        }
 
-        await telegram.api('checkAuthenticationCode', {code: input.value});
+        if (isObjectOf('auth.authorizationSignUpRequired', response)) {
+          console.log('Emit sign up form');
+        }
 
-        // channel.send('login-confirm', user);
         wipe.call(this, input);
       } catch (error) {
-        // console.log('error', error.message); // "PHONE_CODE_INVALID"
+        console.log('error', error); // "PHONE_CODE_INVALID"
         input.value = '';
         input.disabled = false;
       }
