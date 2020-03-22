@@ -121,7 +121,7 @@ class Telegram {
 }
 
 const telegram = new Telegram();
-const storage = new Storage();
+const storage = new Storage('storage', true);
 
 window.telegram = telegram; // TODO убрать
 export default telegram;

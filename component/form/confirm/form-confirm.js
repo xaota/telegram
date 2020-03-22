@@ -16,17 +16,16 @@ export default class FormConfirm extends Component {
 
   mount(node) {
     super.mount(node, attributes, properties);
-    const phone_number = storage.get('phone_number');
-    // debugger;
-    this.innerText = phone_number;
 
     const input = $('ui-input', node);
+    channel.on('authorizationStateWaitCode', () => {
+      const phone_number = storage.get('phone_number');
+      this.innerText = phone_number;
+    });
+
     input.addEventListener('input', async _ => {
-      // console.log(input.value);
       if (input.value.length < 5) return;
-      // console.log('sms', input.value);
       input.disabled = true;
-      // loader ?
 
       const phone_code_hash = await storage.get('phone_code_hash');
       const phone_number    = await storage.get('phone_number');
@@ -42,6 +41,8 @@ export default class FormConfirm extends Component {
 
         if (isObjectOf('auth.authorization', response)) {
           console.log('User successfully authorized, go to chat!');
+          storage.set('me', response.user);
+          channel.send('authorizationStateReady');
         }
 
         if (isObjectOf('auth.authorizationSignUpRequired', response)) {

@@ -27,11 +27,9 @@ async function main() {
 }
 
 channel.on('authorizationStateReady', async () => {
+  console.log('authorization ready, load main layout');
   current.remove(); // layout-login
   loading.style.display = '';
-  // await storage.set('user', user);
-  const me = await telegram.api('getMe');
-  storage.set('me', me);
   current = createLayout(new LayoutMain());
 });
 
