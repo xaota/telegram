@@ -55,11 +55,12 @@ export default class ChatItem extends Component {
   }
 
   static async from({model, user, me}) {
+    console.log(model);
     const avatar     = new UIAvatar();
     avatar.innerHTML = UIAvatar.letter(model.title);
-    avatar.color     = UIAvatar.color(model.type.supergroup_id || model.id);
+    avatar.color     = UIAvatar.color(model.id);
     avatar.slot      = 'avatar';
-    if (model.photo && model.photo.small) File.getFile(model.photo.small).then(src => avatar.src = src);
+    // if (model.photo && model.photo.small) File.getFile(model.photo.small).then(src => avatar.src = src);
 
     const title     = document.createElement('span');
     title.innerText = model.title;
@@ -71,37 +72,37 @@ export default class ChatItem extends Component {
 
     if (model.unread_count > 0) item.setAttribute('badge', model.unread_count); //
 
-    if (model.notification_settings.mute_for !== 0) item.setAttribute('muted', '');
-    if (model.is_pinned) item.setAttribute('pin', '');
-
+    if (model.notify_settings.mute_until !== 0) item.setAttribute('muted', '');
+    if (model.pinned) item.setAttribute('pin', '');
+    //
     item.append(avatar);
     item.append(title);
 
     // chatTypeBasicGroup, chatTypePrivate, , and chatTypeSupergroup.
     // ! chatTypeSecret
-    const type = model.type['@type'];
-    const types = {
-      chatTypeBasicGroup: () => telegram.api('getBasicGroup', {basic_group_id: model.type.basic_group_id}),
-      chatTypeSupergroup: () => telegram.api('getSupergroup', {supergroup_id: model.type.supergroup_id}),
-      chatTypePrivate:    () => telegram.api('getUser', {user_id: model.type.user_id})
-    };
-    if (type in types) {
-      const {is_verified} = await types[type]();
-      if (is_verified) {
-        const verify = new UIIcon('verify');
-        verify.slot = 'title';
-        item.append(verify);
-      };
-
-      if (type === 'chatTypePrivate') { // || type === 'chatTypeSecret'
-        const peer = await telegram.api('getUser', {user_id: model.id})
-        avatar.online = peer.status['@type'] === 'userStatusOnline';
-        item.store({peer: peer.id});
-      }
-    }
+    // const type = model.type['@type'];
+    // const types = {
+    //   chatTypeBasicGroup: () => telegram.api('getBasicGroup', {basic_group_id: model.type.basic_group_id}),
+    //   chatTypeSupergroup: () => telegram.api('getSupergroup', {supergroup_id: model.type.supergroup_id}),
+    //   chatTypePrivate:    () => telegram.api('getUser', {user_id: model.type.user_id})
+    // };
+    // if (type in types) {
+    //   const {is_verified} = await types[type]();
+    //   if (is_verified) {
+    //     const verify = new UIIcon('verify');
+    //     verify.slot = 'title';
+    //     item.append(verify);
+    //   };
+    //
+    //   if (type === 'chatTypePrivate') { // || type === 'chatTypeSecret'
+    //     const peer = await telegram.api('getUser', {user_id: model.id})
+    //     avatar.online = peer.status['@type'] === 'userStatusOnline';
+    //     item.store({peer: peer.id});
+    //   }
+    // }
 
     if (model.last_message) last(item, model.last_message, model, me);
-    item.addEventListener('click', e => channel.send('conversation.open', {chat_id: model.id})); // todo: #110
+    // item.addEventListener('click', e => channel.send('conversation.open', {chat_id: model.id})); // todo: #110
 
     return item;
   }
@@ -116,12 +117,12 @@ Component.init(ChatItem, component, {attributes, properties});
     const timestamp = current === updated ? AppMessage.timestamp(message.date) : updated;
     root.setAttribute('timestamp', timestamp);
 
-    if (message.is_outgoing) {
-      root.status = (model.type.is_channel && model.last_read_inbox_message_id === message.id) || (!model.type.is_channel && model.last_read_outbox_message_id === message.id)
-        ? 'receive' : 'sent';
-    }
+    // if (message.is_outgoing) {
+    //   root.status = (model.type.is_channel && model.last_read_inbox_message_id === message.id) || (!model.type.is_channel && model.last_read_outbox_message_id === message.id)
+    //     ? 'receive' : 'sent';
+    // }
     lastMessage(root, message, true);
-    await lastAuthor(root, {me: me.id, peer: model.type.user_id, sender: message.sender_user_id});
+    // await lastAuthor(root, {me: me.id, peer: model.type.user_id, sender: message.sender_user_id});
   }
 
 /** lastAuthor */
