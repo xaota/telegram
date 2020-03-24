@@ -9,8 +9,8 @@
 }
 
 :host(:focus-within) {
-  border-color: #4ea4f6!important;
-  box-shadow: #4ea4f6 0 0 0 1px!important;
+  border-color: #4ea4f6;
+  box-shadow: #4ea4f6 0 0 0 1px;
 }
 
 :host([error]) {
@@ -32,9 +32,6 @@ span.error {
 :host([error]) span.error {
   display: block;
 }
-:host([error]:focus-within) span.error {
-  display: none;
-}
 
 label {
   display: none;
@@ -51,6 +48,9 @@ label {
 :host(:focus-within) label {
   display: block;
   color: #4ea4f6
+}
+:host([error]:focus-within) label {
+  display: none;
 }
 
 div {
