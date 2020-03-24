@@ -3,12 +3,26 @@ import $, {updateChildrenAttribute, updateChildrenElement, updateChildrenPropert
 
 const component = Component.meta(import.meta.url, 'ui-input');
 const attributes = {
-    value(root, value) { updateChildrenElement(root, 'input', 'value', value) }
+  value(root, value) { updateChildrenElement(root, 'input', 'value', value) },
+  error(root, value) {
+    const input = $('input', root);
+    const spanError = $('span.error', root);
+
+    if (value) {
+      input.classList.add('error')
+      spanError.innerText = value;
+    } else {
+      input.classList.remove('error')
+      spanError.innerText = "";
+    }
   }
+}
 
 const properties = {
-    disabled(root, value) { updateChildrenProperty(root, 'input', 'disabled', value); }
-  }
+  disabled(root, value) {
+    updateChildrenProperty(root, 'input', 'disabled', value);
+  },
+}
 
 export default class UIInput extends Component {
   constructor() {
