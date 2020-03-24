@@ -7,22 +7,28 @@ import { reducer as pageReducer } from '../state/pages/index.js';
 
 import LayoutLoading from '../component/layout/loading/layout-loading.js';
 import LayoutLogin   from '../component/layout/login/layout-login.js';
+import LayoutConfirm from '../component/layout/confirm/layout-confirm.js';
 import LayoutMain    from '../component/layout/main/layout-main.js';
 
 const { buildStateStream, combineReducers, dispatchInit, getActionStream, isActionOf } = store;
+const { of, concat, BehaviorSubject } = rxjs;
 const { map, distinctUntilChanged } = rxjs.operators;
 
 if (localStorage.getItem('dark') === '1') document.body.classList.add('dark');
 
 
-window.state$ = buildStateStream(combineReducers({
+const subject = new BehaviorSubject({});
+const state$ = buildStateStream(combineReducers({
   page: pageReducer,
   auth: authReducer,
 }));
+const action$ = getActionStream();
 
-window.action$ = getActionStream();
 authApplyMiddleware(action$, state$, telegram.connection);
-state$.subscribe((state) => { console.log('[state]:', state)});
+state$.subscribe((newState) => {
+  subject.next(newState);
+});
+window.getState$ = () => subject;
 
 
 const loading = $('layout-loading');
@@ -32,7 +38,8 @@ main();
 
 const getPageLayout = R.cond([
   [R.equals('login'), R.always(LayoutLogin)],
-  [R.equals('main'), R.always(LayoutMain)],
+  [R.equals('verify'), R.always(LayoutConfirm)],
+  [R.equals('chat'), R.always(LayoutMain)],
   [R.T, R.always(LayoutLoading)]
 ])
 

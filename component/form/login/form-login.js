@@ -41,7 +41,7 @@ export default class FormLogin extends Component {
     const phone = $('#phone', node);
     const button = $('ui-button', node);
 
-    const sendingAuthCode$ = state$
+    const sendingAuthCode$ = getState$()
       .pipe(map(R.pathOr(false, ['auth', 'sendingAuthCode'])))
       .pipe(distinctUntilChanged());
 
@@ -51,7 +51,7 @@ export default class FormLogin extends Component {
       button.loading = sending;
     })
 
-    const sendAuthCodeError$ = state$
+    const sendAuthCodeError$ = getState$()
       .pipe(map(getError))
       .pipe(distinctUntilChanged())
 

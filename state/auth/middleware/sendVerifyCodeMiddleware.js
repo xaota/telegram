@@ -1,26 +1,13 @@
-import * as R from 'ramda';
-import {
-  catchError,
-  filter,
-  map,
-  mergeMap,
-  withLatestFrom,
-} from 'rxjs/operators';
-import { fromPromise } from 'rxjs/internal-compatibility';
+import { setPage } from '../../pages/index.js';
+import { VERIFY_CODE } from '../constants.js';
+import { sendVerifyCodeError, setAuthorizationData } from '../actions.js';
 
-import { isActionOf } from 'utils/store';
-import { methodFromSchema } from 'utils/mtproto';
-import { AUTH_KEY_CREATED, STATUS_CHANGED_EVENT } from 'utils/mtproto/MTProto';
-import schema from 'utils/mtproto/tl/schema/layer108';
-import { isMessageOf } from 'utils/mtproto/tl/utils';
-import { CONSTRUCTOR_KEY, RPC_ERROR_TYPE } from 'utils/mtproto/constants';
+const fromPromise = rxjs.from;
+const { isActionOf } = store;
+const { catchError, filter, map, mergeMap, withLatestFrom } = rxjs.operators;
+const { method, isMessageOf, isObjectOf } = zagram;
 
-import { setPage } from '../../pages';
-import { VERIFY_CODE } from '../constants';
-import { sendVerifyCodeError, setAuthorizationData } from '../actions';
-import { debug } from '../../../utils/mtproto/utils';
-
-const sendSignIn = R.partial(methodFromSchema, [schema, 'auth.signIn']);
+const sendSignIn = R.partial(method, ['auth.signIn']);
 
 /**
  * Selector to get phone_number from state
@@ -59,11 +46,11 @@ const getPhoneCode = R.pipe(
 );
 
 
-const isPhoneUnoccupied = R.propEq(CONSTRUCTOR_KEY, 'auth.authorizationSignUpRequired');
+const isPhoneUnoccupied = isObjectOf('auth.authorizationSignUpRequired');
 
 const handleVerifyResponse = R.cond([
   [isPhoneUnoccupied, R.partial(setPage, ['sign-up'])],
-  [isMessageOf(RPC_ERROR_TYPE), R.pipe(R.prop('errorMessage'), sendVerifyCodeError)],
+  [isMessageOf('rpc_error_type'), R.pipe(R.prop('errorMessage'), sendVerifyCodeError)],
   [R.T, R.pipe(R.of, R.ap([setAuthorizationData, R.partial(setPage, ['chat'])]))],
 ]);
 
@@ -73,8 +60,8 @@ const handleVerifyResponse = R.cond([
  * @param {*} connection  - mtproto connection object
  */
 export default function sendVerifyCodeMiddleware(action$, state$, connection) {
-  connection.addEventListener(STATUS_CHANGED_EVENT, (e) => {
-    if (e.status === AUTH_KEY_CREATED) {
+  connection.addEventListener('statusChanged', (e) => {
+    if (e.status === 'AUTH_KEY_CREATED') {
       const phoneData$ = state$.pipe(map(getPhoneData));
       const verifyCode$ = action$
         .pipe(filter(isActionOf(VERIFY_CODE)))
@@ -87,7 +74,7 @@ export default function sendVerifyCodeMiddleware(action$, state$, connection) {
 
       sendSignIn$
         .pipe(mergeMap((x) => fromPromise(connection.request(x)).pipe(catchError(R.of))))
-        .subscribe(R.pipe(debug, handleVerifyResponse));
+        .subscribe(handleVerifyResponse);
     }
   });
 }

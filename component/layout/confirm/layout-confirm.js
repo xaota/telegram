@@ -6,7 +6,7 @@ import FormConfirm  from '../../form/confirm/form-confirm.js';
 import FormPassword from '../../form/password/form-password.js';
 import FormRegister from '../../form/register/form-register.js';
 
-const component = Component.meta(import.meta.url, 'layout-login');
+const component = Component.meta(import.meta.url, 'layout-confirm');
 const attributes = {
 
   }
@@ -15,7 +15,7 @@ const properties = {
 
   }
 
-export default class LayoutLogin extends Component {
+export default class LayoutConfirm extends Component {
   constructor() {
     super(component);
   }
@@ -26,4 +26,4 @@ export default class LayoutLogin extends Component {
   }
 }
 
-Component.init(LayoutLogin, component, {attributes, properties});
+Component.init(LayoutConfirm, component, {attributes, properties});
