@@ -1,24 +1,12 @@
-import * as R from 'ramda';
-import { fromPromise } from 'rxjs/internal-compatibility';
-import {
-  catchError,
-  filter,
-  map,
-  mergeMap,
-  withLatestFrom,
-} from 'rxjs/operators';
+import { SIGN_UP } from '../constants.js';
+import { setAuthorizationData, signUpError } from '../actions.js';
+import { setPage } from '../../pages/index.js';
 
-import { AUTH_KEY_CREATED, STATUS_CHANGED_EVENT } from 'utils/mtproto/MTProto';
-import { isActionOf } from 'utils/store';
-import { methodFromSchema } from 'utils/mtproto';
-import layer5 from 'utils/mtproto/tl/schema/layer5';
-import { isMessageOf } from 'utils/mtproto/tl/utils';
-import { RPC_ERROR_TYPE } from 'utils/mtproto/constants';
-import { SIGN_UP } from 'state/auth/constants';
-import { setAuthorizationData, signUpError } from '../actions';
-import { setPage } from '../../pages';
+const fromPromise = rxjs.from;
+const { catchError, filter, map, mergeMap, withLatestFrom, } = rxjs.operators
+const { isActionOf } = store;
+const { method, isMessageOf } = zagram;
 
-const method = R.partial(methodFromSchema, [layer5]);
 const methodSignUp = R.partial(method, ['auth.signUp']);
 
 const getFirstNameFromAction = R.pipe(
@@ -64,13 +52,14 @@ const handleResponseSuccess = R.pipe(
 );
 
 const handleSignUpResponse = R.cond([
-  [isMessageOf(RPC_ERROR_TYPE), handleResponseError],
+  [isMessageOf('rpc_error_type'), handleResponseError],
   [R.T, handleResponseSuccess],
 ]);
 
 export default function signUpMiddleware(action$, state$, connection) {
-  connection.addEventListener(STATUS_CHANGED_EVENT, (e) => {
-    if (e.status === AUTH_KEY_CREATED) {
+  connection.addEventListener('statusChanged', (e) => {
+    if (e.status === 'AUTH_KEY_CREATED') {
+      console.log('Init sign up middleware');
       const signUpNames$ = action$
         .pipe(filter(isActionOf(SIGN_UP)))
         .pipe(map(getSignUpNames));

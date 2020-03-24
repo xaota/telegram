@@ -23,11 +23,6 @@ const getVerifyLabel = R.cond([
   [R.T, R.identity]
 ]);
 
-const debug = (x) => {
-  console.log('[form-confirm]', x);
-  return x;
-}
-
 const isValidValue = R.pipe(
   R.prop('length'),
   R.lte(5),
@@ -46,7 +41,6 @@ export default class FormConfirm extends Component {
     const state$ = getState$();
 
     const phoneNumber$ = state$
-      .pipe(map(debug))
       .pipe(map(getPhoneNumber))
 
     phoneNumber$
@@ -55,7 +49,6 @@ export default class FormConfirm extends Component {
       });
 
     const verifyCodeError$ = state$
-      .pipe(map(debug))
       .pipe(map(getVerifyError))
       .pipe(distinctUntilChanged())
       .pipe(map(getVerifyLabel))

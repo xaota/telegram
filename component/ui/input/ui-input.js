@@ -50,5 +50,5 @@ Component.init(UIInput, component, {attributes, properties});
   function inputHandler(input, e) {
     e.stopPropagation();
     this.value = input.value;
-    this.event('input');
+    this.event('input', { value: input.value });
   }

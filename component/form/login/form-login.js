@@ -61,7 +61,7 @@ export default class FormLogin extends Component {
     });
 
 
-    phone.addEventListener('change', _ => {
+    phone.addEventListener('input', _ => {
       button.style.display = phone.value.length > 0 ? 'block' : 'none';
     });
 

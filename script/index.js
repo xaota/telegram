@@ -9,6 +9,7 @@ import LayoutLoading from '../component/layout/loading/layout-loading.js';
 import LayoutLogin   from '../component/layout/login/layout-login.js';
 import LayoutConfirm from '../component/layout/confirm/layout-confirm.js';
 import LayoutMain    from '../component/layout/main/layout-main.js';
+import LayoutRegister from '../component/layout/register/layout-register.js';
 
 const { buildStateStream, combineReducers, dispatchInit, getActionStream, isActionOf } = store;
 const { of, concat, BehaviorSubject } = rxjs;
@@ -26,6 +27,7 @@ const action$ = getActionStream();
 
 authApplyMiddleware(action$, state$, telegram.connection);
 state$.subscribe((newState) => {
+  console.log('[state]:', newState);
   subject.next(newState);
 });
 window.getState$ = () => subject;
@@ -39,6 +41,7 @@ main();
 const getPageLayout = R.cond([
   [R.equals('login'), R.always(LayoutLogin)],
   [R.equals('verify'), R.always(LayoutConfirm)],
+  [R.equals('sign-up'), R.always(LayoutRegister)],
   [R.equals('chat'), R.always(LayoutMain)],
   [R.T, R.always(LayoutLoading)]
 ])
