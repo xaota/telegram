@@ -2,6 +2,7 @@ import telegram, {storage} from '../../../tdweb/Telegram.js';
 
 import Component from '../../../script/Component.js';
 import $, {channel} from '../../../script/DOM.js';
+import { setPage } from '../../../state/pages/index.js';
 import { sendVerifyCode } from '../../../state/auth/index.js';
 
 const { fromEvent } = rxjs;
@@ -12,6 +13,7 @@ const component = Component.meta(import.meta.url, 'form-confirm');
 const attributes = {}
 const properties = {}
 
+const goToLogin = R.partial(setPage, ['login']);
 
 const getPhoneNumber = R.path(['auth', 'currentPhone']);
 const getVerifyError = R.path(['auth', 'verifyError']);
@@ -39,6 +41,8 @@ export default class FormConfirm extends Component {
   mount(node) {
     super.mount(node, attributes, properties);
     const input = $('ui-input', node);
+    const icon = $('ui-icon', node);
+
     const state$ = getState$();
 
     const phoneNumber$ = state$
@@ -55,7 +59,6 @@ export default class FormConfirm extends Component {
       .pipe(map(getVerifyError))
       .pipe(distinctUntilChanged())
       .pipe(map(getVerifyLabel))
-
     verifyCodeError$
       .subscribe((error) => {
         input.error = error || null;
@@ -70,6 +73,9 @@ export default class FormConfirm extends Component {
       .pipe(map(R.prop('value')))
       .pipe(filter(isValidValue))
       .subscribe(sendVerifyCode);
+
+    const changePhone$ = fromEvent(icon, 'click')
+    changePhone$.subscribe(goToLogin);
 
     return this;
   }
