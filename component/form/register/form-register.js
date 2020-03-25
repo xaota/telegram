@@ -1,5 +1,6 @@
 import Component from '../../../script/Component.js';
 import $, {channel} from '../../../script/DOM.js';
+import { buildInput$ } from '../../../script/helpers.js';
 import { signUp } from '../../../state/auth/index.js';
 
 import UIIcon    from '../../ui/icon/ui-icon.js';
@@ -7,7 +8,7 @@ import UIInput   from '../../ui/input/ui-input.js';
 import UIButton  from '../../ui/button/ui-button.js';
 import UISticker from '../../ui/sticker/ui-sticker.js';
 
-const { of, fromEvent, combineLatest, merge} = rxjs;
+const { fromEvent, combineLatest } = rxjs;
 const { map, withLatestFrom, distinctUntilChanged } = rxjs.operators;
 
 const component = Component.meta(import.meta.url, 'form-register');
@@ -15,9 +16,6 @@ const attributes = {};
 const properties = {};
 
 
-function buildInput$(inputNode) {
-  return merge(of(""), fromEvent(inputNode, 'input')).pipe(map(R.pathOr("", ['detail', 'value'])));
-}
 
 const buildFirstName = R.set(R.lensProp('firstName'), R.__, {});
 const buildLastName = R.set(R.lensProp('lastName'), R.__, {});

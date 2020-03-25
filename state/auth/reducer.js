@@ -1,5 +1,3 @@
-const { isActionOf, buildReducer } = store;
-
 import {
   AUTH_SEND_CODE,
   AUTH_SEND_CODE_ERROR,
@@ -7,8 +5,11 @@ import {
   CLEAR_AUTH_STATE, SET_AUTHORIZATION_DATA, SIGN_UP, SIGN_UP_ERROR,
   VERIFY_CODE,
   VERIFY_CODE_ERROR,
+  SEND_PASSWORD,
+  SET_PASSWORD_ERROR,
 } from './constants.js';
 
+const { isActionOf, buildReducer } = store;
 const getCurrentPhonePair = R.pipe(
   R.of,
   R.ap([R.always('currentPhone'), R.path(['payload', 'phone'])]),
@@ -87,6 +88,34 @@ const handleSetAuthorizationData = R.pipe(
   R.mergeAll,
 );
 
+const setPasswordSending = R.set(R.lensProp('passwordSending'), true);
+const unsetPasswordSending = R.omit(['passwordSending'])
+
+
+const setPasswordError = R.nth(0);
+const unsetPasswordError = R.omit(['passwordError']);
+
+const handleSendPassword = R.pipe(
+  R.nth(0),
+  setPasswordSending,
+  unsetPasswordError,
+)
+
+const generatePasswordErrorObject =  R.set(R.lensProp('passwordError'), R.__, {});
+
+const handleSetPasswordError = R.pipe(
+  R.of,
+  R.ap([
+    R.pipe(R.nth(0), unsetPasswordSending),
+    R.pipe(R.nth(1), R.prop('payload'), generatePasswordErrorObject),
+  ]),
+  x => {
+    console.log('[auth-reducer]', x);
+    return x;
+  },
+  R.mergeAll,
+)
+
 export default buildReducer({}, [
   [isActionOf(AUTH_SEND_CODE), handleAuthSendCode],
   [isActionOf(AUTH_SEND_CODE_ERROR), handleAuthSendCodeError],
@@ -97,4 +126,6 @@ export default buildReducer({}, [
   [isActionOf(SIGN_UP), handleSignUp],
   [isActionOf(SIGN_UP_ERROR), handleSignUpError],
   [isActionOf(SET_AUTHORIZATION_DATA), handleSetAuthorizationData],
+  [isActionOf(SEND_PASSWORD), handleSendPassword],
+  [isActionOf(SET_PASSWORD_ERROR), handleSetPasswordError],
 ]);

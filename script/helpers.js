@@ -1,3 +1,6 @@
+const { of, merge, fromEvent } = rxjs;
+const { map } = rxjs.operators;
+
 export function formatDate(_date, short) {
     const date = new Date(+_date);
     const monthNames = [
@@ -38,3 +41,8 @@ export function debounce(func, wait, immediate) {
         if (callNow) func.apply(context, args);
     };
 };
+
+export function buildInput$(inputNode) {
+    return merge(of(""), fromEvent(inputNode, 'input')).pipe(map(R.pathOr("", ['detail', 'value'])));
+}
+

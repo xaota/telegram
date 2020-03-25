@@ -48,9 +48,17 @@ const getPhoneCode = R.pipe(
 
 const isPhoneUnoccupied = isObjectOf('auth.authorizationSignUpRequired');
 
+const handleVerifyError = R.pipe(
+  R.prop('errorMessage'),
+  R.cond([
+    [R.equals('SESSION_PASSWORD_NEEDED'), R.partial(setPage, ['password'])],
+    [R.T, sendVerifyCodeError]
+  ]),
+)
+
 const handleVerifyResponse = R.cond([
   [isPhoneUnoccupied, R.partial(setPage, ['sign-up'])],
-  [isMessageOf('rpc_error_type'), R.pipe(R.prop('errorMessage'), sendVerifyCodeError)],
+  [isMessageOf('rpc_error_type'), handleVerifyError],
   [R.T, R.pipe(R.of, R.ap([setAuthorizationData, R.partial(setPage, ['chat'])]))],
 ]);
 

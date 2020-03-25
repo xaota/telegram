@@ -10,6 +10,8 @@ import {
   SIGN_UP_ERROR,
   VERIFY_CODE,
   VERIFY_CODE_ERROR,
+  SEND_PASSWORD,
+  SET_PASSWORD_ERROR,
 } from './constants.js';
 
 export const sendAuthCode = R.partial(dispatch, [AUTH_SEND_CODE]);
@@ -21,3 +23,5 @@ export const setAuthorizationData = R.partial(dispatch, [SET_AUTHORIZATION_DATA]
 export const clearAuthState = R.partial(dispatch, [CLEAR_AUTH_STATE]);
 export const signUp = R.partial(dispatch, [SIGN_UP]);
 export const signUpError = R.partial(dispatch, [SIGN_UP_ERROR]);
+export const sendPassword = R.partial(dispatch, [SEND_PASSWORD]);
+export const setPasswordError = R.partial(dispatch, [SET_PASSWORD_ERROR]);
