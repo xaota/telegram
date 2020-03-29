@@ -1,0 +1,129 @@
+
+.enter-avatar {
+  position: relative;
+  background: #4ea4f6;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  width: 160px;
+  height: 160px;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 50%;
+  cursor: pointer;
+  --iconHover: #fff;
+  --iconStatic: #fff;
+}
+
+ui-icon#photo-add {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  pointer-events: none;
+  transform: scale(0.3);
+}
+
+#resultCanvas {
+  border-radius: 50%;
+}
+
+#overlay {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(2, 30, 60, 0.38);
+  z-index: 100;
+}
+
+#editPhotoPopup {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 35vw;
+  background-color: #fff;
+  border-radius: 8px;
+}
+
+.editPhotoHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  height: 48px;
+}
+
+.editPhotoBody {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: center;
+  align-items: center;
+  padding-left: 48px;
+  padding-right: 48px;
+}
+
+.editPhotoBottom {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  height: 48px;
+}
+
+.btn-circle {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+}
+
+.btn-primary {
+  --iconHover: #fff;
+  --iconStatic: #fff;
+  color: #fff;
+  background: #4ea4f6;
+}
+
+.closeButtonWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+}
+
+.btn {
+  cursor: pointer;
+}
+
+.photoCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  clip-path: circle(80px at 80px 80px);
+  flex-grow: 1;
+}
+
+.photoCanvasBackground {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0.3;
+}
+
+#editPhotoImg {
+  position: relative;
+}

@@ -64,7 +64,7 @@ async function main() {
     current = createLayout(new Layout());
   });
 
-  window.customElements.whenDefined('layout-login').then(dispatchInit);
+  window.customElements.whenDefined('layout-register').then(dispatchInit);
 }
 
 function createLayout(layout) {

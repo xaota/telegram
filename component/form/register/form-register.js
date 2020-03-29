@@ -7,6 +7,7 @@ import UIIcon    from '../../ui/icon/ui-icon.js';
 import UIInput   from '../../ui/input/ui-input.js';
 import UIButton  from '../../ui/button/ui-button.js';
 import UISticker from '../../ui/sticker/ui-sticker.js';
+import EnterAvatar from '../../ui/enter-avatar/enter-avatar.js';
 
 const { fromEvent, combineLatest } = rxjs;
 const { map, withLatestFrom, distinctUntilChanged } = rxjs.operators;
@@ -22,6 +23,7 @@ const buildLastName = R.set(R.lensProp('lastName'), R.__, {});
 
 const getSignUpError = R.pathOr(null, ['auth', 'signUpError']);
 
+
 export default class FormRegister extends Component {
   constructor() {
     super(component);
@@ -32,10 +34,14 @@ export default class FormRegister extends Component {
     const firstName = $('#first-name', node);
     const lastName = $('#last-name', node);
     const submit = $('ui-button', node);
+    const newAvatar = $('enter-avatar', node);
 
     const firstName$ = buildInput$(firstName).pipe(map(buildFirstName));
     const lastName$ = buildInput$(lastName).pipe(map(buildLastName));
     const info$ = combineLatest(firstName$, lastName$).pipe(map(R.mergeAll));
+
+    const newAvatar$ = fromEvent(newAvatar, 'newAvatar')
+    newAvatar$.subscribe(console.log);
 
     const click$ = fromEvent(submit, 'click');
     const submit$ = click$.pipe(withLatestFrom(info$)).pipe(map(R.nth(1)));
@@ -59,9 +65,7 @@ export default class FormRegister extends Component {
       .pipe(distinctUntilChanged());
     lastNameInvalid$.subscribe((invalid) => {
       lastName.error = invalid ? 'Last name invalid' : null;
-    })
-
-    return this;
+    });
   }
 }
 
