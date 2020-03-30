@@ -45,7 +45,7 @@ const getPageLayout = R.cond([
   [R.equals('sign-up'), R.always(LayoutRegister)],
   [R.equals('password'), R.always(LayoutPassword)],
   [R.equals('chat'), R.always(LayoutMain)],
-  [R.T, R.always(LayoutLoading)]
+  [R.T, R.always(LayoutLoading)],
 ])
 
 async function main() {

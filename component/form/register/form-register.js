@@ -10,7 +10,7 @@ import UISticker from '../../ui/sticker/ui-sticker.js';
 import EnterAvatar from '../../ui/enter-avatar/enter-avatar.js';
 
 const { fromEvent, combineLatest } = rxjs;
-const { map, withLatestFrom, distinctUntilChanged } = rxjs.operators;
+const { map, withLatestFrom, distinctUntilChanged, startWith, tap } = rxjs.operators;
 
 const component = Component.meta(import.meta.url, 'form-register');
 const attributes = {};
@@ -40,11 +40,27 @@ export default class FormRegister extends Component {
     const lastName$ = buildInput$(lastName).pipe(map(buildLastName));
     const info$ = combineLatest(firstName$, lastName$).pipe(map(R.mergeAll));
 
-    const newAvatar$ = fromEvent(newAvatar, 'newAvatar')
-    newAvatar$.subscribe(console.log);
+    const newAvatar$ = fromEvent(newAvatar, 'newAvatar').pipe(
+      map(R.prop('detail')),
+      startWith(null)
+    );
 
     const click$ = fromEvent(submit, 'click');
-    const submit$ = click$.pipe(withLatestFrom(info$)).pipe(map(R.nth(1)));
+    const submit$ = click$
+      .pipe(
+        withLatestFrom(info$, newAvatar$),
+        map(
+          R.pipe(
+            R.of,
+            R.ap([
+              R.nth(1),
+              R.pipe(R.nth(2), R.set(R.lensProp('avatar'), R.__, {}))
+            ]),
+            R.mergeAll,
+          ),
+        ),
+        tap(console.log),
+      );
     submit$.subscribe(signUp);
 
     const state$ = getState$();

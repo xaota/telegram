@@ -149,7 +149,7 @@ export default class EnterAvatar extends Component {
 
     const okButtonClick$ = fromEvent(okButton, 'click');
 
-    const getToBlob$ = bindCallback((cb) => photoCanvas.toBlob(cb));
+    const getToBlob$ = bindCallback((cb) => photoCanvas.toBlob(cb, 'image/png'));
 
     const confirmedPosition$ = okButtonClick$.pipe(
       withLatestFrom(position$),
