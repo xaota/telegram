@@ -5,17 +5,17 @@ const {
   uint8ToArrayBuffer,
   bigIntToUint8Array,
   powModulo,
-  construct,
-} = zagram
+  construct
+} = zagram;
 
 const bigIntToArrayBuffer = R.pipe(
   bigIntToUint8Array,
-  uint8ToArrayBuffer,
+  uint8ToArrayBuffer
 );
 
 const arrayBufferToBigInt = R.pipe(
-  (x) => new Uint8Array(x),
-  uint8ToBigInt,
+  x => new Uint8Array(x),
+  uint8ToBigInt
 );
 
 /**
@@ -30,7 +30,7 @@ function xor(a, b) {
   const viewB = new Uint8Array(b);
 
   for (let i=0; i < a.byteLength; i += 1) {
-    view[i] = viewA[i] ^ viewB[i];
+    view[i] = viewA[i] ^ viewB[i]; // eslint-disable-line
   }
 
   return result;
@@ -64,7 +64,7 @@ export function pbkdf2(buffer, salt) {
       false,
       ['deriveBits']
     )
-    .then((key) => window.crypto.subtle
+    .then(key => window.crypto.subtle
       .deriveBits(
         {
           salt,
@@ -73,9 +73,8 @@ export function pbkdf2(buffer, salt) {
           iterations: 100000
         },
         key,
-        512,
-      )
-    );
+        512
+      ));
 }
 window.pbkdf2 = pbkdf2;
 
@@ -95,10 +94,10 @@ export const SH = R.unapply(R.pipe(
   R.ap([
     R.nth(1),
     R.nth(0),
-    R.nth(1),
+    R.nth(1)
   ]),
   mergeAllArrayBuffers,
-  H,
+  H
 ));
 
 /**
@@ -140,7 +139,7 @@ export function isGoodModExp(modexp, prime) {
   return true;
 }
 
-const SIZE_FOR_HASH = 256
+const SIZE_FOR_HASH = 256;
 
 export function numBytesForHash(buffer) {
   return mergeArrayBuffer(new ArrayBuffer(SIZE_FOR_HASH - buffer.byteLength), buffer);
@@ -159,10 +158,10 @@ export async function generateAndCheckRandom(g, p, bForHash) {
     const A = powModulo(g, a, p);
     if (isGoodModExp(A, p)) {
       const aForHash = bigNumForHash(A);
-      const uBuffer = await H(mergeArrayBuffer(aForHash, bForHash));
+      const uBuffer = await H(mergeArrayBuffer(aForHash, bForHash)); // eslint-disable-line
       const u = arrayBufferToBigInt(uBuffer);
       if (u > BigInt(0)) {
-        return { a, aForHash, u };
+        return {a, aForHash, u};
       }
     }
   }
@@ -176,7 +175,7 @@ export async function generateAndCheckRandom(g, p, bForHash) {
  */
 export async function buildInputCheckPasswordSRP(password, accountPassword) {
   const passwordBuffer = uint8ToArrayBuffer((new TextEncoder('utf-8').encode(password)));
-  const { current_algo: algo } = accountPassword;
+  const {current_algo: algo} = accountPassword;
   const salt1 = new Uint8Array(algo.salt1);
   const salt2 = new Uint8Array(algo.salt2);
 
@@ -198,7 +197,7 @@ export async function buildInputCheckPasswordSRP(password, accountPassword) {
   const k = arrayBufferToBigInt(kBuffer);
   const kgX = (k * gX) % p;
 
-  const { a, aForHash, u } = await generateAndCheckRandom(g, p, bForHash);
+  const {a, aForHash, u} = await generateAndCheckRandom(g, p, bForHash);
   const gB = (B - kgX) % p;
 
   if (!isGoodModExp(gB, p)) {
@@ -224,8 +223,8 @@ export async function buildInputCheckPasswordSRP(password, accountPassword) {
     {
       srp_id: accountPassword.srp_id,
       A: new Uint8Array(aForHash),
-      M1: new Uint8Array(M1),
-    },
+      M1: new Uint8Array(M1)
+    }
   );
 /*
   return PH2(passwordBuffer, salt1, salt2)

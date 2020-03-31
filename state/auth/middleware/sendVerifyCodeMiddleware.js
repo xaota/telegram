@@ -1,11 +1,11 @@
-import { setPage } from '../../pages/index.js';
-import { VERIFY_CODE } from '../constants.js';
-import { sendVerifyCodeError, setAuthorizationData } from '../actions.js';
+import {setPage} from '../../pages/index.js';
+import {VERIFY_CODE} from '../constants.js';
+import {sendVerifyCodeError, setAuthorizationData} from '../actions.js';
 
 const fromPromise = rxjs.from;
-const { isActionOf } = store;
-const { catchError, filter, map, mergeMap, withLatestFrom } = rxjs.operators;
-const { method, isMessageOf, isObjectOf } = zagram;
+const {isActionOf} = store;
+const {catchError, filter, map, mergeMap, withLatestFrom} = rxjs.operators;
+const {method, isMessageOf, isObjectOf} = zagram;
 
 const sendSignIn = R.partial(method, ['auth.signIn']);
 
@@ -16,7 +16,7 @@ const sendSignIn = R.partial(method, ['auth.signIn']);
  */
 const getPhoneCodeHash = R.pipe(
   R.path(['auth', 'phoneCodeHash']),
-  R.set(R.lensProp('phone_code_hash'), R.__, {}),
+  R.set(R.lensProp('phone_code_hash'), R.__, {})
 );
 
 /**
@@ -26,7 +26,7 @@ const getPhoneCodeHash = R.pipe(
  */
 const getPhoneNumber = R.pipe(
   R.path(['auth', 'currentPhone']),
-  R.set(R.lensProp('phone_number'), R.__, {}),
+  R.set(R.lensProp('phone_number'), R.__, {})
 );
 
 /**
@@ -37,12 +37,12 @@ const getPhoneNumber = R.pipe(
 const getPhoneData = R.pipe(
   R.of,
   R.ap([getPhoneNumber, getPhoneCodeHash]),
-  R.mergeAll,
+  R.mergeAll
 );
 
 const getPhoneCode = R.pipe(
   R.prop('payload'),
-  R.set(R.lensProp('phone_code'), R.__, {}),
+  R.set(R.lensProp('phone_code'), R.__, {})
 );
 
 
@@ -53,13 +53,13 @@ const handleVerifyError = R.pipe(
   R.cond([
     [R.equals('SESSION_PASSWORD_NEEDED'), R.partial(setPage, ['password'])],
     [R.T, sendVerifyCodeError]
-  ]),
-)
+  ])
+);
 
 const handleVerifyResponse = R.cond([
   [isPhoneUnoccupied, R.partial(setPage, ['sign-up'])],
   [isMessageOf('rpc_error_type'), handleVerifyError],
-  [R.T, R.pipe(R.of, R.ap([setAuthorizationData, R.partial(setPage, ['chat'])]))],
+  [R.T, R.pipe(R.of, R.ap([setAuthorizationData, R.partial(setPage, ['chat'])]))]
 ]);
 
 /**
@@ -68,7 +68,7 @@ const handleVerifyResponse = R.cond([
  * @param {*} connection  - mtproto connection object
  */
 export default function sendVerifyCodeMiddleware(action$, state$, connection) {
-  connection.addEventListener('statusChanged', (e) => {
+  connection.addEventListener('statusChanged', e => {
     if (e.status === 'AUTH_KEY_CREATED') {
       const phoneData$ = state$.pipe(map(getPhoneData));
       const verifyCode$ = action$
@@ -81,7 +81,7 @@ export default function sendVerifyCodeMiddleware(action$, state$, connection) {
         .pipe(map(sendSignIn));
 
       sendSignIn$
-        .pipe(mergeMap((x) => fromPromise(connection.request(x)).pipe(catchError(R.of))))
+        .pipe(mergeMap(x => fromPromise(connection.request(x)).pipe(catchError(R.of))))
         .subscribe(handleVerifyResponse);
     }
   });

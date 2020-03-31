@@ -1,10 +1,11 @@
 import Component from '../../../script/Component.js';
 
-import $, {updateChildrenElement, channel} from '../../../script/DOM.js';
+import $, {channel} from '../../../script/DOM.js';
 import File from '../../../script/File.js';
 import telegram from '../../../tdweb/Telegram.js';
 import {formatDate, dateDay} from '../../../script/helpers.js';
 
+/* eslint-disable */
 import UIFAB              from '../../ui/fab/ui-fab.js';
 import UIList             from '../../ui/list/ui-list.js';
 import UIAvatar           from '../../ui/avatar/ui-avatar.js';
@@ -18,17 +19,16 @@ import MessageEmoji    from '../../message/emoji/message-emoji.js';
 import MessageSticker  from '../../message/sticker/message-sticker.js';
 import MessageDocument from '../../message/document/message-document.js';
 import MessagePhoto    from '../../message/photo/message-photo.js';
+/* eslint-enable */
 
 import '../sidebar/layout-sidebar.js';
 import '../../ui/tabs/ui-tabs.js';
 import '../../ui/tab/ui-tab.js';
-import '../../ui/list/ui-list.js';
-
 import '../../ui/icon/ui-icon.js';
 
 const component = Component.meta(import.meta.url, 'layout-conversation');
-const attributes = {}
-const properties = {}
+const attributes = {};
+const properties = {};
 
 export default class LayoutConversation extends Component {
   constructor(data) {
@@ -40,7 +40,7 @@ export default class LayoutConversation extends Component {
     super.mount(node, attributes, properties);
     const aside   = $('aside', node);
     const list    = $('ui-list', node);
-    const sidebar = $('layout-sidebar', node)
+    const sidebar = $('layout-sidebar', node);
 
     $('conversation-header', node).addEventListener('open-profile', _ => aside.style.display = 'flex');
     $('conversation-header', node).addEventListener('open-search', _ => aside.style.display = 'flex');
@@ -60,8 +60,8 @@ export default class LayoutConversation extends Component {
   }
 
   unmount(node) {
-    const {chat_id} = this.store();
-    telegram.api('closeChat', {chat_id});
+    const {chat_id: chatId} = this.store();
+    telegram.api('closeChat', {chatId});
     return this;
   }
 }
@@ -69,39 +69,39 @@ export default class LayoutConversation extends Component {
 Component.init(LayoutConversation, component, {attributes, properties});
 
 async function init(node, list) {
-  const {chat_id} = this.store();
-  const chat = await telegram.api('getChat', {chat_id});
+  const {chat_id: chatId} = this.store();
+  const chat = await telegram.api('getChat', {chat_id: chatId});
   console.log('CHAT', chat);
 
-  $('conversation-header', node).store({chat_id, chat});
+  $('conversation-header', node).store({chat_id: chatId, chat});
 
   const input = $('conversation-input', node);
-  input.store({chat_id});
+  input.store({chat_id: chatId});
   if (!chat.permissions.can_send_messages) input.style.display = 'none';
 
-  getHistory(chat_id, list);
-  telegram.api('openChat', {chat_id}); // await?
+  getHistory(chatId, list);
+  telegram.api('openChat', {chat_id: chatId}); // await?
 
-  channel.on('chat.permissions', ({chat_id, permissions}) => {
-    debugger;
+  channel.on('chat.permissions', () => {
+    debugger; // eslint-disable-line
   });
 
   channel.on('message.new', message => {
-    if (message.chat_id !== chat_id) return;
-    getHistory(chat_id, list);
+    if (message.chat_id !== chatId) return;
+    getHistory(chatId, list);
   });
 
   $('layout-loading', node).remove();
 }
 
-async function getHistory(chat_id, list) {
+async function getHistory(chatId, list) {
   const root = document.createDocumentFragment();
-  const chat = await telegram.api('getChat', {chat_id});
-  const from_message_id = chat.last_message.id;
+  const chat = await telegram.api('getChat', {chat_id: chatId});
+  const fromMessageId = chat.last_message.id;
 
   const buffer = await Promise.all([ // faster!
-    getChatHistory(chat_id),
-    getChatHistory(chat_id, from_message_id)
+    getChatHistory(chatId),
+    getChatHistory(chatId, fromMessageId)
   ]).then(([last, prev]) => [...last.messages, ...prev.messages]);
 
   const temp = {};
@@ -122,7 +122,7 @@ async function getHistory(chat_id, list) {
 
   const ids = history.map(h => h.id);
   const index = ids.indexOf(chat.last_read_inbox_message_id);
-  if (index > 0) telegram.api('viewMessages', {chat_id, message_ids: ids.slice(0, index)}); // "юзер читает" входящие
+  if (index > 0) telegram.api('viewMessages', {chat_id: chatId, message_ids: ids.slice(0, index)}); // "юзер читает" входящие
 
   // loading.style.display = 'none';
 
@@ -203,16 +203,16 @@ async function getHistory(chat_id, list) {
 
     if (message.content['@type'] === 'messageDocument') {
       content = MessageDocument.from(message.content.document, timestamp);
-      content.setAttribute(side, '')
+      content.setAttribute(side, '');
       return root.append(content);
     }
     if (message.content['@type'] === 'messagePhoto') {
       content = MessagePhoto.from({
         photo: message.content.photo,
         timestamp,
-        caption: message.content.caption,
+        caption: message.content.caption
       });
-      content.setAttribute(outgoing ? 'right' : 'left', '')
+      content.setAttribute(outgoing ? 'right' : 'left', '');
       return root.append(content);
     }
 
@@ -258,39 +258,38 @@ async function getHistory(chat_id, list) {
 
 
     if (message.content.web_page) {
-
-      const web_page = message.content.web_page;
+      const webPage = message.content.web_page;
       const web = document.createElement('div');
       web.setAttribute('class', 'web');
       web.slot = 'web-page';
       web.addEventListener('click', () => {
-        window.open(web_page.url,'_blank');
+        window.open(webPage.url,'_blank');
       });
       const img = document.createElement('img');
-      if (web_page.photo && web_page.photo.sizes[0].photo) {
-        File.getFile(web_page.photo.sizes[0].photo)
+      if (webPage.photo && webPage.photo.sizes[0].photo) {
+        File.getFile(webPage.photo.sizes[0].photo)
             .then(blob => img.setAttribute('src', blob));
       }
       web.append(img);
 
-      if (web_page.site_name) {
+      if (webPage.site_name) {
         const name = document.createElement('span');
-        name.innerText = web_page.site_name;
+        name.innerText = webPage.site_name;
         name.setAttribute('class', 'name');
         web.append(name);
       }
 
 
-      if (web_page.title) {
+      if (webPage.title) {
         const title = document.createElement('span');
-        title.innerText = web_page.title;
+        title.innerText = webPage.title;
         title.setAttribute('class', 'title');
         web.append(title);
       }
 
-      if (web_page.description) {
+      if (webPage.description) {
         const descr = document.createElement('span');
-        descr.innerText = web_page.description;
+        descr.innerText = webPage.description;
         descr.setAttribute('class', 'descr');
         web.append(descr);
       }
@@ -298,7 +297,7 @@ async function getHistory(chat_id, list) {
       content.append(web);
 
       text = text.replace(
-          /((http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?)/g,
+          /((http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?)/g, // eslint-disable-line
           '<a href="$1">$1</a>'
       );
 
@@ -317,19 +316,19 @@ async function getHistory(chat_id, list) {
   }
 
 /** getUsers */
-  async function getUsers(user_ids) {
-    user_ids = user_ids
+  async function getUsers(userIds) {
+    userIds = userIds
       .filter(e => e !== 0)
-      .map(user_id => telegram.api('getUser', {user_id}));
-    const data = await Promise.all(user_ids);
+      .map(userId => telegram.api('getUser', {userId}));
+    const data = await Promise.all(userIds);
     const users = {};
     data.forEach(u => users[u.id] = u);
     return users;
   }
 
 /** getChatHistory */
-  async function getChatHistory(chat_id, from_message_id = 0, offset = 0, limit = 30) {
-    const options = {chat_id, from_message_id, offset, limit, only_local: false};
+  function getChatHistory(chatId, fromMessageId = 0, offset = 0, limit = 30) {
+    const options = {chat_id: chatId, fromMessageId, offset, limit, only_local: false};
     return telegram.api('getChatHistory', options);
   }
 

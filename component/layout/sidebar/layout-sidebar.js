@@ -9,11 +9,11 @@ import events from './events.js';
 const component = Component.meta(import.meta.url, 'layout-sidebar');
 const attributes = {
 
-  }
+  };
 
 const properties = {
 
-  }
+  };
 
 
 export default class LayoutSidebar extends Component {
@@ -27,7 +27,7 @@ export default class LayoutSidebar extends Component {
     this.wrap = $('.wrap', node);
 
     channel.on(events.CLOSE_SIDEBAR, this.close);
-    channel.on(events.OPEN_PROFILE, (e) => {
+    channel.on(events.OPEN_PROFILE, e => {
       const profile = new LayoutProfile(e);
       this.open(profile);
     });
@@ -38,7 +38,7 @@ export default class LayoutSidebar extends Component {
     return this;
   }
 
-  open = async (layout) => {
+  open = async layout => {
     const open = () => {
       this.container.appendChild(layout);
       this.wrap.style.width = '420px';
@@ -52,15 +52,13 @@ export default class LayoutSidebar extends Component {
     }
   };
 
-  close = () => {
-    return new Promise(resolve => {
+  close = () => new Promise(resolve => {
       this.wrap.style.width = '0px';
       setTimeout(() => {
         this.container.innerHTML = '';
         resolve();
       }, 300);
     })
-  }
 }
 
 Component.init(LayoutSidebar, component, {attributes, properties});

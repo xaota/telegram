@@ -40,24 +40,20 @@ const tabs = {
             'car',
             'ball',
             'bulb',
-            'flag',
-        ],
+            'flag'
+        ]
     },
     stickers: {
         list: {},
         selectedGroup: '',
-        groups: [],
+        groups: []
     },
     gifs: {
-      list: [],
-    },
+      list: []
+    }
 };
 
-const unionElements = (elements, render = null) => {
-  return elements.reduce((s, el) => {
-    return s + (render ? render(el) : `<div>${el}</div>`)
-  }, '');
-};
+const unionElements = (elements, render = null) => elements.reduce((s, el) => s + (render ? render(el) : `<div>${el}</div>`), '');
 
 export default class FormEmoji extends Component {
     constructor() {
@@ -91,7 +87,7 @@ export default class FormEmoji extends Component {
                 const img = document.createElement('img');
                 img.setAttribute('id', 'g' + i);
                 File.getFile(el.thumbnail.photo)
-                    .then((blob) => {
+                    .then(blob => {
                         img.setAttribute('src', blob);
                         this.list.append(img);
                     });
@@ -113,37 +109,34 @@ export default class FormEmoji extends Component {
       if (!tab.groups) {
           this.group.style.display = 'none';
           return;
-      } else {
+      } 
           this.group.style.display = 'flex';
-      }
+      
       switch (this.selectedTab) {
           case 'emojies':
-              this.group.innerHTML = unionElements(tab.groups, (el) => {
-                  return `<div class="item" active="${tab.selectedGroup === el}"><ui-icon id="${el}">${el}</ui-icon></div>`;
-              });
+              this.group.innerHTML = unionElements(tab.groups, el => `<div class="item" active="${tab.selectedGroup === el}"><ui-icon id="${el}">${el}</ui-icon></div>`);
               break;
           case 'stickers':
-              tab.groups.forEach((group) => {
+              tab.groups.forEach(group => {
                   const div = document.createElement('div');
-                  div.setAttribute('active', tab.selectedGroup === group.id)
-                  div.setAttribute('class', 'item')
+                  div.setAttribute('active', tab.selectedGroup === group.id);
+                  div.setAttribute('class', 'item');
                   const img = document.createElement('img');
                   img.setAttribute('id', 'g' + group.id);
                   div.append(img);
                 //   console.log(11, tab.list[group.id][0]);
                   File.getFile(tab.list[group.id][0].thumbnail.photo)
-                      .then((blob) => {
+                      .then(blob => {
                           img.setAttribute('src', blob);
                           // img.setAttribute('width', '50px');
                           // img.setAttribute('height', '50px');
                       });
                   this.group.append(div);
               });
-
       }
   };
 
-  onSelectGroup = (e) => {
+  onSelectGroup = e => {
       if (!e.target.getAttribute("id")) {
           return;
       }
@@ -161,7 +154,7 @@ export default class FormEmoji extends Component {
       this.renderList();
   };
 
-  onSelectTab = (e) => {
+  onSelectTab = e => {
       const id = e.target.getAttribute('id');
       if (id && id !== this.selectedTab) {
           $(`#${this.selectedTab}`, this.shadowRoot).removeAttribute('selected');
@@ -172,14 +165,14 @@ export default class FormEmoji extends Component {
       }
   };
 
-  onSelectElement = (e) => {
+  onSelectElement = e => {
       if (e.target.classList.toString().indexOf('list') === -1) {
           switch (this.selectedTab) {
               case 'emojies':
                   this.event('emoji-select', {emoji: e.target.innerHTML});
                   break;
               case 'stickers':
-                  const sticker = tabs.stickers.list[tabs.stickers.selectedGroup][e.target.getAttribute('id').slice(1)];
+                  const sticker = tabs.stickers.list[tabs.stickers.selectedGroup][e.target.getAttribute('id').slice(1)]; // eslint-disable-line
                   this.event('sticker-select', {sticker});
                   break;
           }
@@ -198,11 +191,9 @@ const getStickers = async () => {
     });
     const promises = [];
     result.sets.forEach(x => {
-        promises.push(
-            telegram.api('getStickerSet', {
+        promises.push(telegram.api('getStickerSet', {
                 set_id: x.id
-            })
-        );
+            }));
     });
 
     const sets = await Promise.all(promises);
@@ -218,7 +209,7 @@ const getStickers = async () => {
     //
     // console.log(4, slicedSets);
     // console.log(5, headerStickers);
-    sets.map((set) => {
+    sets.forEach(set => {
         tabs.stickers.list[set.id] = set.stickers;
         tabs.stickers.groups.push({
             id: set.id,

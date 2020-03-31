@@ -7,16 +7,15 @@
 
         // Regexes and supporting functions are cached through closure
         return function (date, mask, utc, gmt) {
-
             // You can't provide utc if you skip other args (use the 'UTC:' mask prefix)
             if (arguments.length === 1 && kindOf(date) === 'string' && !/\d/.test(date)) {
                 mask = date;
                 date = undefined;
             }
 
-            date = date || new Date;
+            date = date || new Date();
 
-            if(!(date instanceof Date)) {
+            if (!(date instanceof Date)) {
                 date = new Date(date);
             }
 
@@ -49,7 +48,7 @@
             var W = getWeek(date);
             var N = getDayOfWeek(date);
             var flags = {
-                d:    d,
+                d,
                 dd:   pad(d),
                 ddd:  dateFormat.i18n.dayNames[D],
                 dddd: dateFormat.i18n.dayNames[D + 7],
@@ -61,11 +60,11 @@
                 yyyy: y,
                 h:    H % 12 || 12,
                 hh:   pad(H % 12 || 12),
-                H:    H,
+                H,
                 HH:   pad(H),
-                M:    M,
+                M,
                 MM:   pad(M),
-                s:    s,
+                s,
                 ss:   pad(s),
                 l:    pad(L, 3),
                 L:    pad(Math.round(L / 10)),
@@ -76,8 +75,8 @@
                 Z:    gmt ? 'GMT' : utc ? 'UTC' : (String(date).match(timezone) || ['']).pop().replace(timezoneClip, ''),
                 o:    (o > 0 ? '-' : '+') + pad(Math.floor(Math.abs(o) / 60) * 100 + Math.abs(o) % 60, 4),
                 S:    ['th', 'st', 'nd', 'rd'][d % 10 > 3 ? 0 : (d % 100 - d % 10 != 10) * d % 10],
-                W:    W,
-                N:    N
+                W,
+                N
             };
 
             return mask.replace(token, function (match) {
@@ -87,7 +86,7 @@
                 return match.slice(1, match.length - 1);
             });
         };
-    })();
+    }());
 
     dateFormat.masks = {
         'default':               'ddd mmm dd yyyy HH:MM:ss',
@@ -168,7 +167,7 @@
      */
     function getDayOfWeek(date) {
         var dow = date.getDay();
-        if(dow === 0) {
+        if (dow === 0) {
             dow = 7;
         }
         return dow;
@@ -198,7 +197,7 @@
 
         return {}.toString.call(val)
             .slice(8, -1).toLowerCase();
-    };
+    }
 
 
     export default dateFormat;

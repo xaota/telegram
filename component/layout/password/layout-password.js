@@ -1,19 +1,17 @@
 import Component from '../../../script/Component.js';
-import $, {channel} from '../../../script/DOM.js';
 
-import FormLogin    from '../../form/login/form-login.js';
-import FormConfirm  from '../../form/confirm/form-confirm.js';
+/* eslint-disable */
 import FormPassword from '../../form/password/form-password.js';
-import FormRegister from '../../form/register/form-register.js';
+/* eslint-enable */
 
 const component = Component.meta(import.meta.url, 'layout-password');
 const attributes = {
 
-  }
+  };
 
 const properties = {
 
-  }
+  };
 
 export default class LayoutPassword extends Component {
   constructor() {

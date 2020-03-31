@@ -1,4 +1,4 @@
-const { dispatch } = store;
+const {dispatch} = store;
 
 import {
   AUTH_SEND_CODE,
@@ -11,7 +11,7 @@ import {
   VERIFY_CODE,
   VERIFY_CODE_ERROR,
   SEND_PASSWORD,
-  SET_PASSWORD_ERROR,
+  SET_PASSWORD_ERROR
 } from './constants.js';
 
 export const sendAuthCode = R.partial(dispatch, [AUTH_SEND_CODE]);

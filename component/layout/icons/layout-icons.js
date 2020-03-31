@@ -1,17 +1,19 @@
 import Component from '../../../script/Component.js';
 
+/* eslint-disable */
 import UIItem   from '../../ui/item/ui-item.js';
 import UIIcon   from '../../ui/icon/ui-icon.js';
 import UIHeader from '../../ui/header/ui-header.js';
+/* eslint-enable */
 
 const component = Component.meta(import.meta.url, 'layout-icons');
 const attributes = {
 
-  }
+  };
 
 const properties = {
 
-  }
+  };
 
 export default class LayoutIcons extends Component {
   constructor() {

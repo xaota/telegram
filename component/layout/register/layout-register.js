@@ -1,16 +1,17 @@
 import Component from '../../../script/Component.js';
-import $, {channel} from '../../../script/DOM.js';
 
+/* eslint-disable */
 import FormRegister from '../../form/register/form-register.js';
+/* eslint-enable */
 
 const component = Component.meta(import.meta.url, 'layout-register');
 const attributes = {
 
-  }
+  };
 
 const properties = {
 
-  }
+  };
 
 export default class LayoutRegister extends Component {
   constructor() {

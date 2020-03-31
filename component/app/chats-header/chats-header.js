@@ -2,19 +2,21 @@ import Component from '../../../script/Component.js';
 import $, {channel, nightTheme} from '../../../script/DOM.js';
 import {storage} from '../../../tdweb/Telegram.js';
 
+/* eslint-disable */
 import UIDrop from '../../ui/drop/ui-drop.js';
 import UIItem from '../../ui/item/ui-item.js';
 import UIIcon from '../../ui/icon/ui-icon.js';
 import UISearch from '../../ui/search/ui-search.js';
+/* eslint-enable */
 
 const component = Component.meta(import.meta.url, 'chats-header');
 const attributes = {
 
-  }
+  };
 
 const properties = {
 
-  }
+  };
 
 export default class ChatsHeader extends Component {
   constructor() {
@@ -43,7 +45,7 @@ Component.init(ChatsHeader, component, {attributes, properties});
       ? window.open(route)
       : route.startsWith('#')
         ? action(route.slice(1))
-        : channel.send('route-aside', {route})
+        : channel.send('route-aside', {route});
   }
 
 /** */
@@ -53,6 +55,6 @@ Component.init(ChatsHeader, component, {attributes, properties});
       case 'night-mode': return nightTheme();
       case 'collapse': return channel.send('aside-collapse');
       case 'favorite': return channel.send('conversation.open', {chat_id: storage.get('me').id});
-      case 'conversation': return channel.send('conversation.open', {chat_id: prompt('укажите ID чата')});
+      case 'conversation': return channel.send('conversation.open', {chat_id: prompt('укажите ID чата')}); // eslint-disable-line
     }
   }

@@ -19,12 +19,12 @@ const attributes = {
     },
     id(root, value) {
         if (value) {
-            this.id = +value;
+            this.id = Number(value);
         }
-    },
+    }
 };
 
-const properties = {}
+const properties = {};
 
 export default class UiOnline extends Component {
   constructor() {
@@ -32,8 +32,8 @@ export default class UiOnline extends Component {
   }
 
   mount(node) {
-    channel.on('user.status', (e) => {
-        if (e.user_id === +this.id) {
+    channel.on('user.status', e => {
+        if (e.user_id === Number(this.id)) {
             if (e.online) {
                 $('#status', node).setAttribute('class', 'status online');
                 updateChildrenHTML(node, '#status', 'online');
@@ -48,14 +48,14 @@ export default class UiOnline extends Component {
   }
 }
 
-function getText(was_online) {
+function getText(wasOnline) {
     const now = new Date();
-    const online = new Date(was_online * 1000);
+    const online = new Date(wasOnline * 1000);
     if (online > now) {
         return 'last seen just now';
     }
 
-    let diff = new Date(now - online);
+    const diff = new Date(now - online);
     if (diff.getTime() / 1000 < 60) {
         return 'last seen just now';
     }
@@ -80,7 +80,7 @@ function getText(was_online) {
     }
 
     // yesterday
-    let yesterday = new Date();
+    const yesterday = new Date();
     yesterday.setDate(now.getDate() - 1);
     today.setHours(0, 0, 0, 0);
     if (online > yesterday) {
@@ -88,24 +88,5 @@ function getText(was_online) {
     }
 
     return `last seen ${dateFormat(online, 'dd.mm.yyyy')}`;
-};
-Component.init(UiOnline, component, {attributes, properties});
-
-function generateTime(time) {
-    return 'TODO DATE';
-    const date = time * 1000;
-    const now = new Date();
-    const day = now.getDay();
-    const year = now.getFullYear();
-    now.setTime(date);
-    let dateDay = now.getDay();
-    let dateYear = now.getFullYear();
-    if (dateDay === day && year === dateYear) {
-
-    } else if (dateDay + 1 == day && year == dateYear) {
-    } else if (Math.abs(+(new Date()) - date) < 31536000000) {
-
-    } else {
-
-    }
 }
+Component.init(UiOnline, component, {attributes, properties});

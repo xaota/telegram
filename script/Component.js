@@ -146,6 +146,7 @@ export default class Component extends HTMLElement {
   }
 
 /** init @static */
+  // eslint-disable-next-line
   static async init(constructor, component, {attributes = {}, properties = {}}) { // сокращенная инициализация компонента
     const fields = [...Object.keys(attributes), ...Object.keys(properties)];
 
@@ -178,7 +179,7 @@ export default class Component extends HTMLElement {
 // #region [Private]
   function setAttribute(prototype, attribute) {
     Object.defineProperty(prototype, attribute, {
-      get() { return this.getAttribute(attribute) },
+      get() { return this.getAttribute(attribute); },
       set(value) {
         value === null
           ? this.removeAttribute(attribute)
@@ -189,7 +190,7 @@ export default class Component extends HTMLElement {
 
   function setProperty(prototype, property) {
     Object.defineProperty(prototype, property, {
-      get() { return this.hasAttribute(property) },
+      get() { return this.hasAttribute(property); },
       set(value) {
         value === false // null?
           ? this.removeAttribute(property)

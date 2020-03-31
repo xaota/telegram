@@ -1,8 +1,10 @@
 import Component from '../../../script/Component.js';
-import $, {updateChildrenAttribute} from '../../../script/DOM.js';
+import {updateChildrenAttribute} from '../../../script/DOM.js';
 import File from '../../../script/File.js';
 
+/* eslint-disable */
 import UIBadge from '../badge/ui-badge.js';
+/* eslint-enable */
 
 const component = Component.meta(import.meta.url, 'ui-avatar');
 const attributes = {
@@ -16,7 +18,7 @@ const attributes = {
 
 const properties = {
   online(root, value) { /* do nothing */ }
-}
+};
 
 export default class UIAvatar extends Component {
   constructor() {
@@ -40,7 +42,7 @@ export default class UIAvatar extends Component {
   static letter(value) {
     return value
       .trim()
-      .replace(/[\s\-\|\.\,\–\—\/\\\&\$\(\)\[\]\{\}]+/g, ' ')
+      .replace(/[\s\-\|\.\,\–\—\/\\\&\$\(\)\[\]\{\}]+/g, ' ') // eslint-disable-line
       .split(/\s+/)
       .slice(0, 2)
       .map(e => e.charAt(0))
@@ -67,23 +69,3 @@ export default class UIAvatar extends Component {
 }
 
 Component.init(UIAvatar, component, {attributes, properties});
-
-
-/** */
-  function rgb2hex(c) {
-    return ('00' + c.toString(16)).slice(-2);
-  }
-
-/** */
-  function shuffle(a) {
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = rand(0, i + 1);
-      [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
-  }
-
-/** */
-  function rand(min, max) {
-    return Math.floor(Math.random() * (max - min)) + min;
-  }

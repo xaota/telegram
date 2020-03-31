@@ -3,11 +3,11 @@ import Component from '../../../script/Component.js';
 const component = Component.meta(import.meta.url, 'layout-contacts');
 const attributes = {
 
-  }
+  };
 
 const properties = {
 
-  }
+  };
 
 export default class LayoutContacts extends Component {
   constructor() {

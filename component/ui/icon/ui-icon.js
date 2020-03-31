@@ -2,8 +2,8 @@ import Component from '../../../script/Component.js';
 import $ from '../../../script/DOM.js';
 
 const component = Component.meta(import.meta.url, 'ui-icon');
-const attributes = {}
-const properties = {}
+const attributes = {};
+const properties = {};
 
 export default class UIIcon extends Component {
   constructor(label) {

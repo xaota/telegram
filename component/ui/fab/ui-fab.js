@@ -1,16 +1,18 @@
 import Component from '../../../script/Component.js';
 import $ from '../../../script/DOM.js';
 
+/* eslint-disable */
 import UIIcon from '../icon/ui-icon.js';
+/* eslint-enable */
 
 const component = Component.meta(import.meta.url, 'ui-fab');
 const attributes = {
 
-  }
+  };
 
 const properties = {
 
-  }
+  };
 
 export default class UIFAB extends Component {
   constructor() {

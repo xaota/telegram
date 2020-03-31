@@ -1,10 +1,10 @@
-import Component from '../../../script/Component.js'
+import Component from '../../../script/Component.js';
 
-const { isObjectOf, CONSTRUCTOR_KEY } = zagram
+const {isObjectOf, CONSTRUCTOR_KEY} = zagram;
 
-const component = Component.meta(import.meta.url, 'app-message')
-const attributes = {}
-const properties = {}
+const component = Component.meta(import.meta.url, 'app-message');
+const attributes = {};
+const properties = {};
 
 /**
  * Returns 'messageText' if message without media else returns type by
@@ -12,7 +12,7 @@ const properties = {}
  * @param message
  */
 function getCommonMessageType(message) {
-  const { media } = message;
+  const {media} = message;
   if (media) {
     return media[CONSTRUCTOR_KEY];
   }
@@ -25,7 +25,7 @@ function getCommonMessageType(message) {
  * @param message
  */
 function getServiceMessageType(message) {
-  const { action } = message;
+  const {action} = message;
   return action[CONSTRUCTOR_KEY];
 }
 
@@ -42,7 +42,7 @@ function getMessageType(message) {
     return getServiceMessageType(message);
   }
 
-  console.warn('Not a message!', message)
+  console.warn('Not a message!', message);
 }
 
 export default class AppMessage extends Component {
@@ -53,11 +53,11 @@ export default class AppMessage extends Component {
   mount(node) {
     super.mount(node, attributes, properties);
 
-    return this
+    return this;
   }
 
   static preview(message) {
-    const type = getMessageType(message)
+    const type = getMessageType(message);
     console.log(type);
     const handlers = {
       messageText: m => m.message,
@@ -69,25 +69,25 @@ export default class AppMessage extends Component {
       messageMediaDocument:  () => `Document`,
       // messageAnimation: c => 'GIF',
       messageChatAddMembers:    () => 'добавление в чат',
-      messageActionContactSignUp: () => 'теперь в телеграм',
-    }
+      messageActionContactSignUp: () => 'теперь в телеграм'
+    };
     const text = typeof handlers[type] === 'function'
       ? handlers[type](message)
-      : 'неподдерживаемое сообщение (' + type + ')'
-    return text.split(/\n/)[0]
+      : 'неподдерживаемое сообщение (' + type + ')';
+    return text.split(/\n/)[0];
   }
 
   static timestamp(timestamp) {
-    if (!timestamp) return ''
+    if (!timestamp) return '';
     try {
-      timestamp = new Date(timestamp * 1000)
+      timestamp = new Date(timestamp * 1000);
       return [timestamp.getHours(), timestamp.getMinutes()]
         .map(e => ('0' + e).slice(-2))
-        .join(':')
+        .join(':');
     } catch (e) {
-      debugger;
+      debugger; // eslint-disable-line
     }
   }
 }
 
-Component.init(AppMessage, component, { attributes, properties })
+Component.init(AppMessage, component, {attributes, properties});

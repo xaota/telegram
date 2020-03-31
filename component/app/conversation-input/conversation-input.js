@@ -3,11 +3,13 @@ import $, {updateChildrenProperty} from '../../../script/DOM.js';
 import {debounce} from '../../../script/helpers.js';
 import telegram from '../../../tdweb/Telegram.js';
 
+/* eslint-disable */
 import UiIcon from '../../ui/icon/ui-icon.js';
 import '../../ui/drop/ui-drop.js';
 import '../../message/text/message-text.js';
 import FormEmoji from '../../form/emoji/form-emoji.js';
 import File from "../../../script/File.js";
+/* eslint-enable */
 
 const component = Component.meta(import.meta.url, 'conversation-input');
 const attributes = {
@@ -16,12 +18,8 @@ const attributes = {
 
 const properties = {
   disabled(root, value) {
-    updateChildrenProperty(root, 'input', 'disabled', value)
+    updateChildrenProperty(root, 'input', 'disabled', value);
   }
-};
-
-focus = (input) => {
-  input.focus();
 };
 
 export default class ConversationInput extends Component {
@@ -45,7 +43,7 @@ export default class ConversationInput extends Component {
     const dropEmoji = $('#drop-emoji', node);
     emoji.addEventListener('click', () => dropEmoji.show = !dropEmoji.show);
 
-    const attach = $('#attach', node)
+    const attach = $('#attach', node);
     const dropAttach = $('#drop-attach', node);
     attach.addEventListener('click', () => dropAttach.show = !dropAttach.show);
 
@@ -66,11 +64,11 @@ export default class ConversationInput extends Component {
         '@type': 'inputMessageSticker',
         sticker: {
           '@type': 'inputFileId',
-          id: sticker.sticker.id,
-        },
+          id: sticker.sticker.id
+        }
       };
       dropEmoji.show = false;
-      this.sendMessage(content)
+      this.sendMessage(content);
     });
 
     $('.action', node)
@@ -84,20 +82,20 @@ export default class ConversationInput extends Component {
           this.onLoadFile('document');
         });
     $('#fileInput', this.shadowRoot)
-        .addEventListener('change', this.selectFile)
+        .addEventListener('change', this.selectFile);
     return this;
   }
 
-  selectFile = (e) => {
+  selectFile = e => {
     const files = e.target.files;
     if (files.length === 0) {
       return;
     }
-    Array.from(files).forEach((file) => {
+    Array.from(files).forEach(file => {
       if (file) {
         const content = {
           '@type': 'inputMessageDocument',
-          document: { '@type': 'inputFileBlob', name: file.name, data: file }
+          document: {'@type': 'inputFileBlob', name: file.name, data: file}
         };
         this.sendMessage(content);
       }
@@ -105,11 +103,10 @@ export default class ConversationInput extends Component {
     e.target.value = '';
   };
 
-  onLoadFile = (type) => {
+  onLoadFile = type => {
     const input = $('#fileInput', this.shadowRoot);
-    input.setAttribute('accept', type === 'image' ? 'image/*' : 'multiple')
+    input.setAttribute('accept', type === 'image' ? 'image/*' : 'multiple');
     input.click();
-
   };
 
   replaceActionIcon = () => {
@@ -126,45 +123,45 @@ export default class ConversationInput extends Component {
     }
   };
 
-  appendUrl = (web_page) => {
+  appendUrl = webPage => {
     const d = $('#url', this.shadowRoot);
-    if (this.url === web_page.url) {
+    if (this.url === webPage.url) {
       return;
-    } else {
+    } 
       d.innerHTML = '';
-    }
-    this.url = web_page.url;
+    
+    this.url = webPage.url;
     const web = document.createElement('div');
     web.setAttribute('class', 'web');
     web.slot = 'web-page';
     web.addEventListener('click', () => {
-      window.open(web_page.url,'_blank');
+      window.open(webPage.url,'_blank');
     });
     const img = document.createElement('img');
-    if (web_page.photo && web_page.photo.sizes[0].photo) {
-      File.getFile(web_page.photo.sizes[0].photo)
+    if (webPage.photo && webPage.photo.sizes[0].photo) {
+      File.getFile(webPage.photo.sizes[0].photo)
           .then(blob => img.setAttribute('src', blob));
     }
     web.append(img);
 
-    if (web_page.site_name) {
+    if (webPage.site_name) {
       const name = document.createElement('span');
-      name.innerText = web_page.site_name;
+      name.innerText = webPage.site_name;
       name.setAttribute('class', 'name');
       web.append(name);
     }
 
 
-    if (web_page.title) {
+    if (webPage.title) {
       const title = document.createElement('span');
-      title.innerText = web_page.title;
+      title.innerText = webPage.title;
       title.setAttribute('class', 'title');
       web.append(title);
     }
 
-    if (web_page.description) {
+    if (webPage.description) {
       const descr = document.createElement('span');
-      descr.innerText = web_page.description;
+      descr.innerText = webPage.description;
       descr.setAttribute('class', 'descr');
       web.append(descr);
     }
@@ -172,7 +169,7 @@ export default class ConversationInput extends Component {
     d.append(web);
   };
 
-  debouncedSearch = debounce((value) => {
+  debouncedSearch = debounce(value => {
     getDataFromUrl(value)
         .then(res => {
           if (res) {
@@ -181,23 +178,24 @@ export default class ConversationInput extends Component {
             $('#url', this.shadowRoot).innerHTML = '';
           }
         })
-        .catch((err) => {
-          $('#url', this.shadowRoot).innerHTML = ''
+        .catch(err => {
+          $('#url', this.shadowRoot).innerHTML = '';
         });
   }, 500)
-  onChange = (e) => {
-    this.debouncedSearch(e.target.value)
+
+  onChange = e => {
+    this.debouncedSearch(e.target.value);
     this.replaceActionIcon();
     this.calculateRows(this.input);
   };
 
-  calculateRows = (el) => {
+  calculateRows = el => {
     el.style.height = 'inherit';
 
     const computed = window.getComputedStyle(el);
     const stepPerRow = parseInt(
         computed.getPropertyValue('line-height'),
-        10,
+        10
     );
     const padding =
         parseInt(computed.getPropertyValue('padding-top'), 10) +
@@ -212,10 +210,10 @@ export default class ConversationInput extends Component {
     el.style.height = `${newHeight}px`;
   };
 
-  onAction = (e) => {
+  onAction = e => {
     const formattedText = {
       '@type': 'formattedText',
-      text: this.input.value,
+      text: this.input.value
     };
     const inputContent = {
       '@type': 'inputMessageText',
@@ -231,12 +229,12 @@ export default class ConversationInput extends Component {
     this.replaceActionIcon();
   };
 
-  sendMessage = (input_message_content) => {
+  sendMessage = inputMessageContent => {
     const store = this.store();
     if (!store) return;
-    const {chat_id} = store;
-    if (!chat_id) return;
-    telegram.api('sendMessage', {chat_id, input_message_content});
+    const {chat_id: chatId} = store;
+    if (!chatId) return;
+    telegram.api('sendMessage', {chat_id: chatId, input_message_content: inputMessageContent});
   }
 }
 
@@ -246,6 +244,6 @@ Component.init(ConversationInput, component, {attributes, properties});
 function getDataFromUrl(text) {
     return telegram.api('getWebPagePreview', {
       text: {'@type': 'formattedText',
-        text: text},
+        text}
     });
 }

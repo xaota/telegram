@@ -1,20 +1,20 @@
 import App from './App.js';
 import $, {channel} from './DOM.js';
-import telegram, {storage} from '../tdweb/Telegram.js';
+import telegram from '../tdweb/Telegram.js';
 
-import { reducer as authReducer, applyMiddleware as authApplyMiddleware } from '../state/auth/index.js';
-import { reducer as pageReducer } from '../state/pages/index.js';
+import {reducer as authReducer, applyMiddleware as authApplyMiddleware} from '../state/auth/index.js';
+import {reducer as pageReducer} from '../state/pages/index.js';
 
 import LayoutLoading from '../component/layout/loading/layout-loading.js';
 import LayoutLogin   from '../component/layout/login/layout-login.js';
 import LayoutConfirm from '../component/layout/confirm/layout-confirm.js';
 import LayoutMain    from '../component/layout/main/layout-main.js';
 import LayoutRegister from '../component/layout/register/layout-register.js';
-import LayoutPassword from '../component/layout/password/layout-password.js'
+import LayoutPassword from '../component/layout/password/layout-password.js';
 
-const { buildStateStream, combineReducers, dispatchInit, getActionStream, isActionOf } = store;
-const { of, concat, BehaviorSubject } = rxjs;
-const { map, distinctUntilChanged } = rxjs.operators;
+const {buildStateStream, combineReducers, dispatchInit, getActionStream} = store;
+const {BehaviorSubject} = rxjs;
+const {map, distinctUntilChanged} = rxjs.operators;
 
 if (localStorage.getItem('dark') === '1') document.body.classList.add('dark');
 
@@ -22,12 +22,12 @@ if (localStorage.getItem('dark') === '1') document.body.classList.add('dark');
 const subject = new BehaviorSubject({});
 const state$ = buildStateStream(combineReducers({
   page: pageReducer,
-  auth: authReducer,
+  auth: authReducer
 }));
 const action$ = getActionStream();
 
 authApplyMiddleware(action$, state$, telegram.connection);
-state$.subscribe((newState) => {
+state$.subscribe(newState => {
   console.log('[state]:', newState);
   subject.next(newState);
 });
@@ -45,16 +45,16 @@ const getPageLayout = R.cond([
   [R.equals('sign-up'), R.always(LayoutRegister)],
   [R.equals('password'), R.always(LayoutPassword)],
   [R.equals('chat'), R.always(LayoutMain)],
-  [R.T, R.always(LayoutLoading)],
-])
+  [R.T, R.always(LayoutLoading)]
+]);
 
-async function main() {
-  new App(telegram, channel);
+function main() {
+  new App(telegram, channel); // eslint-disable-line
   const page$ = state$
     .pipe(map(R.prop('page')))
     .pipe(distinctUntilChanged());
 
-  page$.subscribe((page) => {
+  page$.subscribe(page => {
     if (current) {
       current.remove();
     }

@@ -16,10 +16,10 @@ const attributes = {
         if (svg) {
             svg.style.setProperty("width", value);
         }
-    },
+    }
 };
 
-const properties = {}
+const properties = {};
 
 export default class UiPercent extends Component {
   constructor() {

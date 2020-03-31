@@ -3,11 +3,11 @@ import Component from '../../../script/Component.js';
 const component = Component.meta(import.meta.url, 'form-channel');
 const attributes = {
 
-  }
+  };
 
 const properties = {
 
-  }
+  };
 
 export default class FormChannel extends Component {
   constructor() {

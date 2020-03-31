@@ -5,7 +5,7 @@ import {
   AUTH_SEND_CODE_SUCCESS,
   CLEAR_AUTH_STATE, SET_AUTHORIZATION_DATA, SIGN_UP, SIGN_UP_ERROR,
   VERIFY_CODE,
-  VERIFY_CODE_ERROR,
+  VERIFY_CODE_ERROR
 } from './constants';
 
 describe('auth', () => {
@@ -13,21 +13,21 @@ describe('auth', () => {
     it('first send', () => {
       const action = {
         type: AUTH_SEND_CODE,
-        payload: '+79625213997',
+        payload: '+79625213997'
       };
 
-      expect(reducer({}, action)).toEqual({ sendingAuthCode: true });
+      expect(reducer({}, action)).toEqual({sendingAuthCode: true});
     });
 
     it('with error', () => {
       const action = {
         type: AUTH_SEND_CODE,
-        payload: '+79625213997',
+        payload: '+79625213997'
       };
       expect(reducer(
-        { sendAuthCodeError: 'INVALID_PHONE_NUMBER' },
-        action,
-      )).toEqual({ sendingAuthCode: true });
+        {sendAuthCodeError: 'INVALID_PHONE_NUMBER'},
+        action
+      )).toEqual({sendingAuthCode: true});
     });
   });
 
@@ -35,12 +35,10 @@ describe('auth', () => {
     it('set error', () => {
       const action = {
         type: AUTH_SEND_CODE_ERROR,
-        payload: 'INVALID_PHONE_NUMBER',
+        payload: 'INVALID_PHONE_NUMBER'
       };
 
-      expect(reducer({ sendingAuthCode: true }, action)).toEqual(
-        { sendAuthCodeError: 'INVALID_PHONE_NUMBER' },
-      );
+      expect(reducer({sendingAuthCode: true}, action)).toEqual({sendAuthCodeError: 'INVALID_PHONE_NUMBER'});
     });
   });
 
@@ -51,13 +49,13 @@ describe('auth', () => {
         payload: {
           phone: '+9996621212',
           phone_code_hash: 'e6476b05a321aa7001',
-          phone_registered: true,
-        },
+          phone_registered: true
+        }
       };
-      expect(reducer({ sendingAuthCode: true }, action)).toEqual({
+      expect(reducer({sendingAuthCode: true}, action)).toEqual({
         currentPhone: '+9996621212',
         phoneRegistered: true,
-        phoneCodeHash: 'e6476b05a321aa7001',
+        phoneCodeHash: 'e6476b05a321aa7001'
       });
     });
   });
@@ -65,21 +63,21 @@ describe('auth', () => {
   describe('VERIFY_CODE', () => {
     const action = {
       type: VERIFY_CODE,
-      payload: '12312',
+      payload: '12312'
     };
 
     it('without error', () => {
       const state = {
         currentPhone: '+9996621212',
         phoneRegistered: true,
-        phoneCodeHash: 'e6476b05a321aa7001',
+        phoneCodeHash: 'e6476b05a321aa7001'
       };
 
       expect(reducer(state, action)).toEqual({
         currentPhone: '+9996621212',
         phoneRegistered: true,
         phoneCodeHash: 'e6476b05a321aa7001',
-        verifyCode: '12312',
+        verifyCode: '12312'
       });
     });
 
@@ -89,14 +87,14 @@ describe('auth', () => {
         phoneRegistered: true,
         phoneCodeHash: 'e6476b05a321aa7001',
         verifyCode: '232',
-        verifyError: 'INVALID_ERROR',
+        verifyError: 'INVALID_ERROR'
       };
 
       expect(reducer(state, action)).toEqual({
         currentPhone: '+9996621212',
         phoneRegistered: true,
         phoneCodeHash: 'e6476b05a321aa7001',
-        verifyCode: '12312',
+        verifyCode: '12312'
       });
     });
   });
@@ -104,7 +102,7 @@ describe('auth', () => {
   describe('VERIFY_CODE_ERROR', () => {
     const action = {
       type: VERIFY_CODE_ERROR,
-      payload: 'INVALID_CODE',
+      payload: 'INVALID_CODE'
     };
 
     it('set error', () => {
@@ -112,7 +110,7 @@ describe('auth', () => {
         currentPhone: '+9996621212',
         phoneRegistered: true,
         phoneCodeHash: 'e6476b05a321aa7001',
-        verifyCode: '232',
+        verifyCode: '232'
       };
 
       expect(reducer(state, action)).toEqual({
@@ -120,7 +118,7 @@ describe('auth', () => {
         phoneRegistered: true,
         phoneCodeHash: 'e6476b05a321aa7001',
         verifyCode: '232',
-        verifyError: 'INVALID_CODE',
+        verifyError: 'INVALID_CODE'
       });
     });
   });
@@ -129,7 +127,7 @@ describe('auth', () => {
     it('test', () => {
       const action = {
         type: CLEAR_AUTH_STATE,
-        payload: null,
+        payload: null
       };
 
       const state = {
@@ -137,7 +135,7 @@ describe('auth', () => {
         phoneRegistered: true,
         phoneCodeHash: 'e6476b05a321aa7001',
         verifyCode: '232',
-        verifyError: 'INVALID_CODE',
+        verifyError: 'INVALID_CODE'
       };
 
       expect(reducer(state, action)).toEqual({});
@@ -149,8 +147,8 @@ describe('auth', () => {
       type: SIGN_UP,
       payload: {
         firstName: 'John',
-        lastName: 'Doe',
-      },
+        lastName: 'Doe'
+      }
     };
 
     it('without error', () => {
@@ -158,13 +156,13 @@ describe('auth', () => {
         currentPhone: '+9996621212',
         phoneRegistered: true,
         phoneCodeHash: 'e6476b05a321aa7001',
-        verifyCode: '232',
+        verifyCode: '232'
       };
 
       expect(reducer(state, action)).toEqual({
         ...state,
         firstName: 'John',
-        lastName: 'Doe',
+        lastName: 'Doe'
       });
     });
 
@@ -174,7 +172,7 @@ describe('auth', () => {
         phoneRegistered: true,
         phoneCodeHash: 'e6476b05a321aa7001',
         verifyCode: '232',
-        signUpError: 'ERROR',
+        signUpError: 'ERROR'
       };
 
       expect(reducer(state, action)).toEqual({
@@ -183,7 +181,7 @@ describe('auth', () => {
         phoneCodeHash: 'e6476b05a321aa7001',
         verifyCode: '232',
         firstName: 'John',
-        lastName: 'Doe',
+        lastName: 'Doe'
       });
     });
   });
@@ -196,17 +194,17 @@ describe('auth', () => {
         phoneCodeHash: 'e6476b05a321aa7001',
         verifyCode: '232',
         firstName: 'John',
-        lastName: 'Doe',
+        lastName: 'Doe'
       };
 
       const action = {
         type: SIGN_UP_ERROR,
-        payload: 'ERROR',
+        payload: 'ERROR'
       };
 
       expect(reducer(state, action)).toEqual({
         ...state,
-        signUpError: 'ERROR',
+        signUpError: 'ERROR'
       });
     });
   });
@@ -218,10 +216,10 @@ describe('auth', () => {
           user: {
             self: true,
             first_name: 'John',
-            last_name: 'Doe',
-          },
+            last_name: 'Doe'
+          }
         },
-        type: SET_AUTHORIZATION_DATA,
+        type: SET_AUTHORIZATION_DATA
       };
 
       const state = {
@@ -230,12 +228,12 @@ describe('auth', () => {
         phoneCodeHash: 'e6476b05a321aa7001',
         verifyCode: '232',
         firstName: 'John',
-        lastName: 'Doe',
+        lastName: 'Doe'
       };
 
       expect(reducer(state, action)).toEqual({
         ...state,
-        user: action.payload.user,
+        user: action.payload.user
       });
     });
   });

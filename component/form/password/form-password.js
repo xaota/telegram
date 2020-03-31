@@ -1,19 +1,21 @@
 import Component from '../../../script/Component.js';
-import $, {channel} from '../../../script/DOM.js';
-import { buildInput$ } from '../../../script/helpers.js';
-import { sendPassword } from '../../../state/auth/index.js';
+import $ from '../../../script/DOM.js';
+import {buildInput$} from '../../../script/helpers.js';
+import {sendPassword} from '../../../state/auth/index.js';
 
+/* eslint-disable */
 import UIInput from '../../ui/input/ui-input.js';
 import UIButton from '../../ui/button/ui-button.js';
 import UISticker from '../../ui/sticker/ui-sticker.js';
+/* eslint-enable */
 
-const { fromEvent } = rxjs;
-const { withLatestFrom, map, distinctUntilChanged } = rxjs.operators;
+const {fromEvent} = rxjs;
+const {withLatestFrom, map, distinctUntilChanged} = rxjs.operators;
 
 const component = Component.meta(import.meta.url, 'form-password');
-const attributes = {}
+const attributes = {};
 
-const properties = {}
+const properties = {};
 
 const getSendingState = R.pathOr(false, ['auth', 'passwordSending']);
 const getSendingError = R.pathOr(null, ['auth', 'passwordError']);
@@ -36,8 +38,8 @@ export default class FormPassword extends Component {
       .pipe(
         map(getSendingState),
         distinctUntilChanged()
-      )
-    sendingStatus$.subscribe((status) => {
+      );
+    sendingStatus$.subscribe(status => {
       console.log(`[send-password] status: ${status}`);
       input.disabled = status;
       submit.loading = status;
@@ -47,9 +49,9 @@ export default class FormPassword extends Component {
       .pipe(
         map(getSendingError),
         distinctUntilChanged()
-      )
+      );
 
-    sendingError$.subscribe((error) => {
+    sendingError$.subscribe(error => {
       console.log(`[send-password] error: ${error}`);
       input.error = error;
     });

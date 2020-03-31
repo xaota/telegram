@@ -1,21 +1,22 @@
 import Component from '../../../script/Component.js';
-import $, {channel} from '../../../script/DOM.js';
-import { buildInput$ } from '../../../script/helpers.js';
-import { signUp } from '../../../state/auth/index.js';
+import $ from '../../../script/DOM.js';
+import {buildInput$} from '../../../script/helpers.js';
+import {signUp} from '../../../state/auth/index.js';
 
+/* eslint-disable */
 import UIIcon    from '../../ui/icon/ui-icon.js';
 import UIInput   from '../../ui/input/ui-input.js';
 import UIButton  from '../../ui/button/ui-button.js';
 import UISticker from '../../ui/sticker/ui-sticker.js';
 import EnterAvatar from '../../ui/enter-avatar/enter-avatar.js';
+/* eslint-enable */
 
-const { fromEvent, combineLatest } = rxjs;
-const { map, withLatestFrom, distinctUntilChanged, startWith, tap } = rxjs.operators;
+const {fromEvent, combineLatest} = rxjs;
+const {map, withLatestFrom, distinctUntilChanged, startWith, tap} = rxjs.operators;
 
 const component = Component.meta(import.meta.url, 'form-register');
 const attributes = {};
 const properties = {};
-
 
 
 const buildFirstName = R.set(R.lensProp('firstName'), R.__, {});
@@ -49,17 +50,15 @@ export default class FormRegister extends Component {
     const submit$ = click$
       .pipe(
         withLatestFrom(info$, newAvatar$),
-        map(
-          R.pipe(
+        map(R.pipe(
             R.of,
             R.ap([
               R.nth(1),
               R.pipe(R.nth(2), R.set(R.lensProp('avatar'), R.__, {}))
             ]),
-            R.mergeAll,
-          ),
-        ),
-        tap(console.log),
+            R.mergeAll
+          )),
+        tap(console.log)
       );
     submit$.subscribe(signUp);
 
@@ -72,14 +71,14 @@ export default class FormRegister extends Component {
     const firstNameInvalid$ = signUpError$
       .pipe(map(R.equals('FIRSTNAME_INVALID')))
       .pipe(distinctUntilChanged());
-    firstNameInvalid$.subscribe((invalid) => {
+    firstNameInvalid$.subscribe(invalid => {
       firstName.error = invalid ? 'First name invalid' : null;
     });
 
     const lastNameInvalid$ = signUpError$
       .pipe(map(R.equals('LASTNAME_INVALID')))
       .pipe(distinctUntilChanged());
-    lastNameInvalid$.subscribe((invalid) => {
+    lastNameInvalid$.subscribe(invalid => {
       lastName.error = invalid ? 'Last name invalid' : null;
     });
   }
