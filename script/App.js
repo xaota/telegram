@@ -4,6 +4,7 @@ export default class App {
   constructor(telegram, channel) {
     this.telegram = telegram;
     this.channel = channel;
+    this.config = undefined;
     this.init();
   }
 
@@ -14,7 +15,11 @@ export default class App {
 
   update(update) {
     const type = update['@type'];
-    // console.log(update);
+
+    console.group(`[APP] Update: ${type}`);
+    console.log(update);
+    console.groupEnd();
+
     const handlers = {
       updateFile:                  File.update,
 
@@ -52,38 +57,38 @@ export default class App {
     this.channel.send('chat.new', chat);
   }
 
-  updateChatChatList({chat_id, chat_list}) {
-    this.channel.send('list.chat', {chat_id, chat_list});
+  updateChatChatList({chat_id: chatId, chat_list: chatList}) {
+    this.channel.send('list.chat', {chat_id: chatId, chat_list: chatList});
   }
 
-  updateChatReadInbox({chat_id, last_read_inbox_message_id, unread_count}) {
-    this.channel.send('chat.counter', {chat_id, last_read_inbox_message_id, unread_count});
+  updateChatReadInbox({chat_id: chatId, last_read_inbox_message_id: lastReadInboxMessageId, unread_count: unreadCount}) {
+    this.channel.send('chat.counter', {chat_id: chatId, last_read_inbox_message_id: lastReadInboxMessageId, unread_count: unreadCount});
   }
 
-  updateChatReadOutbox({chat_id, last_read_outbox_message_id}) {
+  static updateChatReadOutbox() {
     // console.log('todo: updateChatReadOutbox', {chat_id, last_read_outbox_message_id}); //
   }
 
-  updateChatLastMessage({chat_id, last_message, order}) {
+  updateChatLastMessage({chat_id: chatId, last_message: lastMessage, order}) {
     console.log('updateChatLastMessage');
-    this.channel.send('chat.message', {chat_id, last_message}); // order?
+    this.channel.send('chat.message', {chat_id: chatId, last_message: lastMessage}); // order?
   }
 
-  updateUserStatus({user_id, status}) {
+  updateUserStatus({user_id: userId, status}) {
     const online = status['@type'].slice(10).toLowerCase() === 'online';
-    const was_online = status.was_online;
+    const wasOnline = status.was_online;
     const expires = status.expires;
-    this.channel.send('user.status', {user_id, online, was_online, expires});
+    this.channel.send('user.status', {user_id: userId, online, was_online: wasOnline, expires});
   }
 
-  updateChatOnlineMemberCount({chat_id, online_member_count}) {
-    console.log('update@ChatOnlineMemberCount -> chat.online', {chat_id, online_member_count});
-    this.channel.send('chat.online', {chat_id, online_member_count});
+  updateChatOnlineMemberCount({chat_id: chatId, online_member_count: onlineMemberCount}) {
+    console.log('update@ChatOnlineMemberCount -> chat.online', {chat_id: chatId, online_member_count: onlineMemberCount});
+    this.channel.send('chat.online', {chat_id: chatId, online_member_count: onlineMemberCount});
   }
 
-  updateChatPermissions({chat_id, permissions}) {
-    console.log('update@ChatPermissions', {chat_id, permissions});
-    this.channel.send('chat.permissions', {chat_id, permissions});
+  updateChatPermissions({chat_id: chatId, permissions}) {
+    console.log('update@ChatPermissions', {chat_id: chatId, permissions});
+    this.channel.send('chat.permissions', {chat_id: chatId, permissions});
   }
 
   connection(type) {
@@ -91,10 +96,11 @@ export default class App {
   }
 
   async authorization(type, state) {
+    console.log(`[APP] authorization ${type}`);
     const telegram = this.telegram;
     const channel  = this.channel;
 
-    switch(type) {
+    switch (type) {
       case 'authorizationStateWaitTdlibParameters': // -> SetTdlibParameters
         await telegram.sendTdParameters();
         break;

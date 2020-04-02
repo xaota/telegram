@@ -3,16 +3,13 @@ import $, {cssVariable, updateChildrenHTML} from '../../../script/DOM.js';
 
 import UiFile from '../../ui/file/ui-file.js';
 
-import File from '../../../script/File.js';
-import {updateChildrenAttribute} from '../../../script/DOM.js';
-
 const component = Component.meta(import.meta.url, 'message-document');
 
 const attributes = {
     color(root, value) { cssVariable(this, 'color', '#' + value); },
-    timestamp(root, value) { updateChildrenHTML(root, 'span', value) }
-  }
-const properties = {}
+    timestamp(root, value) { updateChildrenHTML(root, 'span', value); }
+  };
+const properties = {};
 
 export default class MessageDocument extends Component {
   constructor(data, time) {

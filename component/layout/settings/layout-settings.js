@@ -1,16 +1,18 @@
 import Component from '../../../script/Component.js';
 import $, {channel} from '../../../script/DOM.js';
-import telegram from '../../../tdweb/Telegram.js';
 import File from '../../../script/File.js';
+import {storage} from '../../../tdweb/Telegram.js';
 
+/* eslint-disable */
 import UIItem   from '../../ui/item/ui-item.js';
 import UIIcon   from '../../ui/icon/ui-icon.js';
 import UIHeader from '../../ui/header/ui-header.js';
 import UIAvatar from '../../ui/avatar/ui-avatar.js';
+/* eslint-enable */
 
 const component = Component.meta(import.meta.url, 'layout-settings');
-const attributes = {}
-const properties = {}
+const attributes = {};
+const properties = {};
 
 export default class LayoutSettings extends Component {
   constructor() {
@@ -39,8 +41,9 @@ export default class LayoutSettings extends Component {
 Component.init(LayoutSettings, component, {attributes, properties});
 
 /** */
-  async function init(node) {
-    const me = await telegram.api('getMe');
+  function init(node) {
+    const me = storage.get('me');
+    console.log(me);
 
     const h1 = $('h1', node);
     const h2 = $('h2', node);

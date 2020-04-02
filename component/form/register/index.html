@@ -1,28 +1,12 @@
 <template>
-  <link rel="stylesheet" href="./form-register.css" />
+    <link rel="stylesheet" href="./form-register.css"/>
 
-  <label for="enterName_fileInput">
-    <input id="enterName_fileInput" type="file" accept="image/*" style="display: none">
-    <div class="enter-avatar">
-      <ui-icon id="photo-add">photo-add</ui-icon>
-    </div>
-  </label>
+    <enter-avatar></enter-avatar>
 
-  <h1>Your Name</h1>
-  <h2>Enter your name and add a profile picture.</h2>
-  <ui-input>Name</ui-input>
-  <ui-input>Last Name (optional)</ui-input>
-  <ui-button>Start Messaging</ui-button>
+    <h1>Your Name</h1>
+    <h2>Enter your name and add a profile picture.</h2>
+    <ui-input id="first-name">Name</ui-input>
+    <ui-input id="last-name">Last Name (optional)</ui-input>
+    <ui-button>Start Messaging</ui-button>
 
-  <!-- <div id="overlay" style="display: none">
-      <div id="editPhotoPopup">
-          <a id="editPhoto_closeButton" class="btn btn-circle"></a>
-          <div class="editPhoto_title">Drag to Reposition</div>
-          <div id="editPhotoImg">
-              <div class="editPhoto_img" style="background-image: url(&quot;null&quot;);"></div>
-              <div class="editPhoto_mask"></div>
-          </div>
-          <a id="editPhoto_okButton" class="btn btn-primary btn-circle"></a>
-      </div>
-  </div> -->
 </template>

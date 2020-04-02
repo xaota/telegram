@@ -1,9 +1,9 @@
 import Component from '../../../script/Component.js';
-import $, {updateChildrenHTML} from '../../../script/DOM.js';
+import $ from '../../../script/DOM.js';
 
 const component = Component.meta(import.meta.url, 'ui-badge');
-const attributes = {}
-const properties = {}
+const attributes = {};
+const properties = {};
 
 export default class UIBadge extends Component {
   constructor() {
@@ -16,7 +16,7 @@ export default class UIBadge extends Component {
     const slot = $('slot', node);
     const span = $('span', node);
     slot.addEventListener('slotchange', _ => {
-      const value = parseInt(this.innerText || this.innerHTML);
+      const value = parseInt(this.innerText || this.innerHTML, 10);
       const count = badge(value);
       this.store({value});
       span.innerText = count;

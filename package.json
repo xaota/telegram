@@ -1,0 +1,36 @@
+{
+  "name": "telegram",
+  "version": "0.0.2",
+  "description": "Telegram contest app",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "jest",
+    "lint": "eslint --max-warnings 10 script/ component/ state/",
+    "lintw": "esw -w --quiet --color --clear script/ component/ state/",
+    "lint-fix": "eslint --fix script/ component/ state/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xaota/telegram.git"
+  },
+  "keywords": [
+    "telegram",
+    "mtproto"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xaota/telegram/issues"
+  },
+  "homepage": "https://github.com/xaota/telegram#readme",
+  "devDependencies": {
+    "babel-eslint": "^10.1.0",
+    "babel-preset-env": "^1.7.0",
+    "eslint": "^6.8.0",
+    "eslint-plugin-jest": "^23.8.2",
+    "jest": "^25.2.4"
+  }
+}

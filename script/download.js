@@ -1,4 +1,7 @@
     export default function download(data, strFileName, strMimeType) {
+        function toString (a) {
+            return String(a);
+        }
 
         var self = window, // this script is only for browsers anyway...
             defaultMime = "application/octet-stream", // this default mime also triggers iframe downloads
@@ -6,9 +9,6 @@
             payload = data,
             url = !strFileName && !strMimeType && payload,
             anchor = document.createElement("a"),
-            toString = function (a) {
-                return String(a);
-            },
             myBlob = (self.Blob || self.MozBlob || self.WebKitBlob || toString),
             fileName = strFileName || "download",
             blob,
@@ -42,26 +42,24 @@
 
         //go ahead and download dataURLs right away
         if (/^data:([\w+-]+\/[\w+.-]+)?[,;]/.test(payload)) {
-
             if (payload.length > (1024 * 1024 * 1.999) && myBlob !== toString) {
                 payload = dataUrlToBlob(payload);
                 mimeType = payload.type || defaultMime;
             } else {
-                return navigator.msSaveBlob ?  // IE10 can't do a[download], only Blobs:
-                    navigator.msSaveBlob(dataUrlToBlob(payload), fileName) :
-                    saver(payload); // everyone else can save dataURLs un-processed
+                return navigator.msSaveBlob  // IE10 can't do a[download], only Blobs:
+                    ? navigator.msSaveBlob(dataUrlToBlob(payload), fileName)
+                    : saver(payload); // everyone else can save dataURLs un-processed
             }
-
-        } else {//not data url, is it a string with special needs?
+        } else { //not data url, is it a string with special needs?
             if (/([\x80-\xff])/.test(payload)) {
                 var i = 0, tempUiArr = new Uint8Array(payload.length), mx = tempUiArr.length;
                 for (i; i < mx; ++i) tempUiArr[i] = payload.charCodeAt(i);
                 payload = new myBlob([tempUiArr], {type: mimeType});
             }
         }
-        blob = payload instanceof myBlob ?
-            payload :
-            new myBlob([payload], {type: mimeType});
+        blob = payload instanceof myBlob
+            ? payload
+            : new myBlob([payload], {type: mimeType});
 
 
         function dataUrlToBlob(strUrl) {
@@ -76,11 +74,10 @@
 
             for (i; i < mx; ++i) uiArr[i] = binData.charCodeAt(i);
 
-            return new myBlob([uiArr], {type: type});
+            return new myBlob([uiArr], {type});
         }
 
         function saver(url, winMode) {
-
             if ('download' in anchor) { //html5 A[download]
                 anchor.href = url;
                 anchor.setAttribute("download", fileName);
@@ -89,7 +86,7 @@
                 anchor.style.display = "none";
                 anchor.addEventListener('click', function (e) {
                     e.stopPropagation();
-                    this.removeEventListener('click', arguments);
+                    this.removeEventListener('click', arguments); // eslint-disable-line
                 });
                 document.body.appendChild(anchor);
                 setTimeout(function () {
@@ -106,9 +103,9 @@
 
             // handle non-a[download] safari as best we can:
             if (/(Version)\/(\d+)\.(\d+)(?:\.(\d+))?.*Safari\//.test(navigator.userAgent)) {
-                if (/^data:/.test(url)) url = "data:" + url.replace(/^data:([\w\/\-\+]+)/, defaultMime);
+                if (/^data:/.test(url)) url = "data:" + url.replace(/^data:([\w\/\-\+]+)/, defaultMime); // eslint-disable-line
                 if (!window.open(url)) { // popup blocked, offer direct download:
-                    if (confirm("Displaying New Document\n\nUse Save As... to download, then click back to return to this page.")) {
+                    if (confirm("Displaying New Document\n\nUse Save As... to download, then click back to return to this page.")) { // eslint-disable-line
                         location.href = url;
                     }
                 }
@@ -120,13 +117,12 @@
             document.body.appendChild(f);
 
             if (!winMode && /^data:/.test(url)) { // force a mime that will download:
-                url = "data:" + url.replace(/^data:([\w\/\-\+]+)/, defaultMime);
+                url = "data:" + url.replace(/^data:([\w\/\-\+]+)/, defaultMime); // eslint-disable-line
             }
             f.src = url;
             setTimeout(function () {
                 document.body.removeChild(f);
             }, 333);
-
         }//end saver
 
 

@@ -1,50 +1,22 @@
 import Storage from '../script/Storage.js';
 import Channel from '../script/Channel.js';
 
-const TdClient = window.tdweb.default;
+const { MTProto, schema, method } = zagram;
+
+const url = 'http://149.154.167.40/apiw';
 
 const config = {
   api_id: 905423,
   api_hash: '3beebd95a9a78b35f4dc296fa1b7d8fd'
 }
 
-const use_test_dc = false;
-
-const options = {
-  prefix: use_test_dc ? 'tdlib_test' : 'tdlib'
-  // localstorage
-}
-
-function databaseExists(dbname, callback) {
-  var req = indexedDB.open(dbname);
-  var existed = true;
-  req.onsuccess = function() {
-    req.result.close();
-    if (!existed) indexedDB.deleteDatabase(dbname);
-    callback(existed);
-  };
-  req.onupgradeneeded = function() {
-    existed = false;
-  };
-}
-
 const channel = new Channel();
 
 class Telegram {
   constructor() {
-    this.parameters = {
-      useTestDC: use_test_dc,
-      readOnly: false,
-      verbosity: 1,
-      jsVerbosity: 3,
-      fastUpdating: true,
-      useDatabase: false,
-      mode: 'wasm'
-    };
-
-    this.disableLog = false;
-    this.localStorage = true;
     this.channel = new Channel();
+    this.connection = new MTProto(url, schema);
+    console.log(this.connection);
   }
 
   emit(type, data) {
@@ -55,37 +27,9 @@ class Telegram {
     this.channel.on('tdlib-' + type, listener);
   }
 
-  init(location) {
-    // this.setParameters(location);
-
-    const {verbosity, jsVerbosity, useTestDC, readOnly, fastUpdating, useDatabase, mode} = this.parameters;
-    const dbName = useTestDC ? 'tdlib_test' : 'tdlib';
-
-    this.client = new TdClient(options);
-    this.client.onUpdate = update => this.emit('update', update);
-
-    // databaseExists(dbName, exists => {
-    //   this.clientUpdate({'@type': 'clientUpdateTdLibDatabaseExists', exists});
-
-    //   let options = {
-    //     logVerbosityLevel: verbosity,
-    //     jsLogVerbosityLevel: jsVerbosity,
-    //     mode: mode, // 'wasm-streaming'/'wasm'/'asmjs'
-    //     prefix: useTestDC ? 'tdlib_test' : 'tdlib',
-    //     readOnly: readOnly,
-    //     isBackground: false,
-    //     useDatabase: useDatabase,
-    //     wasmUrl: `${WASM_FILE_NAME}?_sw-precache=${WASM_FILE_HASH}`
-    //     // onUpdate: update => this.emit('update', update)
-    //   };
-
-    //   console.log(
-    //     `[TdLibController] (fast_updating=${fastUpdating}) Start client with params=${JSON.stringify(options)}`
-    //   );
-
-    // init
-
-    // });
+  init() {
+    this.connection.addEventListener('statusChanged', this.sendTdParameters.bind(this));
+    this.connection.init();
   }
 
   clientUpdate(update) {
@@ -93,50 +37,63 @@ class Telegram {
     return this;
   }
 
-  api(method, params) {
-    if (!this.client) return; // console.error(`tdlib@${method}: !tdlib.init`, params);
+  /**
+   * @param {string} methodName - method that will be called in telegram server
+   * @param {*} params - object with params for callable method
+   * @returns {Promise<T>}
+   */
+  api(methodName, params) {
+    if (!this.connection || this.connection.status !== 'AUTH_KEY_CREATED') {
+      return Promise.reject(new Error('No connection'));
+    }
 
-    // console.log(`tdlib@${method}.request`, params);
-    return this.client.send({'@type': method, ...params})
-      .then(result => {
-        // console.log(`tdlib@${method}.response`, result);
-        return result;
-      })
-      .catch(error => {
-        // console.error(`tdlib@${method}.error`, error, params);
-        throw error;
-      })
+    return this.connection.request(method(methodName, params));
   }
 
-  async sendTdParameters() {
-    const apiId = config.api_id;
-    const apiHash = config.api_hash;
-
+  async sendTdParameters(e) {
+    this.emitConnectionStatus(e.status);
     const parameters = {
-      '@type': 'tdParameters',
-      use_test_dc,
-      api_id: apiId,
-      api_hash: apiHash,
-      system_language_code: 'ru', // navigator.language || 'ru',
-      device_model: 'tdlib client web', // window.navigator.platform.name, // getBrowser(),
-      system_version: '1.0.0', // window.navigator.platform.os, // getOSName(),
-      application_version: '1.0.0',
-      // use_secret_chats: false,
-      // use_message_database: true,
-      // use_file_database: false,
-      // database_directory: '/db',
-      // files_directory: '/'
+      layer: 108,
+      query: method(
+        'initConnection',
+        {
+          api_id: config.api_id,
+          device_model: navigator.userAgent,
+          system_version: navigator.platform,
+          app_version: '0.0.1',
+          system_lang_code: navigator.language,
+          lang_pack: '',
+          lang_code: 'ru-ru',
+          query: method('help.getConfig')
+        },
+      ),
     }
 
-    this.api('setTdlibParameters', {parameters});
+    this.api('invokeWithLayer', parameters)
+      .then(this.handleTdParamsHasBeenSet.bind(this))
+      .catch(this.handleTdParamsSetError.bind(this));
+  }
 
-    if (this.parameters.tag && this.parameters.tagVerbosity) {
-      for (let i = 0; i < this.parameters.tag.length; i++) {
-        let tag = this.parameters.tag[i];
-        let tagVerbosity = this.parameters.tagVerbosity[i];
-        this.api('setLogTagVerbosityLevel', {tag, new_verbosity_level: tagVerbosity});
-      }
-    }
+  emitConnectionStatus(status) {
+    this.emit('update', {
+      '@type': 'updateConnectionState',
+      state: { '@type': status },
+    });
+  }
+
+  async handleTdParamsHasBeenSet(config) {
+    this.emit(
+      'update',
+      {
+        '@type': 'updateAuthorizationState',
+        authorization_state: {
+          '@type': 'authorizationStateWaitPhoneNumber',
+        },
+    });
+  }
+
+  async handleTdParamsSetError(error) {
+    console.warn('[SET PARAMS ERROR]:', error);
   }
 
   logOut() {
@@ -164,7 +121,7 @@ class Telegram {
 }
 
 const telegram = new Telegram();
-const storage = new Storage();
+const storage = new Storage('storage', true);
 
 window.telegram = telegram; // TODO убрать
 export default telegram;

@@ -1,18 +1,19 @@
 import {channel} from './DOM.js';
+import telegram from '../tdweb/Telegram.js';
 
 export class File {
-  async stopLoading(file_id) {
-    await telegram.api('cancelDownloadFile', {file_id})
+  static async stopLoading(fileId) {
+    await telegram.api('cancelDownloadFile', {file_id: fileId});
   }
 
-  async getFile(file, getFileState, loadingProcess, priority = 32) {
+  getFile(file, getFileState, loadingProcess, priority = 32) {
     return new Promise((resolve, reject) => {
       if (!file || !file.id) return reject(new Error('no file id'));
       if (file.local.is_downloading_completed) {
         return this.readFile(file.id).then(blob => resolve(blob));
       }
 
-      channel.on('updateFile', (loadFile) => { // @todo: вынести в синглколл/отписаться / подписка на загрузку файла
+      channel.on('updateFile', loadFile => { // @todo: вынести в синглколл/отписаться / подписка на загрузку файла
         if (file.local.is_downloading_completed) return this.readFile(file.id);
         if (loadFile.id !== file.id) return;
         if (loadingProcess) loadingProcess(loadFile);
@@ -29,8 +30,8 @@ export class File {
     });
   }
 
-  async readFile(file_id) {
-    const file = await telegram.api('readFile', {file_id});
+  static async readFile(fileId) {
+    const file = await telegram.api('readFile', {file_id: fileId});
 
     return new Promise(resolve => {
       const reader = new FileReader();
@@ -38,11 +39,11 @@ export class File {
       reader.onloadend = function() {
         const base64data = reader.result;
         resolve(base64data);
-      }
+      };
     });
   }
 
-  update(e) {
+  static update(e) {
     channel.send('updateFile', e.file); //
   }
 }
@@ -52,6 +53,6 @@ export default new File();
 export function normalizeSize(bytes) {
   const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
   if (bytes === 0) return '0 KB';
-  const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+  const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)), 10);
   return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
 }

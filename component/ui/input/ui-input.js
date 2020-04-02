@@ -3,12 +3,26 @@ import $, {updateChildrenAttribute, updateChildrenElement, updateChildrenPropert
 
 const component = Component.meta(import.meta.url, 'ui-input');
 const attributes = {
-    value(root, value) { updateChildrenElement(root, 'input', 'value', value) }
+  value(root, value) { updateChildrenElement(root, 'input', 'value', value); },
+  error(root, value) {
+    const input = $('input', root);
+    const spanError = $('span.error', root);
+
+    if (value) {
+      input.classList.add('error');
+      spanError.innerText = value;
+    } else {
+      input.classList.remove('error');
+      spanError.innerText = "";
+    }
   }
+};
 
 const properties = {
-    disabled(root, value) { updateChildrenProperty(root, 'input', 'disabled', value); }
+  disabled(root, value) {
+    updateChildrenProperty(root, 'input', 'disabled', value);
   }
+};
 
 export default class UIInput extends Component {
   constructor() {
@@ -24,7 +38,7 @@ export default class UIInput extends Component {
     slot.addEventListener('slotchange', _ => updateChildrenAttribute(node, 'input', 'placeholder', this.innerText || this.innerHTML));
     input.addEventListener('input', _ => inputHandler.call(this, input, _));
     input.addEventListener('change', _ => this.event('change'));
-    input.addEventListener('keydown', e => { if (e.key === 'Enter') return this.event('enter') });
+    input.addEventListener('keydown', e => { if (e.key === 'Enter') return this.event('enter'); });
     this.addEventListener('focus', _ => input.focus());
     return this;
   }
@@ -36,5 +50,5 @@ Component.init(UIInput, component, {attributes, properties});
   function inputHandler(input, e) {
     e.stopPropagation();
     this.value = input.value;
-    this.event('input');
+    this.event('input', {value: input.value});
   }

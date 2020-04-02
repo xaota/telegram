@@ -1,17 +1,19 @@
 import Component from '../../../script/Component.js';
 import $, {channel} from '../../../script/DOM.js';
 
+/* eslint-disable */
 import UIIcon from '../icon/ui-icon.js';
 import UIDrop from '../drop/ui-drop.js';
+/* eslint-enable */
 
 const component = Component.meta(import.meta.url, 'ui-header');
 const attributes = {
 
-  }
+  };
 
 const properties = {
 
-  }
+  };
 
 export default class UIHeader extends Component {
   constructor() {

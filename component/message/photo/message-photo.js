@@ -1,15 +1,14 @@
 import Component from '../../../script/Component.js';
-import $, {cssVariable, updateChildrenHTML} from '../../../script/DOM.js';
+import $, {cssVariable, updateChildrenHTML, updateChildrenAttribute} from '../../../script/DOM.js';
 
 import File from '../../../script/File.js';
-import {updateChildrenAttribute} from '../../../script/DOM.js';
 
 const component = Component.meta(import.meta.url, 'message-photo');
 const attributes = {
     color(root, value) { cssVariable(this, 'color', '#' + value); },
-    timestamp(root, value) { updateChildrenHTML(root, '#time', value) }
-  }
-const properties = {}
+    timestamp(root, value) { updateChildrenHTML(root, '#time', value); }
+  };
+const properties = {};
 
 export default class MessagePhoto extends Component {
   constructor(data) {

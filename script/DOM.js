@@ -30,7 +30,7 @@ export function updateChildrenProperty(root, selector, property, value = false) 
   if (!children) return;
   value === '' || Boolean(value)
     ? children.setAttribute(property, '')
-    : children.removeAttribute(property)
+    : children.removeAttribute(property);
 }
 
 export function updateChildrenHTML(root, selector, value = '') {

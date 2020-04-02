@@ -3,11 +3,11 @@ import Component from '../../../script/Component.js';
 const component = Component.meta(import.meta.url, 'message-file');
 const attributes = {
 
-  }
+  };
 
 const properties = {
 
-  }
+  };
 
 export default class MessageFile extends Component {
   constructor() {

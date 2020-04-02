@@ -3,6 +3,7 @@ import $, {channel} from '../../../script/DOM.js';
 
 import LayoutChats from '../chats/layout-chats.js';
 
+/* eslint-disable */
 import FormGroup from '../../form/group/form-group.js';
 import FormChannel from '../../form/channel/form-channel.js';
 
@@ -17,15 +18,16 @@ import LayoutEmpty        from '../empty/layout-empty.js';
 import LayoutConversation from '../conversation/layout-conversation.js';
 
 import LayoutIcons from '../icons/layout-icons.js';
+/* eslint-enable */
 
 const component = Component.meta(import.meta.url, 'layout-main');
 const attributes = {
 
-  }
+  };
 
 const properties = {
 
-  }
+  };
 
 export default class LayoutMain extends Component {
   constructor() {
