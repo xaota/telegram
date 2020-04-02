@@ -1,5 +1,5 @@
 import Component from '../../../script/Component.js';
-import $, {updateChildrenAttribute, updateChildrenHTML} from '../../../script/DOM.js';
+import {updateChildrenAttribute, updateChildrenHTML} from '../../../script/DOM.js';
 import '../avatar/ui-avatar.js';
 
 const component = Component.meta(import.meta.url, 'ui-member');
@@ -21,7 +21,7 @@ const attributes = {
     }
 };
 
-const properties = {}
+const properties = {};
 
 export default class UIMember extends Component {
   constructor() {

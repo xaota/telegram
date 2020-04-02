@@ -1,16 +1,18 @@
 import Component from '../../../script/Component.js';
 import $, {channel} from '../../../script/DOM.js';
 
+/* eslint-disable */
 import UIIcon from '../../ui/icon/ui-icon.js';
+/* eslint-enable */
 
 const component = Component.meta(import.meta.url, 'layout-empty');
 const attributes = {
 
-  }
+  };
 
 const properties = {
 
-  }
+  };
 
 export default class LayoutEmpty extends Component {
   constructor() {

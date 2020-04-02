@@ -3,11 +3,11 @@ import Component from '../../../script/Component.js';
 const component = Component.meta(import.meta.url, 'ui-tab');
 const attributes = {
 
-  }
+  };
 
 const properties = {
 
-  }
+  };
 
 export default class UITab extends Component {
   constructor() {

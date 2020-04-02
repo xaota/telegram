@@ -1,24 +1,25 @@
 import Component from '../../../script/Component.js';
-
+import telegram from '../../../tdweb/Telegram.js';
 import $, {channel, updateChildrenHTML, updateChildrenText} from '../../../script/DOM.js';
-import File       from '../../../script/File.js';
 import {dateDay, formatDate} from '../../../script/helpers.js';
 
+/* eslint-disable */
 import UIIcon     from '../../ui/icon/ui-icon.js';
 import UIBadge    from '../../ui/badge/ui-badge.js';
 import UIAvatar   from '../../ui/avatar/ui-avatar.js';
 import AppMessage from '../message/app-message.js';
+/* eslint-enable */
 
 const component = Component.meta(import.meta.url, 'chat-item');
 const attributes = {
-    badge(root, value) { updateChildrenHTML(root, 'ui-badge', value) },
-    status(root, value) { updateChildrenText(root, '#status', value) },
-    timestamp(root, value) { updateChildrenHTML(root, 'div.dialog__date > span.timestamp', value) }
-  }
+    badge(root, value) { updateChildrenHTML(root, 'ui-badge', value); },
+    status(root, value) { updateChildrenText(root, '#status', value); },
+    timestamp(root, value) { updateChildrenHTML(root, 'div.dialog__date > span.timestamp', value); }
+  };
 
 const properties = {
 
-  }
+  };
 
 export default class ChatItem extends Component {
   constructor() {
@@ -39,22 +40,22 @@ export default class ChatItem extends Component {
       });
     }
 
-    channel.on('chat.message', async ({chat_id, last_message}) => {
-      if (chat_id !== id) return;
-      lastMessage(this, last_message);
-      await lastAuthor(this, {me: me.id, peer, sender: last_message.sender_user_id});
+    channel.on('chat.message', async ({chat_id: chatId, last_message: lastMessage}) => {
+      if (chatId !== id) return;
+      lastMessage(this, lastMessage);
+      await lastAuthor(this, {me: me.id, peer, sender: lastMessage.sender_user_id});
     });
 
-    channel.on('chat.counter', ({chat_id, last_read_inbox_message_id, unread_count}) => {
-      if (chat_id !== id) return;
-      this.setAttribute('badge', unread_count);
+    channel.on('chat.counter', ({chat_id: chatId, unread_count: unreadCount}) => {
+      if (chatId !== id) return;
+      this.setAttribute('badge', unreadCount);
       // !
     });
 
     return this;
   }
 
-  static async from({model, user, me}) {
+  static from({model, user, me}) {
     console.log(model);
     const avatar     = new UIAvatar();
     avatar.innerHTML = UIAvatar.letter(model.title);
@@ -111,7 +112,7 @@ export default class ChatItem extends Component {
 Component.init(ChatItem, component, {attributes, properties});
 
 /** */
-  async function last(root, message, model, me) {
+  function last(root, message, model, me) {
     const current = formatDate(dateDay(), true);
     const updated = formatDate(dateDay(message.date * 1000), true);
     const timestamp = current === updated ? AppMessage.timestamp(message.date) : updated;

@@ -3,10 +3,13 @@
     "browser": true,
     "node": true,
     "commonjs": true,
-    "es6": true
+    "es6": true,
+    "mocha": true,
+    "jest/globals": true,
   },
   "extends": "eslint:recommended",
   "parser": "babel-eslint",
+  "plugins": ["jest"],
   "parserOptions": {
     "sourceType": "module",
     "ecmaVersion": 2018
@@ -186,7 +189,7 @@
       "error",
       "functions"
     ],
-    "no-invalid-this": "warn",
+    "no-invalid-this": "off",
     "no-iterator": "error",
     "no-label-var": "error",
     "no-labels": "error",
@@ -280,7 +283,7 @@
     "no-trailing-spaces": "off",
     "no-undef-init": "error",
     "no-undefined": "off",
-    "no-underscore-dangle": "error",
+    "no-underscore-dangle": "off",
     "no-unmodified-loop-condition": "error",
     "no-unneeded-ternary": "error",
     "no-use-before-define": "off",
@@ -349,34 +352,15 @@
     "prefer-template": "off",
     "quote-props": "off",
     "quotes": "off",
-    "radix": [
-      "error",
-      "as-needed"
-    ],
+    "radix": ["error"],
     "require-await": "error",
-    "require-jsdoc": [
-      "error",
-      {
-        "require": {
-          "FunctionDeclaration": true,
-          "MethodDefinition": true,
-          "ClassDeclaration": true,
-          "ArrowFunctionExpression": false,
-          "FunctionExpression": true
-        }
-      }
-    ],
-    "valid-jsdoc": [
-      "error",
-      {
-        "requireReturn": false
-      }
-    ],
+    "require-jsdoc": "off",
+    "valid-jsdoc": "off",
     "rest-spread-spacing": [
       "error",
       "never"
     ],
-    "semi": "off",
+    "semi": "error",
     "semi-spacing": "error",
     "semi-style": [
       "error",
@@ -408,5 +392,13 @@
       "error",
       "never"
     ]
+  },
+  "globals": {
+    "R": "readonly",
+    "rxjs": "readonly",
+    "zagram": "readonly",
+    "store": "readonly",
+    "getState$": "readonly",
+    "BigInt": "readonly",
   }
 }

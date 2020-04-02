@@ -13,6 +13,26 @@
   box-shadow: #4ea4f6 0 0 0 1px;
 }
 
+:host([error]) {
+  border-color: #f6553b;
+  box-shadow: #f6553b 0 0 0 1px;
+}
+
+span.error {
+  display: none;
+  position: absolute;
+  top: -13px;
+  left: 10px;
+  z-index: 20;
+  background: var(--background-aside);
+  padding: 4px;
+  font-size: 12px;
+  color: #f6553b;
+}
+:host([error]) span.error {
+  display: block;
+}
+
 label {
   display: none;
   position: absolute;
@@ -28,6 +48,9 @@ label {
 :host(:focus-within) label {
   display: block;
   color: #4ea4f6
+}
+:host([error]:focus-within) label {
+  display: none;
 }
 
 div {

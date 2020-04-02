@@ -9,11 +9,10 @@ import '../../ui/drop/ui-drop.js';
 import '../../ui/online/ui-online.js';
 import telegram from "../../../tdweb/Telegram.js";
 import File from "../../../script/File.js";
-import {updateChildrenHTML} from "../../../script/DOM.js";
 
 const component = Component.meta(import.meta.url, 'conversation-header');
-const attributes = {}
-const properties = {}
+const attributes = {};
+const properties = {};
 
 const formatter = new Intl.NumberFormat('en');
 
@@ -59,7 +58,7 @@ export default class ConversationHeader extends Component {
 Component.init(ConversationHeader, component, {attributes, properties});
 
 /** */
-async function init(node) {
+function init(node) {
   const {chat} = this.store();
 
   $('.title', node).innerText = chat.title;
@@ -68,7 +67,7 @@ async function init(node) {
     // user profile getUserFullInfo
     telegram.api('getUser', {
       user_id: chat.type.user_id
-    }).then((user) => {
+    }).then(user => {
       let status = user.status['@type'] === 'userStatusOnline' ? 'online' : user.status.was_online;
       if (user.status['@type'] === 'userStatusRecently') {
         status = 'hidden';

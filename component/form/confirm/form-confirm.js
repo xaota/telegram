@@ -1,13 +1,29 @@
-import telegram, {storage} from '../../../tdweb/Telegram.js';
-
 import Component from '../../../script/Component.js';
-import $, {channel} from '../../../script/DOM.js';
+import $ from '../../../script/DOM.js';
+import {setPage} from '../../../state/pages/index.js';
+import {sendVerifyCode} from '../../../state/auth/index.js';
 
-const { isObjectOf } = zagram;
+const {fromEvent} = rxjs;
+const {filter, mapTo, map, distinctUntilChanged} = rxjs.operators;
 
 const component = Component.meta(import.meta.url, 'form-confirm');
-const attributes = {}
-const properties = {}
+const attributes = {};
+const properties = {};
+
+const goToLogin = R.partial(setPage, ['login']);
+
+const getPhoneNumber = R.path(['auth', 'currentPhone']);
+const getVerifyError = R.path(['auth', 'verifyError']);
+
+const getVerifyLabel = R.cond([
+  [R.equals('PHONE_CODE_INVALID'), R.always('Invalid code')],
+  [R.T, R.identity]
+]);
+
+const isValidValue = R.pipe(
+  R.prop('length'),
+  R.lte(5)
+);
 
 export default class FormConfirm extends Component {
   constructor() {
@@ -16,46 +32,40 @@ export default class FormConfirm extends Component {
 
   mount(node) {
     super.mount(node, attributes, properties);
-
     const input = $('ui-input', node);
-    channel.on('authorizationStateWaitCode', () => {
-      const phone_number = storage.get('phone_number');
-      this.innerText = phone_number;
-    });
+    const icon = $('ui-icon', node);
 
-    input.addEventListener('input', async _ => {
-      if (input.value.length < 5) return;
-      input.disabled = true;
+    const state$ = getState$();
 
-      const phone_code_hash = await storage.get('phone_code_hash');
-      const phone_number    = await storage.get('phone_number');
-      const phone_code      = input.value;
+    const phoneNumber$ = state$
+      .pipe(map(getPhoneNumber));
 
-      try {
-        const response = await telegram.api(
-          'auth.signIn',
-          { phone_code_hash, phone_number, phone_code }
-        );
+    phoneNumber$
+      .subscribe(phoneNumber => {
+        this.innerText = phoneNumber;
+      });
 
-        console.log('Response', response);
-
-        if (isObjectOf('auth.authorization', response)) {
-          console.log('User successfully authorized, go to chat!');
-          storage.set('me', response.user);
-          channel.send('authorizationStateReady');
+    const verifyCodeError$ = state$
+      .pipe(map(getVerifyError))
+      .pipe(distinctUntilChanged())
+      .pipe(map(getVerifyLabel));
+    verifyCodeError$
+      .subscribe(error => {
+        input.error = error || null;
+        if (error) {
+          wipe(input);
         }
+      });
 
-        if (isObjectOf('auth.authorizationSignUpRequired', response)) {
-          console.log('Emit sign up form');
-        }
+    const input$ = fromEvent(input, 'input');
+    input$
+      .pipe(mapTo(input))
+      .pipe(map(R.prop('value')))
+      .pipe(filter(isValidValue))
+      .subscribe(sendVerifyCode);
 
-        wipe.call(this, input);
-      } catch (error) {
-        console.log('error', error); // "PHONE_CODE_INVALID"
-        input.value = '';
-        input.disabled = false;
-      }
-    });
+    const changePhone$ = fromEvent(icon, 'click');
+    changePhone$.subscribe(goToLogin);
 
     return this;
   }

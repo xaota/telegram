@@ -1,10 +1,12 @@
 import Component from '../../../script/Component.js';
-import $, {channel, updateChildrenAttribute} from '../../../script/DOM.js';
+import $, {channel} from '../../../script/DOM.js';
 
 import telegram from '../../../tdweb/Telegram.js';
 import File from '../../../script/File.js';
 
 import sidebarEvents from '../sidebar/events.js';
+
+/* eslint-disable */
 import '../../ui/grid/ui-grid.js';
 import '../../ui/list/ui-list.js';
 import UIMember from '../../ui/member/ui-member.js';
@@ -13,15 +15,16 @@ import UiGrid from '../../ui/grid/ui-grid.js';
 import UiIcon from '../../ui/icon/ui-icon.js';
 import UIAvatar from "../../ui/avatar/ui-avatar.js";
 import UIOnline from "../../ui/online/ui-online.js";
+/* eslint-enable */
 
 const component = Component.meta(import.meta.url, 'layout-profile');
 const attributes = {
 
-  }
+  };
 
 const properties = {
 
-  }
+  };
 const formatter = new Intl.NumberFormat('en');
 export default class LayoutProfile extends Component {
   constructor({chatId, profileId} = {}) {
@@ -31,13 +34,13 @@ export default class LayoutProfile extends Component {
     this.selectedTab = 'media';
     this.loadedItems = {
       media: [],
-      docs: [],
+      docs: []
     };
     this.totalCount = {
       media: 0,
-      docs: 0,
+      docs: 0
     };
-    this.cancelLoading = () => {};
+    this.cancelLoading = () => {}; // eslint-disable-line
   }
 
   mount(node) {
@@ -50,9 +53,9 @@ export default class LayoutProfile extends Component {
       offset: 0,
       limit: 1,
       filter: {
-        '@type': 'searchMessagesFilterPhoto',
+        '@type': 'searchMessagesFilterPhoto'
       }
-    }).then((p) => {
+    }).then(p => {
       telegram.api('searchChatMessages', {
         chat_id: this.chatId,
         query: '',
@@ -61,9 +64,9 @@ export default class LayoutProfile extends Component {
         offset: 0,
         limit: 1,
         filter: {
-          '@type': 'searchMessagesFilterDocument',
+          '@type': 'searchMessagesFilterDocument'
         }
-      }).then((d) => {
+      }).then(d => {
         if (p.total_count + d.total_count) {
           this.tabContainer = $('ui-list', node);
           this.tabContainer.addEventListener('list-overscroll', e => {
@@ -77,7 +80,7 @@ export default class LayoutProfile extends Component {
         } else {
           $('.footer', node).style.display = 'none';
         }
-      })
+      });
     });
     $('#close', node)
         .addEventListener('click', () => {
@@ -111,7 +114,7 @@ export default class LayoutProfile extends Component {
     }
 
     telegram.api('getChat', {
-      chat_id: this.chatId,
+      chat_id: this.chatId
     }).then(res => {
       this.setTitle(res.title);
       this.renderPhoto(res.photo, res.type.user_id || res.type.supergroup_id || res.type.basic_group_id, res.title);
@@ -120,7 +123,7 @@ export default class LayoutProfile extends Component {
         // user profile getUserFullInfo
         telegram.api('getUser', {
           user_id: res.type.user_id
-        }).then((user) => {
+        }).then(user => {
           // online
             const statusBlock = $('ui-online', node);
           let status = user.status['@type'] === 'userStatusOnline' ? 'online' : user.status.was_online;
@@ -141,7 +144,7 @@ export default class LayoutProfile extends Component {
           // full info
           telegram.api('getUserFullInfo', {
             user_id: res.type.user_id
-          }).then((userFullInfo) => {
+          }).then(userFullInfo => {
             if (userFullInfo.bio) {
               list.append(createItem('info', user.bio, 'Bio'));
             }
@@ -195,11 +198,11 @@ export default class LayoutProfile extends Component {
     avatar.innerText = UIAvatar.letter(letter);
   };
 
-  setTitle = (title) => {
+  setTitle = title => {
     $('.name', this.shadowRoot).innerText = title;
   };
 
-  onSelectTab = (e) => {
+  onSelectTab = e => {
     const id = e.target.getAttribute('id');
     if (id && id !== this.selectedTab) {
       this.cancelLoading();
@@ -211,16 +214,16 @@ export default class LayoutProfile extends Component {
     }
   };
 
-  loadData = (append) => {
+  loadData = append => {
     const types = {
       media: {
         type: 'searchMessagesFilterPhoto',
-        render: this.renderMedia,
+        render: this.renderMedia
       },
       docs: {
         type: 'searchMessagesFilterDocument',
-        render: this.renderFiles,
-      },
+        render: this.renderFiles
+      }
     };
     if (!append && this.loadedItems[this.selectedTab].length > 0) {
       types[this.selectedTab].render(this.loadedItems[this.selectedTab]);
@@ -232,22 +235,22 @@ export default class LayoutProfile extends Component {
       chat_id: this.chatId,
       query: '',
       sender_user_id: 0,
-      from_message_id: this.loadedItems[this.selectedTab].length > 0 ?
-          this.loadedItems[this.selectedTab][this.loadedItems[this.selectedTab].length - 1].id
+      from_message_id: this.loadedItems[this.selectedTab].length > 0
+          ? this.loadedItems[this.selectedTab][this.loadedItems[this.selectedTab].length - 1].id
           : 0,
       offset: 0,
       limit: 20,
       filter: {
-        '@type': types[this.selectedTab].type,
+        '@type': types[this.selectedTab].type
       }
-    }).then((res) => {
+    }).then(res => {
       if (cancel) {
         return;
       }
       this.totalCount[this.selectedTab] = res.total_count;
       this.loadedItems[this.selectedTab] = this.loadedItems[this.selectedTab].concat(res.messages);
       types[this.selectedTab].render(append ? res.messages : this.loadedItems[this.selectedTab], append);
-    })
+    });
   };
 
     renderMedia = (messages, append) => {
@@ -261,11 +264,11 @@ export default class LayoutProfile extends Component {
       grid.setAttribute('columns', 'repeat(3, 133px)');
       grid.setAttribute('row-gap', '5px');
       grid.setAttribute('column-gap', '5px');
-      messages.forEach((message) => {
+      messages.forEach(message => {
         const div = document.createElement('div');
         grid.append(div);
         File.getFile(message.content.photo.sizes[0].photo)
-            .then((blob) => {
+            .then(blob => {
               div.style.backgroundImage = `url(${blob})`;
             });
       });
@@ -286,10 +289,10 @@ export default class LayoutProfile extends Component {
       grid.setAttribute('rows', 'auto');
       grid.setAttribute('columns', '100%');
       grid.setAttribute('row-gap', '24px');
-      messages.forEach((message) => {
+      messages.forEach(message => {
         const file = new UiFile({
           file: message.content.document,
-          date: message.date,
+          date: message.date
         });
         grid.append(file);
       });

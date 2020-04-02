@@ -1,8 +1,7 @@
 import Component from '../../../script/Component.js';
 import $, {updateChildrenHTML} from '../../../script/DOM.js';
-import {normalizeSize} from '../../../script/File.js';
+import {default as File, normalizeSize} from '../../../script/File.js';
 import {formatDate} from '../../../script/helpers.js';
-import File from '../../../script/File.js';
 import download from '../../../script/download.js';
 
 import UiLoadingPercent from '../loading-percent/ui-percent.js';
@@ -10,19 +9,19 @@ import UiIcon from '../icon/ui-icon.js';
 
 const component = Component.meta(import.meta.url, 'ui-file');
 
-const attributes = {}
+const attributes = {};
 
-const properties = {}
+const properties = {};
 
 const bentColor = {
     '#8C171B': '#70000B',
-    '#418FE3': '#2266B6',
+    '#418FE3': '#2266B6'
 };
 const colors = [
     '#418FE3',
     '#389237',
     '#8C171B',
-    '#F87808',
+    '#F87808'
 ];
 
 export default class UiFile extends Component {
@@ -35,7 +34,7 @@ export default class UiFile extends Component {
 
   mount(node) {
     updateChildrenHTML(node, '.name', this.file.file_name);
-    updateChildrenHTML(node, '.size', normalizeSize(+this.file.document.size));
+    updateChildrenHTML(node, '.size', normalizeSize(Number(this.file.document.size)));
     $( '.size', node)
         .setAttribute('class', 'size noafter');
     if (!this.message) {
@@ -81,13 +80,11 @@ export default class UiFile extends Component {
         }
     }
     this.fileState();
-    this.img.addEventListener('click', this.onClick)
+    this.img.addEventListener('click', this.onClick);
     return super.mount(node, attributes, properties);
   }
 
-  getType = () => {
-      return this.file.file_name.indexOf('.') !== -1 ? this.file.file_name.split(".").pop().toLowerCase() : '';
-  };
+  getType = () => this.file.file_name.indexOf('.') !== -1 ? this.file.file_name.split(".").pop().toLowerCase() : '';
 
   fileState = () => {
       const img = this.img;
@@ -118,24 +115,22 @@ export default class UiFile extends Component {
       }
       if (img) {
           img.innerHTML = '';
-          heatBlocks.forEach((el) => {
+          heatBlocks.forEach(el => {
               img.append(el);
           });
       }
   };
 
-  getLoadingPercent = (size, loaded) => {
-      return Math.abs(loaded / (size / 100));
-  };
+  getLoadingPercent = (size, loaded) => Math.abs(loaded / (size / 100));
 
   setLoadingPercent = (size, loaded) => {
       const loading = $('ui-loading-percent', this.shadowRoot);
       if (loading) {
-          loading.setAttribute('percent', this.getLoadingPercent(size, loaded))
+          loading.setAttribute('percent', this.getLoadingPercent(size, loaded));
       }
   };
 
-  generatePreviewText = (type) => {
+  generatePreviewText = type => {
       const div = document.createElement('div');
       div.classList.add('type');
       if (!this.file.document.local.is_downloading_completed) {
@@ -158,7 +153,7 @@ export default class UiFile extends Component {
           File.getFile(
               this.file.document,
               true,
-              (file) => {
+              file => {
                   this.setLoadingPercent(file.size, file.local.downloaded_size);
               }
           )
@@ -179,14 +174,11 @@ export default class UiFile extends Component {
           return;
       }
       // download file local or open preview
-      File.getFile(
-          this.file.document
-      )
+      File.getFile(this.file.document)
           .then(blob => {
               download(blob, this.file.file_name, this.file.mime_type);
           });
   }
-
 }
 
 Component.init(UiFile, component, {attributes, properties});

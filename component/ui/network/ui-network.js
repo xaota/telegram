@@ -1,12 +1,14 @@
 import Component from '../../../script/Component.js';
 import {channel} from '../../../script/DOM.js';
 
+/* eslint-disable */
 import UIIcon    from '../icon/ui-icon.js';
 import UILoading from '../loading/ui-loading.js';
+/* eslint-enable */
 
 const component = Component.meta(import.meta.url, 'ui-network');
-const attributes = {}
-const properties = {}
+const attributes = {};
+const properties = {};
 
 export default class UINetwork extends Component {
   constructor() {

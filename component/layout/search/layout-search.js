@@ -15,11 +15,11 @@ import '../../ui/list/ui-list.js';
 const component = Component.meta(import.meta.url, 'layout-search');
 const attributes = {
 
-  }
+  };
 
 const properties = {
 
-  }
+  };
 
 export default class LayoutSearch extends Component {
   constructor({chatId}) {
@@ -27,7 +27,7 @@ export default class LayoutSearch extends Component {
     this.chatId = chatId;
     this.messages = [];
     this.totalCount = 0;
-    this.cancelFunc = () => {};
+    this.cancelFunc = () => {}; // eslint-disable-line
   }
 
   mount(node) {
@@ -41,7 +41,7 @@ export default class LayoutSearch extends Component {
     this.messagesBlock = $('ui-grid', node);
 
     $('ui-search', node)
-        .addEventListener('ui-search', (e) => {
+        .addEventListener('ui-search', e => {
             this.cancelFunc();
             this.messages = [];
             this.text = e.detail.value;
@@ -56,7 +56,7 @@ export default class LayoutSearch extends Component {
     return this;
   }
 
-  getResult = (append) => {
+  getResult = append => {
       if (append && this.totalCount === this.messages.length) {
           return;
       }
@@ -72,7 +72,7 @@ export default class LayoutSearch extends Component {
           limit: 20,
           filter: null
       })
-          .then((res) =>{
+          .then(res => {
               if (cancel) {
                   return;
               }
@@ -96,11 +96,11 @@ export default class LayoutSearch extends Component {
       telegram.api('getUser', {
         user_id: message.sender_user_id
       })
-          .then((user) => {
+          .then(user => {
             if (user.profile_photo) {
                 File.getFile(user.profile_photo.small)
                     .then(blob => {
-                        block.setAttribute('src', blob)
+                        block.setAttribute('src', blob);
                     });
             }
             block.setAttribute('name', user.first_name + ' ' + user.last_name);

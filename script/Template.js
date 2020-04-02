@@ -1,4 +1,4 @@
-import Deferred from './Deferred.js'
+import Deferred from './Deferred.js';
 
 const root = document.head;
 const templates = Object.create(null);
