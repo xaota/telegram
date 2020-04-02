@@ -27,9 +27,7 @@ describe('utils', () => {
     });
 
     it('peerChannel', () => {
-      expect(peerIdToPeer('peer_channel_42')).toMatchObject(
-        construct('peerChannel', {channel_id: 42})
-      );
-    })
+      expect(peerIdToPeer('peer_channel_42')).toMatchObject(construct('peerChannel', {channel_id: 42}));
+    });
   });
 });

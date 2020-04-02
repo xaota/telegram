@@ -9,40 +9,40 @@ const buildUserObject = R.pipe(
   R.of,
   R.ap([
     R.prop('id'),
-    R.identity,
+    R.identity
   ]),
   R.of,
-  R.fromPairs,
+  R.fromPairs
 );
 
 const getUserFromAction = R.pipe(
   getAction,
   R.prop('payload'),
-  buildUserObject,
+  buildUserObject
 );
 
 const handleSetUser = R.pipe(
   R.of,
   R.ap([
     getState,
-    getUserFromAction,
+    getUserFromAction
   ]),
-  R.mergeAll,
-)
+  R.mergeAll
+);
 
 const handleSetUserList = R.pipe(
   R.of,
   R.ap([
     getState,
-    R.pipe(getAction, R.prop('payload'), R.map(buildUserObject), R.mergeAll),
+    R.pipe(getAction, R.prop('payload'), R.map(buildUserObject), R.mergeAll)
   ]),
-  R.mergeAll,
+  R.mergeAll
 );
 
 export default buildReducer(
   {},
   [
     [isActionOf(SET_USER), handleSetUser],
-    [isActionOf(SET_USER_LIST), handleSetUserList],
-  ],
+    [isActionOf(SET_USER_LIST), handleSetUserList]
+  ]
 );

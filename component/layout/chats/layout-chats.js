@@ -2,7 +2,7 @@ import telegram, {storage} from '../../../tdweb/Telegram.js';
 
 import Component from '../../../script/Component.js';
 import $, {channel} from '../../../script/DOM.js';
-import { loadDialogs } from '../../../state/dialogs/index.js';
+import {loadDialogs} from '../../../state/dialogs/index.js';
 
 
 /* eslint-disable */

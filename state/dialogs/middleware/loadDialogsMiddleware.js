@@ -1,5 +1,5 @@
-import {LOAD_DIALOGS} from '../constants.js'
-import {setDialogsLoaded, setLoadDialogsFailed} from '../actions.js'
+import {LOAD_DIALOGS} from '../constants.js';
+import {setDialogsLoaded, setLoadDialogsFailed} from '../actions.js';
 import {setUserList} from '../../users/index.js';
 
 const {from} = rxjs;
@@ -15,10 +15,10 @@ function loadDialogsStream(connection, action) {
       offset: 0,
       offset_id: 0,
       offset_peer: construct('inputPeerEmpty'),
-      hash: 0,
+      hash: 0
     }),
     R.partial(method, ['messages.getDialogs']),
-    x => from(connection.request(x)).pipe(catchError(R.of)),
+    x => from(connection.request(x)).pipe(catchError(R.of))
   )(action);
 }
 
@@ -31,16 +31,16 @@ const handleSuccessResponse = R.pipe(
   R.ap([
     R.pipe(R.prop('dialogs'), setDialogsLoaded),
     R.pipe(R.prop('users'), setUserList)
-  ]),
+  ])
 );
 
 const handleResponse = R.cond([
   [isRpcError, handleFailedResponse],
-  [R.T, handleSuccessResponse],
+  [R.T, handleSuccessResponse]
 ]);
 
 export default function loadDialogsMiddleware(action$, state$, connection) {
-  connection.addEventListener('statusChanged', (e) => {
+  connection.addEventListener('statusChanged', e => {
     if (e.status === 'AUTH_KEY_CREATED') {
       const loadDialogs$  = action$.pipe(
         filter(isActionOf(LOAD_DIALOGS)),

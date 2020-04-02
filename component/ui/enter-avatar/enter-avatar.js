@@ -1,6 +1,6 @@
-import Component from '../../../script/Component.js'
-import $ from '../../../script/DOM.js'
-import { wrapAsObjWithKey } from '../../../script/helpers.js'
+import Component from '../../../script/Component.js';
+import $ from '../../../script/DOM.js';
+import {wrapAsObjWithKey} from '../../../script/helpers.js';
 
 /* eslint-disable */
 import UIIcon    from '../../ui/icon/ui-icon.js';

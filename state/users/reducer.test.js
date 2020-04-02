@@ -1,5 +1,5 @@
 import reducer from './reducer.js';
-import {SET_USER, SET_USER_LIST} from './constants.js'
+import {SET_USER, SET_USER_LIST} from './constants.js';
 
 const {construct} = zagram;
 
@@ -30,9 +30,9 @@ describe('users reducer', () => {
             last_name: 'Doe',
             username: 'johndoe',
             phone: '9996621111',
-            status: construct('userStatusOnline', {expires: 1585773114}),
-          },
-        ),
+            status: construct('userStatusOnline', {expires: 1585773114})
+          }
+        )
       };
 
       expect(reducer({}, action)).toEqual({
@@ -58,9 +58,9 @@ describe('users reducer', () => {
             last_name: 'Doe',
             username: 'johndoe',
             phone: '9996621111',
-            status: construct('userStatusOnline', {expires: 1585773114}),
-          },
-        ),
+            status: construct('userStatusOnline', {expires: 1585773114})
+          }
+        )
       });
     });
   });
@@ -91,8 +91,8 @@ describe('users reducer', () => {
             last_name: 'Doe',
             username: 'johndoe',
             phone: '9996621111',
-            status: construct('userStatusOnline', {expires: 1585773114}),
-          },
+            status: construct('userStatusOnline', {expires: 1585773114})
+          }
         ),
         construct(
           'user',
@@ -115,9 +115,9 @@ describe('users reducer', () => {
             first_name: 'Ivan',
             username: 'test9996627777',
             status: construct('userStatusOffline', {was_online: 1585649788})
-          },
-        ),
-      ],
+          }
+        )
+      ]
     };
 
     expect(reducer({}, action)).toEqual({
@@ -143,8 +143,8 @@ describe('users reducer', () => {
           last_name: 'Doe',
           username: 'johndoe',
           phone: '9996621111',
-          status: construct('userStatusOnline', {expires: 1585773114}),
-        },
+          status: construct('userStatusOnline', {expires: 1585773114})
+        }
       ),
       516572: construct(
         'user',
@@ -167,8 +167,8 @@ describe('users reducer', () => {
           first_name: 'Ivan',
           username: 'test9996627777',
           status: construct('userStatusOffline', {was_online: 1585649788})
-        },
-      ),
+        }
+      )
     });
   });
 });

@@ -12,20 +12,20 @@ describe('dialogs', () => {
   describe('LOAD_DIALOGS', () => {
     it('first load', () => {
       const action = {
-        type: LOAD_DIALOGS,
-      }
+        type: LOAD_DIALOGS
+      };
 
       const state = {};
 
       expect(reducer(state, action)).toEqual({
-        dialogsLoading: true,
+        dialogsLoading: true
       });
     });
   });
 
   describe('LOAD_DIALOGS_FAILED', () => {
     const action = {
-      type: DIALOGS_LOAD_FAILED,
+      type: DIALOGS_LOAD_FAILED
     };
 
     const state = {dialogsLoading: true};
@@ -48,8 +48,8 @@ describe('dialogs', () => {
             read_outbox_max_id: 14,
             unread_count: 9,
             unread_mentions_count: 0,
-            notify_settings: construct('peerNotifySettings', {}),
-          },
+            notify_settings: construct('peerNotifySettings', {})
+          }
         ),
         construct(
           'dialog',
@@ -62,10 +62,10 @@ describe('dialogs', () => {
             read_outbox_max_id: 0,
             unread_count: 0,
             unread_mentions_count: 0,
-            notify_settings: construct('peerNotifySettings', {}),
-          },
-        ),
-      ],
+            notify_settings: construct('peerNotifySettings', {})
+          }
+        )
+      ]
     };
 
     const state = {dialogsLoading: true};
@@ -73,7 +73,7 @@ describe('dialogs', () => {
     expect(reducer(state, action)).toEqual({
       dialogsOrder: [
         'peer_user_77700',
-        'peer_user_516572',
+        'peer_user_516572'
       ],
       dialogs: {
         'peer_user_77700': construct('dialog', {
@@ -85,7 +85,7 @@ describe('dialogs', () => {
           read_outbox_max_id: 14,
           unread_count: 9,
           unread_mentions_count: 0,
-          notify_settings: construct('peerNotifySettings', {}),
+          notify_settings: construct('peerNotifySettings', {})
         }),
         'peer_user_516572': construct('dialog', {
           pinned: false,
@@ -96,9 +96,9 @@ describe('dialogs', () => {
           read_outbox_max_id: 0,
           unread_count: 0,
           unread_mentions_count: 0,
-          notify_settings: construct('peerNotifySettings', {}),
-        }),
-      },
+          notify_settings: construct('peerNotifySettings', {})
+        })
+      }
     });
   });
 });

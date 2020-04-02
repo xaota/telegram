@@ -9,7 +9,7 @@ import {
 import {reducer as pageReducer} from '../state/pages/index.js';
 import {
   reducer as dialogsReducer,
-  applyMiddleware as dialogsApplyMiddleware,
+  applyMiddleware as dialogsApplyMiddleware
 } from '../state/dialogs/index.js';
 import {reducer as usersReducer} from '../state/users/index.js';
 
@@ -32,7 +32,7 @@ const state$ = buildStateStream(combineReducers({
   page: pageReducer,
   auth: authReducer,
   dialogs: dialogsReducer,
-  users: usersReducer,
+  users: usersReducer
 }));
 const action$ = getActionStream();
 

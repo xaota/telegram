@@ -1,4 +1,4 @@
-import {LOAD_DIALOGS, DIALOGS_LOAD_FAILED, DIALOGS_LOADED} from'./constants.js';
+import {LOAD_DIALOGS, DIALOGS_LOAD_FAILED, DIALOGS_LOADED} from './constants.js';
 import {wrapAsObjWithKey} from '../../script/helpers.js';
 import {peerToPeerId} from '../utils.js';
 
@@ -15,9 +15,9 @@ const handleLoadingTrue = R.pipe(
   R.of,
   R.ap([
     R.identity,
-    R.always({dialogsLoading: true}),
+    R.always({dialogsLoading: true})
   ]),
-  R.mergeAll,
+  R.mergeAll
 );
 
 
@@ -25,8 +25,8 @@ const unsetLoading = R.omit(['dialogsLoading']);
 
 const removeLoadingFromState = R.pipe(
   getState,
-  unsetLoading,
-)
+  unsetLoading
+);
 
 
 const getPeerFormDialog = R.prop('peer');
@@ -37,12 +37,12 @@ const buildDialogsOrder = R.pipe(
   getAction,
   R.prop('payload'),
   R.map(getPeerIdFromDialog),
-  wrapAsObjWithKey('dialogsOrder'),
+  wrapAsObjWithKey('dialogsOrder')
 );
 
 const buildDialogsPair = R.pipe(
   R.of,
-  R.ap([getPeerIdFromDialog, R.identity]),
+  R.ap([getPeerIdFromDialog, R.identity])
 );
 
 const buildDialogsMap = R.pipe(
@@ -50,7 +50,7 @@ const buildDialogsMap = R.pipe(
   R.prop('payload'),
   R.map(buildDialogsPair),
   R.fromPairs,
-  wrapAsObjWithKey('dialogs'),
+  wrapAsObjWithKey('dialogs')
 );
 
 const handleDialogsLoadFailed = removeLoadingFromState;
@@ -61,14 +61,14 @@ const handleDialogsLoaded = R.pipe(
   R.ap([
     removeLoadingFromState,
     buildDialogsOrder,
-    buildDialogsMap,
+    buildDialogsMap
   ]),
-  R.mergeAll,
+  R.mergeAll
 );
 
 
 export default buildReducer({}, [
   [isActionOf(LOAD_DIALOGS), handleLoadingTrue],
   [isActionOf(DIALOGS_LOAD_FAILED), handleDialogsLoadFailed],
-  [isActionOf(DIALOGS_LOADED), handleDialogsLoaded],
+  [isActionOf(DIALOGS_LOADED), handleDialogsLoaded]
 ]);
