@@ -1,6 +1,6 @@
 import {LOAD_DIALOGS, DIALOGS_LOAD_FAILED, DIALOGS_LOADED} from'./constants.js';
 import {wrapAsObjWithKey} from '../../script/helpers.js';
-import {peerToPeerId} from '../utils';
+import {peerToPeerId} from '../utils.js';
 
 const {isActionOf, buildReducer} = store;
 

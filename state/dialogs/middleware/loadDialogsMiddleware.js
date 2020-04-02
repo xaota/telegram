@@ -1,9 +1,11 @@
 import {LOAD_DIALOGS} from '../constants.js'
+import {setDialogsLoaded, setLoadDialogsFailed} from '../actions.js'
+import {setUserList} from '../../users/index.js';
 
 const {from} = rxjs;
 const {filter, switchMap, catchError} = rxjs.operators;
 const {isActionOf} = store;
-const {method, construct} = zagram;
+const {method, construct, isRpcError} = zagram;
 
 
 function loadDialogsStream(connection, action) {
@@ -21,6 +23,23 @@ function loadDialogsStream(connection, action) {
   )(action);
 }
 
+const handleFailedResponse = () => {
+  setLoadDialogsFailed();
+};
+
+const handleSuccessResponse = R.pipe(
+  R.of,
+  R.ap([
+    R.pipe(R.prop('dialogs'), setDialogsLoaded),
+    R.pipe(R.prop('users'), setUserList)
+  ]),
+);
+
+const handleResponse = R.cond([
+  [isRpcError, handleFailedResponse],
+  [R.T, handleSuccessResponse],
+]);
+
 export default function loadDialogsMiddleware(action$, state$, connection) {
   connection.addEventListener('statusChanged', (e) => {
     if (e.status === 'AUTH_KEY_CREATED') {
@@ -29,7 +48,7 @@ export default function loadDialogsMiddleware(action$, state$, connection) {
         switchMap(R.partial(loadDialogsStream, [connection]))
       );
 
-      loadDialogs$.subscribe(console.log);
+      loadDialogs$.subscribe(handleResponse);
     }
   });
 }

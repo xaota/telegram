@@ -2,8 +2,16 @@ import App from './App.js';
 import $, {channel} from './DOM.js';
 import telegram from '../tdweb/Telegram.js';
 
-import {reducer as authReducer, applyMiddleware as authApplyMiddleware} from '../state/auth/index.js';
+import {
+  reducer as authReducer,
+  applyMiddleware as authApplyMiddleware
+} from '../state/auth/index.js';
 import {reducer as pageReducer} from '../state/pages/index.js';
+import {
+  reducer as dialogsReducer,
+  applyMiddleware as dialogsApplyMiddleware,
+} from '../state/dialogs/index.js';
+import {reducer as usersReducer} from '../state/users/index.js';
 
 import LayoutLoading from '../component/layout/loading/layout-loading.js';
 import LayoutLogin   from '../component/layout/login/layout-login.js';
@@ -22,11 +30,14 @@ if (localStorage.getItem('dark') === '1') document.body.classList.add('dark');
 const subject = new BehaviorSubject({});
 const state$ = buildStateStream(combineReducers({
   page: pageReducer,
-  auth: authReducer
+  auth: authReducer,
+  dialogs: dialogsReducer,
+  users: usersReducer,
 }));
 const action$ = getActionStream();
 
 authApplyMiddleware(action$, state$, telegram.connection);
+dialogsApplyMiddleware(action$, state$, telegram.connection);
 state$.subscribe(newState => {
   console.log('[state]:', newState);
   subject.next(newState);
