@@ -7,7 +7,6 @@ const {filter, switchMap, catchError} = rxjs.operators;
 const {isActionOf} = store;
 const {method, construct, isRpcError} = zagram;
 
-
 function loadDialogsStream(connection, action) {
   console.log('Load dialogs with action', action);
   return R.pipe(

@@ -1,5 +1,6 @@
-import Component from '../../../script/Component.js';
-import $ from '../../../script/DOM.js';
+import Component from '../../../script/Component.js'
+import $ from '../../../script/DOM.js'
+import { wrapAsObjWithKey } from '../../../script/helpers.js'
 
 /* eslint-disable */
 import UIIcon    from '../../ui/icon/ui-icon.js';
@@ -24,11 +25,6 @@ const getImageFromEvent = R.path(['path', 0]);
 
 const getNaturalWidth = R.prop('naturalWidth');
 const getNaturalHeight = R.prop('naturalHeight');
-
-const wrapAsObjWithKey = R.pipe(
-  R.lensProp,
-  R.partialRight(R.set, [R.__, {}])
-);
 
 const getImageSizeFromEvent = R.pipe(
   getImageFromEvent,
