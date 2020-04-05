@@ -8,6 +8,7 @@
   },
   "scripts": {
     "test": "jest",
+    "testw": "jest --watch",
     "lint": "eslint --max-warnings 10 script/ component/ state/",
     "lintw": "esw -w --quiet --color --clear script/ component/ state/",
     "lint-fix": "eslint --fix script/ component/ state/"
