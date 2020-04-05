@@ -8,6 +8,7 @@ const { MTProto, schema, method } = zagram;
 const url = 'http://149.154.167.40/apiw';
 
 export const LOCAL_STORAGE_AUTH_KEY = 'telegramAuthData';
+export const LOCAL_STORAGE_USER_ID = 'telegramUserId';
 
 const config = {
   api_id: 905423,
@@ -46,6 +47,7 @@ class Telegram {
     const authKeyData = loadFromLocalStorage();
     console.log(authKeyData);
     this.connection = new MTProto(url, schema, authKeyData);
+    console.log(this.connection);
   }
 
   emit(type, data) {
@@ -82,26 +84,26 @@ class Telegram {
   async sendTdParameters(e) {
     if (e.status === 'AUTH_KEY_CREATED') {
       saveToLocalStorage(e.detail);
-      const parameters = {
-        layer: 108,
-        query: method(
-          'initConnection',
-          {
-            api_id: config.api_id,
-            device_model: navigator.userAgent,
-            system_version: navigator.platform,
-            app_version: '0.0.1',
-            system_lang_code: navigator.language,
-            lang_pack: '',
-            lang_code: 'ru-ru',
-            query: method('help.getConfig')
-          },
-        ),
-      }
-
-      this.api('invokeWithLayer', parameters)
-        .then(this.handleTdParamsHasBeenSet.bind(this))
-        .catch(this.handleTdParamsSetError.bind(this));
+      // const parameters = {
+      //   layer: 108,
+      //   query: method(
+      //     'initConnection',
+      //     {
+      //       api_id: config.api_id,
+      //       device_model: navigator.userAgent,
+      //       system_version: navigator.platform,
+      //       app_version: '0.0.1',
+      //       system_lang_code: navigator.language,
+      //       lang_pack: '',
+      //       lang_code: 'ru-ru',
+      //       query: method('help.getConfig')
+      //     },
+      //   ),
+      // }
+      //
+      // this.api('invokeWithLayer', parameters)
+      //   .then(this.handleTdParamsHasBeenSet.bind(this))
+      //   .catch(this.handleTdParamsSetError.bind(this));
     }
     this.emitConnectionStatus(e.status);
   }
