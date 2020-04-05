@@ -7,6 +7,6 @@ const handleSetPage = R.pipe(
   R.prop('payload')
 );
 
-export default buildReducer('login', [
+export default buildReducer('loading', [
   [isActionOf(SET_PAGE), handleSetPage]
 ]);
