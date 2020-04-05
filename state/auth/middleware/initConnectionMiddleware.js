@@ -1,6 +1,7 @@
 import {setAuthorizationData} from '../actions.js';
 import {setPage} from '../../pages/index.js';
 import {config} from '../../../tdweb/Telegram.js';
+import {wrapAsObjWithKey} from '../../../script/helpers.js';
 
 const {of, from, fromEvent} = rxjs;
 const {map, filter, switchMap, catchError, tap, mapTo} = rxjs.operators;
@@ -53,7 +54,7 @@ function chatPage$(userData) {
 
   return of(userData)
     .pipe(
-      map(R.prop('user')),
+      map(R.pipe(R.prop('user'), wrapAsObjWithKey('user'))),
       tap(setAuthorizationData),
       mapTo('chat')
     );
