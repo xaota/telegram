@@ -11,8 +11,6 @@ const isAuthKeyCreated = R.pipe(
   R.equals('AUTH_KEY_CREATED')
 );
 
-const hasUser = R.has('user');
-
 function initConnection$(connection, x) {
   console.log('[INIT CONNECTION] initConnection$', x);
   const initConnectionRequestData = method(
