@@ -4,6 +4,7 @@ import $ from '../../script/ui/DOM.js';
 /* eslint-disable */
 import UIItem   from '../ui/item.js';
 import UIAvatar from '../ui/avatar.js';
+import locator from '../../script/app/locator.js';
 /* eslint-enable */
 
 const style = css`
@@ -63,11 +64,11 @@ const properties = {};
         <h2></h2>
 
         <div>
-          <ui-item icon="edit" data-route="form-settings">Edit Profile</ui-item>
-          <ui-item icon="settings" data-route="form-general">General Settings</ui-item>
-          <ui-item icon="notifications" data-route="form-notifications">Notifications</ui-item>
-          <ui-item icon="security" data-route="form-privacy">Privacy and Security</ui-item>
-          <ui-item icon="language" data-route="form-language">Language</ui-item>
+          <ui-item icon="edit" data-route="screen-preferences">Edit Profile</ui-item>
+          <ui-item icon="settings" data-route="screen-general">General Settings</ui-item>
+          <ui-item icon="notifications" data-route="screen-notifications">Notifications</ui-item>
+          <ui-item icon="security" data-route="screen-security">Privacy and Security</ui-item>
+          <ui-item icon="language" data-route="screen-language">Language</ui-item>
         </div>
       </template>`;
 
@@ -77,6 +78,12 @@ const properties = {};
     */
     mount(node) {
       super.mount(node, attributes, properties);
+
+      const items = node.querySelectorAll('ui-item')
+        .forEach(e => e.addEventListener('click',
+          () =>  locator.channel.send('$.settings.screen', {location: e.dataset.route})
+        ));
+
       // const main = $('main', node);
       // [...main.querySelectorAll('ui-item')]
       //   .forEach(e => e.addEventListener('click', _ => route(e.dataset.route)));

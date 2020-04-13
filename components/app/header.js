@@ -100,7 +100,8 @@ const properties = {};
       more.addEventListener('click', () => drop.show = !drop.show);
 
       const back = $('#back', node);
-      back.addEventListener('click', _ => route(this.getAttribute('back'), drop));
+      back.addEventListener('click', _ => this.event('back'));
+      // back.addEventListener('click', _ => route(this.getAttribute('back'), drop));
 
       return this;
     }
