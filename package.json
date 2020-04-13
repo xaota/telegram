@@ -3,14 +3,15 @@
   "version": "0.0.2",
   "description": "Telegram contest app",
   "main": "index.js",
+  "type": "module",
   "directories": {
     "lib": "lib"
   },
   "scripts": {
     "test": "jest",
-    "lint": "eslint --max-warnings 10 script/ component/ state/",
-    "lintw": "esw -w --quiet --color --clear script/ component/ state/",
-    "lint-fix": "eslint --fix script/ component/ state/"
+    "lint": "eslint --max-warnings 10 script/ components/",
+    "lintw": "esw -w --quiet --color --clear script/ components/",
+    "lint-fix": "eslint --fix script/ components/"
   },
   "repository": {
     "type": "git",
