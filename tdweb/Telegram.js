@@ -5,7 +5,7 @@ import { wrapAsObjWithKey } from '../script/helpers.js';
 const { MTProto, schema, method } = zagram;
 
 
-const url = 'http://149.154.167.40/apiw';
+const url = 'ws://149.154.167.50/apiws';
 
 export const LOCAL_STORAGE_AUTH_KEY = 'telegramAuthData';
 export const LOCAL_STORAGE_USER_ID = 'telegramUserId';
