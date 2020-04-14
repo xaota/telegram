@@ -1,9 +1,9 @@
 import Component from '../../../script/Component.js';
 import $, {channel} from '../../../script/DOM.js';
 
-import LayoutChats from '../chats/layout-chats.js';
 
 /* eslint-disable */
+import LayoutChats from '../chats/layout-chats.js';
 import FormGroup from '../../form/group/form-group.js';
 import FormChannel from '../../form/channel/form-channel.js';
 
