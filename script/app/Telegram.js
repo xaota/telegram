@@ -1,3 +1,5 @@
+import ApiError from './ApiError.js';
+
 // @ts-ignore
 const {MTProto, schema, method, construct} = zagram; // +isMessageOf('rpc_error_type')
 
@@ -42,10 +44,14 @@ const {MTProto, schema, method, construct} = zagram; // +isMessageOf('rpc_error_
     }
 
   /** / method */
-    method(name, data) {
-      data = constructing(data);
-      const query = method(name, data);
-      return this.connection.request(query);
+    async method(name, data) {
+      try {
+        data = constructing(data);
+        const query = method(name, data);
+        return await this.connection.request(query);
+      } catch (error) {
+        throw ApiError.from(error);
+      }
     }
 
   /** */

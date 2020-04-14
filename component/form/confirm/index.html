@@ -1,0 +1,13 @@
+<template>
+  <link rel="stylesheet" href="./form-confirm.css" />
+
+  <form autocomplete="off">
+    <ui-sticker></ui-sticker>
+    <div>
+      <h1><slot></slot></h1>
+      <ui-icon>edit</ui-icon>
+    </div>
+    <h2>We have sent you an SMS with code</h2>
+    <ui-input>Code</ui-input>
+  </form>
+</template>

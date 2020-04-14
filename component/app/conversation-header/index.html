@@ -1,0 +1,21 @@
+<template>
+  <link rel="stylesheet" href="./conversation-header.css" />
+
+  <div class="left">
+    <ui-avatar></ui-avatar>
+    <div class="header">
+      <div class="title"></div>
+      <ui-online></ui-online>
+      <div class="status"></div>
+      <!--<div class="status online">online</div>-->
+    </div>
+  </div>
+  <div class="right">
+    <ui-icon id="search">search</ui-icon>
+    <ui-icon id="more">more</ui-icon>
+    <ui-drop right>
+      <ui-item icon="group">Leave</ui-item>
+      <ui-item icon="private">Mute</ui-item>
+    </ui-drop>
+  </div>
+</template>

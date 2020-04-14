@@ -1,0 +1,44 @@
+:host {
+    width: 100%;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    padding: 5px 15px;
+}
+.header ui-icon {
+    cursor: pointer;
+}
+
+.search #close {
+    color: var(--iconStatic);
+}
+
+ui-search {
+    margin-left: 20px;
+}
+
+.result {
+    padding: 0 20px 10px 20px;
+    height: calc(100vh - 68px);
+    overflow: scroll;
+}
+
+.result .count {
+    color: var(--grayTextColor);
+    padding-bottom: 20px;
+}
+
+.desc {
+    padding-top: 6px;
+    color: var(--grayTextColor);
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+span {
+    color: #4092E4;
+}

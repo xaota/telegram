@@ -1,0 +1,20 @@
+:host {
+  display: block;
+  color: #62A4EF;
+}
+
+svg {
+  width: 100%;
+  height: 100%;
+  animation: rotation 0.4s linear infinite
+}
+
+svg path {
+  fill: currentColor;
+}
+
+@keyframes rotation {
+  100% {
+    transform: rotate(360deg)
+  }
+}

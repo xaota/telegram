@@ -109,7 +109,7 @@ const properties = {};
         } catch (error) {
           phone.disabled = false;
           button.loading = false;
-          phone.error = 'Invalid phone number'; // error.message;
+          phone.error = 'Invalid phone number'; // error.errorMessage;
         }
       });
 

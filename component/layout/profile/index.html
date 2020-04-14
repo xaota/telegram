@@ -1,0 +1,49 @@
+<template>
+  <link rel="stylesheet" href="./layout-profile.css" />
+
+  <div class="header">
+    <ui-icon id="close">close</ui-icon>
+    <div class="info">Info</div>
+    <ui-icon id="more">more</ui-icon>
+  </div>
+
+  <div class="profile">
+    <ui-avatar></ui-avatar>
+    <div class="name"></div>
+    <ui-online></ui-online>
+    <div class="status"></div>
+    <div class="list">
+
+<!--      <div class="item">-->
+<!--        <div class="left">-->
+<!--          <ui-icon>live-location</ui-icon>-->
+<!--        </div>-->
+<!--        <div class="right">-->
+<!--          <div>Live location</div>-->
+<!--          <div class="desc">Karen is sharing live location</div>-->
+<!--        </div>-->
+<!--      </div>-->
+
+
+<!--      <div class="item">-->
+<!--        <div class="left">-->
+<!--          <ui-icon>close</ui-icon>-->
+<!--        </div>-->
+<!--        <div class="right">-->
+<!--          <div>Notifications</div>-->
+<!--          <div class="desc">Enabled</div>-->
+<!--        </div>-->
+<!--      </div>-->
+    </div>
+    <div class="footer">
+      <ui-tabs class="test">
+        <ui-tab id="media" selected>Media</ui-tab>
+        <ui-tab id="docs">Docs</ui-tab>
+        <ui-tab id="links">Links</ui-tab>
+        <ui-tab id="audio">Audio</ui-tab>
+      </ui-tabs>
+      <ui-list id="#tabContainer" class="container">
+      </ui-list>
+    </div>
+  </div>
+</template>

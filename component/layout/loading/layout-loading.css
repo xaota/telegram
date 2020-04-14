@@ -1,0 +1,19 @@
+:host {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 1000;
+  background: var(--background-alpha);
+  backdrop-filter: blur(3px);
+}
+
+ui-loading {
+  width: 80px;
+  height: 80px;
+}

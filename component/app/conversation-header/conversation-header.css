@@ -1,0 +1,58 @@
+:host {
+  background: var(--background-aside);
+  color: var(--foreground);
+
+  border-bottom: 1px solid var(--edge);
+  padding: .33333rem 1.33333rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+  font-size: 15px;
+  box-sizing: border-box;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+ui-avatar {
+  width: 3.06667rem;
+  height: 3.06667rem;
+  /* 46x46px */
+}
+
+.left {
+  flex-direction: row;
+  display: flex;
+  cursor: pointer;
+}
+.header {
+  padding-left: .8rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center
+}
+
+.header {
+  font-weight: 500;
+  font-size: 1rem
+}
+
+.header {
+  font-size: .93333rem;
+}
+
+.status {
+  color: #707579
+}
+
+.right {
+  position: relative;
+  right: 0;
+}
+
+.right ui-icon:hover {
+  cursor: pointer;
+}

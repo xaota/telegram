@@ -1,0 +1,33 @@
+<template>
+    <link rel="stylesheet" href="./enter-avatar.css"/>
+    <label for="enterName_fileInput">
+        <input id="enterName_fileInput" type="file" accept="image/*" style="display: none">
+        <div class="enter-avatar">
+            <ui-icon id="photo-add">photo-add</ui-icon>
+            <canvas id="resultCanvas" width="160" height="160"></canvas>
+        </div>
+    </label>
+    <div id="overlay" style="display: none">
+        <div id="editPhotoPopup">
+            <div class="editPhotoHeader">
+                <div class="closeButtonWrapper">
+                    <a id="editPhoto_closeButton" class="btn">
+                        <ui-icon>close</ui-icon>
+                    </a>
+                </div>
+                <div class="editPhoto_title">Drag to Reposition</div>
+            </div>
+            <div class="editPhotoBody">
+                <div id="editPhotoImg">
+                    <canvas width="300" class="photoCanvasBackground"></canvas>
+                    <canvas width="300" class="photoCanvas"></canvas>
+                </div>
+            </div>
+            <div class="editPhotoBottom">
+                <a id="editPhoto_okButton" class="btn btn-primary btn-circle">
+                    <ui-icon>check</ui-icon>
+                </a>
+            </div>
+        </div>
+    </div>
+</template>

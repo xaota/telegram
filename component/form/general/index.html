@@ -1,0 +1,36 @@
+<template>
+  <link rel="stylesheet" href="./form-general.css" />
+
+  <ui-header back="route-aside">General</ui-header>
+  <main>
+    <ui-fieldset name="Settings">
+      <div>
+        <ui-icon>photo</ui-icon>
+        Chat Background
+      </div>
+      <ui-checkbox>Enable Animations</ui-checkbox>
+    </ui-fieldset>
+
+    <ui-fieldset name="Keyboard">
+      <ui-radio hint="New line by Shift + Enter" checked>Send by Enter</ui-radio>
+      <ui-radio hint="New line by Enter">Send by Ctrl + Enter</ui-radio>
+    </ui-fieldset>
+
+    <ui-fieldset name="Auto-Download Media">
+      <ui-checkbox>Contacts</ui-checkbox>
+      <ui-checkbox>Private Chats</ui-checkbox>
+      <ui-checkbox>Group Chats</ui-checkbox>
+      <ui-checkbox>Channels</ui-checkbox>
+    </ui-fieldset>
+
+    <ui-fieldset name="Auto-Play Media">
+      <ui-checkbox>GIFs</ui-checkbox>
+      <ui-checkbox>Videos</ui-checkbox>
+    </ui-fieldset>
+
+    <ui-fieldset name="Stickers">
+      <ui-checkbox>Suggest Sticker by Emoji</ui-checkbox>
+      <ui-checkbox>Loop Animated Stickers</ui-checkbox>
+    </ui-fieldset>
+  </main>
+</template>
