@@ -46,3 +46,7 @@ export function buildInput$(inputNode) {
     return merge(of(""), fromEvent(inputNode, 'input')).pipe(map(R.pathOr("", ['detail', 'value'])));
 }
 
+export const wrapAsObjWithKey = R.pipe(
+  R.lensProp,
+  R.partialRight(R.set, [R.__, {}])
+);

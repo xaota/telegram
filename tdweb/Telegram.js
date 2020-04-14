@@ -1,21 +1,52 @@
 import Storage from '../script/Storage.js';
 import Channel from '../script/Channel.js';
+import { wrapAsObjWithKey } from '../script/helpers.js';
 
 const { MTProto, schema, method } = zagram;
 
-const url = 'http://149.154.167.40/apiw';
+
+const url = 'ws://149.154.167.50/apiws';
+
+export const LOCAL_STORAGE_AUTH_KEY = 'telegramAuthData';
+export const LOCAL_STORAGE_USER_ID = 'telegramUserId';
 
 const config = {
   api_id: 905423,
   api_hash: '3beebd95a9a78b35f4dc296fa1b7d8fd'
 }
 
+
 const channel = new Channel();
+
+
+const buildJsonAuthData = R.pipe(
+  R.of,
+  R.ap([
+    R.pipe(R.prop('authKey'), Array.from, wrapAsObjWithKey('authKey')),
+    R.pipe(R.prop('authKeyId'), Array.from, wrapAsObjWithKey('authKeyId')),
+    R.pipe(R.prop('serverSalt'), Array.from, wrapAsObjWithKey('serverSalt')),
+  ]),
+  R.mergeAll,
+  JSON.stringify,
+);
+
+
+const saveToLocalStorage = R.pipe(
+  buildJsonAuthData,
+  (x) => localStorage.setItem(LOCAL_STORAGE_AUTH_KEY, x),
+);
+
+const loadFromLocalStorage = R.pipe(
+  (x) => localStorage.getItem(LOCAL_STORAGE_AUTH_KEY),
+  JSON.parse,
+);
 
 class Telegram {
   constructor() {
     this.channel = new Channel();
-    this.connection = new MTProto(url, schema);
+    const authKeyData = loadFromLocalStorage();
+    console.log(authKeyData);
+    this.connection = new MTProto(url, schema, authKeyData);
     console.log(this.connection);
   }
 
@@ -51,27 +82,30 @@ class Telegram {
   }
 
   async sendTdParameters(e) {
-    this.emitConnectionStatus(e.status);
-    const parameters = {
-      layer: 108,
-      query: method(
-        'initConnection',
-        {
-          api_id: config.api_id,
-          device_model: navigator.userAgent,
-          system_version: navigator.platform,
-          app_version: '0.0.1',
-          system_lang_code: navigator.language,
-          lang_pack: '',
-          lang_code: 'ru-ru',
-          query: method('help.getConfig')
-        },
-      ),
+    if (e.status === 'AUTH_KEY_CREATED') {
+      saveToLocalStorage(e.detail);
+      // const parameters = {
+      //   layer: 108,
+      //   query: method(
+      //     'initConnection',
+      //     {
+      //       api_id: config.api_id,
+      //       device_model: navigator.userAgent,
+      //       system_version: navigator.platform,
+      //       app_version: '0.0.1',
+      //       system_lang_code: navigator.language,
+      //       lang_pack: '',
+      //       lang_code: 'ru-ru',
+      //       query: method('help.getConfig')
+      //     },
+      //   ),
+      // }
+      //
+      // this.api('invokeWithLayer', parameters)
+      //   .then(this.handleTdParamsHasBeenSet.bind(this))
+      //   .catch(this.handleTdParamsSetError.bind(this));
     }
-
-    this.api('invokeWithLayer', parameters)
-      .then(this.handleTdParamsHasBeenSet.bind(this))
-      .catch(this.handleTdParamsSetError.bind(this));
+    this.emitConnectionStatus(e.status);
   }
 
   emitConnectionStatus(status) {
