@@ -9,9 +9,10 @@
   },
   "scripts": {
     "test": "jest",
-    "lint": "eslint --max-warnings 10 script/ components/",
-    "lintw": "esw -w --quiet --color --clear script/ components/",
-    "lint-fix": "eslint --fix script/ components/"
+    "testw": "jest --watch",
+    "lint": "eslint --max-warnings 10 script/ components/ state/",
+    "lintw": "esw -w --quiet --color --clear script/ components/ state/",
+    "lint-fix": "eslint --fix script/ components/ state/"
   },
   "repository": {
     "type": "git",
@@ -32,6 +33,8 @@
     "babel-preset-env": "^1.7.0",
     "eslint": "^6.8.0",
     "eslint-plugin-jest": "^23.8.2",
-    "jest": "^25.2.4"
+    "eslint-watch": "^6.0.1",
+    "jest": "^25.2.4",
+    "node-fetch": "^2.6.0"
   }
 }

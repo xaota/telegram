@@ -2,6 +2,7 @@ import telegram, {storage} from '../../../tdweb/Telegram.js';
 
 import Component from '../../../script/Component.js';
 import $, {channel} from '../../../script/DOM.js';
+import {loadDialogs} from '../../../state/dialogs/index.js';
 
 
 /* eslint-disable */
@@ -70,15 +71,9 @@ export default class LayoutChats extends Component {
 
     channel.on('list.chat', ({chat_id: chatId, chat_list: chatList}) => {
       lists[chatList].add(chatId);
-
-      // if (!chats[chatId] || list.store().list !== chatList) return;
-      // if ($('chat-item[dataset-id="'+chatId+'"]', list)) return; // !
-
-      // const item = await ChatItem.from({model: chats[chatId], me});
-      // list.append(item);
     });
 
-    createChatsList(list, $('layout-loading', node), {lists, type}); // chats,
+    loadDialogs(); // first time load dialogs on mount;
     return this;
   }
 }
