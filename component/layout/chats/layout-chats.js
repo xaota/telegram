@@ -81,6 +81,7 @@ export default class LayoutChats extends Component {
 Component.init(LayoutChats, component, {attributes, properties});
 
 /** */
+/*
   async function createChatsList(list, loading, {lists, type}) { // chats
     const me = storage.get('me');
 
@@ -98,6 +99,7 @@ Component.init(LayoutChats, component, {attributes, properties});
     list.append(root);
     loading.style.display = 'none';
   }
+*/
 
 /**
  * Builds map for fast user access by id
