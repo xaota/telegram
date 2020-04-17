@@ -1,22 +1,23 @@
+/**
+  * @typedef { import("../app/config.js").default } Config
+  */
+
 import ApiError from './ApiError.js';
+
+import Storage from '../utils/Storage.js';
 
 // @ts-ignore
 const {MTProto, schema, method, construct} = zagram; // +isMessageOf('rpc_error_type')
 
 /** {Telegram} Работа с Telegram @class @export @default
-  *
   */
   export default class Telegram {
   /** {Telegram} Создание объекта для общения с API Telegram @constructor
+    * @param {Config} config конфигурация приложения
     */
     constructor(config) {
       this.config = config;
-      this.connection = new MTProto(config.api.url, schema);
-    }
-
-  /** @fields */
-    get connected() {
-      return this.connection.status === 'AUTH_KEY_CREATED';
+      this.connect();
     }
 
   /** */
@@ -71,6 +72,32 @@ const {MTProto, schema, method, construct} = zagram; // +isMessageOf('rpc_error_
         console.error(status);
       }
     }
+
+  /** */
+    save() {
+      const authKeyStore = this.config.authKeyStore;
+      const keys = this.keys;
+      if (!keys) return;
+
+      keys.serverSalt = Array.from(keys.serverSalt);
+      new Storage(authKeyStore).save(keys);
+    }
+
+  /** @private */
+    connect() {
+      const config = this.config;
+      const authKeyStore = config.authKeyStore;
+      const authKeyData = authKeyStore
+        ? new Storage(authKeyStore).load()
+        : undefined;
+
+      const url = config.api.url[config.test ? 'test' : 'prod'];
+      const addr = config.socket
+        ? 'ws://' + url + 's'
+        : 'http://' + url;
+
+      this.connection = new MTProto(addr, schema, authKeyData);
+    }
   }
 
 // #region [Private]
@@ -95,10 +122,11 @@ const {MTProto, schema, method, construct} = zagram; // +isMessageOf('rpc_error_
     return new Promise((resolve, reject) => {
       telegram.connection.init(); // @event statusChanged
 
-      telegram.once('statusChanged', ({status}) => {
-        telegram.connected
-          ? resolve(status) // AUTH_KEY_CREATED
-          : reject(status); // AUTH_KEY_CREATE_FAILED, AUTH_KEY_ERROR
+      telegram.once('statusChanged', ({status, detail}) => {
+        if (status !== 'AUTH_KEY_CREATED') return reject(status); // AUTH_KEY_CREATE_FAILED, AUTH_KEY_ERROR
+
+        telegram.keys = detail;
+        resolve(status); // AUTH_KEY_CREATED
       });
     });
   }

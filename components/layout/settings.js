@@ -16,10 +16,7 @@ import locator             from '../../script/app/locator.js';
 
 const style = css`
   :host {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 100%;
+    display: block;
     position: relative;
   }`;
 

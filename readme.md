@@ -12,8 +12,9 @@ avatar-edit -> app-avatar
 ### DOM-Tree
 ```
 body
+  |> layout-loading
+  |
   |> layout-login
-  |   |> layout-loading
   |   |> screen-login
   |   |> screen-confirm
   |   |> screen-register
@@ -22,10 +23,10 @@ body
   |> layout-messenger
       |> layout-main
       |   |> layout-loading
+      |   |
       |   |> layout-settings
       |   |   |> app-header
       |   |   |> screen-settings
-      |   |
       |   |   |> screen-general
       |   |   |> screen-preferences
       |   |   |> screen-notifications
@@ -35,28 +36,33 @@ body
       |   |> layout-conversations
       |       |> app-header
       |       |> screen-conversations
-      |       |   |> ui-list
-      |       |   |> app-conversation
+      |       |   |> ui-list > app-conversation * n
       |       |   |> ui-drop > ui-fab + ui-menu
       |       |
-      |       |> screen-contacts
-      |       |> screen-
+      |       |> screen-contacts ?
+      |       |   |> ui-list > app-contact * n
+      |       |   |> ui-drop > ui-fab + ui-menu
+      |       |
+      |       |> screen-...
       |
       |> layout-conversation
-          |> layout-empty
-          |> layout-dialog
-          |   |> layout-loading
+          |> screen-empty
+          |> screen-conversation
           |   |> app-header
-          |   |> app-dialog
-          |   |   |> app-message
+          |   |> ui-list
+          |   |   |> app-message * n
           |   |
           |   |> app-field
           |       |> app-emoji
           |
-          |> layout-info
+          |> layout-sidebar
               |> layout-loading
-              |> app-header
+              |> screen-sidebar
+                  |> app-header
+                  ...
 ```
+
+> в `layout-conversation/screen-conversation` нет `layout-loading` и не должно быть
 
 ### Router - роутинг дочерних компонент (todo: надо бы улучшить его)
 ```javascript
@@ -86,6 +92,10 @@ router.check('login', ...args);
 Router.nameCheck(route, location)
 Router.constructorHandler(constructor, skip = 1)
 Router.callbackSkip(callback, skip = 2)
+
+// @TODO:
+// router.history
+// .back(), .forward()
 ```
 
 ### Services (DI / Service Locator)

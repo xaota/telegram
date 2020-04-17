@@ -1,8 +1,17 @@
 import Router   from './ui/Router.js';
-import Telegram from './app/Telegram.js';
+import Telegram from './telegram/Telegram.js';
 
 import config   from './app/config.js';
 import locator  from './app/locator.js';
+
+import Channel from './utils/Channel.js';
+import Storage from './utils/Storage.js';
+
+/* eslint-disable */
+import LayoutLoading   from '../components/layout/loading.js';
+import LayoutLogin     from '../components/layout/login.js';
+import LayoutMessenger from '../components/layout/messenger.js';
+/* eslint-enable */
 
 // import {
 //   reducer as authReducer,
@@ -15,18 +24,11 @@ import locator  from './app/locator.js';
 // } from '../state/dialogs/index.js';
 // import {reducer as usersReducer} from '../state/users/index.js';
 
-import Channel from './utils/Channel.js';
-import Storage from './utils/Storage.js';
-
-import LayoutLoading   from '../components/layout/loading.js';
-import LayoutLogin     from '../components/layout/login.js';
-import LayoutMessenger from '../components/layout/messenger.js';
 // const {buildStateStream, combineReducers, dispatchInit, getActionStream} = store;
 // const {BehaviorSubject} = rxjs;
 // const {map, distinctUntilChanged} = rxjs.operators;
 
 // if (localStorage.getItem('dark') === '1') document.body.classList.add('dark');
-
 
 // const subject = new BehaviorSubject({});
 // const state$ = buildStateStream(combineReducers({
@@ -57,12 +59,20 @@ async function main() {
   locator.set({config, telegram, channel, storage});
 
   const router = routing();
+  channel.on('$.auth.user', ({user}) => router.check('layout-messenger', user));
 
   const connection = await telegram.init();
-  // console.log({connection});
-  if (telegram.connected) router.check('layout-login');
+  console.log({connection});
 
-  locator.channel.on('$.auth.user', ({user}) => router.check('layout-messenger', user));
+  telegram
+    .method('users.getFullUser', {id: {_: 'inputUserSelf'}})
+    .then(user => {
+      console.log(user);
+      channel.send('$.auth.user', {user});
+    })
+    .catch(() => router.check('layout-login'));
+
+  window.telegram = telegram;
 }
 
 // #region [Private]

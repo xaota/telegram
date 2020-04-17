@@ -18,6 +18,7 @@ const style = css`
     font-weight: 500;
     /* margin-left: 22px; */
     position: relative;
+    background: var(--background-aside);
   }
 
   ui-icon {

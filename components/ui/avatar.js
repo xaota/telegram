@@ -85,6 +85,18 @@ const properties = {
         <ui-badge dot outline></ui-badge>
       </template>`;
 
+  /** Создание компонента {UIAvatar} @constructor
+    * @param {Object} contact контакт для общения
+    * @param {number=} contact.id содержимое элемента
+    * @param {string=} contact.name содержимое элемента
+    */
+    constructor(contact = {id: 325, name: 'вапр'}) {
+      super();
+      const {id, name} = contact;
+      if (id)   this.color     = UIAvatar.color(id);
+      if (name) this.innerText = UIAvatar.letter(name);
+    }
+
   /** Создание элемента в DOM (DOM доступен) / mount @lifecycle
     * @param {HTMLElement} node корневой узел элемента
     * @return {Component} @this {UIAvatar} текущий компонент
@@ -93,7 +105,7 @@ const properties = {
       return super.mount(node, attributes, properties);
     }
 
-    static from(sender, color, image) { // создание аватара в сообщении
+    static from(sender, color) { // создание аватара в сообщении
       const avatar = new UIAvatar();
       avatar.innerText = UIAvatar.letter(sender);
       avatar.color = color;

@@ -1,9 +1,9 @@
 /**
- * @typedef { import("./config.js").default } Config
- * @typedef { import("./Telegram.js").default } Telegram
- * @typedef { import("../utils/Channel.js").default } Channel
- * @typedef { import("../utils/Storage.js").default } Storage
- */
+  * @typedef { import("./config.js").default } Config
+  * @typedef { import("../utils/Storage.js").default } Storage
+  * @typedef { import("../utils/Channel.js").default } Channel
+  * @typedef { import("../telegram/Telegram.js").default } Telegram
+  */
 
 /** {Locator} DI @class @export @default
   *

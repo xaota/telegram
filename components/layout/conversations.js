@@ -1,50 +1,40 @@
 import Component, {html, css} from '../../script/ui/Component.js';
 
 /* eslint-disable */
-import UILoading from '../ui/loading.js';
+import AppHeader           from '../app/header.js';
+import ScreenConversations from '../screen/conversations.js';
 /* eslint-enable */
 
 const style = css`
   :host {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    z-index: 1000;
-    background: var(--background-alpha);
-    backdrop-filter: blur(3px);
-  }
-
-  ui-loading {
-    width: 80px;
-    height: 80px;
+    display: grid;
+    height: 100%;
+    grid-template-rows: 60px auto;
   }`;
 
 const attributes = {};
 const properties = {};
 
-/** {LayoutLoading} @class
-  * @description Отображение блока простого текста
+/** {LayoutConversations} @class
+  * @description Отображение блока списка чатов
   */
-  export default class LayoutLoading extends Component {
+  export default class LayoutConversations extends Component {
     static template = html`
       <template>
         <style>${style}</style>
-        <ui-loading></ui-loading>
+        <app-header></app-header>
+        <main>
+          <screen-conversations></screen-conversations>
+        </main>
       </template>`;
 
   /** Создание элемента в DOM (DOM доступен) / mount @lifecycle
     * @param {HTMLElement} node корневой узел элемента
-    * @return {Component} @this {LayoutLoading} текущий компонент
+    * @return {Component} @this {LayoutConversations} текущий компонент
     */
     mount(node) {
       return super.mount(node, attributes, properties);
     }
   }
 
-Component.init(LayoutLoading, 'layout-loading', {attributes, properties});
+Component.init(LayoutConversations, 'layout-conversations', {attributes, properties});

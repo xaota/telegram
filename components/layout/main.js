@@ -1,8 +1,9 @@
 import Component, {html, css} from '../../script/ui/Component.js';
 
 /* eslint-disable */
-import LayoutLoading  from './loading.js';
-import LayoutSettings from './settings.js';
+import LayoutLoading       from './loading.js';
+import LayoutSettings      from './settings.js';
+import LayoutConversations from './conversations.js'; // список чатов
 /* eslint-enable */
 
 const style = css`
@@ -21,8 +22,12 @@ const properties = {};
     static template = html`
       <template>
         <style>${style}</style>
-        <!-- <layout-loading></layout-loading> -->
-        <layout-settings></layout-settings>
+        <!--
+          <layout-loading></layout-loading>
+          <layout-settings></layout-settings>
+        -->
+        <layout-conversations></layout-conversations>
+
       </template>`;
 
   /** Создание элемента в DOM (DOM доступен) / mount @lifecycle

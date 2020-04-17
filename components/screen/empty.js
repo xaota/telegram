@@ -75,10 +75,10 @@ const style = css`
 const attributes = {};
 const properties = {};
 
-/** {LayoutEmpty} @class
+/** {ScreenEmpty} @class
   * @description Отображение пустого раздела общения
   */
-  export default class LayoutEmpty extends Component {
+  export default class ScreenEmpty extends Component {
     static template = html`
       <template>
         <style>${style}</style>
@@ -102,7 +102,7 @@ const properties = {};
 
   /** Создание элемента в DOM (DOM доступен) / mount @lifecycle
     * @param {HTMLElement} node корневой узел элемента
-    * @return {Component} @this {LayoutEmpty} текущий компонент
+    * @return {Component} @this {ScreenEmpty} текущий компонент
     */
     mount(node) {
       super.mount(node, attributes, properties);
@@ -114,4 +114,4 @@ const properties = {};
     }
   }
 
-Component.init(LayoutEmpty, 'layout-empty', {attributes, properties});
+Component.init(ScreenEmpty, 'screen-empty', {attributes, properties});
