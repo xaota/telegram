@@ -59,7 +59,10 @@ async function main() {
   locator.set({config, telegram, channel, storage});
 
   const router = routing();
-  channel.on('$.auth.user', ({user}) => router.check('layout-messenger', user));
+  channel.on('$.auth.user', ({user}) => {
+    telegram.save(); // сохранить сессию
+    router.check('layout-messenger', user);
+  });
 
   const connection = await telegram.init();
   console.log({connection});

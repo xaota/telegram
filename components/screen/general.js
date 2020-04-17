@@ -1,4 +1,5 @@
 import Component, {html, css} from '../../script/ui/Component.js';
+import locator from '../../script/app/locator.js';
 
 /* eslint-disable */
 import UIFAB      from '../ui/fab.js';
@@ -46,13 +47,13 @@ const properties = {};
         <style>${style}</style>
         <app-avatar></app-avatar>
 
-        <ui-input>Name</ui-input>
-        <ui-input>Last Name</ui-input>
-        <ui-input>Bio (optional)</ui-input>
+        <ui-input id="name">Name</ui-input>
+        <ui-input id="last-name">Last Name</ui-input>
+        <ui-input id="bio">Bio (optional)</ui-input>
         <p>Any details such as age, occupation or city. Example: 23 y.o. designer from San Francisco.</p>
 
         <ui-fieldset name="Username">
-          <ui-input>Username (optional)</ui-input>
+          <ui-input id="user-name">Username (optional)</ui-input>
           <p>You can choose a username on Telegram.
             If you do, other people will be able to find you by this username and contact you without knowing your phone number.</p>
           <p>You can use a-z, 0-9 and underscores. Minimum length is 5 characters.</p>
@@ -65,8 +66,36 @@ const properties = {};
     * @return {Component} @this {ScreenGeneral} текущий компонент
     */
     mount(node) {
-      return super.mount(node, attributes, properties);
+      super.mount(node, attributes, properties);
+      init(node);
+      return this;
     }
   }
 
 Component.init(ScreenGeneral, 'screen-general', {attributes, properties});
+
+/** */
+  async function init(node) {
+    const button   = node.querySelector('ui-fab');
+    const name     = node.querySelector('#name');
+    const lastName = node.querySelector('#last-name');
+    const bio      = node.querySelector('#bio');
+    const userName = node.querySelector('#user-name');
+
+    const account  = await locator.telegram.method('users.getFullUser', {id: {_: 'inputUserSelf'}});
+    name.value     = account.user.first_name || '';
+    lastName.value = account.user.last_name || '';
+    bio.value      = account.about || '';
+    userName.value = account.user.username || '';
+
+    button.addEventListener('click', async () => {
+      const data = {
+        first_name: name.value || '',
+        last_name:  lastName.value || '',
+        about:      bio.value || ''
+      };
+
+      const updateProfile = await locator.telegram.method('account.updateProfile', data);
+      console.log('updateProfile', updateProfile);
+    })
+  }
