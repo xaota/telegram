@@ -74,6 +74,7 @@ export default class LayoutChats extends Component {
     });
 
     loadDialogs(); // first time load dialogs on mount;
+    createChatsList(list, $('layout-loading', node), {lists, type});
     return this;
   }
 }
