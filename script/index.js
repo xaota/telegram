@@ -12,6 +12,7 @@ import {
   applyMiddleware as dialogsApplyMiddleware
 } from '../state/dialogs/index.js';
 import {reducer as usersReducer} from '../state/users/index.js';
+import {reducer as chatsReducer} from '../state/chats/index.js';
 
 import LayoutLoading from '../component/layout/loading/layout-loading.js';
 import LayoutLogin   from '../component/layout/login/layout-login.js';
@@ -32,7 +33,8 @@ const state$ = buildStateStream(combineReducers({
   page: pageReducer,
   auth: authReducer,
   dialogs: dialogsReducer,
-  users: usersReducer
+  users: usersReducer,
+  chats: chatsReducer
 }));
 const action$ = getActionStream();
 
