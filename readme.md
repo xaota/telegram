@@ -52,14 +52,15 @@ body
           |   |> ui-list
           |   |   |> app-message * n
           |   |
-          |   |> app-field
-          |       |> app-emoji
+          |   |> screen-field
+          |       |> app-field
           |
           |> layout-sidebar
               |> layout-loading
               |> screen-sidebar
                   |> app-header
                   ...
+          ...search
 ```
 
 > в `layout-conversation/screen-conversation` нет `layout-loading` и не должно быть

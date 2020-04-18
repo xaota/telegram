@@ -7,7 +7,8 @@ import ApiError from './ApiError.js';
 import Storage from '../utils/Storage.js';
 
 // @ts-ignore
-const {MTProto, schema, method, construct} = zagram; // +isMessageOf('rpc_error_type')
+const {MTProto, schema, method, construct} = zagram;
+// +isMessageOf('rpc_error_type'), isObjectOf, CONSTRUCTOR_KEY
 
 /** {Telegram} Работа с Telegram @class @export @default
   */

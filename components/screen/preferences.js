@@ -3,6 +3,7 @@ import Component, {html, css} from '../../script/ui/Component.js';
 /* eslint-disable */
 import UIIcon     from '../ui/icon.js';
 import UIRadio    from '../ui/radio.js';
+import UIProperty from '../ui/property.js';
 import UICheckbox from '../ui/checkbox.js';
 import UIFieldset from '../ui/fieldset.js';
 /* eslint-enable */
@@ -30,10 +31,7 @@ const properties = {};
       <template>
         <style>${style}</style>
         <ui-fieldset name="Settings">
-          <div>
-            <ui-icon>photo</ui-icon>
-            Chat Background
-          </div>
+          <ui-property icon="photo" side="left">Chat Background</ui-property>
           <ui-checkbox>Enable Animations</ui-checkbox>
         </ui-fieldset>
 

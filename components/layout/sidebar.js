@@ -2,6 +2,7 @@ import Component, {html, css} from '../../script/ui/Component.js';
 
 /* eslint-disable */
 import LayoutLoading from './loading.js';
+import ScreenSidebar from '../screen/sidebar.js';
 /* eslint-enable */
 
 const style = css`
@@ -23,8 +24,8 @@ const properties = {};
     static template = html`
       <template>
         <style>${style}</style>
-        <layout-loading></layout-loading>
-        screen-sidebar
+        <!-- <layout-loading></layout-loading> -->
+        <screen-sidebar></screen-sidebar>
         ...
       </template>`;
 

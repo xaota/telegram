@@ -3,14 +3,14 @@ import $ from '../../script/ui/DOM.js';
 
 const style = css`
   :host {
+    display: inline-block;
+    position: relative;
+  }
+
+  main {
     display: block;
     position: absolute;
-    min-width: 218px;
-    border-radius: 10px;
-    box-shadow: var(--shadow) 0px 0px 10px;
     z-index: 40;
-    background-color: var(--drop);
-    padding: 8px 0;
     overflow: hidden;
     opacity: 0;
     visibility: hidden;
@@ -18,20 +18,26 @@ const style = css`
     transition: all 0.2s ease 0s;
     left: 0;
     top: 100%;
+
+    /* box-sizing: border-box; */
+    background-color: var(--drop);
+    box-shadow: var(--shadow) 0 0 10px;
+    border: 1px solid var(--edge);
+    border-radius: 10px;
   }
 
-  :host([up]) {
+  :host([up]) main {
     top: auto;
     bottom: 100%;
     transform: translateY(10px);
   }
 
-  :host([right]) {
+  :host([right]) main {
     left: auto;
     right: 0;
   }
 
-  :host([show]) {
+  :host([show]) main {
     opacity: 1;
     visibility: visible;
     transform: translateY(0px);
@@ -52,15 +58,8 @@ const properties = {
       <template>
         <style>${style}</style>
         <slot></slot>
+        <main><slot name="drop"></slot></main>
       </template>`;
-
-  /** Создание компонента {UIDrop} @constructor
-    * @param {string?} name название иконки
-    */
-    constructor(name) {
-      super();
-      if (name) this.innerText = name;
-    }
 
   /** Создание элемента в DOM (DOM доступен) / mount @lifecycle
     * @param {HTMLElement} node корневой узел элемента

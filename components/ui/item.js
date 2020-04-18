@@ -31,6 +31,12 @@ const style = css`
     color: var(--iconStatic);
   }
 
+  slot {
+    display: inline-block;
+    white-space: nowrap;
+    padding-right: 16px;
+  }
+
   :host(:hover) ui-icon {
     color: var(--iconHover);
   }

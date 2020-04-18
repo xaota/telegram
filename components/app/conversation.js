@@ -22,7 +22,7 @@ const style = css`
     width: 3.6rem;
     height: 3.6rem;
     grid-area: avatar;
-    margin-right: 6px;
+    margin-right: 8px;
   }
 
   header, main {

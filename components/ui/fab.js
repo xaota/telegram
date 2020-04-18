@@ -1,11 +1,16 @@
 import Component, {html, css} from '../../script/ui/Component.js';
 import $ from '../../script/ui/DOM.js';
 
+// eslint-disable
+import UIIcon from './icon.js';
+// eslint-enable
+
 const style = css`
   :host {
-    position: absolute;
+    /* position: absolute;
     bottom: 20px;
     right: 20px;
+    z-index: 30; */
     background-color: #dadce0;
     border-radius: 50%;
     width: 54px;
@@ -15,7 +20,6 @@ const style = css`
     justify-content: center;
     cursor: pointer;
     border: none;
-    z-index: 30;
   }
 
   slot {

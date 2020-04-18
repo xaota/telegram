@@ -4,9 +4,11 @@ import Component, {html, css} from '../../script/ui/Component.js';
 
 /* eslint-disable */
 import UIFAB           from '../ui/fab.js';
+import UIMenu          from '../ui/menu.js';
+import UIDrop          from '../ui/drop.js';
 import UIItem          from '../ui/item.js';
-import UINetwork       from '../ui/network.js';
 import UIList          from '../ui/list.js';
+import UINetwork       from '../ui/network.js';
 import AppConversation from '../app/conversation.js';
 /* eslint-enable */
 
@@ -35,24 +37,22 @@ const style = css`
     right: 0;
   }
 
-  ui-fab {
-    bottom: -54px;
+  ui-drop {
+    position: absolute;
+    /* bottom: -54px; */
+    bottom: 20px;
+    right: 20px;
     transition: .3s ease bottom;
   }
 
-  ui-list:hover ~ ui-fab, ui-fab:hover, ui-drop:hover ~ ui-fab {
+  /* ui-list:hover ~ ui-drop, ui-drop:hover {
     bottom: 20px;
-  }
+  } */
 
-  ui-drop {
-    right: 16px;
-    bottom: 84px;
-  }
-
-  :host-context(aside[collapsed]) ui-drop {
+  /* :host-context(aside[collapsed]) ui-drop {
     right: auto;
     left: 16px;
-  }`;
+  } */`;
 
 const attributes = {};
 const properties = {};
@@ -65,6 +65,15 @@ const properties = {};
       <template>
         <style>${style}</style>
         <ui-network updating></ui-network>
+        <ui-tabs>
+          <ui-tab selected>All chats</ui-tab>
+          <ui-tab>Unread</ui-tab>
+          <ui-tab>Personal</ui-tab>
+          <ui-tab>Groups</ui-tab>
+          <!-- <ui-tab>Channels</ui-tab>
+          <ui-tab>Bots</ui-tab>
+          <ui-tab>Other</ui-tab> -->
+        </ui-tabs>
         <ui-list>
           <app-conversation pin></app-conversation>
           <app-conversation pin></app-conversation>
@@ -74,12 +83,14 @@ const properties = {};
           <app-conversation></app-conversation>
         </ui-list>
 
-        <ui-drop up right>
-          <ui-item icon="channel" id="fab-channel">New Channel</ui-item>
-          <ui-item icon="group" id="fab-group">New Group</ui-item>
-          <ui-item icon="private">New Private Chat</ui-item>
+        <ui-drop up right show>
+          <ui-fab>edit</ui-fab>
+          <ui-menu slot="drop">
+            <ui-item icon="channel" id="fab-channel">New Channel</ui-item>
+            <ui-item icon="group" id="fab-group">New Group</ui-item>
+            <ui-item icon="private">New Private Chat</ui-item>
+          </ui-menu>
         </ui-drop>
-        <ui-fab>edit</ui-fab>
       </template>`;
 
   /** Создание элемента в DOM (DOM доступен) / mount @lifecycle
