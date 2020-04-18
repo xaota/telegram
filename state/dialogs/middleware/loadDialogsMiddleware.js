@@ -1,6 +1,7 @@
 import {LOAD_DIALOGS} from '../constants.js';
 import {setDialogsLoaded, setLoadDialogsFailed} from '../actions.js';
 import {setUserList} from '../../users/index.js';
+import {setChatList} from '../../chats/index.js';
 
 const {from} = rxjs;
 const {filter, switchMap, catchError} = rxjs.operators;
@@ -30,7 +31,8 @@ const handleSuccessResponse = R.pipe(
   R.of,
   R.ap([
     R.pipe(R.prop('dialogs'), setDialogsLoaded),
-    R.pipe(R.prop('users'), setUserList)
+    R.pipe(R.prop('users'), setUserList),
+    R.pipe(R.prop('chats'), setChatList)
   ])
 );
 
