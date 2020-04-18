@@ -1,5 +1,5 @@
 import {LOAD_DIALOGS} from '../constants.js';
-import {setDialogsLoaded, setLoadDialogsFailed} from '../actions.js';
+import {setDialogsLoaded, setLoadDialogsFailed, addMessagesBatch} from '../actions.js';
 import {setUserList} from '../../users/index.js';
 import {setChatList} from '../../chats/index.js';
 
@@ -9,7 +9,6 @@ const {isActionOf} = store;
 const {method, construct, isRpcError} = zagram;
 
 function loadDialogsStream(connection, action) {
-  console.log('Load dialogs with action', action);
   return R.pipe(
     R.always({
       limit: 20,
@@ -32,7 +31,8 @@ const handleSuccessResponse = R.pipe(
   R.ap([
     R.pipe(R.prop('dialogs'), setDialogsLoaded),
     R.pipe(R.prop('users'), setUserList),
-    R.pipe(R.prop('chats'), setChatList)
+    R.pipe(R.prop('chats'), setChatList),
+    R.pipe(R.prop('messages'), addMessagesBatch)
   ])
 );
 

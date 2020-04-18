@@ -1,17 +1,18 @@
-import {LOAD_DIALOGS, DIALOGS_LOAD_FAILED, DIALOGS_LOADED, ADD_MESSAGE} from './constants.js';
+import {
+  LOAD_DIALOGS,
+  DIALOGS_LOAD_FAILED,
+  DIALOGS_LOADED,
+  ADD_MESSAGE,
+  ADD_MESSAGES_BATCH
+} from './constants.js';
 import {wrapAsObjWithKey} from '../../script/helpers.js';
 import {peerToPeerId} from '../utils.js';
-import { ADD_MESSAGES_BATCH } from './constants'
 
 const {isActionOf, buildReducer} = store;
 
-const debug = x => {
-  console.log(x);
-  return x;
-};
-
 
 const getState = R.nth(0);
+
 
 const getAction = R.nth(1);
 
@@ -123,7 +124,6 @@ const buildMessageLens = R.pipe(
     R.pipe(R.prop('id'), x => x.toString())
   ]),
   R.flatten,
-  debug,
   R.lensPath
 );
 
@@ -177,9 +177,9 @@ const handleAddMessage = R.pipe(
   R.of,
   R.ap([
     R.nth(0),
-    R.path([1, 'payload']),
+    R.path([1, 'payload'])
   ]),
-  addMessage,
+  addMessage
 );
 
 const handleAddMessagesBatch = R.pipe(
@@ -189,13 +189,13 @@ const handleAddMessagesBatch = R.pipe(
     R.nth(0),
     R.path([1, 'payload'])
   ]),
-  R.apply(R.reduce),
-)
+  R.apply(R.reduce)
+);
 
 export default buildReducer({}, [
   [isActionOf(LOAD_DIALOGS), handleLoadingTrue],
   [isActionOf(DIALOGS_LOAD_FAILED), handleDialogsLoadFailed],
   [isActionOf(DIALOGS_LOADED), handleDialogsLoaded],
   [isActionOf(ADD_MESSAGE), handleAddMessage],
-  [isActionOf(ADD_MESSAGES_BATCH), handleAddMessagesBatch],
+  [isActionOf(ADD_MESSAGES_BATCH), handleAddMessagesBatch]
 ]);

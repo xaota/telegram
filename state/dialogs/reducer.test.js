@@ -5,7 +5,7 @@ import {
 } from './constants.js';
 
 import reducer from './reducer.js';
-import { ADD_MESSAGES_BATCH } from './constants'
+import {ADD_MESSAGES_BATCH} from './constants';
 
 const {construct} = zagram;
 
@@ -284,8 +284,8 @@ describe('dialogs', () => {
               silent: false,
               to_id: construct('peerUser', {'user_id': 516572})
             }
-          ),
-        ],
+          )
+        ]
       };
 
       expect(reducer(state, action)).toEqual({
