@@ -163,7 +163,7 @@ const properties = {};
               <textarea placeholder="Message" rows="1"></textarea>
             </div>
             <input type="file" id="fileInput" style="display: none">
-            <ui-drop id="drop-attach" up right show>
+            <ui-drop id="drop-attach" up right>
               <ui-icon id="attach">attach</ui-icon>
               <ui-menu slot="drop">
                 <ui-item icon="photo" id="photo">Photo or Video</ui-item>

@@ -1,5 +1,5 @@
 import Component, {html, css} from '../../script/ui/Component.js';
-import $ from '../../script/ui/DOM.js';
+// import $ from '../../script/ui/DOM.js';
 
 const style = css`
   :host {
@@ -67,6 +67,9 @@ const properties = {
     */
     mount(node) {
       super.mount(node, attributes, properties);
+      // const drop = $('slot[name="drop"]', node);
+      // (if prop) drop click cancel
+      node.addEventListener('click', () => this.show = !this.show);
       return this;
     }
   }

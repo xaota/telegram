@@ -59,7 +59,7 @@ const properties = {};
     static template = html`
       <template>
         <style>${style}</style>
-        <app-header></app-header>
+        <app-header close more></app-header>
         <main>
           <ui-avatar></ui-avatar>
           <h1>хаотаскрипт</h1>

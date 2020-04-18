@@ -20,7 +20,9 @@ export default class ScreenConversation extends Component {
   static template = html`
       <template>
         <style>${style}</style>
-        <app-header></app-header>
+        <app-header find more>
+          <span>ui-avatar + caption + ui-online</span>
+        </app-header>
 
         <app-message data-hash="1587063600000x1">
           <message-system>

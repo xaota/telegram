@@ -22,9 +22,23 @@ const properties = {};
     static template = html`
       <template>
         <style>${style}</style>
-        <app-header></app-header>
+        <app-header menu search>
+          <ui-menu slot="menu">
+            <ui-item icon="group" data-route="form-group">New group</ui-item>
+            <ui-item icon="private">Contacts</ui-item>
+            <ui-item icon="archive">Archived</ui-item>
+            <ui-item icon="favorite" data-route="#favorite">Saved</ui-item>
+            <ui-item icon="conversation" data-route="#conversation">Open by ID</ui-item>
+            <ui-item icon="settings" data-route="layout-settings">Settings</ui-item>
+            <ui-item icon="help" data-route="//telegram.org/support">Help</ui-item>
+            <ui-item icon="bulb" data-route="#night-mode">Night Mode</ui-item>
+            <ui-item icon="back" data-route="#collapse">Collapse</ui-item>
+            <ui-item data-route="layout-icons">Icons</ui-item>
+          </ui-menu>
+        </app-header>
         <main>
           <screen-conversations></screen-conversations>
+          <!-- screen-contacts, etc. -->
         </main>
       </template>`;
 

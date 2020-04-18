@@ -83,7 +83,7 @@ const properties = {};
           <app-conversation></app-conversation>
         </ui-list>
 
-        <ui-drop up right show>
+        <ui-drop up right>
           <ui-fab>edit</ui-fab>
           <ui-menu slot="drop">
             <ui-item icon="channel" id="fab-channel">New Channel</ui-item>
