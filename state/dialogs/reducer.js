@@ -1,6 +1,7 @@
 import {LOAD_DIALOGS, DIALOGS_LOAD_FAILED, DIALOGS_LOADED, ADD_MESSAGE} from './constants.js';
 import {wrapAsObjWithKey} from '../../script/helpers.js';
 import {peerToPeerId} from '../utils.js';
+import { ADD_MESSAGES_BATCH } from './constants'
 
 const {isActionOf, buildReducer} = store;
 
@@ -135,8 +136,8 @@ const buildMessageLens = R.pipe(
 const setNewMessageOrder = R.pipe(
   R.of,
   R.ap([
-    R.pipe(R.path([1, 'payload']), buildMessageOrderLens),
-    R.pipe(R.path([1, 'payload', 'id']), R.append),
+    R.pipe(R.nth(1), buildMessageOrderLens),
+    R.pipe(R.path([1, 'id']), R.append),
     R.nth(0)
   ]),
   R.apply(R.over)
@@ -148,14 +149,17 @@ const setNewMessageOrder = R.pipe(
 const setNewMessage = R.pipe(
   R.of,
   R.ap([
-    R.pipe(R.path([1, 'payload']), buildMessageLens),
-    R.path([1, 'payload']),
+    R.pipe(R.nth(1), buildMessageLens),
+    R.nth(1),
     R.nth(0)
   ]),
   R.apply(R.set)
 );
 
-const handleAddMessage = R.pipe(
+/**
+ * Takes tuple with current state and message. Returns state with updated dialog
+ */
+const addMessage = R.pipe(
   R.of,
   R.ap([
     setNewMessageOrder,
@@ -169,9 +173,29 @@ const handleAddMessage = R.pipe(
   R.nth(0)
 );
 
+const handleAddMessage = R.pipe(
+  R.of,
+  R.ap([
+    R.nth(0),
+    R.path([1, 'payload']),
+  ]),
+  addMessage,
+);
+
+const handleAddMessagesBatch = R.pipe(
+  R.of,
+  R.ap([
+    R.always(R.unapply(addMessage)),
+    R.nth(0),
+    R.path([1, 'payload'])
+  ]),
+  R.apply(R.reduce),
+)
+
 export default buildReducer({}, [
   [isActionOf(LOAD_DIALOGS), handleLoadingTrue],
   [isActionOf(DIALOGS_LOAD_FAILED), handleDialogsLoadFailed],
   [isActionOf(DIALOGS_LOADED), handleDialogsLoaded],
-  [isActionOf(ADD_MESSAGE), handleAddMessage]
+  [isActionOf(ADD_MESSAGE), handleAddMessage],
+  [isActionOf(ADD_MESSAGES_BATCH), handleAddMessagesBatch],
 ]);
