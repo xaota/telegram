@@ -4,15 +4,16 @@ import {setUserList} from '../../users/index.js';
 import {setChatList} from '../../chats/index.js';
 
 const {from} = rxjs;
-const {filter, switchMap, catchError} = rxjs.operators;
+const {filter, switchMap, catchError, tap} = rxjs.operators;
 const {isActionOf} = store;
 const {method, construct, isRpcError} = zagram;
 
 function loadDialogsStream(connection, action) {
   return R.pipe(
-    R.always({
-      limit: 20,
-      offset: 0,
+    R.propOr({}, 'payload'),
+    R.merge({
+      limit: 10,
+      offset_date: 0,
       offset_id: 0,
       offset_peer: construct('inputPeerEmpty'),
       hash: 0
@@ -46,7 +47,7 @@ export default function loadDialogsMiddleware(action$, state$, connection) {
     if (e.status === 'AUTH_KEY_CREATED') {
       const loadDialogs$  = action$.pipe(
         filter(isActionOf(LOAD_DIALOGS)),
-        switchMap(R.partial(loadDialogsStream, [connection]))
+        switchMap(R.partial(loadDialogsStream, [connection])),
       );
 
       loadDialogs$.subscribe(handleResponse);

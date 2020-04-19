@@ -40,10 +40,20 @@ const getPeerFormDialog = R.prop('peer');
 
 const getPeerIdFromDialog = R.pipe(getPeerFormDialog, peerToPeerId);
 
-const buildDialogsOrder = R.pipe(
+const buildNewDialogsOrder = R.pipe(
   getAction,
   R.prop('payload'),
   R.map(getPeerIdFromDialog),
+);
+
+const buildDialogsOrder = R.pipe(
+  R.of,
+  R.ap([
+    R.pipe(getState, R.propOr([], 'dialogsOrder')),
+    buildNewDialogsOrder,
+  ]),
+  R.flatten,
+  R.uniq,
   wrapAsObjWithKey('dialogsOrder')
 );
 
@@ -52,12 +62,21 @@ const buildDialogsPair = R.pipe(
   R.ap([getPeerIdFromDialog, R.set(R.lensProp('info'), R.__, {messages: {}, messages_order: []})])
 );
 
-const buildDialogsMap = R.pipe(
+const buildNewDialogsMap = R.pipe(
   getAction,
   R.prop('payload'),
   R.map(buildDialogsPair),
   R.fromPairs,
-  wrapAsObjWithKey('dialogs')
+);
+
+const buildDialogsMap = R.pipe(
+  R.of,
+  R.ap([
+    buildNewDialogsMap,
+    R.pipe(getState, R.prop('dialogs'))
+  ]),
+  R.mergeAll,
+  wrapAsObjWithKey('dialogs'),
 );
 
 const handleDialogsLoadFailed = removeLoadingFromState;

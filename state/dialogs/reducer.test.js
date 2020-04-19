@@ -113,6 +113,161 @@ describe('dialogs', () => {
         }
       });
     });
+
+    it('test has got loaded before', () => {
+      const state = {
+        dialogsOrder: [
+          'peer_user_77700',
+          'peer_user_516572'
+        ],
+        dialogs: {
+          'peer_user_77700': {
+            info: construct('dialog', {
+              pinned: false,
+              unread_mark: false,
+              peer: construct('peerUser', {'user_id': 77700}),
+              top_message: 208,
+              read_inbox_max_id: 199,
+              read_outbox_max_id: 14,
+              unread_count: 9,
+              unread_mentions_count: 0,
+              notify_settings: construct('peerNotifySettings', {})
+            }),
+            messages_order: [],
+            messages: {}
+          },
+          'peer_user_516572': {
+            info: construct('dialog', {
+              pinned: false,
+              unread_mark: false,
+              peer: construct('peerUser', {user_id: 516572}),
+              top_message: 198,
+              read_inbox_max_id: 0,
+              read_outbox_max_id: 0,
+              unread_count: 0,
+              unread_mentions_count: 0,
+              notify_settings: construct('peerNotifySettings', {})
+            }),
+            messages_order: [],
+            messages: {}
+          }
+        }
+
+      };
+
+      const action = {
+        type: DIALOGS_LOADED,
+        payload: [
+          construct(
+            'dialog',
+            {
+              pinned: false,
+              unread_mark: false,
+              peer: construct('peerUser', {'user_id': 77711}),
+              top_message: 208,
+              read_inbox_max_id: 199,
+              read_outbox_max_id: 14,
+              unread_count: 9,
+              unread_mentions_count: 0,
+              notify_settings: construct('peerNotifySettings', {})
+            }
+          ),
+          construct(
+            'dialog',
+            {
+              pinned: false,
+              unread_mark: false,
+              peer: construct('peerUser', {user_id: 516500}),
+              top_message: 198,
+              read_inbox_max_id: 0,
+              read_outbox_max_id: 0,
+              unread_count: 0,
+              unread_mentions_count: 0,
+              notify_settings: construct('peerNotifySettings', {})
+            }
+          )
+        ]
+      };
+
+      expect(reducer(state, action)).toEqual({
+        dialogsOrder: [
+          'peer_user_77700',
+          'peer_user_516572',
+          'peer_user_77711',
+          'peer_user_516500',
+
+        ],
+        dialogs: {
+          'peer_user_77711': {
+            info: construct(
+              'dialog',
+              {
+                pinned: false,
+                unread_mark: false,
+                peer: construct('peerUser', {'user_id': 77711}),
+                top_message: 208,
+                read_inbox_max_id: 199,
+                read_outbox_max_id: 14,
+                unread_count: 9,
+                unread_mentions_count: 0,
+                notify_settings: construct('peerNotifySettings', {})
+              }
+            ),
+            messages_order: [],
+            messages: {}
+          },
+          'peer_user_516500': {
+            info: construct(
+              'dialog',
+              {
+                pinned: false,
+                unread_mark: false,
+                peer: construct('peerUser', {user_id: 516500}),
+                top_message: 198,
+                read_inbox_max_id: 0,
+                read_outbox_max_id: 0,
+                unread_count: 0,
+                unread_mentions_count: 0,
+                notify_settings: construct('peerNotifySettings', {})
+              }
+            ),
+            messages_order: [],
+            messages: {}
+          },
+          'peer_user_77700': {
+            info: construct('dialog', {
+              pinned: false,
+              unread_mark: false,
+              peer: construct('peerUser', {'user_id': 77700}),
+              top_message: 208,
+              read_inbox_max_id: 199,
+              read_outbox_max_id: 14,
+              unread_count: 9,
+              unread_mentions_count: 0,
+              notify_settings: construct('peerNotifySettings', {})
+            }),
+            messages_order: [],
+            messages: {}
+          },
+          'peer_user_516572': {
+            info: construct('dialog', {
+              pinned: false,
+              unread_mark: false,
+              peer: construct('peerUser', {user_id: 516572}),
+              top_message: 198,
+              read_inbox_max_id: 0,
+              read_outbox_max_id: 0,
+              unread_count: 0,
+              unread_mentions_count: 0,
+              notify_settings: construct('peerNotifySettings', {})
+            }),
+            messages_order: [],
+            messages: {}
+          }
+        }
+      });
+
+    });
   });
 
   describe('ADD_MESSAGE', () => {
