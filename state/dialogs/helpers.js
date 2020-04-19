@@ -6,13 +6,13 @@ const getLastMessage = R.pipe(
   R.ap([
     R.pipe(
       R.pathOr(-1, ['info', 'top_message']),
-      (x) => x.toString(),
+      x => x.toString(),
       R.partialRight(R.append, [['messages']])
     ),
     R.identity
   ]),
   R.apply(R.path)
-)
+);
 
 export const getDialogWithLastMessage = R.pipe(
   R.of,
@@ -21,4 +21,4 @@ export const getDialogWithLastMessage = R.pipe(
     R.prop('info')
   ]),
   R.apply(R.set(R.lensProp('last_message')))
-)
+);

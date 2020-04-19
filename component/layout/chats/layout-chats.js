@@ -1,8 +1,9 @@
-import telegram, {storage} from '../../../tdweb/Telegram.js';
+import telegram from '../../../tdweb/Telegram.js';
 
 import Component from '../../../script/Component.js';
 import $, {channel} from '../../../script/DOM.js';
 import {loadDialogs} from '../../../state/dialogs/index.js';
+import {getDialogWithLastMessage} from '../../../state/dialogs/helpers.js';
 
 
 /* eslint-disable */
@@ -15,10 +16,23 @@ import ChatsHeader   from '../../app/chats-header/chats-header.js';
 import LayoutLoading from '../loading/layout-loading.js';
 /* eslint-enable */
 
+const {fromEvent} = rxjs;
+const {map, distinctUntilChanged, withLatestFrom} = rxjs.operators;
 const {construct, isObjectOf, CONSTRUCTOR_KEY} = zagram;
 const component = Component.meta(import.meta.url, 'layout-chats');
 const attributes = {};
 const properties = {};
+
+
+const getDialogsOrder = R.pathOr([], ['dialogs', 'dialogsOrder']);
+
+const getInputPeer = R.cond([
+  [R.equals(undefined), R.always(construct('inputPeerSelf'))],
+  [isObjectOf('peerChat'), R.partial(construct, ['inputPeerChat'])],
+  [isObjectOf('peerUser'), R.partial(construct, ['inputPeerUser'])],
+  [isObjectOf('peerChannel'), R.partial(construct, ['inputPeerChannel'])],
+  [R.T, R.always(construct('inputPeerSelf'))]
+]);
 
 export default class LayoutChats extends Component {
   constructor() {
@@ -29,6 +43,8 @@ export default class LayoutChats extends Component {
     super.mount(node, attributes, properties);
 
     const list = $('ui-list', node);
+    const layoutLoading = $('layout-loading', node);
+    const loadMoreButton = $('#load-more', node);
     // const items = [...list.querySelectorAll('chat-item')];
     // items.forEach(item => item.addEventListener('click', e => channel.send('conversation.open', {id: item.dataset.id})));
 
@@ -74,7 +90,36 @@ export default class LayoutChats extends Component {
     });
 
     loadDialogs(); // first time load dialogs on mount;
-    createChatsList(list, $('layout-loading', node), {lists, type});
+    const state$ = getState$();
+    const dialogs$ = state$
+      .pipe(map(getDialogsOrder));
+
+    dialogs$.pipe(distinctUntilChanged()).subscribe(dialogOrderList => {
+      console.log('[DIALOGS]:', dialogOrderList);
+      createChatsList(list, layoutLoading, dialogOrderList);
+    });
+
+    const loadMoreButtonClick$ = fromEvent(loadMoreButton, 'click');
+    const latestDialog$ = dialogs$.pipe(
+      map(R.pipe(R.last, R.partialRight(R.append, [['dialogs', 'dialogs']]))),
+      withLatestFrom(state$),
+      map(R.apply(R.path))
+    );
+
+    const loadMore$ = loadMoreButtonClick$.pipe(
+      withLatestFrom(latestDialog$),
+      map(R.nth(1)),
+      map(getDialogWithLastMessage)
+    );
+
+    loadMore$.subscribe(x => {
+      console.log('[LAST DIALOG]:', x);
+      loadDialogs({
+        offset_id: R.propOr(0, 'top_message', x),
+        offset_date: R.pathOr(0, ['last_message', 'date'], x),
+        offset_peer: getInputPeer()
+      });
+    });
     return this;
   }
 }
@@ -82,123 +127,18 @@ export default class LayoutChats extends Component {
 Component.init(LayoutChats, component, {attributes, properties});
 
 /** */
-  async function createChatsList(list, loading, {lists, type}) { // chats
-    const me = storage.get('me');
-
+  async function createChatsList(list, loading, dialogs) { // chats
     const root = document.createDocumentFragment();
-    const dialogs = await getDialogs();
 
     for (let i = 0; i < dialogs.length; ++i) {
-      const model = dialogs[i];
-      const item  = await ChatItem.from({model, me}); // eslint-disable-line
+      const item  = await ChatItem.from(dialogs[i]); // eslint-disable-line
       root.append(item);
     }
 
     list.innerHTML = '';
-    list.store({list: type}); // .setAttribute('list', type);
     list.append(root);
-    loading.style.display = 'none';
-  }
-
-/**
- * Builds map for fast user access by id
- * @param {Array<*>} users
- * @returns {Map<Number, *>}
- */
-function buildUserMap(users) {
-  const usersMap = new Map();
-  users.forEach(x => usersMap.set(x.id, x));
-  return usersMap;
-}
-
-/**
- * Builds map  for fast chat/channel access by id
- * @param chats
- * @returns {Map<any, any>}
- */
-function buildChatMap(chats) {
-  const chatMap = new Map();
-  chats.forEach(x => chatMap.set(x.id, x));
-  return chatMap;
-}
-
-
-/**
- * Checks that pears are equal for message and dialog
- * @param dialog
- * @param message
- */
-function checkPeersAreEqual(dialog, message) {
-  if (dialog.peer[CONSTRUCTOR_KEY] === message.to_id[CONSTRUCTOR_KEY]) {
-    if (isObjectOf('peerUser', dialog.peer)) {
-      return dialog.peer.user_id === message.to_id.user_id;
-    }
-
-    if (isObjectOf('peerChat', dialog.peer)) {
-      return dialog.peer.chat_id === message.to_id.chat_id;
-    }
-
-    if (isObjectOf('peerChannel', dialog.peer)) {
-      return dialog.peer.channel_id === message.to_id.channel_id;
+    if (dialogs.length > 0) {
+      loading.style.display = 'none';
     }
   }
-  return false;
-}
 
-function buildDialogsList({dialogs, chats, users, messages}) {
-  const chatMap = buildChatMap(chats);
-  const userMap = buildUserMap(users);
-
-  function attachInfo(dialog) {
-    if (isObjectOf('peerUser', dialog.peer)) {
-      dialog.user = userMap.get(dialog.peer.user_id);
-      const {first_name: firstName, last_name: lastName} = dialog.user;
-      dialog.title = `${firstName} ${lastName}`;
-      dialog.id = dialog.user.id;
-    }
-
-    if (isObjectOf('peerChat', dialog.peer)) {
-      dialog.chat = chatMap.get(dialog.peer.chat_id);
-      dialog.title = dialog.chat.title;
-      dialog.id = dialog.chat.id;
-    }
-
-    if (isObjectOf('peerChannel', dialog.peer)) {
-      dialog.chat = chatMap.get(dialog.peer.channel_id);
-      dialog.title = dialog.chat.title;
-      dialog.id = dialog.chat.id;
-    }
-
-    const filteredMessages = messages.filter(x => checkPeersAreEqual(dialog, x));
-    if (filteredMessages.length > 0) {
-      dialog.last_message = filteredMessages[0];
-    }
-
-    return dialog;
-  }
-
-  return dialogs.map(attachInfo);
-}
-
-/** getDialogs @async
-  * @param {string} [type="chatListMain"] one of 'chatListMain', 'chatListArchive'
-  */
-  async function getDialogs(offset_chat_id = 0, limit = 20) {
-    try {
-      const response = await telegram.api(
-        'messages.getDialogs',
-        {
-          limit,
-          offset_date: 0,
-          offset_id: offset_chat_id,
-          offset_peer: construct('inputPeerEmpty'),
-          hash:  0
-        }
-      );
-
-      return buildDialogsList(response);
-    } catch (e) {
-      console.warn(e);
-      return [];
-    }
-  }

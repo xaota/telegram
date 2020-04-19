@@ -194,7 +194,7 @@ describe('dialogs', () => {
           'peer_user_77700',
           'peer_user_516572',
           'peer_user_77711',
-          'peer_user_516500',
+          'peer_user_516500'
 
         ],
         dialogs: {
@@ -266,7 +266,6 @@ describe('dialogs', () => {
           }
         }
       });
-
     });
   });
 
@@ -358,6 +357,102 @@ describe('dialogs', () => {
           }
         }
       });
+    });
+
+
+    it('test from user to me', () => {
+      const state = {
+        dialogsOrder: [
+          'peer_user_81118611'
+        ],
+        dialogs: {
+          'peer_user_81118611': {
+            info: construct('dialog', {
+              pinned: false,
+              unread_mark: false,
+              peer: construct('peerUser', {'user_id': 81118611}),
+              top_message: 208,
+              read_inbox_max_id: 199,
+              read_outbox_max_id: 14,
+              unread_count: 9,
+              unread_mentions_count: 0,
+              notify_settings: construct('peerNotifySettings', {})
+            }),
+            messages_order: [
+            ],
+            messages: {
+            }
+          }
+        }
+      };
+
+      const action = {
+        type: 'ADD_MESSAGE',
+        payload: construct(
+          'message',
+          {
+            date: 1587315645,
+            edit_hide: false,
+            from_id: 81118611,
+            from_scheduled: false,
+            id: 313307,
+            legacy: false,
+            media_unread: false,
+            mentioned: false,
+            message: "321",
+            out: false,
+            post: false,
+            silent: false,
+            to_id: construct('peerUser', {user_id: 2443566})
+          }
+        )
+      };
+
+      const expectedState = {
+        dialogsOrder: [
+          'peer_user_81118611'
+        ],
+        dialogs: {
+          'peer_user_81118611': {
+            info: construct('dialog', {
+              pinned: false,
+              unread_mark: false,
+              peer: construct('peerUser', {'user_id': 81118611}),
+              top_message: 208,
+              read_inbox_max_id: 199,
+              read_outbox_max_id: 14,
+              unread_count: 9,
+              unread_mentions_count: 0,
+              notify_settings: construct('peerNotifySettings', {})
+            }),
+            messages_order: [
+              313307
+            ],
+            messages: {
+              313307: construct(
+                'message',
+                {
+                  date: 1587315645,
+                  edit_hide: false,
+                  from_id: 81118611,
+                  from_scheduled: false,
+                  id: 313307,
+                  legacy: false,
+                  media_unread: false,
+                  mentioned: false,
+                  message: "321",
+                  out: false,
+                  post: false,
+                  silent: false,
+                  to_id: construct('peerUser', {user_id: 81118611})
+                }
+              )
+            }
+          }
+        }
+      };
+
+      expect(reducer(state, action)).toEqual(expectedState);
     });
   });
 

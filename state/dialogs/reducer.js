@@ -8,6 +8,7 @@ import {
 import {wrapAsObjWithKey} from '../../script/helpers.js';
 import {peerToPeerId} from '../utils.js';
 
+const {construct, isObjectOf} = zagram;
 const {isActionOf, buildReducer} = store;
 
 
@@ -43,14 +44,14 @@ const getPeerIdFromDialog = R.pipe(getPeerFormDialog, peerToPeerId);
 const buildNewDialogsOrder = R.pipe(
   getAction,
   R.prop('payload'),
-  R.map(getPeerIdFromDialog),
+  R.map(getPeerIdFromDialog)
 );
 
 const buildDialogsOrder = R.pipe(
   R.of,
   R.ap([
     R.pipe(getState, R.propOr([], 'dialogsOrder')),
-    buildNewDialogsOrder,
+    buildNewDialogsOrder
   ]),
   R.flatten,
   R.uniq,
@@ -66,7 +67,7 @@ const buildNewDialogsMap = R.pipe(
   getAction,
   R.prop('payload'),
   R.map(buildDialogsPair),
-  R.fromPairs,
+  R.fromPairs
 );
 
 const buildDialogsMap = R.pipe(
@@ -76,7 +77,7 @@ const buildDialogsMap = R.pipe(
     R.pipe(getState, R.prop('dialogs'))
   ]),
   R.mergeAll,
-  wrapAsObjWithKey('dialogs'),
+  wrapAsObjWithKey('dialogs')
 );
 
 const handleDialogsLoadFailed = removeLoadingFromState;
@@ -90,31 +91,6 @@ const handleDialogsLoaded = R.pipe(
     buildDialogsMap
   ]),
   R.mergeAll
-);
-
-/**
- * Takes tuple with state and peer and returns state of dialog
- * @param {[*, *]}
- * @return {*}
- */
-const getDialog = R.pipe(
-  R.of,
-  R.ap([
-    R.always({}),
-    R.pipe(R.nth(1), peerToPeerId),
-    R.pipe(R.nth(0), R.prop('dialogs'))
-  ]),
-  R.apply(R.propOr)
-);
-
-
-const getDialogByMessage = R.pipe(
-  R.of,
-  R.ap([
-    R.nth(0),
-    R.pipe(R.nth(1), R.prop('to_id'))
-  ]),
-  getDialog
 );
 
 const getPeerIdFromMessage = R.pipe(
@@ -163,6 +139,57 @@ const setNewMessageOrder = R.pipe(
 );
 
 /**
+ * Takes tuple with state and message. Returns has state dialog for message or not
+ */
+const isOutgoingMessage = R.pipe(
+  R.propOr(false, 'out'),
+  R.equals(true)
+);
+
+const isNotPeerUserMessage = R.pipe(
+  R.prop('to_id'),
+  isObjectOf('peerUser'),
+  R.not
+);
+
+/**
+ * Takes message and build peerUser with id from `from_id`
+ */
+const changeMessageToId = R.pipe(
+  R.of,
+  R.ap([
+    R.identity,
+    R.pipe(
+      R.prop('from_id'),
+      wrapAsObjWithKey('user_id'),
+      R.partial(construct, ['peerUser']),
+      wrapAsObjWithKey('to_id')
+    )
+  ]),
+  R.mergeAll
+);
+
+const setToPeerForMessage = R.cond([
+  [
+    R.anyPass([
+      R.pipe(R.nth(1), isNotPeerUserMessage),
+      R.pipe(R.nth(1), isOutgoingMessage)
+    ]),
+    R.identity
+  ],
+  [
+    R.T,
+    R.pipe(
+      R.of,
+      R.ap([
+        R.nth(0),
+        R.pipe(R.nth(1), changeMessageToId)
+      ])
+    )
+  ]
+]);
+
+/**
  * Takes tuple with state and action data. Returns state with dialog
  */
 const setNewMessage = R.pipe(
@@ -179,14 +206,15 @@ const setNewMessage = R.pipe(
  * Takes tuple with current state and message. Returns state with updated dialog
  */
 const addMessage = R.pipe(
+  setToPeerForMessage,
   R.of,
   R.ap([
-    setNewMessageOrder,
+    setNewMessage,
     R.nth(1)
   ]),
   R.of,
   R.ap([
-    setNewMessage,
+    setNewMessageOrder,
     R.nth(1)
   ]),
   R.nth(0)

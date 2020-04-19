@@ -60,9 +60,6 @@ export default class UIAvatar extends Component {
       "#409ADB",
       "#FC55A0"
     ];
-    if (id >= 0 && id < 7) {
-      return id;
-    }
     const colorIndex = Math.abs(id % colors.length);
     return colors[colorIndex];
   }

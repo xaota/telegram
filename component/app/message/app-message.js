@@ -58,7 +58,6 @@ export default class AppMessage extends Component {
 
   static preview(message) {
     const type = getMessageType(message);
-    console.log(type);
     const handlers = {
       messageText: m => m.message,
       messageMediaPoll: () => '📊 Poll',
