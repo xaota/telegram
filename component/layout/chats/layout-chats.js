@@ -120,6 +120,7 @@ export default class LayoutChats extends Component {
         offset_peer: getInputPeer()
       });
     });
+
     return this;
   }
 }

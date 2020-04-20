@@ -1,5 +1,5 @@
 import Component from '../../../script/Component.js';
-import {updateChildrenHTML, updateChildrenText} from '../../../script/DOM.js';
+import $, {updateChildrenHTML, updateChildrenText} from '../../../script/DOM.js';
 import {dateDay, formatDate, wrapAsObjWithKey} from '../../../script/helpers.js';
 /* eslint-disable */
 import UIAvatar from '../../ui/avatar/ui-avatar.js'
@@ -7,7 +7,7 @@ import AppMessage from '../message/app-message.js'
 import {peerIdToPeer} from '../../../state/utils.js'
 import {getDialogWithLastMessage} from '../../../state/dialogs/helpers.js'
 /* eslint-enable */
-const {combineLatest} = rxjs;
+const {combineLatest, fromEvent} = rxjs;
 const {map, distinctUntilChanged} = rxjs.operators;
 const {isObjectOf} = zagram;
 
@@ -78,6 +78,13 @@ export default class ChatItem extends Component {
 
   mount(node) {
     super.mount(node, attributes, properties);
+
+    const clickableDiv = $('.dialog__clickable', node);
+
+    const selected$ = fromEvent(clickableDiv, 'click');
+    selected$.subscribe(() => {
+      console.log('[CHAT ITEM] selected: ', this.dialogId);
+    });
   }
 
   /**
@@ -147,6 +154,7 @@ export default class ChatItem extends Component {
         message.innerText = 'not a message';
       }
     });
+
 
     return item;
   }
