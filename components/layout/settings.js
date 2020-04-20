@@ -1,8 +1,9 @@
 import Component, {html, css} from '../../script/ui/Component.js';
 
+import Router              from '../../script/ui/Router.js';
+import locator             from '../../script/app/locator.js';
+
 /* eslint-disable */
-import UILoading           from '../ui/loading.js';
-import AppHeader           from '../app/header.js';
 import UIItem              from '../ui/item.js';
 import ScreenSettings      from '../screen/settings.js';
 import ScreenGeneral       from '../screen/general.js';
@@ -10,8 +11,6 @@ import ScreenPreferences   from '../screen/preferences.js';
 import ScreenNotifications from '../screen/notifications.js';
 import ScreenSecurity      from '../screen/security.js';
 import ScreenLanguage      from '../screen/language.js';
-import Router              from '../../script/ui/Router.js';
-import locator             from '../../script/app/locator.js';
 /* eslint-enable */
 
 const style = css`
@@ -30,13 +29,7 @@ const properties = {};
     static template = html`
       <template>
         <style>${style}</style>
-        <app-header back="route-aside">
-          Settings
-          <ui-item icon="exit" slot="more" id="logout">Log Out</ui-item>
-        </app-header>
-
-        <main></main>
-
+        <main>
         <!--
           <screen-settings></screen-settings>
 
@@ -46,19 +39,20 @@ const properties = {};
           <screen-security></screen-security>
           <screen-language></screen-language>
         -->
+        </main>
       </template>`;
 
   /** Создание элемента в DOM (DOM доступен) / mount @lifecycle
-    * @param {HTMLElement} node корневой узел элемента
+    * @param {ShadowRoot} node корневой узел элемента
     * @return {Component} @this {LayoutSettings} текущий компонент
     */
     mount(node) {
       super.mount(node, attributes, properties);
       const router = routing(node.querySelector('main'));
-      const header = node.querySelector('app-header');
-      header.addEventListener('back', () =>{router.check()});
+      // const header = node.querySelector('app-header');
+      // header.addEventListener('back', () => router.check());
 
-      locator.channel.on('$.settings.screen', ({location}) => {router.check(location)});
+      locator.channel.on('router.main.settings', ({location}) => router.check(location));
       router.check();
       return this;
     }
@@ -84,11 +78,11 @@ function routing(root) {
     })
     .route({
       name: 'screen-security',
-      check: Router.nameCheck,
+      check: Router.nameCheck
     })
     .route({
       name: 'screen-language',
-      check: Router.nameCheck,
+      check: Router.nameCheck
     })
     .route({
       name: 'screen-settings',

@@ -1,10 +1,10 @@
 import Component, {html, css} from '../../script/ui/Component.js';
-import $ from '../../script/ui/DOM.js';
+import {$$}    from '../../script/ui/DOM.js';
+import locator from '../../script/app/locator.js';
 
 /* eslint-disable */
 import UIItem   from '../ui/item.js';
 import UIAvatar from '../ui/avatar.js';
-import locator from '../../script/app/locator.js';
 /* eslint-enable */
 
 const style = css`
@@ -64,8 +64,8 @@ const properties = {};
         <h2></h2>
 
         <div>
-          <ui-item icon="edit" data-route="screen-preferences">Edit Profile</ui-item>
-          <ui-item icon="settings" data-route="screen-general">General Settings</ui-item>
+          <ui-item icon="edit" data-route="screen-general">Edit Profile</ui-item>
+          <ui-item icon="settings" data-route="screen-preferences">General Settings</ui-item>
           <ui-item icon="notifications" data-route="screen-notifications">Notifications</ui-item>
           <ui-item icon="security" data-route="screen-security">Privacy and Security</ui-item>
           <ui-item icon="language" data-route="screen-language">Language</ui-item>
@@ -73,16 +73,23 @@ const properties = {};
       </template>`;
 
   /** Создание элемента в DOM (DOM доступен) / mount @lifecycle
-    * @param {HTMLElement} node корневой узел элемента
+    * @param {ShadowRoot} node корневой узел элемента
     * @return {Component} @this {ScreenSettings} текущий компонент
     */
     mount(node) {
       super.mount(node, attributes, properties);
 
-      const items = node.querySelectorAll('ui-item')
-        .forEach(e => e.addEventListener('click',
-          () =>  locator.channel.send('$.settings.screen', {location: e.dataset.route})
-        ));
+      locator.channel.send('header.main', {options: { // переключаем шапку
+        caption: 'Settings',
+        back: true,
+        more: true
+      }});
+
+      $$('ui-item', node)
+        .forEach(e => e.addEventListener('click', () => {
+          const location = e.dataset.route;
+          locator.channel.send('router.main.settings', {location});
+        }));
 
       // const main = $('main', node);
       // [...main.querySelectorAll('ui-item')]

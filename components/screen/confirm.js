@@ -84,39 +84,14 @@ const properties = {};
     }
 
   /** Создание элемента в DOM (DOM доступен) / mount @lifecycle
-    * @param {HTMLElement} node корневой узел элемента
+    * @param {ShadowRoot} node корневой узел элемента
     * @return {Component} @this {ScreenConfirm} текущий компонент
     */
     mount(node) {
       super.mount(node, attributes, properties);
       const input = $('ui-input', node);
 
-      const {telegram, channel} = locator;
-
-      input.addEventListener('input', async () => {
-        const phone_code = input.value;
-        const length = phone_code.length;
-        if (length > 1) input.error = null;
-        if (length !== 5) return;
-        const {phone_number, phone_code_hash} = this.store();
-        const data = {phone_code, phone_number, phone_code_hash};
-        try {
-          const {user} = await telegram.method('auth.signIn', data);
-          // {terms_of_service.text -> auth.signUp(phone_number, phone_code_hash, first_name, last_name)}
-          channel.send('$.auth.user', {user});
-        } catch (error) {
-          input.value = '';
-          let message = error.text;
-          switch (error.message) {
-            case 'PHONE_CODE_INVALID': message = 'Invalid phone code'; break;
-            case 'FLOOD_WAIT': message = `Flood! Wait ${error.data} seconds`; break;
-          }
-          input.error = message;
-          if (error.unauthorized && error.message === 'SESSION_PASSWORD_NEEDED') {
-            channel.send('$.auth.password');
-          }
-        }
-      });
+      input.addEventListener('input', () => send.call(this, input));
       return this;
     }
 
@@ -129,3 +104,35 @@ const properties = {};
   }
 
 Component.init(ScreenConfirm, 'screen-confirm', {attributes, properties});
+
+// #region [Private]
+/** send
+  * @this ScreenConfirm
+  */
+  async function send(input) {
+    const {telegram, channel} = locator;
+
+    const phone_code = input.value;
+    const length = phone_code.length;
+    if (length > 1) input.error = null;
+    if (length !== 5) return;
+    const {phone_number, phone_code_hash} = this.store();
+    const data = {phone_code, phone_number, phone_code_hash};
+    try {
+      const {user} = await telegram.method('auth.signIn', data);
+      // {terms_of_service.text -> auth.signUp(phone_number, phone_code_hash, first_name, last_name)}
+      channel.send('$.auth.user', {user});
+    } catch (error) {
+      input.value = '';
+      let message = error.text;
+      switch (error.message) {
+        case 'PHONE_CODE_INVALID': message = 'Invalid phone code'; break;
+        case 'FLOOD_WAIT': message = `Flood! Wait ${error.data} seconds`; break;
+      }
+      input.error = message;
+      if (error.unauthorized && error.message === 'SESSION_PASSWORD_NEEDED') {
+        channel.send('$.auth.password');
+      }
+    }
+  }
+// #endregion

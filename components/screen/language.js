@@ -1,4 +1,5 @@
 import Component, {html, css} from '../../script/ui/Component.js';
+import locator from '../../script/app/locator.js';
 
 /* eslint-disable */
 import UIRadio    from '../ui/radio.js';
@@ -42,11 +43,18 @@ const properties = {};
       </template>`;
 
   /** Создание элемента в DOM (DOM доступен) / mount @lifecycle
-    * @param {HTMLElement} node корневой узел элемента
+    * @param {ShadowRoot} node корневой узел элемента
     * @return {Component} @this {ScreenLanguage} текущий компонент
     */
     mount(node) {
-      return super.mount(node, attributes, properties);
+      super.mount(node, attributes, properties);
+
+      locator.channel.send('header.main', {options: { // переключаем шапку
+        caption: 'Language',
+        back: true
+      }});
+
+      return this;
     }
   }
 

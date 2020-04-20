@@ -1,4 +1,7 @@
 import Component, {html, css} from '../../script/ui/Component.js';
+import $ from '../../script/ui/DOM.js';
+
+import locator from '../../script/app/locator.js';
 
 /* eslint-disable */
 import UIInput   from '../ui/input.js';
@@ -84,12 +87,29 @@ const properties = {};
   //   }
 
   /** Создание элемента в DOM (DOM доступен) / mount @lifecycle
-    * @param {HTMLElement} node корневой узел элемента
+    * @param {ShadowRoot} node корневой узел элемента
     * @return {Component} @this {ScreenRegister} текущий компонент
     */
     mount(node) {
-      return super.mount(node, attributes, properties);
+      super.mount(node, attributes, properties);
+      const avatar    = $('app-avatar', node);
+      const firstName = $('#first-name', node);
+      const lastName  = $('#last-name', node);
+      const button    = $('ui-button', node);
+
+      button.addEventListener('click', () => send.call(this, firstName, lastName, avatar));
+      return this;
     }
   }
 
 Component.init(ScreenRegister, 'screen-register', {attributes, properties});
+
+// #region [Private]
+/** send
+  * @this ScreenPassword
+  */
+  async function send(firstName, lastName, avatar) {
+    const {telegram, channel} = locator;
+    // const first_name = firstName.value;
+  }
+// #endregion

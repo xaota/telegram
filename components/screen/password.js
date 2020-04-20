@@ -1,4 +1,7 @@
 import Component, {html, css} from '../../script/ui/Component.js';
+import $ from '../../script/ui/DOM.js';
+
+import locator from '../../script/app/locator.js';
 
 /* eslint-disable */
 import UIInput  from '../ui/input.js';
@@ -64,12 +67,27 @@ const properties = {};
   //   }
 
   /** Создание элемента в DOM (DOM доступен) / mount @lifecycle
-    * @param {HTMLElement} node корневой узел элемента
+    * @param {ShadowRoot} node корневой узел элемента
     * @return {Component} @this {ScreenPassword} текущий компонент
     */
     mount(node) {
-      return super.mount(node, attributes, properties);
+      super.mount(node, attributes, properties);
+      const input  = $('ui-input', node);
+      const button = $('ui-button', node);
+
+      button.addEventListener('click', () => send.call(this, input));
+      return this;
     }
   }
 
 Component.init(ScreenPassword, 'screen-password', {attributes, properties});
+
+// #region [Private]
+/** send
+  * @this ScreenPassword
+  */
+  async function send(input) {
+    const {telegram, channel} = locator;
+    // const password = input.value;
+  }
+// #endregion

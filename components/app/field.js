@@ -185,7 +185,7 @@ const properties = {};
   //   }
 
   /** Создание элемента в DOM (DOM доступен) / mount @lifecycle
-    * @param {HTMLElement} node корневой узел элемента
+    * @param {ShadowRoot} node корневой узел элемента
     * @return {Component} @this {AppField} текущий компонент
     */
     mount(node) {

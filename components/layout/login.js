@@ -47,7 +47,7 @@ const properties = {};
       </template>`;
 
   /** Создание элемента в DOM (DOM доступен) / mount @lifecycle
-    * @param {HTMLElement} node корневой узел элемента
+    * @param {ShadowRoot} node корневой узел элемента
     * @return {Component} @this {LayoutLogin} текущий компонент
     */
     mount(node) {
@@ -76,11 +76,13 @@ Component.init(LayoutLogin, 'layout-login', {attributes, properties});
       })
       .route({
         name: 'screen-register',
-        check: (route, location) => location === route.name
+        check: Router.nameCheck,
+        handler: Router.constructorHandler(ScreenRegister)
       })
       .route({
         name: 'screen-password',
-        check: (route, location) => location === route.name
+        check: Router.nameCheck,
+        handler: Router.constructorHandler(ScreenPassword)
       });
   }
 // #endregion

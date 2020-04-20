@@ -1,5 +1,5 @@
 import Component, {html, css} from '../../script/ui/Component.js';
-import $ from '../../script/ui/DOM.js';
+import {updateChildrenText} from '../../script/ui/DOM.js';
 
 /* eslint-disable */
 import UIIcon   from '../ui/icon.js';
@@ -41,11 +41,11 @@ const style = css`
     color: var(--iconStatic);
   }
 
-  ui-search {
+  ui-search, #caption {
     width: 100%;
   }
 
-  :host > ui-icon, ui-search, #menu, #more {
+  :host > ui-icon, ui-search, #menu, #more, #caption {
     display: none;
   }
 
@@ -53,6 +53,7 @@ const style = css`
   :host([back]) #back { display: flex; }
   :host([close]) #close { display: flex; }
   :host([search]) ui-search { display: flex; }
+  :host([caption]) #caption { display: flex; }
   :host([mute]) #mute { display: flex; }
   :host([find]) #find { display: flex; }
   :host([more]) #more { display: block; }
@@ -70,8 +71,20 @@ const style = css`
     user-select: none;
   }`;
 
-const attributes = {};
-const properties = {};
+const attributes = {
+    caption(root, value) { updateChildrenText(root, '#caption', value); }
+  };
+const properties = {
+    /* eslint-disable no-empty-function */
+    menu(root, value) {},
+    back(root, value) {},
+    close(root, value) {},
+    search(root, value) {},
+    mute(root, value) {},
+    find(root, value) {},
+    more(root, value) {}
+    /* eslint-enable no-empty-function */
+  };
 
 /** {AppHeader} @class
   * @description Отображение блока простого текста
@@ -90,9 +103,10 @@ const properties = {};
         <ui-icon id="close">close</ui-icon>
 
         <ui-search>Search</ui-search>
-        <slot></slot>
-        <!-- pinned message, subscribe button, player? -->
+        <slot name="data"></slot>
+        <p id="caption"></p>
 
+        <!-- pinned message, subscribe button, player? -->
         <ui-icon id="mute">mute</ui-icon> <!-- mute-off -->
         <ui-icon id="find">search</ui-icon>
 
@@ -107,15 +121,15 @@ const properties = {};
       </template>`;
 
   /** Создание компонента {AppHeader} @constructor
-    * @param {string?} text содержимое элемента
+    * @param {string?} options содержимое элемента
     */
-    constructor(text) {
+    constructor(options) {
       super();
-      if (text) this.innerText = text;
+      if (options) this.store(options);
     }
 
   /** Создание элемента в DOM (DOM доступен) / mount @lifecycle
-    * @param {HTMLElement} node корневой узел элемента
+    * @param {ShadowRoot} node корневой узел элемента
     * @return {Component} @this {AppHeader} текущий компонент
     */
     mount(node) {
@@ -135,6 +149,25 @@ const properties = {};
       // const back = $('#back', node);
       // back.addEventListener('click', _ => this.event('back'));
       // // back.addEventListener('click', _ => route(this.getAttribute('back'), drop));
+      return this;
+    }
+
+    render(node) {
+      this.menu   = false;
+      this.back   = false;
+      this.close  = false;
+      this.search = false;
+      this.mute   = false;
+      this.find   = false;
+      this.more   = false;
+
+      this.caption = null;
+
+      const {options} = this.store();
+      // if (!options) return;
+      Object
+        .keys(options)
+        .forEach(key => this[key] = options[key]);
 
       return this;
     }
@@ -143,9 +176,9 @@ const properties = {};
 Component.init(AppHeader, 'app-header', {attributes, properties});
 
 // #region [Private]
-/** */
-  function route(layout, drop) {
-    // channel.send(layout);
-    drop.show = false;
-  }
+// /** */
+//   function route(layout, drop) {
+//     // channel.send(layout);
+//     drop.show = false;
+//   }
 // #endregion

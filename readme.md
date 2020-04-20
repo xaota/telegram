@@ -9,6 +9,9 @@ h1, h2
 
 avatar-edit -> app-avatar
 
+helpers
+ - debounce (ui-search)
+
 ### DOM-Tree
 ```
 body
@@ -22,10 +25,10 @@ body
   |
   |> layout-messenger
       |> layout-main
+      |   |> app-header
       |   |> layout-loading
       |   |
       |   |> layout-settings
-      |   |   |> app-header
       |   |   |> screen-settings
       |   |   |> screen-general
       |   |   |> screen-preferences
@@ -34,7 +37,6 @@ body
       |   |   |> screen-language
       |   |
       |   |> layout-conversations
-      |       |> app-header
       |       |> screen-conversations
       |       |   |> ui-list > app-conversation * n
       |       |   |> ui-drop > ui-fab + ui-menu

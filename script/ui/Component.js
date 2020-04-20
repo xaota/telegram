@@ -83,7 +83,7 @@ const state = Symbol('state');
     }
 
   /** Создание элемента в DOM (DOM доступен) / mount @lifecycle
-    * @param {HTMLElement} node ShadowRoot узел элемента
+    * @param {ShadowRoot} node ShadowRoot узел элемента
     * @param {object} attributes функции, вызываемые при изменении отслеживаемых атрибутов
     * @return {Component} @this
     */
@@ -170,7 +170,7 @@ const state = Symbol('state');
           const root = this.shadowRoot;
           if (current === previous) return;
           if (name in attributes) attributes[name].call(this, root, current, previous);
-          if (name in properties) properties[name].call(this, root, current, previous);
+          if (name in properties) properties[name].call(this, root, current === '', previous === '');
         }
       });
 

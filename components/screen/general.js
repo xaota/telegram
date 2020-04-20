@@ -2,21 +2,14 @@ import Component, {html, css} from '../../script/ui/Component.js';
 import locator from '../../script/app/locator.js';
 
 /* eslint-disable */
-import UIFAB      from '../ui/fab.js';
-import UIInput    from '../ui/input.js';
+import UIIcon     from '../ui/icon.js';
+import UIRadio    from '../ui/radio.js';
+import UIProperty from '../ui/property.js';
+import UICheckbox from '../ui/checkbox.js';
 import UIFieldset from '../ui/fieldset.js';
-import AppAvatar  from '../app/avatar.js';
 /* eslint-enable */
 
 const style = css`
-  :host {
-    /*
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    position: relative; */
-  }
-
   :host {
     display: block;
     height: 100%;
@@ -24,78 +17,62 @@ const style = css`
     padding: 0px 18px;
   }
 
-  app-avatar {
-    width: 120px;
-    height: 120px;
-    margin: 0 auto 34px;
-  }
-
-  p {
-    font-size: 14px;
-    color: rgb(112, 117, 121);
+  ui-checkbox, ui-radio {
+    margin-bottom: 32px;
   }`;
 
 const attributes = {};
 const properties = {};
 
 /** {ScreenGeneral} @class
-  * @description Отображение экрана настроек профиля
+  * @description Отображение экрана основных настроек
   */
   export default class ScreenGeneral extends Component {
     static template = html`
       <template>
         <style>${style}</style>
-        <app-avatar></app-avatar>
-
-        <ui-input id="name">Name</ui-input>
-        <ui-input id="last-name">Last Name</ui-input>
-        <ui-input id="bio">Bio (optional)</ui-input>
-        <p>Any details such as age, occupation or city. Example: 23 y.o. designer from San Francisco.</p>
-
-        <ui-fieldset name="Username">
-          <ui-input id="user-name">Username (optional)</ui-input>
-          <p>You can choose a username on Telegram.
-            If you do, other people will be able to find you by this username and contact you without knowing your phone number.</p>
-          <p>You can use a-z, 0-9 and underscores. Minimum length is 5 characters.</p>
+        <ui-fieldset name="Settings">
+          <ui-property icon="photo" side="left">Chat Background</ui-property>
+          <ui-checkbox>Enable Animations</ui-checkbox>
         </ui-fieldset>
-        <ui-fab>check</ui-fab>
+
+        <ui-fieldset name="Keyboard">
+          <ui-radio hint="New line by Shift + Enter" checked>Send by Enter</ui-radio>
+          <ui-radio hint="New line by Enter">Send by Ctrl + Enter</ui-radio>
+        </ui-fieldset>
+
+        <ui-fieldset name="Auto-Download Media">
+          <ui-checkbox>Contacts</ui-checkbox>
+          <ui-checkbox>Private Chats</ui-checkbox>
+          <ui-checkbox>Group Chats</ui-checkbox>
+          <ui-checkbox>Channels</ui-checkbox>
+        </ui-fieldset>
+
+        <ui-fieldset name="Auto-Play Media">
+          <ui-checkbox>GIFs</ui-checkbox>
+          <ui-checkbox>Videos</ui-checkbox>
+        </ui-fieldset>
+
+        <ui-fieldset name="Stickers">
+          <ui-checkbox>Suggest Sticker by Emoji</ui-checkbox>
+          <ui-checkbox>Loop Animated Stickers</ui-checkbox>
+        </ui-fieldset>
       </template>`;
 
   /** Создание элемента в DOM (DOM доступен) / mount @lifecycle
-    * @param {HTMLElement} node корневой узел элемента
+    * @param {ShadowRoot} node корневой узел элемента
     * @return {Component} @this {ScreenGeneral} текущий компонент
     */
     mount(node) {
       super.mount(node, attributes, properties);
-      init(node);
+
+      locator.channel.send('header.main', {options: { // переключаем шапку
+        caption: 'General',
+        back: true
+      }});
+
       return this;
     }
   }
 
 Component.init(ScreenGeneral, 'screen-general', {attributes, properties});
-
-/** */
-  async function init(node) {
-    const button   = node.querySelector('ui-fab');
-    const name     = node.querySelector('#name');
-    const lastName = node.querySelector('#last-name');
-    const bio      = node.querySelector('#bio');
-    const userName = node.querySelector('#user-name');
-
-    const account  = await locator.telegram.method('users.getFullUser', {id: {_: 'inputUserSelf'}});
-    name.value     = account.user.first_name || '';
-    lastName.value = account.user.last_name || '';
-    bio.value      = account.about || '';
-    userName.value = account.user.username || '';
-
-    button.addEventListener('click', async () => {
-      const data = {
-        first_name: name.value || '',
-        last_name:  lastName.value || '',
-        about:      bio.value || ''
-      };
-
-      const updateProfile = await locator.telegram.method('account.updateProfile', data);
-      console.log('updateProfile', updateProfile);
-    })
-  }

@@ -1,14 +1,25 @@
 // @todo:
 
 /** Выбор элемента DOM
-  * @param {string|HTMLElement} selector селектор
-  * @param {HTMLElement|Document} root? корень поиска
-  * @return {HTMLElement|null}
+  * @param {string|HTMLElement|ShadowRoot} selector селектор
+  * @param {HTMLElement|Document|ShadowRoot} root? корень поиска
+  * @return {HTMLElement|object|null}
   */
   export default function $(selector, root = document) {
-    return typeof selector === 'object'
+    return typeof selector === 'object' // instanceOf Element
       ? selector
       : root.querySelector(selector);
+  }
+
+/** Выбор элемента DOM
+  * @param {string|HTMLElement|ShadowRoot} selector селектор
+  * @param {HTMLElement|Document|ShadowRoot} root? корень поиска
+  * @return {NodeListOf<Element>|object|null}
+  */
+  export function $$(selector, root = document) {
+    return typeof selector === 'object' // instanceOf Element | NodeList
+      ? selector
+      : root.querySelectorAll(selector);
   }
 
 /** */
