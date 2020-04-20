@@ -67,7 +67,7 @@ const properties = {};
           <h2>34 members</h2>
         </main>
 
-        <ui-property icon="info" caption="About" side="left">https://github.com/xaotascript
+        <ui-property icon="info" caption="About" side="left" large>https://github.com/xaotascript
 
           Союз нерушимый █ █ █ █ токсичных
           Сплотил нам навеки великий фронтенд
@@ -75,7 +75,7 @@ const properties = {};
           Единый могучий хаотаскрипт!
 
           https://t.me/addstickers/gwifmkosc_1001282550938_by_QuotLyBot</ui-property>
-        <ui-property icon="username" caption="Link" side="left">https://t.me/joinchat/fdghjklkjhfggiolllljl</ui-property>
+        <ui-property icon="username" caption="Link" side="left" large>https://t.me/joinchat/fdghjklkjhfggiolllljl</ui-property>
 
         <ui-tabs>
           <ui-tab id="media" selected>Media</ui-tab>

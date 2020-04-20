@@ -17,7 +17,7 @@ const style = css`
     padding: 0px 18px;
   }
 
-  ui-checkbox, ui-radio {
+  ui-checkbox, ui-radio, ui-property {
     margin-bottom: 32px;
   }`;
 

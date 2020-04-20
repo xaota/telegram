@@ -8,12 +8,15 @@ import UIIcon from './icon.js';
 const style = css`
   :host {
     display: grid;
-    font-size: 15px;
+    font-size: 16px;
     grid-template-areas: 'icon text' 'icon caption';
     grid-template-columns: 24px auto;
-    grid-gap: 8px;
+    grid-column-gap: 32px;
+    grid-row-gap: 8px;
   }
-
+  :host([large]) {
+    grid-column-gap: 16px;
+  }
   ui-icon {
     grid-area: icon;
     width: 24px;
@@ -24,6 +27,7 @@ const style = css`
     grid-area: text;
     white-space: pre-line;
     overflow: overlay; /** ! @todo: */
+    line-height: 24px;
   }
   p {
     grid-area: caption;
@@ -33,11 +37,13 @@ const style = css`
   }`;
 
 const attributes = {
-  // side(root, value) {}, // left / right / none=default
-  icon(root, value) { updateChildrenText(root, 'ui-icon', value); },
-  caption(root, value) { updateChildrenText(root, 'p', value); }
-};
-const properties = {};
+    // side(root, value) {}, // left / right / none=default
+    icon(root, value) { updateChildrenText(root, 'ui-icon', value); },
+    caption(root, value) { updateChildrenText(root, 'p', value); }
+  };
+const properties = {
+    large() {}
+  };
 
 /** {UIProperty} @class
   * @description Отображение кнопки основного действия

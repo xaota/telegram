@@ -1,5 +1,5 @@
 import Component, {html, css} from '../../script/ui/Component.js';
-import {updateChildrenText} from '../../script/ui/DOM.js';
+import $, {updateChildrenText} from '../../script/ui/DOM.js';
 
 /* eslint-disable */
 import UIIcon   from '../ui/icon.js';
@@ -134,21 +134,19 @@ const properties = {
     */
     mount(node) {
       super.mount(node, attributes, properties);
-      // /** @type HTMLSlotElement */
-      // const slot = $('slot[name="more"]', node);
-      // const more = $('#more', node);
-      // const drop = $('ui-drop', node);
 
-      // slot.addEventListener('slotchange', () => {
-      //   more.style.display = slot.assignedNodes().length > 0
-      //     ? 'flex'
-      //     : ''; // none
-      // });
-      // more.addEventListener('click', () => drop.show = !drop.show);
+      const back  = $('#back', node);
+      const close = $('#back', node);
+      const find  = $('#back', node);
+      // const mute = $('#back', node);
+      // search
 
-      // const back = $('#back', node);
-      // back.addEventListener('click', _ => this.event('back'));
-      // // back.addEventListener('click', _ => route(this.getAttribute('back'), drop));
+      back .addEventListener('click', () => this.event('back'));
+      close.addEventListener('click', () => this.event('close'));
+      find .addEventListener('click', () => this.event('find'));
+      // mute .addEventListener('click', () => this.event('mute'));
+      // search
+
       return this;
     }
 
@@ -174,11 +172,3 @@ const properties = {
   }
 
 Component.init(AppHeader, 'app-header', {attributes, properties});
-
-// #region [Private]
-// /** */
-//   function route(layout, drop) {
-//     // channel.send(layout);
-//     drop.show = false;
-//   }
-// #endregion

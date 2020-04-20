@@ -64,8 +64,8 @@ const properties = {};
         <h2></h2>
 
         <div>
-          <ui-item icon="edit" data-route="screen-general">Edit Profile</ui-item>
-          <ui-item icon="settings" data-route="screen-preferences">General Settings</ui-item>
+          <ui-item icon="edit" data-route="screen-preferences">Edit Profile</ui-item>
+          <ui-item icon="settings" data-route="screen-general">General Settings</ui-item>
           <ui-item icon="notifications" data-route="screen-notifications">Notifications</ui-item>
           <ui-item icon="security" data-route="screen-security">Privacy and Security</ui-item>
           <ui-item icon="language" data-route="screen-language">Language</ui-item>

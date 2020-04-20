@@ -5,7 +5,7 @@ const style = css`
   :host {
     display: block;
     position: relative;
-    padding-left: 53px;
+    padding-left: 56px;
     cursor: pointer;
     font-size: 16px;
     line-height: 18px;
@@ -24,7 +24,7 @@ const style = css`
   span.checkmark {
     position: absolute;
     top: 0;
-    left: 0;
+    left: 3px;
     width: 16px;
     height: 16px;
     border-radius: 50%;
