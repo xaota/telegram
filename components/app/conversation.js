@@ -1,4 +1,5 @@
 import Component, {html, css} from '../../script/ui/Component.js';
+import $ from '../../script/ui/DOM.js';
 
 const style = css`
   :host {
@@ -117,11 +118,11 @@ const properties = {};
       </template>`;
 
   /** Создание компонента {AppConversation} @constructor
-    * @param {string?} text содержимое элемента
+    * @param {object?} conversation объект беседы
     */
-    constructor(text) {
+    constructor(conversation) {
       super();
-      if (text) this.innerText = text;
+      if (conversation) this.store({conversation});
     }
 
   /** Создание элемента в DOM (DOM доступен) / mount @lifecycle
@@ -129,7 +130,18 @@ const properties = {};
     * @return {Component} @this {AppConversation} текущий компонент
     */
     mount(node) {
-      return super.mount(node, attributes, properties);
+      super.mount(node, attributes, properties);
+      const {conversation} = this.store(); // id диалога, string
+
+      return this;
+    }
+
+  /** */
+    render(node) {
+      const {conversation} = this.store(); // id диалога, string
+      if (!conversation) return this;
+
+      return this;
     }
   }
 
