@@ -6,6 +6,7 @@ import locator  from './app/locator.js';
 
 import Channel from './utils/Channel.js';
 import Storage from './utils/Storage.js';
+import {default as initState} from '../state/index.js';
 
 /* eslint-disable */
 import LayoutLoading   from '../components/layout/loading.js';
@@ -13,43 +14,8 @@ import LayoutLogin     from '../components/layout/login.js';
 import LayoutMessenger from '../components/layout/messenger.js';
 /* eslint-enable */
 
-// import {
-//   reducer as authReducer,
-//   applyMiddleware as authApplyMiddleware
-// } from '../state/auth/index.js';
-// import {reducer as pageReducer} from '../state/pages/index.js';
-// import {
-//   reducer as dialogsReducer,
-//   applyMiddleware as dialogsApplyMiddleware
-// } from '../state/dialogs/index.js';
-// import {reducer as usersReducer} from '../state/users/index.js';
+const {map, distinctUntilChanged} = rxjs.operators;
 
-// const {buildStateStream, combineReducers, dispatchInit, getActionStream} = store;
-// const {BehaviorSubject} = rxjs;
-// const {map, distinctUntilChanged} = rxjs.operators;
-
-// if (localStorage.getItem('dark') === '1') document.body.classList.add('dark');
-
-// const subject = new BehaviorSubject({});
-// const state$ = buildStateStream(combineReducers({
-//   page: pageReducer,
-//   auth: authReducer,
-//   dialogs: dialogsReducer,
-//   users: usersReducer
-// }));
-// const action$ = getActionStream();
-
-// authApplyMiddleware(action$, state$, telegram.connection);
-// dialogsApplyMiddleware(action$, state$, telegram.connection);
-// state$.subscribe(newState => {
-//   console.log('[state]:', newState);
-//   subject.next(newState);
-// });
-// window.getState$ = () => subject;
-
-
-// const loading = $('layout-loading');
-// let current;
 
 main();
 async function main() {
@@ -57,23 +23,28 @@ async function main() {
   const channel  = new Channel();
   const storage  = new Storage();
   locator.set({config, telegram, channel, storage});
-
+  initState(telegram.connection);
   const router = routing();
-  channel.on('$.auth.user', ({user}) => {
-    telegram.save(); // сохранить сессию
-    router.check('layout-messenger', user);
+
+  const page$ = getState$().pipe(
+    map(R.propOr('loading', 'page')),
+    distinctUntilChanged()
+  );
+
+  page$.subscribe(openedPage => {
+    if (openedPage === 'loading') {
+      router.check('layout-loading');
+    }
+
+    if (openedPage === 'login') {
+      router.check('layout-login');
+    }
+
+    if (openedPage === 'chat') {
+      router.check('layout-messenger');
+    }
   });
-
-  const connection = await telegram.init();
-  console.log({connection});
-
-  telegram
-    .method('users.getFullUser', {id: {_: 'inputUserSelf'}})
-    .then(user => {
-      console.log(user);
-      channel.send('$.auth.user', {user});
-    })
-    .catch(() => router.check('layout-login'));
+  await telegram.init();
 
   window.telegram = telegram;
 }
@@ -96,4 +67,3 @@ async function main() {
         default: true
       });
   }
-// #endregion

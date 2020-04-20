@@ -5,6 +5,8 @@ import LayoutMain         from './main.js';
 import LayoutConversation from './conversation.js';
 /* eslint-enable */
 
+const {map} = rxjs.operators;
+
 const style = css`
   :host {
     display: flex;
@@ -53,7 +55,13 @@ const properties = {};
     */
     constructor(user) {
       super();
-      if (user) this.store(user);
+      const state$ = getState$();
+      const user$ = state$
+        .pipe(map(R.path(['auth', 'user'])));
+
+      user$.subscribe(user => {
+        this.store(user)
+      });
     }
 
   /** Создание элемента в DOM (DOM доступен) / mount @lifecycle

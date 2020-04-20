@@ -1,5 +1,5 @@
-import Storage from '../script/Storage.js';
-import Channel from '../script/Channel.js';
+import Storage from '../script/utils/Storage.js';
+import Channel from '../script/utils/Channel.js';
 import { wrapAsObjWithKey } from '../script/helpers.js';
 
 const { MTProto, schema, method } = zagram;

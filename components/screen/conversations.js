@@ -1,5 +1,7 @@
 import Component, {html, css} from '../../script/ui/Component.js';
-// import $ from '../../script/ui/DOM.js';
+import {loadDialogs} from '../../state/dialogs/index.js';
+import $ from '../../script/ui/DOM.js';
+import {getDialogWithLastMessage} from '../../state/dialogs/helpers.js'
 // import locator from '../../script/app/locator.js';
 
 /* eslint-disable */
@@ -11,6 +13,19 @@ import UIList          from '../ui/list.js';
 import UINetwork       from '../ui/network.js';
 import AppConversation from '../app/conversation.js';
 /* eslint-enable */
+const {fromEvent} = rxjs;
+const {map, distinctUntilChanged, withLatestFrom} = rxjs.operators;
+const {construct, isObjectOf} = zagram;
+
+const getDialogsOrder = R.pathOr([], ['dialogs', 'dialogsOrder']);
+
+const getInputPeer = R.cond([
+  [R.equals(undefined), R.always(construct('inputPeerSelf'))],
+  [isObjectOf('peerChat'), R.partial(construct, ['inputPeerChat'])],
+  [isObjectOf('peerUser'), R.partial(construct, ['inputPeerUser'])],
+  [isObjectOf('peerChannel'), R.partial(construct, ['inputPeerChannel'])],
+  [R.T, R.always(construct('inputPeerSelf'))]
+]);
 
 const style = css`
   :host {
@@ -60,6 +75,11 @@ const properties = {};
   * @description Отображение экрана списка чатов
   */
   export default class ScreenConversations extends Component {
+
+    constructor() {
+      super();
+    }
+
     static template = html`
       <template>
         <style>${style}</style>
@@ -74,14 +94,8 @@ const properties = {};
           <ui-tab>Other</ui-tab> -->
         </ui-tabs>
         <ui-list>
-          <app-conversation pin></app-conversation>
-          <app-conversation pin></app-conversation>
-          <app-conversation pin></app-conversation>
-          <app-conversation pin></app-conversation>
-          <app-conversation pin></app-conversation>
-          <app-conversation></app-conversation>
         </ui-list>
-
+        <button>loadMore</button>
         <ui-drop up right>
           <ui-fab>edit</ui-fab>
           <ui-menu slot="drop">
@@ -98,7 +112,53 @@ const properties = {};
     */
     mount(node) {
       super.mount(node, attributes, properties);
+      const uiList = $('ui-list', node);
+      const loadMoreButton = $('button', node);
 
+      const state$ = getState$();
+      const dialogsOrderList$ = state$.pipe(
+        map(getDialogsOrder),
+        distinctUntilChanged()
+      );
+
+      dialogsOrderList$.subscribe(dialogs => {
+        const localState = this.store();
+        const newUiItems = {};
+        for (let i = 0; i < dialogs.length; i++) {
+          if (R.has(dialogs[i], localState)) {
+            continue;
+          }
+          const appConversation = new AppConversation(dialogs[i]);
+          uiList.append(appConversation);
+          newUiItems[dialogs[i]] = appConversation;
+        }
+        this.store({...localState, ...newUiItems});
+      });
+
+
+    const loadMoreButtonClick$ = fromEvent(loadMoreButton, 'click');
+    const latestDialog$ = dialogsOrderList$.pipe(
+      map(R.pipe(R.last, R.partialRight(R.append, [['dialogs', 'dialogs']]))),
+      withLatestFrom(state$),
+      map(R.apply(R.path))
+    );
+
+    const loadMore$ = loadMoreButtonClick$.pipe(
+      withLatestFrom(latestDialog$),
+      map(R.nth(1)),
+      map(getDialogWithLastMessage)
+    );
+
+    loadMore$.subscribe(x => {
+      console.log('[LAST DIALOG]', x);
+      loadDialogs({
+        offset_id: R.propOr(0, 'top_message', x),
+        offset_date: R.pathOr(0, ['last_message', 'date'], x),
+        offset_peer: getInputPeer()
+      });
+    });
+
+      loadDialogs();
       return this;
     }
   }

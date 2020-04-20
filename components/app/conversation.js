@@ -1,5 +1,8 @@
 import Component, {html, css} from '../../script/ui/Component.js';
 import $ from '../../script/ui/DOM.js';
+import {peerIdToPeer} from '../../state/utils.js'
+import {getDialogWithLastMessage} from '../../state/dialogs/helpers.js'
+import {wrapAsObjWithKey} from '../../script/helpers.js';
 
 const style = css`
   :host {
@@ -97,6 +100,59 @@ const style = css`
 const attributes = {};
 const properties = {};
 
+const {combineLatest, fromEvent} = rxjs;
+const {map, distinctUntilChanged} = rxjs.operators;
+const {isObjectOf} = zagram;
+
+
+const buildUserByIdSelector = R.pipe(
+  R.prop('user_id'),
+  R.partialRight(R.append, [['users']]),
+  R.path
+);
+
+
+const buildChatByIdSelector = R.pipe(
+  R.prop('chat_id'),
+  R.partialRight(R.append, [['chats']]),
+  R.path
+);
+
+const buildChannelByIdSelector = R.pipe(
+  R.prop('channel_id'),
+  R.partialRight(R.append, [['chats']]),
+  R.path
+);
+
+const getPeerInfoSelectorByPeerId = R.pipe(
+  peerIdToPeer,
+  R.cond([
+    [isObjectOf('peerUser'), buildUserByIdSelector],
+    [isObjectOf('peerChat'), buildChatByIdSelector],
+    [R.T, buildChannelByIdSelector]
+  ])
+);
+
+const getDialogTitle = R.pipe(
+  R.prop('peer_info'),
+  R.cond([
+    [R.equals(undefined), R.always('dialog')],
+    [isObjectOf('user'), R.prop('first_name')],
+    [isObjectOf('chat'), R.prop('title')],
+    [isObjectOf('channel'), R.prop('title')],
+    [R.T, R.always('dialog')]
+  ])
+);
+
+const getIdFromPeer = R.pipe(
+  R.prop('peer_info'),
+  R.cond([
+    [R.equals(undefined), R.always(0)],
+    [R.T, R.prop('id')]
+  ])
+);
+
+
 /** {AppConversation} @class
   * @description Отображение чата в списке чатов
   */
@@ -118,11 +174,11 @@ const properties = {};
       </template>`;
 
   /** Создание компонента {AppConversation} @constructor
-    * @param {object?} conversation объект беседы
+    * @param {string} dilalogId - id of dialog in state
     */
-    constructor(conversation) {
+    constructor(dialogId) {
       super();
-      if (conversation) this.store({conversation});
+      this.store({dialogId});
     }
 
   /** Создание элемента в DOM (DOM доступен) / mount @lifecycle
@@ -131,15 +187,33 @@ const properties = {};
     */
     mount(node) {
       super.mount(node, attributes, properties);
-      const {conversation} = this.store(); // id диалога, string
+      const {dialogId} = this.store(); // id диалога, string
+
+    const state$ = getState$();
+    const dialog$ = state$.pipe(
+      map(R.path(['dialogs', 'dialogs', dialogId])),
+      map(getDialogWithLastMessage),
+      distinctUntilChanged()
+    );
+
+    const peerInfo$ = state$.pipe(
+      map(getPeerInfoSelectorByPeerId(dialogId)),
+      map(wrapAsObjWithKey('peer_info'))
+    );
+
+    const dialogInfo$ = combineLatest(dialog$, peerInfo$).pipe(map(R.mergeAll));
+    dialogInfo$.subscribe(dialog => {
+      this.store({dialog});
+    });
 
       return this;
     }
 
   /** */
     render(node) {
-      const {conversation} = this.store(); // id диалога, string
-      if (!conversation) return this;
+      const {dialog} = this.store(); // id диалога, string
+      if (!dialog) return this;
+      // console.log('[AppConversation]', dialog);
 
       return this;
     }
