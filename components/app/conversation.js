@@ -1,7 +1,7 @@
 import Component, {html, css} from '../../script/ui/Component.js';
 import $ from '../../script/ui/DOM.js';
-import {peerIdToPeer} from '../../state/utils.js'
-import {getDialogWithLastMessage} from '../../state/dialogs/helpers.js'
+import {peerIdToPeer} from '../../state/utils.js';
+import {getDialogWithLastMessage} from '../../state/dialogs/helpers.js';
 import {wrapAsObjWithKey} from '../../script/helpers.js';
 
 const style = css`
@@ -104,7 +104,6 @@ const {combineLatest, fromEvent} = rxjs;
 const {map, distinctUntilChanged} = rxjs.operators;
 const {isObjectOf} = zagram;
 
-
 const buildUserByIdSelector = R.pipe(
   R.prop('user_id'),
   R.partialRight(R.append, [['users']]),
@@ -174,7 +173,7 @@ const getIdFromPeer = R.pipe(
       </template>`;
 
   /** Создание компонента {AppConversation} @constructor
-    * @param {string} dilalogId - id of dialog in state
+    * @param {string} dialogId - id of dialog in state
     */
     constructor(dialogId) {
       super();
@@ -213,7 +212,7 @@ const getIdFromPeer = R.pipe(
     render(node) {
       const {dialog} = this.store(); // id диалога, string
       if (!dialog) return this;
-      // console.log('[AppConversation]', dialog);
+      console.log('[AppConversation]', dialog);
 
       return this;
     }

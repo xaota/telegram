@@ -6,7 +6,8 @@ import locator  from './app/locator.js';
 
 import Channel from './utils/Channel.js';
 import Storage from './utils/Storage.js';
-import {default as initState} from '../state/index.js';
+
+import initState from '../state/index.js';
 
 /* eslint-disable */
 import LayoutLoading   from '../components/layout/loading.js';

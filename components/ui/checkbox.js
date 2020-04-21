@@ -48,8 +48,8 @@ const style = css`
   input[type="checkbox"] ~ ui-icon {
     display: none;
     position: absolute;
-    left: 0;
-    top: 0px;
+    left: 3px;
+    top: 0;
     width: 18px;
     height: 18px;
     color: #fff;
