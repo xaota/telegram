@@ -40,7 +40,6 @@ export default class FormPassword extends Component {
         distinctUntilChanged()
       );
     sendingStatus$.subscribe(status => {
-      console.log(`[send-password] status: ${status}`);
       input.disabled = status;
       submit.loading = status;
     });
@@ -52,7 +51,6 @@ export default class FormPassword extends Component {
       );
 
     sendingError$.subscribe(error => {
-      console.log(`[send-password] error: ${error}`);
       input.error = error;
     });
 
