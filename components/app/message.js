@@ -109,6 +109,19 @@ const properties = {};
       super.mount(node, attributes, properties);
       return this;
     }
+
+  /** форматирование времени / timestamp @static */
+    static timestamp(timestamp) {
+      if (!timestamp) return '';
+      try {
+        timestamp = new Date(timestamp * 1000);
+        return [timestamp.getHours(), timestamp.getMinutes()]
+          .map(e => ('0' + e).slice(-2))
+          .join(':');
+      } catch (e) {
+        debugger; // eslint-disable-line
+      }
+    }
   }
 
 Component.init(AppMessage, 'app-message', {attributes, properties});

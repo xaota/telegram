@@ -1,8 +1,20 @@
 import Component, {html, css} from '../../script/ui/Component.js';
 import $ from '../../script/ui/DOM.js';
+
+/* eslint-disable */
+import UIIcon     from '../ui/icon.js';
+import UIBadge    from '../ui/badge.js';
+import UIAvatar   from '../ui/avatar.js';
+import AppMessage from '../app/message.js';
+/* eslint-enable */
+
 import {peerIdToPeer} from '../../state/utils.js';
 import {getDialogWithLastMessage} from '../../state/dialogs/helpers.js';
-import {wrapAsObjWithKey} from '../../script/helpers.js';
+import {wrapAsObjWithKey, dateDay, formatDate, } from '../../script/helpers.js';
+
+const {combineLatest, fromEvent} = rxjs;
+const {map, distinctUntilChanged} = rxjs.operators;
+const {isObjectOf} = zagram;
 
 const style = css`
   :host {
@@ -55,6 +67,10 @@ const style = css`
 
   header > p > ui-icon { /* verify */
     margin-left: 4px;
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+    color: var(--iconHover);
   }
 
   header > p + ui-icon { /* sended, received */
@@ -100,16 +116,11 @@ const style = css`
 const attributes = {};
 const properties = {};
 
-const {combineLatest, fromEvent} = rxjs;
-const {map, distinctUntilChanged} = rxjs.operators;
-const {isObjectOf} = zagram;
-
 const buildUserByIdSelector = R.pipe(
   R.prop('user_id'),
   R.partialRight(R.append, [['users']]),
   R.path
 );
-
 
 const buildChatByIdSelector = R.pipe(
   R.prop('chat_id'),
@@ -161,7 +172,7 @@ const getIdFromPeer = R.pipe(
         <style>${style}</style>
         <ui-avatar></ui-avatar>
         <header>
-          <p>Яндекс.Диалоги (сообщество разработчиков)</p>
+          <p><!-- chaption --></p>
           <ui-icon>receive</ui-icon>
           <span>Mar 1</span>
         </header>
@@ -188,32 +199,61 @@ const getIdFromPeer = R.pipe(
       super.mount(node, attributes, properties);
       const {dialogId} = this.store(); // id диалога, string
 
-    const state$ = getState$();
-    const dialog$ = state$.pipe(
-      map(R.path(['dialogs', 'dialogs', dialogId])),
-      map(getDialogWithLastMessage),
-      distinctUntilChanged()
-    );
+      const state$ = getState$();
+      const dialog$ = state$.pipe(
+        map(R.path(['dialogs', 'dialogs', dialogId])),
+        map(getDialogWithLastMessage),
+        distinctUntilChanged()
+      );
 
-    const peerInfo$ = state$.pipe(
-      map(getPeerInfoSelectorByPeerId(dialogId)),
-      map(wrapAsObjWithKey('peer_info'))
-    );
+      const peerInfo$ = state$.pipe(
+        map(getPeerInfoSelectorByPeerId(dialogId)),
+        map(wrapAsObjWithKey('peer_info'))
+      );
 
-    const dialogInfo$ = combineLatest(dialog$, peerInfo$).pipe(map(R.mergeAll));
-    dialogInfo$.subscribe(dialog => {
-      this.store({dialog});
-    });
+      const dialogInfo$ = combineLatest(dialog$, peerInfo$).pipe(map(R.mergeAll));
+      dialogInfo$.subscribe(dialog => {
+        this.store({dialog});
+      });
 
       return this;
     }
 
-  /** */
+  /** / render */
     render(node) {
       const {dialog} = this.store(); // id диалога, string
       if (!dialog) return this;
-      console.log('[AppConversation]', dialog);
 
+      const current = formatDate(dateDay(), true);
+
+      const peer     = getIdFromPeer(dialog);
+      const verify   = dialog?.peer_info?.verified;
+      const chaption = getDialogTitle(dialog);
+      const updated  = formatDate(dateDay(1000 * (dialog?.last_message?.date || 0)), true);
+      const timestamp = current === updated ? AppMessage.timestamp(dialog?.last_message?.date) : updated;
+
+      // pinned, muted
+
+
+      // nodes
+      const avatarNode    = $('ui-avatar',        node);
+      const chaptionNode  = $('header > p',       node);
+      const receiveNode   = $('header > ui-icon', node);
+      const timestampNode = $('header > span',    node);
+      const authorNode    = $('main > p',         node);
+      const messageNode   = $('main > span',      node);
+      const badgeNode     = $('main > ui-badge',  node);
+
+      // patch ui
+      this.dataset.peer = peer;
+      avatarNode.color = UIAvatar.color(peer);
+      avatarNode.innerText = UIAvatar.letter(chaption);
+      chaptionNode.innerText = chaption;
+      if (verify) chaptionNode.append(new UIIcon('verify'));
+      timestampNode.innerText = timestamp;
+      badgeNode.innerText = dialog.unread_count;
+
+      // console.log('[app-conversation]', dialog);
       return this;
     }
   }
