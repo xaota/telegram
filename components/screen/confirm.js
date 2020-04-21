@@ -1,5 +1,7 @@
 import Component, {html, css} from '../../script/ui/Component.js';
 import $ from '../../script/ui/DOM.js';
+import { setPage } from '../../state/pages/index.js'
+import { sendVerifyCode } from '../../state/auth/index.js'
 
 import locator from '../../script/app/locator.js';
 
@@ -8,6 +10,25 @@ import UIIcon   from '../ui/icon.js';
 import UIInput  from '../ui/input.js';
 import UIMonkey from '../ui/monkey.js';
 /* eslint-enable */
+
+const {fromEvent} = rxjs;
+const {filter, mapTo, map, distinctUntilChanged} = rxjs.operators;
+
+const goToLogin = R.partial(setPage, ['login']);
+
+const getPhoneNumber = R.path(['auth', 'currentPhone']);
+
+const getVerifyError = R.path(['auth', 'verifyError']);
+
+const getVerifyLabel = R.cond([
+  [R.equals('PHONE_CODE_INVALID'), R.always('Invalid code')],
+  [R.T, R.identity]
+]);
+
+const isValidValue = R.pipe(
+  R.prop('length'),
+  R.lte(5)
+);
 
 const style = css`
   :host {
@@ -90,49 +111,51 @@ const properties = {};
     mount(node) {
       super.mount(node, attributes, properties);
       const input = $('ui-input', node);
+      const icon = $('ui-icon', node);
 
-      input.addEventListener('input', () => send.call(this, input));
+      const state$ = getState$();
+
+      const phoneNumber$ = state$
+        .pipe(map(getPhoneNumber));
+
+      phoneNumber$
+        .subscribe(phoneNumber => {
+          this.store({phoneNumber});
+        });
+
+      const verifyCodeError$ = state$
+        .pipe(map(getVerifyError))
+        .pipe(distinctUntilChanged())
+        .pipe(map(getVerifyLabel));
+
+      verifyCodeError$
+        .subscribe(error => {
+          input.error = error || null;
+          if (error) {
+            input.disabled = false;
+            input.value = '';
+          }
+        });
+
+      const input$ = fromEvent(input, 'input');
+      input$
+        .pipe(mapTo(input))
+        .pipe(map(R.prop('value')))
+        .pipe(filter(isValidValue))
+        .subscribe(sendVerifyCode);
+
+      const changePhone$ = fromEvent(icon, 'click');
+      changePhone$.subscribe(goToLogin);
+
       return this;
     }
 
   /** */
     render(node) {
-      const {phone_number} = this.store();
-      this.innerText = phone_number;
+      const {phoneNumber} = this.store();
+      this.innerText = phoneNumber;
       return this;
     }
   }
 
 Component.init(ScreenConfirm, 'screen-confirm', {attributes, properties});
-
-// #region [Private]
-/** send
-  * @this ScreenConfirm
-  */
-  async function send(input) {
-    const {telegram, channel} = locator;
-
-    const phone_code = input.value;
-    const length = phone_code.length;
-    if (length > 1) input.error = null;
-    if (length !== 5) return;
-    const {phone_number, phone_code_hash} = this.store();
-    const data = {phone_code, phone_number, phone_code_hash};
-    try {
-      const {user} = await telegram.method('auth.signIn', data);
-      // {terms_of_service.text -> auth.signUp(phone_number, phone_code_hash, first_name, last_name)}
-      channel.send('$.auth.user', {user});
-    } catch (error) {
-      input.value = '';
-      let message = error.text;
-      switch (error.message) {
-        case 'PHONE_CODE_INVALID': message = 'Invalid phone code'; break;
-        case 'FLOOD_WAIT': message = `Flood! Wait ${error.data} seconds`; break;
-      }
-      input.error = message;
-      if (error.unauthorized && error.message === 'SESSION_PASSWORD_NEEDED') {
-        channel.send('$.auth.password');
-      }
-    }
-  }
-// #endregion
