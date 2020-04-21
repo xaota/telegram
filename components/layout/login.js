@@ -10,6 +10,8 @@ import ScreenRegister from '../screen/register.js';
 import ScreenPassword from '../screen/password.js';
 /* eslint-enable */
 
+const {map, distinctUntilChanged} = rxjs.operators;
+
 const style = css`
   :host {
     display: block;
@@ -54,7 +56,25 @@ const properties = {};
       super.mount(node, attributes, properties);
       const router = routing(node.querySelector('main'));
 
-      locator.channel.on('$.auth.confirm', details => router.check('screen-confirm', details));
+      const page$ = getState$().pipe(
+        map(R.propOr('loading', 'page')),
+        distinctUntilChanged()
+      );
+
+      page$.subscribe(openedPage => {
+        console.log('Opened page:', openedPage);
+        if (openedPage === 'login') {
+          router.check('screen-login');
+        }
+
+        if (openedPage === 'verify') {
+          router.check('screen-confirm');
+        }
+
+        if (openedPage === 'password') {
+          router.check('screen-password');
+        }
+    });
       return this;
     }
   }

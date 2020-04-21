@@ -1,5 +1,6 @@
 import Component, {html, css} from '../../script/ui/Component.js';
 import $ from '../../script/ui/DOM.js';
+import {sendAuthCode} from '../../state/auth/index.js';
 
 import locator from '../../script/app/locator.js';
 
@@ -10,6 +11,29 @@ import UIButton   from '../ui/button.js';
 // import UICountry  from '../ui/country.js';
 import UICheckbox from '../ui/checkbox.js';
 /* eslint-enable */
+
+const {fromEvent} = rxjs;
+const {map, distinctUntilChanged, withLatestFrom, startWith} = rxjs.operators;
+
+const getButtonStyle = R.pipe(
+  R.length,
+  R.cond([
+    [R.equals(0), R.always('none')],
+    [R.T, R.always('block')]
+  ])
+);
+
+const getErrorLabel = R.cond([
+  [R.equals('PHONE_NUMBER_INVALID'), R.always('Invalid phone number')],
+  [R.T, R.identity]
+]);
+
+const getErrorCode = R.pathOr(null, ['auth', 'sendAuthCodeError']);
+
+const getError = R.pipe(
+  getErrorCode,
+  getErrorLabel
+);
 
 const style = css`
   :host {
@@ -55,6 +79,7 @@ const style = css`
 const attributes = {};
 const properties = {};
 
+
 /** {ScreenLogin} @class
   * @description Отображение экрана входа
   */
@@ -86,33 +111,42 @@ const properties = {};
       const phone  = $('#phone',    node);
       const button = $('ui-button', node);
 
-      phone.addEventListener('input', _ => {
-        button.style.display = phone.value.length > 0 ? 'block' : 'none';
+      const sendingAuthCode$ = getState$()
+        .pipe(map(R.pathOr(false, ['auth', 'sendingAuthCode'])))
+        .pipe(distinctUntilChanged());
+
+      sendingAuthCode$.subscribe(sending => {
+        phone.disabled = sending;
+        button.loading = sending;
       });
 
-      button.addEventListener('click', async () => {
-        const phone_number = phone.value;
-        phone.disabled = true;
-        button.loading = true;
-        // sendAuthCode(phoneNumber);
+      const sendAuthCodeError$ = getState$()
+        .pipe(map(getError))
+        .pipe(distinctUntilChanged());
 
-        const {telegram, config, channel} = locator;
-
-        try {
-          const {phone_code_hash} = await telegram.method('auth.sendCode', {
-            phone_number,
-            api_id: config.api.id,
-            api_hash: config.api.hash,
-            settings: {_: 'codeSettings'}
-          });
-          channel.send('$.auth.confirm', {phone_number, phone_code_hash});
-        } catch (error) {
-          phone.disabled = false;
-          button.loading = false;
-          phone.error = 'Invalid phone number'; // error.errorMessage;
-        }
+      sendAuthCodeError$.subscribe(error => {
+        console.log(`[form-login] error: ${error}`);
+        phone.error = error;
       });
 
+      const phone$ = fromEvent(phone, 'input').pipe(
+        map(R.pathOr('', ['detail', 'value'])),
+        startWith('')
+      );
+      const buttonStyle$ = phone$.pipe(
+        map(getButtonStyle)
+      );
+      buttonStyle$.subscribe((x) => {
+        button.style.display = x;
+      });
+
+      const buttonClick$ = fromEvent(button, 'click');
+      const submit$ = buttonClick$.pipe(
+        withLatestFrom(phone$),
+        map(R.nth(1)),
+      );
+
+      submit$.subscribe(sendAuthCode);
       return this;
     }
   }
