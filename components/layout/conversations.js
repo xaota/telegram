@@ -37,6 +37,7 @@ const properties = {};
     */
     mount(node) {
       super.mount(node, attributes, properties);
+      telegram.save(); // TODO: move to middleware
 
       locator.channel.send('header.main', {options: { // переключаем шапку
         menu: true,
