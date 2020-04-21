@@ -1,7 +1,7 @@
 import Component, {html, css} from '../../script/ui/Component.js';
 import $ from '../../script/ui/DOM.js';
-import { setPage } from '../../state/pages/index.js'
-import { sendVerifyCode } from '../../state/auth/index.js'
+import {setPage} from '../../state/pages/index.js';
+import {sendVerifyCode} from '../../state/auth/index.js';
 
 import locator from '../../script/app/locator.js';
 

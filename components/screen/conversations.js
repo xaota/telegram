@@ -1,7 +1,7 @@
 import Component, {html, css} from '../../script/ui/Component.js';
 import {loadDialogs} from '../../state/dialogs/index.js';
 import $ from '../../script/ui/DOM.js';
-import {getDialogWithLastMessage} from '../../state/dialogs/helpers.js'
+import {getDialogWithLastMessage} from '../../state/dialogs/helpers.js';
 // import locator from '../../script/app/locator.js';
 
 /* eslint-disable */
@@ -75,7 +75,6 @@ const properties = {};
   * @description Отображение экрана списка чатов
   */
   export default class ScreenConversations extends Component {
-
     constructor() {
       super();
     }

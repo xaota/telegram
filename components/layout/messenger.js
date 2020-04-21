@@ -60,7 +60,7 @@ const properties = {};
         .pipe(map(R.path(['auth', 'user'])));
 
       user$.subscribe(user => {
-        this.store(user)
+        this.store(user);
       });
     }
 

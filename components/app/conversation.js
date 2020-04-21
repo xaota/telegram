@@ -10,10 +10,11 @@ import AppMessage from '../app/message.js';
 
 import {peerIdToPeer} from '../../state/utils.js';
 import {getDialogWithLastMessage} from '../../state/dialogs/helpers.js';
-import {wrapAsObjWithKey, dateDay, formatDate, } from '../../script/helpers.js';
+import {wrapAsObjWithKey, dateDay, formatDate} from '../../script/helpers.js';
+import { setActiveDialog } from '../../state/dialogs/actions.js'
 
 const {combineLatest, fromEvent} = rxjs;
-const {map, distinctUntilChanged, tap} = rxjs.operators;
+const {map, distinctUntilChanged, mapTo} = rxjs.operators;
 const {isObjectOf} = zagram;
 
 const style = css`
@@ -167,8 +168,7 @@ const getIdFromPeer = R.pipe(
 /**
  * Takes selector returns userId
  */
-const buildUserSelector = R.pipe(
-  R.cond([
+const buildUserSelector = R.pipe(R.cond([
     [R.isNil, R.always(R.always(null))],
     [
       R.T,
@@ -177,10 +177,9 @@ const buildUserSelector = R.pipe(
         R.of,
         R.concat(['users']),
         R.path
-      ),
+      )
     ]
-  ])
-);
+  ]));
 
 
 /** {AppConversation} @class
@@ -236,29 +235,30 @@ const buildUserSelector = R.pipe(
         distinctUntilChanged()
       );
 
-      const lastMessageAuthorSelector$ = lastMessageAuthorId$.pipe(
-        map(buildUserSelector),
-      );
+      const lastMessageAuthorSelector$ = lastMessageAuthorId$.pipe(map(buildUserSelector));
 
       const lastMessageAuthor$ = combineLatest(
         lastMessageAuthorSelector$,
         state$
       ).pipe(
         map(R.apply(R.call)),
-        map(wrapAsObjWithKey('last_author')),
+        map(wrapAsObjWithKey('last_author'))
       );
 
       const dialogInfo$ = combineLatest(
         dialog$,
         peerInfo$,
         lastMessageAuthor$
-      ).pipe(
-        map(R.mergeAll)
-      );
+      ).pipe(map(R.mergeAll));
       dialogInfo$.subscribe(dialog => {
         this.store({dialog});
       });
 
+      const selectDialog$ = fromEvent(node, 'click').pipe(
+        mapTo(dialogId)
+      )
+
+      selectDialog$.subscribe(setActiveDialog);
       return this;
     }
 

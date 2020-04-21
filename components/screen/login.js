@@ -133,17 +133,15 @@ const properties = {};
         map(R.pathOr('', ['detail', 'value'])),
         startWith('')
       );
-      const buttonStyle$ = phone$.pipe(
-        map(getButtonStyle)
-      );
-      buttonStyle$.subscribe((x) => {
+      const buttonStyle$ = phone$.pipe(map(getButtonStyle));
+      buttonStyle$.subscribe(x => {
         button.style.display = x;
       });
 
       const buttonClick$ = fromEvent(button, 'click');
       const submit$ = buttonClick$.pipe(
         withLatestFrom(phone$),
-        map(R.nth(1)),
+        map(R.nth(1))
       );
 
       submit$.subscribe(sendAuthCode);

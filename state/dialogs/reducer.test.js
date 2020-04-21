@@ -1,7 +1,8 @@
 import {
   LOAD_DIALOGS,
   DIALOGS_LOAD_FAILED,
-  DIALOGS_LOADED
+  DIALOGS_LOADED,
+  SET_ACTIVE_DIALOG
 } from './constants.js';
 
 import reducer from './reducer.js';
@@ -618,6 +619,19 @@ describe('dialogs', () => {
           }
         }
       });
+    });
+  });
+
+  describe('SET_ACTIVE_DIALOG', () => {
+    test('SET', () => {
+      const state = {};
+
+      const action = {
+        type: SET_ACTIVE_DIALOG,
+        payload: 'dialog_id'
+      };
+
+      expect(reducer(state, action)).toEqual({activeDialog: 'dialog_id'});
     });
   });
 });

@@ -3,7 +3,8 @@ import {
   DIALOGS_LOAD_FAILED,
   DIALOGS_LOADED,
   ADD_MESSAGE,
-  ADD_MESSAGES_BATCH
+  ADD_MESSAGES_BATCH,
+  SET_ACTIVE_DIALOG
 } from './constants.js';
 import {wrapAsObjWithKey} from '../../script/helpers.js';
 import {peerToPeerId} from '../utils.js';
@@ -239,10 +240,20 @@ const handleAddMessagesBatch = R.pipe(
   R.apply(R.reduce)
 );
 
+const handleSetActiveDialog = R.pipe(
+  R.of,
+  R.ap([
+    getState,
+    R.pipe(getAction, R.prop('payload'), wrapAsObjWithKey('activeDialog'))
+  ]),
+  R.mergeAll
+);
+
 export default buildReducer({}, [
   [isActionOf(LOAD_DIALOGS), handleLoadingTrue],
   [isActionOf(DIALOGS_LOAD_FAILED), handleDialogsLoadFailed],
   [isActionOf(DIALOGS_LOADED), handleDialogsLoaded],
   [isActionOf(ADD_MESSAGE), handleAddMessage],
-  [isActionOf(ADD_MESSAGES_BATCH), handleAddMessagesBatch]
+  [isActionOf(ADD_MESSAGES_BATCH), handleAddMessagesBatch],
+  [isActionOf(SET_ACTIVE_DIALOG), handleSetActiveDialog]
 ]);
