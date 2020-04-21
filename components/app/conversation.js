@@ -13,7 +13,7 @@ import {getDialogWithLastMessage} from '../../state/dialogs/helpers.js';
 import {wrapAsObjWithKey, dateDay, formatDate, } from '../../script/helpers.js';
 
 const {combineLatest, fromEvent} = rxjs;
-const {map, distinctUntilChanged} = rxjs.operators;
+const {map, distinctUntilChanged, tap} = rxjs.operators;
 const {isObjectOf} = zagram;
 
 const style = css`
@@ -154,11 +154,31 @@ const getDialogTitle = R.pipe(
   ])
 );
 
+
 const getIdFromPeer = R.pipe(
   R.prop('peer_info'),
   R.cond([
     [R.equals(undefined), R.always(0)],
     [R.T, R.prop('id')]
+  ])
+);
+
+
+/**
+ * Takes selector returns userId
+ */
+const buildUserSelector = R.pipe(
+  R.cond([
+    [R.isNil, R.always(R.always(null))],
+    [
+      R.T,
+      R.pipe(
+        x => x.toString(),
+        R.of,
+        R.concat(['users']),
+        R.path
+      ),
+    ]
   ])
 );
 
@@ -211,7 +231,30 @@ const getIdFromPeer = R.pipe(
         map(wrapAsObjWithKey('peer_info'))
       );
 
-      const dialogInfo$ = combineLatest(dialog$, peerInfo$).pipe(map(R.mergeAll));
+      const lastMessageAuthorId$ = dialog$.pipe(
+        map(R.path(['last_message', 'from_id'])),
+        distinctUntilChanged()
+      );
+
+      const lastMessageAuthorSelector$ = lastMessageAuthorId$.pipe(
+        map(buildUserSelector),
+      );
+
+      const lastMessageAuthor$ = combineLatest(
+        lastMessageAuthorSelector$,
+        state$
+      ).pipe(
+        map(R.apply(R.call)),
+        map(wrapAsObjWithKey('last_author')),
+      );
+
+      const dialogInfo$ = combineLatest(
+        dialog$,
+        peerInfo$,
+        lastMessageAuthor$
+      ).pipe(
+        map(R.mergeAll)
+      );
       dialogInfo$.subscribe(dialog => {
         this.store({dialog});
       });
