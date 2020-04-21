@@ -74,6 +74,10 @@ const properties = {};
         if (openedPage === 'password') {
           router.check('screen-password');
         }
+
+        if (openedPage === 'sign-up') {
+          router.check('screen-register');
+        }
     });
       return this;
     }

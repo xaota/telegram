@@ -1,5 +1,7 @@
 import Component, {html, css} from '../../script/ui/Component.js';
 import $ from '../../script/ui/DOM.js';
+import {buildInput$} from '../../script/helpers.js';
+import {signUp} from '../../state/auth/index.js';
 
 import locator from '../../script/app/locator.js';
 
@@ -8,6 +10,14 @@ import UIInput   from '../ui/input.js';
 import UIButton  from '../ui/button.js';
 import AppAvatar from '../app/avatar.js';
 /* eslint-enable */
+
+const {fromEvent, combineLatest} = rxjs;
+const {map, withLatestFrom, distinctUntilChanged, startWith, tap} = rxjs.operators;
+
+const buildFirstName = R.set(R.lensProp('firstName'), R.__, {});
+const buildLastName = R.set(R.lensProp('lastName'), R.__, {});
+
+const getSignUpError = R.pathOr(null, ['auth', 'signUpError']);
 
 const style = css`
   :host {
@@ -92,24 +102,59 @@ const properties = {};
     */
     mount(node) {
       super.mount(node, attributes, properties);
-      const avatar    = $('app-avatar', node);
+      const newAvatar = $('app-avatar', node);
       const firstName = $('#first-name', node);
       const lastName  = $('#last-name', node);
-      const button    = $('ui-button', node);
+      const submit = $('ui-button', node);
 
-      button.addEventListener('click', () => send.call(this, firstName, lastName, avatar));
+      const firstName$ = buildInput$(firstName).pipe(map(buildFirstName));
+      const lastName$ = buildInput$(lastName).pipe(map(buildLastName));
+      const info$ = combineLatest(firstName$, lastName$).pipe(map(R.mergeAll));
+
+      const newAvatar$ = fromEvent(newAvatar, 'newAvatar').pipe(
+        map(R.prop('detail')),
+        startWith(null)
+      );
+
+      const click$ = fromEvent(submit, 'click');
+      const submit$ = click$
+        .pipe(
+          withLatestFrom(info$, newAvatar$),
+          map(R.pipe(
+            R.of,
+            R.ap([
+              R.nth(1),
+              R.pipe(R.nth(2), R.set(R.lensProp('avatar'), R.__, {}))
+            ]),
+            R.mergeAll
+          )),
+          tap(console.log)
+        );
+      submit$.subscribe(signUp);
+
+      const state$ = getState$();
+
+      const signUpError$ = state$
+        .pipe(map(getSignUpError))
+        .pipe(distinctUntilChanged());
+
+      const firstNameInvalid$ = signUpError$
+        .pipe(map(R.equals('FIRSTNAME_INVALID')))
+        .pipe(distinctUntilChanged());
+      firstNameInvalid$.subscribe(invalid => {
+        firstName.error = invalid ? 'First name invalid' : null;
+      });
+
+      const lastNameInvalid$ = signUpError$
+        .pipe(map(R.equals('LASTNAME_INVALID')))
+        .pipe(distinctUntilChanged());
+
+      lastNameInvalid$.subscribe(invalid => {
+        lastName.error = invalid ? 'Last name invalid' : null;
+      });
       return this;
     }
   }
 
 Component.init(ScreenRegister, 'screen-register', {attributes, properties});
 
-// #region [Private]
-/** send
-  * @this ScreenPassword
-  */
-  async function send(firstName, lastName, avatar) {
-    const {telegram, channel} = locator;
-    // const first_name = firstName.value;
-  }
-// #endregion

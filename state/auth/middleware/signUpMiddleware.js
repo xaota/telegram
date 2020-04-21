@@ -4,7 +4,7 @@ import {setPage} from '../../pages/index.js';
 
 const fromPromise = rxjs.from;
 const {of, combineLatest} = rxjs;
-const {catchError, filter, map, mergeMap, withLatestFrom, switchMap} = rxjs.operators;
+const {catchError, filter, map, mergeMap, withLatestFrom, switchMap, tap} = rxjs.operators;
 const {isActionOf} = store;
 const {method, isRpcError} = zagram;
 
@@ -78,7 +78,10 @@ function signUpWithoutAvatar(connection, data) {
 }
 
 function uploadAvatar(connection, avatar) {
-  return fromPromise(connection.upload(avatar, console.log))
+  /* eslint-disable no-empty-function */
+  const {promise} = connection.upload(avatar, () => {});
+  /* eslint-enable no-empty-function */
+  return fromPromise(promise)
     .pipe(
       map(buildUploadPhotoObject),
       map(methodUploadProfilePhoto),
@@ -90,12 +93,12 @@ function uploadAvatar(connection, avatar) {
 function signUpWithAvatar(connection, data) {
   return signUpWithoutAvatar(connection, data)
     .pipe(switchMap(R.cond([
-        [isRpcError, of],
+        [isRpcError, R.of],
         [
           R.T,
           x => combineLatest(of(x), uploadAvatar(connection, data.avatar)).pipe(map(R.nth(0)))
         ]
-      ])));
+    ])));
 }
 
 
@@ -114,9 +117,9 @@ export default function signUpMiddleware(action$, state$, connection) {
           withLatestFrom(authData$),
           map(R.mergeAll),
           mergeMap(R.cond([
-              [hasAvatar, R.partial(signUpWithAvatar, [connection])],
-              [R.T, R.partial(signUpWithoutAvatar, [connection])]
-            ]))
+            [hasAvatar, R.partial(signUpWithAvatar, [connection])],
+            [R.T, R.partial(signUpWithoutAvatar, [connection])]
+          ]))
         );
 
       signUp$.subscribe(handleSignUpResponse);
