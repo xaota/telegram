@@ -11,6 +11,7 @@ import {getDialogWithLastMessage$} from '../../state/dialogs/stream-builders.js'
 /* eslint-enable */
 
 const {fromEvent} = rxjs;
+const {mapTo} = rxjs.operators;
 
 const style = css`
   :host {
