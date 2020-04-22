@@ -54,11 +54,20 @@ export const getPeerInfoSelectorByPeerId = R.pipe(
   ])
 );
 
+const getFullName = R.pipe(
+  R.of,
+  R.ap([
+    R.propOr('', 'first_name'),
+    R.propOr('', 'last_name'),
+  ]),
+  R.join(' '),
+);
+
 export const getDialogTitle = R.pipe(
   R.prop('peer_info'),
   R.cond([
     [R.equals(undefined), R.always('dialog')],
-    [isObjectOf('user'), R.prop('first_name')],
+    [isObjectOf('user'), getFullName],
     [isObjectOf('chat'), R.prop('title')],
     [isObjectOf('channel'), R.prop('title')],
     [R.T, R.always('dialog')]
