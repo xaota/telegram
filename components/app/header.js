@@ -12,6 +12,7 @@ const style = css`
   :host {
     height: 60px;
     display: flex;
+    flex-grow: 1;
     align-items: center;
     /* padding-left: 18px;
         width: 100%;

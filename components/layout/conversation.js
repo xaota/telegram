@@ -22,7 +22,8 @@ const style = css`
     min-width: 420px; */
     grid-area: sidebar;
     border-left: 1px solid var(--edge);
-  }`;
+  }
+`;
 
 const attributes = {};
 const properties = {};
@@ -65,7 +66,7 @@ export default class LayoutConversation extends Component {
     const screenConversation  = $('screen-conversation', node);
 
     screenEmpty.style.display = 'none';
-    screenConversation.style.display = 'block';
+    screenConversation.style.display = 'flex';
   }
 
   render(node) {

@@ -13,7 +13,32 @@ import MessageText from '../messages/text.js';
 
 const {map} = rxjs.operators;
 
-const style = css``;
+const style = css`
+  :host {
+    display: flex;
+    flex-direction: column;
+    height: 100wh
+  }
+  .header-area {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 0;
+  }
+  
+  .message-area {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    flex-grow: 1;
+  }
+  
+  .send-message-area {
+    display: flex;
+    flex-direction: row;
+    padding-bottom: 8px;
+    flex-grow: 0;
+  }
+`;
 
 /**
  * @param state - of app
@@ -41,47 +66,55 @@ export default class ScreenConversation extends Component {
   static template = html`
       <template>
         <style>${style}</style>
-        <app-header find more>
-          <span>ui-avatar + caption + ui-online</span>
-        </app-header>
+          <div class="header-area">
+            <app-header find more>
+              <span>ui-avatar + caption + ui-online</span>
+            </app-header>
+          </div>
+        
 
-        <app-message data-hash="1587063600000x1">
-          <message-system>
-            <span slot="content">Apr 17</span>
-          </message-system>
-        </app-message>
+        <div class="message-area">
+          <app-message data-hash="1587063600000x1">
+            <message-system>
+              <span slot="content">Apr 17</span>
+            </message-system>
+          </app-message>
 
-        <app-message left="" data-hash="169239117824x5">
-          <ui-avatar color="#409ADB" slot="avatar" src="" style="background-color: rgb(64, 154, 219);">F</ui-avatar>
-          <message-text left="" timestamp="22:38" color="#409ADB" style="--color:#409ADB;">
-            <span slot="author">Fill </span>
-            <span slot="content">когда плохо живешь</span>
-          </message-text>
-          <message-text left="" timestamp="22:38" color="#409ADB" style="--color:#409ADB;">
-            <span slot="content">от любой инициативы ждешь говна</span>
-          </message-text>
-          <message-text left="" timestamp="22:38" color="#409ADB" style="--color:#409ADB;">
-            <span slot="content">ну и ведро с крабами</span>
-          </message-text>
-          <message-text left="" timestamp="22:39" color="#409ADB" style="--color:#409ADB;">
-            <span slot="content">меня некоторые люди буквально НЕНАВИДЯТ за то, что я пишу статьи</span>
-          </message-text>
-          <message-text left="" timestamp="22:39" color="#409ADB" style="--color:#409ADB;">
-            <span slot="content">писали в лс, что желают мне смерти и вот такое всё</span>
-          </message-text>
-        </app-message>
+          <app-message left="" data-hash="169239117824x5">
+            <ui-avatar color="#409ADB" slot="avatar" src="" style="background-color: rgb(64, 154, 219);">F</ui-avatar>
+            <message-text left="" timestamp="22:38" color="#409ADB" style="--color:#409ADB;">
+              <span slot="author">Fill </span>
+              <span slot="content">когда плохо живешь</span>
+            </message-text>
+            <message-text left="" timestamp="22:38" color="#409ADB" style="--color:#409ADB;">
+              <span slot="content">от любой инициативы ждешь говна</span>
+            </message-text>
+            <message-text left="" timestamp="22:38" color="#409ADB" style="--color:#409ADB;">
+              <span slot="content">ну и ведро с крабами</span>
+            </message-text>
+            <message-text left="" timestamp="22:39" color="#409ADB" style="--color:#409ADB;">
+              <span slot="content">меня некоторые люди буквально НЕНАВИДЯТ за то, что я пишу статьи</span>
+            </message-text>
+            <message-text left="" timestamp="22:39" color="#409ADB" style="--color:#409ADB;">
+              <span slot="content">писали в лс, что желают мне смерти и вот такое всё</span>
+            </message-text>
+          </app-message>
 
-        <app-message right="" data-hash="169245409280x2">
-          <message-text right="" timestamp="02:12" color="#409ADB" style="--color:#409ADB;">
-            <span slot="content">А мне нравится</span>
-          </message-text>
-          <message-text right="" timestamp="02:12" color="#409ADB" style="--color:#409ADB;">
-            <span slot="content">Не знаю почему</span>
-          </message-text>
-        </app-message>
+          <app-message right="" data-hash="169245409280x2">
+            <message-text right="" timestamp="02:12" color="#409ADB" style="--color:#409ADB;">
+              <span slot="content">А мне нравится</span>
+            </message-text>
+            <message-text right="" timestamp="02:12" color="#409ADB" style="--color:#409ADB;">
+              <span slot="content">Не знаю почему</span>
+            </message-text>
+          </app-message>
+        </div>
 
-        <screen-field></screen-field>
-      </template>`;
+        <div class="send-message-area">
+          <screen-field></screen-field>
+        </div>
+      </template>
+`;
 
   /** Создание элемента в DOM (DOM доступен) / mount @lifecycle
     * @param {ShadowRoot} node корневой узел элемента
