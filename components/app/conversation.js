@@ -1,21 +1,16 @@
-import Component, {html, css} from '../../script/ui/Component.js';
-import $ from '../../script/ui/DOM.js';
-
+import Component, { css, html } from '../../script/ui/Component.js'
+import $ from '../../script/ui/DOM.js'
 /* eslint-disable */
-import UIIcon     from '../ui/icon.js';
-import UIBadge    from '../ui/badge.js';
-import UIAvatar   from '../ui/avatar.js';
-import AppMessage from '../app/message.js';
+import UIIcon from '../ui/icon.js'
+import UIAvatar from '../ui/avatar.js'
+import AppMessage from '../app/message.js'
+import {getDialogTitle} from '../../state/dialogs/helpers.js'
+import {dateDay, formatDate} from '../../script/helpers.js'
+import {setActiveDialog} from '../../state/dialogs/actions.js'
+import {getDialogWithLastMessage$} from '../../state/dialogs/stream-builders.js'
 /* eslint-enable */
 
-import {peerIdToPeer} from '../../state/utils.js';
-import {getDialogWithLastMessage} from '../../state/dialogs/helpers.js';
-import {wrapAsObjWithKey, dateDay, formatDate} from '../../script/helpers.js';
-import { setActiveDialog } from '../../state/dialogs/actions.js'
-
-const {combineLatest, fromEvent} = rxjs;
-const {map, distinctUntilChanged, mapTo} = rxjs.operators;
-const {isObjectOf} = zagram;
+const {fromEvent} = rxjs;
 
 const style = css`
   :host {
@@ -117,44 +112,6 @@ const style = css`
 const attributes = {};
 const properties = {};
 
-const buildUserByIdSelector = R.pipe(
-  R.prop('user_id'),
-  R.partialRight(R.append, [['users']]),
-  R.path
-);
-
-const buildChatByIdSelector = R.pipe(
-  R.prop('chat_id'),
-  R.partialRight(R.append, [['chats']]),
-  R.path
-);
-
-const buildChannelByIdSelector = R.pipe(
-  R.prop('channel_id'),
-  R.partialRight(R.append, [['chats']]),
-  R.path
-);
-
-const getPeerInfoSelectorByPeerId = R.pipe(
-  peerIdToPeer,
-  R.cond([
-    [isObjectOf('peerUser'), buildUserByIdSelector],
-    [isObjectOf('peerChat'), buildChatByIdSelector],
-    [R.T, buildChannelByIdSelector]
-  ])
-);
-
-const getDialogTitle = R.pipe(
-  R.prop('peer_info'),
-  R.cond([
-    [R.equals(undefined), R.always('dialog')],
-    [isObjectOf('user'), R.prop('first_name')],
-    [isObjectOf('chat'), R.prop('title')],
-    [isObjectOf('channel'), R.prop('title')],
-    [R.T, R.always('dialog')]
-  ])
-);
-
 
 const getIdFromPeer = R.pipe(
   R.prop('peer_info'),
@@ -219,39 +176,8 @@ const buildUserSelector = R.pipe(R.cond([
       const {dialogId} = this.store(); // id диалога, string
 
       const state$ = getState$();
-      const dialog$ = state$.pipe(
-        map(R.path(['dialogs', 'dialogs', dialogId])),
-        map(getDialogWithLastMessage),
-        distinctUntilChanged()
-      );
-
-      const peerInfo$ = state$.pipe(
-        map(getPeerInfoSelectorByPeerId(dialogId)),
-        map(wrapAsObjWithKey('peer_info'))
-      );
-
-      const lastMessageAuthorId$ = dialog$.pipe(
-        map(R.path(['last_message', 'from_id'])),
-        distinctUntilChanged()
-      );
-
-      const lastMessageAuthorSelector$ = lastMessageAuthorId$.pipe(map(buildUserSelector));
-
-      const lastMessageAuthor$ = combineLatest(
-        lastMessageAuthorSelector$,
-        state$
-      ).pipe(
-        map(R.apply(R.call)),
-        map(wrapAsObjWithKey('last_author'))
-      );
-
-      const dialogInfo$ = combineLatest(
-        dialog$,
-        peerInfo$,
-        lastMessageAuthor$
-      ).pipe(map(R.mergeAll));
-      dialogInfo$.subscribe(dialog => {
-        this.store({dialog});
+      getDialogWithLastMessage$(state$, dialogId).subscribe(dialog => {
+        this.store({dialog})
       });
 
       const selectDialog$ = fromEvent(node, 'click').pipe(

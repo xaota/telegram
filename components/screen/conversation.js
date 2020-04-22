@@ -8,7 +8,25 @@ import ScreenField from '../screen/field.js';
 import MessageText from '../messages/text.js';
 /* eslint-enable */
 
+const {map} = rxjs.operators;
+
 const style = css``;
+
+/**
+ * @param state - of app
+ * @returns - full info about dialog
+ */
+const getActiveDialogInfo = R.pipe(
+  R.of,
+  R.ap([
+    R.pipe(
+      R.path(['dialogs', 'activeDialog']),
+      R.propOr(null),
+    ),
+    R.path(['dialogs', 'dialogs'])
+  ]),
+  R.apply(R.call),
+);
 
 const attributes = {};
 const properties = {};
@@ -67,6 +85,11 @@ export default class ScreenConversation extends Component {
     * @return {Component} @this {ScreenConversation} текущий компонент
     */
   mount(node) {
+    const state$ = getState$();
+    const activeDialog$ = state$
+      .pipe(map(getActiveDialogInfo))
+
+    activeDialog$.subscribe(console.log);
     return super.mount(node, attributes, properties);
   }
 }

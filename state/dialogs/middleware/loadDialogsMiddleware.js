@@ -12,7 +12,7 @@ function loadDialogsStream(connection, action) {
   return R.pipe(
     R.propOr({}, 'payload'),
     R.merge({
-      limit: 5,
+      limit: 20,
       offset_date: 0,
       offset_id: 0,
       offset_peer: construct('inputPeerEmpty'),
