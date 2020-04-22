@@ -1,4 +1,6 @@
 import Component, {html, css} from '../../script/ui/Component.js';
+import $ from '../../script/ui/DOM.js';
+import {getActiveDialogId$} from '../../state/dialogs/stream-builders.js';
 
 /* eslint-disable */
 import LayoutSidebar      from './sidebar.js';
@@ -28,14 +30,12 @@ const properties = {};
 /** {LayoutConversation} @class
   * @description Отображение ряздела общения
   */
-  export default class LayoutConversation extends Component {
+export default class LayoutConversation extends Component {
     static template = html`
       <template>
         <style>${style}</style>
-        <!--
           <screen-empty></screen-empty>
-        -->
-        <screen-conversation></screen-conversation>
+          <screen-conversation></screen-conversation>
         <layout-sidebar></layout-sidebar>
       </template>`;
 
@@ -43,9 +43,45 @@ const properties = {};
     * @param {ShadowRoot} node корневой узел элемента
     * @return {Component} @this {LayoutConversation} текущий компонент
     */
-    mount(node) {
-      return super.mount(node, attributes, properties);
-    }
+  mount(node) {
+    super.mount(node, attributes, properties);
+
+    const state$ = getState$();
+    getActiveDialogId$(state$).subscribe(dialogId => this.store({dialogId}));
+    this.showScreenEmpty(node);
+    return this;
   }
+
+  showScreenEmpty(node) {
+    const screenEmpty = $('screen-empty', node);
+    const screenConversation  = $('screen-conversation', node);
+
+    screenEmpty.style.display = 'flex';
+    screenConversation.style.display = 'none';
+  }
+
+  showScreenConversation(node) {
+    const screenEmpty = $('screen-empty', node);
+    const screenConversation  = $('screen-conversation', node);
+
+    screenEmpty.style.display = 'none';
+    screenConversation.style.display = 'block';
+  }
+
+  render(node) {
+    super.render(node)
+
+    const {dialogId} = this.store();
+
+    if (R.isNil(dialogId)) {
+      this.showScreenEmpty(node);
+
+    } else {
+      this.showScreenConversation(node);
+    }
+
+    return this;
+  }
+}
 
 Component.init(LayoutConversation, 'layout-conversation', {attributes, properties});

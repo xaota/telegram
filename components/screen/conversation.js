@@ -1,5 +1,7 @@
 import Component, {html, css} from '../../script/ui/Component.js';
+import $ from '../../script/ui/DOM.js';
 import {getActiveDialogInfo$} from '../../state/dialogs/stream-builders.js';
+import {getDialogTitle} from '../../state/dialogs/helpers.js';
 
 /* eslint-disable */
 import AppHeader   from '../app/header.js';
@@ -89,10 +91,26 @@ export default class ScreenConversation extends Component {
     const state$ = getState$();
     const activeDialog$ = getActiveDialogInfo$(state$);
 
-    activeDialog$.subscribe((activeDialog) => {
-      console.log('[ACTIVE DIALOG]: ', activeDialog);
+    activeDialog$.subscribe((dialog) => {
+      this.store({dialog});
     });
     return super.mount(node, attributes, properties);
+  }
+
+  render(node) {
+    const {dialog} = this.store();
+    if (R.isNil(dialog)) {
+      return this;
+    }
+    const title = getDialogTitle(dialog);
+
+    const appHeaderNode = $('app-header', node);
+    const appTitleNode = $('app-header > span', node);
+    appTitleNode.innerText = title;
+    appTitleNode.slot = "data"
+    appHeaderNode.find = false;
+    appHeaderNode.more = false;
+    return this;
   }
 }
 
