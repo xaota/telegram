@@ -21,11 +21,11 @@ const getActiveDialogInfo = R.pipe(
   R.ap([
     R.pipe(
       R.path(['dialogs', 'activeDialog']),
-      R.propOr(null),
+      R.propOr(null)
     ),
     R.path(['dialogs', 'dialogs'])
   ]),
-  R.apply(R.call),
+  R.apply(R.call)
 );
 
 const attributes = {};
@@ -87,7 +87,7 @@ export default class ScreenConversation extends Component {
   mount(node) {
     const state$ = getState$();
     const activeDialog$ = state$
-      .pipe(map(getActiveDialogInfo))
+      .pipe(map(getActiveDialogInfo));
 
     activeDialog$.subscribe(console.log);
     return super.mount(node, attributes, properties);

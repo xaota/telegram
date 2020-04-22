@@ -1,6 +1,6 @@
 import {getPeerInfoSelectorByPeerId} from './helpers.js';
 import {getUser$} from '../users/stream-builders.js';
-import { wrapAsObjWithKey } from '../../script/helpers.js'
+import {wrapAsObjWithKey} from '../../script/helpers.js';
 
 const {combineLatest} = rxjs;
 const {map, withLatestFrom, switchMap, tap} = rxjs.operators;
@@ -50,9 +50,7 @@ export function getDialogWithPeerInfo$(state$, dialogId) {
   return combineLatest(
     getPeerInfo$(state$, dialogId),
     getDialogInfo$(state$, dialogId)
-  ).pipe(
-    map(R.apply(addPeerInfoToDialog))
-  );
+  ).pipe(map(R.apply(addPeerInfoToDialog)));
 }
 
 /**
@@ -67,7 +65,7 @@ export function getMessage$(state$, dialogId, messageId) {
     'dialogs',
     dialogId,
     'messages',
-    R.toString(messageId),
+    R.toString(messageId)
   ]);
   return state$.pipe(map(messageSelector));
 }
@@ -82,7 +80,7 @@ export function getMessageAuthor$(state$, dialogId, messageId) {
   const getAuthorId = R.path(['dialogs', 'dialogs', dialogId, 'messages', messageId, 'from_id']);
   return state$.pipe(
     map(getAuthorId),
-    switchMap(R.partial(getUser$, [state$])),
+    switchMap(R.partial(getUser$, [state$]))
   );
 }
 
@@ -108,7 +106,7 @@ export function getMessageWithAuthor$(state$, dialogId, messageId) {
 export function getLastDialogMessage$(state$, dialogId) {
   return getDialogInfo$(state$, dialogId).pipe(
     map(R.prop('top_message')),
-    switchMap((messageId) => getMessageWithAuthor$(state$, dialogId, messageId))
+    switchMap(messageId => getMessageWithAuthor$(state$, dialogId, messageId))
   );
 }
 
@@ -121,7 +119,7 @@ export function getLastDialogMessage$(state$, dialogId) {
 export function getDialogWithLastMessage$(state$, dialogId) {
   return combineLatest(
     getLastDialogMessage$(state$, dialogId).pipe(map(wrapAsObjWithKey('last_message'))),
-    getDialogWithPeerInfo$(state$, dialogId),
+    getDialogWithPeerInfo$(state$, dialogId)
   ).pipe(map(R.mergeAll));
 }
 

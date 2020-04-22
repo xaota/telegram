@@ -1,5 +1,5 @@
-import Component, { css, html } from '../../script/ui/Component.js'
-import $ from '../../script/ui/DOM.js'
+import Component, {css, html} from '../../script/ui/Component.js';
+import $ from '../../script/ui/DOM.js';
 /* eslint-disable */
 import UIIcon from '../ui/icon.js'
 import UIAvatar from '../ui/avatar.js'
@@ -122,23 +122,6 @@ const getIdFromPeer = R.pipe(
 );
 
 
-/**
- * Takes selector returns userId
- */
-const buildUserSelector = R.pipe(R.cond([
-    [R.isNil, R.always(R.always(null))],
-    [
-      R.T,
-      R.pipe(
-        x => x.toString(),
-        R.of,
-        R.concat(['users']),
-        R.path
-      )
-    ]
-  ]));
-
-
 /** {AppConversation} @class
   * @description Отображение чата в списке чатов
   */
@@ -177,12 +160,10 @@ const buildUserSelector = R.pipe(R.cond([
 
       const state$ = getState$();
       getDialogWithLastMessage$(state$, dialogId).subscribe(dialog => {
-        this.store({dialog})
+        this.store({dialog});
       });
 
-      const selectDialog$ = fromEvent(node, 'click').pipe(
-        mapTo(dialogId)
-      )
+      const selectDialog$ = fromEvent(node, 'click').pipe(mapTo(dialogId));
 
       selectDialog$.subscribe(setActiveDialog);
       return this;

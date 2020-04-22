@@ -1,7 +1,7 @@
 /**
  * Takes dialog structure and returns last message
  */
-import { peerIdToPeer } from '../utils.js'
+import {peerIdToPeer} from '../utils.js';
 
 const {isObjectOf} = zagram;
 
