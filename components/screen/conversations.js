@@ -29,9 +29,10 @@ const getInputPeer = R.cond([
 
 const style = css`
   :host {
-    display: block;
+    display: flex;
     /* font-size: 15px; */
     height: 100%;
+    flex-direction: column;
   }
 
   /* ui-list {} */
@@ -58,7 +59,7 @@ const style = css`
     right: 20px;
     transition: .3s ease bottom;
   }
-
+  
   /* ui-list:hover ~ ui-drop, ui-drop:hover {
     bottom: 20px;
   } */

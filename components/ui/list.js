@@ -3,8 +3,11 @@ import Component, {html, css} from '../../script/ui/Component.js';
 
 const style = css`
   :host {
-    display: block;
-    overflow: hidden;
+    display: flex;
+    overflow: auto;
+    flex-direction: column;
+    height: 0px;
+    flex-grow: 1;
   }
 
   slot {

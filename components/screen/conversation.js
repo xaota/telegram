@@ -1,6 +1,6 @@
 import Component, {html, css} from '../../script/ui/Component.js';
 import $ from '../../script/ui/DOM.js';
-import {getActiveDialogInfo$} from '../../state/dialogs/stream-builders.js';
+import {getActiveDialogInfo$, getActiveDialogId$} from '../../state/dialogs/stream-builders.js';
 import {getDialogTitle} from '../../state/dialogs/helpers.js';
 
 /* eslint-disable */
@@ -17,7 +17,8 @@ const style = css`
   :host {
     display: flex;
     flex-direction: column;
-    height: 100wh
+    height: 100wh;
+    max-height: 100wh;
   }
   .header-area {
     display: flex;
@@ -26,15 +27,22 @@ const style = css`
   }
   
   .message-area {
-    display: flex;
-    flex-direction: column;
+    overflow-y: auto;
+    height: 0px;
     justify-content: flex-end;
     flex-grow: 1;
   }
   
+  .message-area-inner {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    justify-content: flex-end;
+  }
+  
   .send-message-area {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     padding-bottom: 8px;
     flex-grow: 0;
   }
@@ -74,6 +82,7 @@ export default class ScreenConversation extends Component {
         
 
         <div class="message-area">
+          <div class="message-area-inner">
           <app-message data-hash="1587063600000x1">
             <message-system>
               <span slot="content">Apr 17</span>
@@ -108,6 +117,178 @@ export default class ScreenConversation extends Component {
               <span slot="content">Не знаю почему</span>
             </message-text>
           </app-message>
+          <app-message data-hash="1587063600000x1">
+            <message-system>
+              <span slot="content">Apr 17</span>
+            </message-system>
+          </app-message>
+
+          <app-message left="" data-hash="169239117824x5">
+            <ui-avatar color="#409ADB" slot="avatar" src="" style="background-color: rgb(64, 154, 219);">F</ui-avatar>
+            <message-text left="" timestamp="22:38" color="#409ADB" style="--color:#409ADB;">
+              <span slot="author">Fill </span>
+              <span slot="content">когда плохо живешь</span>
+            </message-text>
+            <message-text left="" timestamp="22:38" color="#409ADB" style="--color:#409ADB;">
+              <span slot="content">от любой инициативы ждешь говна</span>
+            </message-text>
+            <message-text left="" timestamp="22:38" color="#409ADB" style="--color:#409ADB;">
+              <span slot="content">ну и ведро с крабами</span>
+            </message-text>
+            <message-text left="" timestamp="22:39" color="#409ADB" style="--color:#409ADB;">
+              <span slot="content">меня некоторые люди буквально НЕНАВИДЯТ за то, что я пишу статьи</span>
+            </message-text>
+            <message-text left="" timestamp="22:39" color="#409ADB" style="--color:#409ADB;">
+              <span slot="content">писали в лс, что желают мне смерти и вот такое всё</span>
+            </message-text>
+          </app-message>
+
+          <app-message right="" data-hash="169245409280x2">
+            <message-text right="" timestamp="02:12" color="#409ADB" style="--color:#409ADB;">
+              <span slot="content">А мне нравится</span>
+            </message-text>
+            <message-text right="" timestamp="02:12" color="#409ADB" style="--color:#409ADB;">
+              <span slot="content">Не знаю почему</span>
+            </message-text>
+          </app-message>
+          <app-message data-hash="1587063600000x1">
+            <message-system>
+              <span slot="content">Apr 17</span>
+            </message-system>
+          </app-message>
+
+          <app-message left="" data-hash="169239117824x5">
+            <ui-avatar color="#409ADB" slot="avatar" src="" style="background-color: rgb(64, 154, 219);">F</ui-avatar>
+            <message-text left="" timestamp="22:38" color="#409ADB" style="--color:#409ADB;">
+              <span slot="author">Fill </span>
+              <span slot="content">когда плохо живешь</span>
+            </message-text>
+            <message-text left="" timestamp="22:38" color="#409ADB" style="--color:#409ADB;">
+              <span slot="content">от любой инициативы ждешь говна</span>
+            </message-text>
+            <message-text left="" timestamp="22:38" color="#409ADB" style="--color:#409ADB;">
+              <span slot="content">ну и ведро с крабами</span>
+            </message-text>
+            <message-text left="" timestamp="22:39" color="#409ADB" style="--color:#409ADB;">
+              <span slot="content">меня некоторые люди буквально НЕНАВИДЯТ за то, что я пишу статьи</span>
+            </message-text>
+            <message-text left="" timestamp="22:39" color="#409ADB" style="--color:#409ADB;">
+              <span slot="content">писали в лс, что желают мне смерти и вот такое всё</span>
+            </message-text>
+          </app-message>
+
+          <app-message right="" data-hash="169245409280x2">
+            <message-text right="" timestamp="02:12" color="#409ADB" style="--color:#409ADB;">
+              <span slot="content">А мне нравится</span>
+            </message-text>
+            <message-text right="" timestamp="02:12" color="#409ADB" style="--color:#409ADB;">
+              <span slot="content">Не знаю почему</span>
+            </message-text>
+          </app-message>
+          <app-message data-hash="1587063600000x1">
+            <message-system>
+              <span slot="content">Apr 17</span>
+            </message-system>
+          </app-message>
+
+          <app-message left="" data-hash="169239117824x5">
+            <ui-avatar color="#409ADB" slot="avatar" src="" style="background-color: rgb(64, 154, 219);">F</ui-avatar>
+            <message-text left="" timestamp="22:38" color="#409ADB" style="--color:#409ADB;">
+              <span slot="author">Fill </span>
+              <span slot="content">когда плохо живешь</span>
+            </message-text>
+            <message-text left="" timestamp="22:38" color="#409ADB" style="--color:#409ADB;">
+              <span slot="content">от любой инициативы ждешь говна</span>
+            </message-text>
+            <message-text left="" timestamp="22:38" color="#409ADB" style="--color:#409ADB;">
+              <span slot="content">ну и ведро с крабами</span>
+            </message-text>
+            <message-text left="" timestamp="22:39" color="#409ADB" style="--color:#409ADB;">
+              <span slot="content">меня некоторые люди буквально НЕНАВИДЯТ за то, что я пишу статьи</span>
+            </message-text>
+            <message-text left="" timestamp="22:39" color="#409ADB" style="--color:#409ADB;">
+              <span slot="content">писали в лс, что желают мне смерти и вот такое всё</span>
+            </message-text>
+          </app-message>
+
+          <app-message right="" data-hash="169245409280x2">
+            <message-text right="" timestamp="02:12" color="#409ADB" style="--color:#409ADB;">
+              <span slot="content">А мне нравится</span>
+            </message-text>
+            <message-text right="" timestamp="02:12" color="#409ADB" style="--color:#409ADB;">
+              <span slot="content">Не знаю почему</span>
+            </message-text>
+          </app-message>
+          <app-message data-hash="1587063600000x1">
+            <message-system>
+              <span slot="content">Apr 17</span>
+            </message-system>
+          </app-message>
+
+          <app-message left="" data-hash="169239117824x5">
+            <ui-avatar color="#409ADB" slot="avatar" src="" style="background-color: rgb(64, 154, 219);">F</ui-avatar>
+            <message-text left="" timestamp="22:38" color="#409ADB" style="--color:#409ADB;">
+              <span slot="author">Fill </span>
+              <span slot="content">когда плохо живешь</span>
+            </message-text>
+            <message-text left="" timestamp="22:38" color="#409ADB" style="--color:#409ADB;">
+              <span slot="content">от любой инициативы ждешь говна</span>
+            </message-text>
+            <message-text left="" timestamp="22:38" color="#409ADB" style="--color:#409ADB;">
+              <span slot="content">ну и ведро с крабами</span>
+            </message-text>
+            <message-text left="" timestamp="22:39" color="#409ADB" style="--color:#409ADB;">
+              <span slot="content">меня некоторые люди буквально НЕНАВИДЯТ за то, что я пишу статьи</span>
+            </message-text>
+            <message-text left="" timestamp="22:39" color="#409ADB" style="--color:#409ADB;">
+              <span slot="content">писали в лс, что желают мне смерти и вот такое всё</span>
+            </message-text>
+          </app-message>
+
+          <app-message right="" data-hash="169245409280x2">
+            <message-text right="" timestamp="02:12" color="#409ADB" style="--color:#409ADB;">
+              <span slot="content">А мне нравится</span>
+            </message-text>
+            <message-text right="" timestamp="02:12" color="#409ADB" style="--color:#409ADB;">
+              <span slot="content">Не знаю почему</span>
+            </message-text>
+          </app-message>
+          <app-message data-hash="1587063600000x1">
+            <message-system>
+              <span slot="content">Apr 17</span>
+            </message-system>
+          </app-message>
+
+          <app-message left="" data-hash="169239117824x5">
+            <ui-avatar color="#409ADB" slot="avatar" src="" style="background-color: rgb(64, 154, 219);">F</ui-avatar>
+            <message-text left="" timestamp="22:38" color="#409ADB" style="--color:#409ADB;">
+              <span slot="author">Fill </span>
+              <span slot="content">когда плохо живешь</span>
+            </message-text>
+            <message-text left="" timestamp="22:38" color="#409ADB" style="--color:#409ADB;">
+              <span slot="content">от любой инициативы ждешь говна</span>
+            </message-text>
+            <message-text left="" timestamp="22:38" color="#409ADB" style="--color:#409ADB;">
+              <span slot="content">ну и ведро с крабами</span>
+            </message-text>
+            <message-text left="" timestamp="22:39" color="#409ADB" style="--color:#409ADB;">
+              <span slot="content">меня некоторые люди буквально НЕНАВИДЯТ за то, что я пишу статьи</span>
+            </message-text>
+            <message-text left="" timestamp="22:39" color="#409ADB" style="--color:#409ADB;">
+              <span slot="content">писали в лс, что желают мне смерти и вот такое всё</span>
+            </message-text>
+          </app-message>
+
+          <app-message right="" data-hash="169245409280x2">
+            <message-text right="" timestamp="02:12" color="#409ADB" style="--color:#409ADB;">
+              <span slot="content">А мне нравится</span>
+            </message-text>
+            <message-text right="" timestamp="02:12" color="#409ADB" style="--color:#409ADB;">
+              <span slot="content">Не знаю почему</span>
+            </message-text>
+          </app-message>
+          
+          </div>
         </div>
 
         <div class="send-message-area">
@@ -123,6 +304,13 @@ export default class ScreenConversation extends Component {
   mount(node) {
     const state$ = getState$();
     const activeDialog$ = getActiveDialogInfo$(state$);
+    const activeDialogId$ = getActiveDialogId$(state$);
+    const msgAreaInnerNode = $('.message-area', node);
+
+    activeDialogId$.subscribe(() => {
+      console.log('Scroll down');
+      msgAreaInnerNode.scrollTop = msgAreaInnerNode.scrollHeight - msgAreaInnerNode.clientHeight;
+    });
 
     activeDialog$.subscribe((dialog) => {
       this.store({dialog});
