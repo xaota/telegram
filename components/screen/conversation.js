@@ -1,4 +1,5 @@
 import Component, {html, css} from '../../script/ui/Component.js';
+import {getActiveDialogInfo$} from '../../state/dialogs/stream-builders.js';
 
 /* eslint-disable */
 import AppHeader   from '../app/header.js';
@@ -86,10 +87,11 @@ export default class ScreenConversation extends Component {
     */
   mount(node) {
     const state$ = getState$();
-    const activeDialog$ = state$
-      .pipe(map(getActiveDialogInfo));
+    const activeDialog$ = getActiveDialogInfo$(state$);
 
-    activeDialog$.subscribe(console.log);
+    activeDialog$.subscribe((activeDialog) => {
+      console.log('[ACTIVE DIALOG]: ', activeDialog);
+    });
     return super.mount(node, attributes, properties);
   }
 }

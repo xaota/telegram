@@ -2,8 +2,8 @@ import {getPeerInfoSelectorByPeerId} from './helpers.js';
 import {getUser$} from '../users/stream-builders.js';
 import {wrapAsObjWithKey} from '../../script/helpers.js';
 
-const {combineLatest} = rxjs;
-const {map, withLatestFrom, switchMap, tap} = rxjs.operators;
+const {combineLatest, of} = rxjs;
+const {map, switchMap} = rxjs.operators;
 
 
 /**
@@ -121,5 +121,28 @@ export function getDialogWithLastMessage$(state$, dialogId) {
     getLastDialogMessage$(state$, dialogId).pipe(map(wrapAsObjWithKey('last_message'))),
     getDialogWithPeerInfo$(state$, dialogId)
   ).pipe(map(R.mergeAll));
+}
+
+/**
+ * @param {Observable<*>} state$ - stream of current state$
+ * @return {Observable<string>} - id of active(selected dialog)
+ */
+export function getActiveDialogId$(state$) {
+  const getActiveDialogId = R.path(['dialogs', 'activeDialog'])
+  return state$.pipe(map(getActiveDialogId));
+}
+
+/**
+ * @param {Observable<*>} state$ - stream of current state
+ * @return {Observable<string>} - info with peer info about active dialog
+ */
+export function getActiveDialogInfo$(state$) {
+  const getActiveDialog$ = R.cond([
+    [R.isNil, R.always(of(null))],
+    [R.T, R.partial(getDialogWithPeerInfo$, [state$])]
+  ]);
+  return getActiveDialogId$(state$).pipe(
+    switchMap(getActiveDialog$)
+  );
 }
 
