@@ -1,8 +1,12 @@
 import Component, {html, css} from '../../script/ui/Component.js';
 import $ from '../../script/ui/DOM.js';
-import {getActiveDialogInfo$, getActiveDialogId$} from '../../state/dialogs/stream-builders.js';
+import {
+  getActiveDialogInfo$,
+  getActiveDialogId$,
+  getActiveDialogMessages$
+} from '../../state/dialogs/stream-builders.js';
+import {authorizedUser$} from '../../state/auth/stream-builders.js';
 import {getDialogTitle} from '../../state/dialogs/helpers.js';
-import {loadDialogHistory} from '../../state/dialogs/actions.js';
 
 /* eslint-disable */
 import AppHeader   from '../app/header.js';
@@ -12,7 +16,8 @@ import ScreenField from '../screen/field.js';
 import MessageText from '../messages/text.js';
 /* eslint-enable */
 
-const {distinctUntilChanged} = rxjs.operators;
+const {fromEvent} = rxjs;
+const {map, distinctUntilChanged} = rxjs.operators;
 
 const style = css`
   :host {
@@ -82,6 +87,9 @@ export default class ScreenConversation extends Component {
           </div>
         
 
+        <div class="load-more-area">
+            <button class="load-more">load-more</button>
+        </div>
         <div class="message-area">
           <div class="message-area-inner">
           <app-message data-hash="1587063600000x1">
@@ -307,6 +315,7 @@ export default class ScreenConversation extends Component {
     const activeDialog$ = getActiveDialogInfo$(state$);
     const activeDialogId$ = getActiveDialogId$(state$);
     const msgAreaInnerNode = $('.message-area', node);
+    const loadMoreNode = $('.load-more', node);
 
     activeDialogId$.pipe(distinctUntilChanged()).subscribe(() => {
       msgAreaInnerNode.scrollTop = msgAreaInnerNode.scrollHeight - msgAreaInnerNode.clientHeight;
@@ -315,11 +324,22 @@ export default class ScreenConversation extends Component {
     activeDialog$.subscribe(dialog => {
       this.store({dialog});
     });
+
+    const dialogMessages$ = getActiveDialogMessages$(state$)
+      .pipe(map(R.groupWith(R.eqProps('from_id'))));
+
+    dialogMessages$.subscribe(groupedMessages => {
+      this.store({groupedMessages});
+    });
+
+    authorizedUser$(state$).subscribe(authorizedUser => this.store({authorizedUser}));
+
+    const loadMoreClick$ = fromEvent(loadMoreNode, 'click');
     return super.mount(node, attributes, properties);
   }
 
   render(node) {
-    const {dialog} = this.store();
+    const {dialog, authorizedUser, groupedMessages = []} = this.store();
     if (R.isNil(dialog)) {
       return this;
     }
@@ -331,6 +351,37 @@ export default class ScreenConversation extends Component {
     appTitleNode.slot = "data";
     appHeaderNode.find = false;
     appHeaderNode.more = false;
+
+    const messageAreaNode = $('.message-area-inner', node);
+    messageAreaNode.innerHTML = '';
+
+    for (let i = 0; i < groupedMessages.length; i++) {
+      const messageGroup = groupedMessages[i];
+      const appMessage = new AppMessage();
+
+      const authorizedUserMessage = messageGroup[0].from_id === authorizedUser.id;
+
+      if (authorizedUserMessage) {
+        appMessage.right = true;
+      } else {
+        appMessage.left = true;
+      }
+
+      for (let j = 0; j < messageGroup.length; j++) {
+        const message = new MessageText();
+
+        if (authorizedUserMessage) {
+          message.right = true;
+        } else {
+          message.left = true;
+        }
+
+        message.content = messageGroup[j].message;
+        appMessage.append(message);
+      }
+      messageAreaNode.append(appMessage);
+    }
+
     return this;
   }
 }

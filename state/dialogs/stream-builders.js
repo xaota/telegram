@@ -124,6 +124,19 @@ export function getDialogWithLastMessage$(state$, dialogId) {
 }
 
 /**
+ * @param {Observable<*>} state$ - stream of current state
+ * @param {string} dialogId - id of dialog to show messages
+ * @returns {Observable<Array<*>>} - observable of messages list for dialog
+ */
+export function getDialogMessages$(state$, dialogId) {
+  return state$.pipe(
+    map(R.path(['dialogs', 'dialogs', dialogId, 'messages'])),
+    map(R.values),
+    map(R.sortBy(R.prop('id')))
+  );
+}
+
+/**
  * @param {Observable<*>} state$ - stream of current state$
  * @return {Observable<string>} - id of active(selected dialog)
  */
@@ -144,3 +157,15 @@ export function getActiveDialogInfo$(state$) {
   return getActiveDialogId$(state$).pipe(switchMap(getActiveDialog$));
 }
 
+/**
+ * @param {Observable<*>} state$ - stream of current state
+ * @returns {Observable<Array<*>>} - observable of messages list for dialog
+ */
+export function getActiveDialogMessages$(state$) {
+  const getActiveDialog$ = R.cond([
+    [R.isNil, R.always(of([]))],
+    [R.T, R.partial(getDialogMessages$, [state$])]
+  ]);
+
+  return getActiveDialogId$(state$).pipe(switchMap(getActiveDialog$));
+}
