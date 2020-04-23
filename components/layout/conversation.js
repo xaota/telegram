@@ -70,13 +70,12 @@ export default class LayoutConversation extends Component {
   }
 
   render(node) {
-    super.render(node)
+    super.render(node);
 
     const {dialogId} = this.store();
 
     if (R.isNil(dialogId)) {
       this.showScreenEmpty(node);
-
     } else {
       this.showScreenConversation(node);
     }

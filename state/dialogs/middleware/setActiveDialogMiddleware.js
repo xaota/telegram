@@ -22,20 +22,20 @@ export default function setActiveDialogMiddleware(action$, state$, connection) {
   const activeDialogChanged$ = authKeyCreated$.pipe(
     switchMapTo(action$),
     filter(isActionOf(SET_ACTIVE_DIALOG)),
-    map(R.prop('payload')),
+    map(R.prop('payload'))
   );
 
   const dialogPeerSelector$ = activeDialogChanged$.pipe(
     distinctUntilChanged(),
     map(getInputPeerSelectorByPeerId)
-  )
+  );
 
   const dialogPeer$ = dialogPeerSelector$.pipe(
     withLatestFrom(state$),
-    map(R.apply(R.call)),
+    map(R.apply(R.call))
   );
 
-  dialogPeer$.subscribe((inputPeer) => {
+  dialogPeer$.subscribe(inputPeer => {
     connection.request(method(
       'messages.getHistory',
       {

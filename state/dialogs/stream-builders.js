@@ -128,7 +128,7 @@ export function getDialogWithLastMessage$(state$, dialogId) {
  * @return {Observable<string>} - id of active(selected dialog)
  */
 export function getActiveDialogId$(state$) {
-  const getActiveDialogId = R.path(['dialogs', 'activeDialog'])
+  const getActiveDialogId = R.path(['dialogs', 'activeDialog']);
   return state$.pipe(map(getActiveDialogId));
 }
 
@@ -141,8 +141,6 @@ export function getActiveDialogInfo$(state$) {
     [R.isNil, R.always(of(null))],
     [R.T, R.partial(getDialogWithPeerInfo$, [state$])]
   ]);
-  return getActiveDialogId$(state$).pipe(
-    switchMap(getActiveDialog$)
-  );
+  return getActiveDialogId$(state$).pipe(switchMap(getActiveDialog$));
 }
 

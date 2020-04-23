@@ -2,7 +2,7 @@
  * Takes dialog structure and returns last message
  */
 import {peerIdToPeer} from '../utils.js';
-import { wrapAsObjWithKey } from '../../script/helpers.js'
+import {wrapAsObjWithKey} from '../../script/helpers.js';
 
 const {isObjectOf, construct} = zagram;
 
@@ -63,10 +63,10 @@ const userToInputPeerUser = R.pipe(
   R.of,
   R.ap([
     R.pipe(R.prop('id'), wrapAsObjWithKey('user_id')),
-    R.pipe(R.prop('access_hash'), wrapAsObjWithKey('access_hash')),
+    R.pipe(R.prop('access_hash'), wrapAsObjWithKey('access_hash'))
   ]),
   R.mergeAll,
-  R.partial(construct, ['inputPeerUser']),
+  R.partial(construct, ['inputPeerUser'])
 );
 
 /**
@@ -82,7 +82,7 @@ const buildInputPeerUserSelector = R.pipe(
 const chatToInputPeerChat = R.pipe(
   R.prop('id'),
   wrapAsObjWithKey('chat_id'),
-  R.partial(construct, ['inputPeerChat']),
+  R.partial(construct, ['inputPeerChat'])
 );
 
 /**
@@ -101,10 +101,10 @@ const peerChannelToInputPeerChannel = R.pipe(
   R.of,
   R.ap([
     R.pipe(R.prop('id'), wrapAsObjWithKey('channel_id')),
-    R.pipe(R.prop('access_hash'), wrapAsObjWithKey('access_hash')),
+    R.pipe(R.prop('access_hash'), wrapAsObjWithKey('access_hash'))
   ]),
   R.mergeAll,
-  R.partial(construct, ['inputPeerChannel']),
+  R.partial(construct, ['inputPeerChannel'])
 );
 
 /**
@@ -113,7 +113,7 @@ const peerChannelToInputPeerChannel = R.pipe(
  */
 const buildInputPeerChannelSelector = R.pipe(
   buildChannelByIdSelector,
-  R.curry(R.binary(R.compose))(peerChannelToInputPeerChannel),
+  R.curry(R.binary(R.compose))(peerChannelToInputPeerChannel)
 );
 
 /**
@@ -125,17 +125,17 @@ export const getInputPeerSelectorByPeerId = R.pipe(
   R.cond([
     [isObjectOf('peerUser'), buildInputPeerUserSelector],
     [isObjectOf('peerChat'), buildInputPeerChatSelector],
-    [R.T, buildInputPeerChannelSelector],
-  ]),
+    [R.T, buildInputPeerChannelSelector]
+  ])
 );
 
 const getFullName = R.pipe(
   R.of,
   R.ap([
     R.propOr('', 'first_name'),
-    R.propOr('', 'last_name'),
+    R.propOr('', 'last_name')
   ]),
-  R.join(' '),
+  R.join(' ')
 );
 
 export const getDialogTitle = R.pipe(

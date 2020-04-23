@@ -12,7 +12,7 @@ import EnterAvatar from '../../ui/enter-avatar/enter-avatar.js';
 /* eslint-enable */
 
 const {fromEvent, combineLatest} = rxjs;
-const {map, withLatestFrom, distinctUntilChanged, startWith, tap} = rxjs.operators;
+const {map, withLatestFrom, distinctUntilChanged, startWith} = rxjs.operators;
 
 const component = Component.meta(import.meta.url, 'form-register');
 const attributes = {};
@@ -58,7 +58,6 @@ export default class FormRegister extends Component {
             ]),
             R.mergeAll
           )),
-        tap(console.log)
       );
     submit$.subscribe(signUp);
 

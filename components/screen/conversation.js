@@ -312,7 +312,7 @@ export default class ScreenConversation extends Component {
       msgAreaInnerNode.scrollTop = msgAreaInnerNode.scrollHeight - msgAreaInnerNode.clientHeight;
     });
 
-    activeDialog$.subscribe((dialog) => {
+    activeDialog$.subscribe(dialog => {
       this.store({dialog});
     });
     return super.mount(node, attributes, properties);
@@ -328,7 +328,7 @@ export default class ScreenConversation extends Component {
     const appHeaderNode = $('app-header', node);
     const appTitleNode = $('app-header > span', node);
     appTitleNode.innerText = title;
-    appTitleNode.slot = "data"
+    appTitleNode.slot = "data";
     appHeaderNode.find = false;
     appHeaderNode.more = false;
     return this;

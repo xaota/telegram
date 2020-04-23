@@ -71,7 +71,6 @@ Component.init(LayoutConversation, component, {attributes, properties});
 async function init(node, list) {
   const {chat_id: chatId} = this.store();
   const chat = await telegram.api('getChat', {chat_id: chatId});
-  console.log('CHAT', chat);
 
   $('conversation-header', node).store({chat_id: chatId, chat});
 
