@@ -42,7 +42,9 @@ const attributes = {
     caption(root, value) { updateChildrenText(root, 'p', value); }
   };
 const properties = {
+    /* eslint-disable no-empty-function */
     large() {}
+    /* eslint-enable no-empty-function */
   };
 
 /** {UIProperty} @class

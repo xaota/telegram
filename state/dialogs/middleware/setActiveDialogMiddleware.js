@@ -2,12 +2,12 @@ import {loadDialogHistory} from '../actions.js';
 import {SET_ACTIVE_DIALOG} from '../constants.js';
 import {isAuthKeyCreated} from '../../utils.js';
 import {getInputPeerSelectorByPeerId} from '../helpers.js';
+import {wrapAsObjWithKey} from '../../../script/helpers.js';
 
-const {of, fromEvent} = rxjs;
+const {fromEvent} = rxjs;
 const {filter, map, switchMapTo, distinctUntilChanged, withLatestFrom} = rxjs.operators;
 
 const {isActionOf} = store;
-const {method} = zagram;
 
 /**
  * Loads mtproto connection
@@ -35,19 +35,7 @@ export default function setActiveDialogMiddleware(action$, state$, connection) {
     map(R.apply(R.call))
   );
 
-  dialogPeer$.subscribe(inputPeer => {
-    connection.request(method(
-      'messages.getHistory',
-      {
-        peer: inputPeer,
-        offset_id: 0,
-        offset_date: 0,
-        add_offset: 0,
-        limit: 20,
-        max_id: 0,
-        min_id: 0,
-        hash: 0
-      }
-    ));
-  });
+  dialogPeer$
+    .pipe(map(wrapAsObjWithKey('peer')))
+    .subscribe(loadDialogHistory);
 }

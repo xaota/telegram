@@ -1,6 +1,8 @@
 import {wrapAsObjWithKey} from '../script/helpers.js';
 const {construct, isObjectOf} = zagram;
 
+const fromPromise = rxjs.from;
+const {catchError} = rxjs.operators;
 
 export const isAuthKeyCreated = R.pipe(
   R.prop('status'),
@@ -47,3 +49,13 @@ export const peerIdToPeer = R.cond([
     R.pipe(toInt, wrapAsObjWithKey('channel_id'), R.partial(construct, ['peerChannel']))
   ]
 ]);
+
+
+/**
+ * @param {MTProto} connection - telegram connection
+ * @param {Object} methodObject - request that will be send
+ * @returns {Observable} - stream with response
+ */
+export function requestToTelegram$(connection, methodObject) {
+  return fromPromise(connection.request(methodObject)).pipe(catchError(R.of));
+}

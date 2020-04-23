@@ -133,7 +133,7 @@ const setNewMessageOrder = R.pipe(
   R.of,
   R.ap([
     R.pipe(R.nth(1), buildMessageOrderLens),
-    R.pipe(R.path([1, 'id']), R.append),
+    R.pipe(R.path([1, 'id']), R.append, R.curry(R.binary(R.compose))(R.uniq)),
     R.nth(0)
   ]),
   R.apply(R.over)
