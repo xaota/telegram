@@ -2,8 +2,9 @@
  * Takes dialog structure and returns last message
  */
 import {peerIdToPeer} from '../utils.js';
+import { wrapAsObjWithKey } from '../../script/helpers.js'
 
-const {isObjectOf} = zagram;
+const {isObjectOf, construct} = zagram;
 
 export const getLastMessage = R.pipe(
   R.of,
@@ -52,6 +53,80 @@ export const getPeerInfoSelectorByPeerId = R.pipe(
     [isObjectOf('peerChat'), buildChatByIdSelector],
     [R.T, buildChannelByIdSelector]
   ])
+);
+
+/**
+ * @param {*} user - user object
+ * @returns {*} - telegram's input peer user
+ */
+const userToInputPeerUser = R.pipe(
+  R.of,
+  R.ap([
+    R.pipe(R.prop('id'), wrapAsObjWithKey('user_id')),
+    R.pipe(R.prop('access_hash'), wrapAsObjWithKey('access_hash')),
+  ]),
+  R.mergeAll,
+  R.partial(construct, ['inputPeerUser']),
+);
+
+/**
+ * @param {*} userPeer - peer of user
+ * @returns {Function} - returns function that takes state, and returns inputPeerUser
+ */
+const buildInputPeerUserSelector = R.pipe(
+  buildUserByIdSelector,
+  R.curry(R.binary(R.compose))(userToInputPeerUser)
+);
+
+
+const chatToInputPeerChat = R.pipe(
+  R.prop('id'),
+  wrapAsObjWithKey('chat_id'),
+  R.partial(construct, ['inputPeerChat']),
+);
+
+/**
+ * @param {*} chatPeer - peer of chat
+ * @returns {Function} - returns function that takes state, and returns inputPeerChat
+ */
+const buildInputPeerChatSelector = R.pipe(
+  buildChatByIdSelector,
+  R.curry(R.binary(R.compose))(chatToInputPeerChat)
+);
+
+/**
+ * @param {*} channel -
+ */
+const peerChannelToInputPeerChannel = R.pipe(
+  R.of,
+  R.ap([
+    R.pipe(R.prop('id'), wrapAsObjWithKey('channel_id')),
+    R.pipe(R.prop('access_hash'), wrapAsObjWithKey('access_hash')),
+  ]),
+  R.mergeAll,
+  R.partial(construct, ['inputPeerChannel']),
+);
+
+/**
+ * @param {*} channelPeer - peer of channel
+ * @returns {Function} - returns function that takes state, and returns inputPeerChannel
+ */
+const buildInputPeerChannelSelector = R.pipe(
+  buildChannelByIdSelector,
+  R.curry(R.binary(R.compose))(peerChannelToInputPeerChannel),
+);
+
+/**
+ * @param {string} dialogId
+ * @return {Function} - returns function that takes state and returns InputPeer object
+ */
+export const getInputPeerSelectorByPeerId = R.pipe(
+  peerIdToPeer,
+  R.cond([
+    [isObjectOf('peerUser'), buildInputPeerUserSelector],
+    [isObjectOf('peerChat'), buildInputPeerChatSelector],
+    [R.T, buildInputPeerChannelSelector],
+  ]),
 );
 
 const getFullName = R.pipe(

@@ -2,6 +2,7 @@ import Component, {html, css} from '../../script/ui/Component.js';
 import $ from '../../script/ui/DOM.js';
 import {getActiveDialogInfo$, getActiveDialogId$} from '../../state/dialogs/stream-builders.js';
 import {getDialogTitle} from '../../state/dialogs/helpers.js';
+import {loadDialogHistory} from '../../state/dialogs/actions.js';
 
 /* eslint-disable */
 import AppHeader   from '../app/header.js';
@@ -11,7 +12,7 @@ import ScreenField from '../screen/field.js';
 import MessageText from '../messages/text.js';
 /* eslint-enable */
 
-const {map} = rxjs.operators;
+const {distinctUntilChanged} = rxjs.operators;
 
 const style = css`
   :host {
@@ -307,8 +308,7 @@ export default class ScreenConversation extends Component {
     const activeDialogId$ = getActiveDialogId$(state$);
     const msgAreaInnerNode = $('.message-area', node);
 
-    activeDialogId$.subscribe(() => {
-      console.log('Scroll down');
+    activeDialogId$.pipe(distinctUntilChanged()).subscribe(() => {
       msgAreaInnerNode.scrollTop = msgAreaInnerNode.scrollHeight - msgAreaInnerNode.clientHeight;
     });
 

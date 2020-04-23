@@ -26,12 +26,12 @@ export default function init(connection) {
   }));
   const action$ = getActionStream();
 
-  authApplyMiddleware(action$, state$, connection);
-  dialogsApplyMiddleware(action$, state$, connection);
   state$.subscribe(newState => {
     console.log('[state]:', newState);
     subject.next(newState);
   });
   window.getState$ = () => subject;
+  authApplyMiddleware(action$, getState$(), connection);
+  dialogsApplyMiddleware(action$, getState$(), connection);
 }
 

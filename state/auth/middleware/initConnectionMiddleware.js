@@ -2,15 +2,11 @@ import {setAuthorizationData} from '../actions.js';
 import {setPage} from '../../pages/index.js';
 import {config} from '../../../tdweb/Telegram.js';
 import {wrapAsObjWithKey} from '../../../script/helpers.js';
+import {isAuthKeyCreated} from '../../utils.js';
 
 const {of, from, fromEvent} = rxjs;
 const {map, filter, switchMap, catchError, tap, mapTo} = rxjs.operators;
 const {method, construct} = zagram;
-
-const isAuthKeyCreated = R.pipe(
-  R.prop('status'),
-  R.equals('AUTH_KEY_CREATED')
-);
 
 function initConnection$(connection, x) {
   console.log('[INIT CONNECTION] initConnection$', x);

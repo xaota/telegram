@@ -1,6 +1,13 @@
 import {wrapAsObjWithKey} from '../script/helpers.js';
 const {construct, isObjectOf} = zagram;
 
+
+export const isAuthKeyCreated = R.pipe(
+  R.prop('status'),
+  R.equals('AUTH_KEY_CREATED')
+);
+
+
 /**
  * Takes peer and returns string that could be used as id of dialog
  *
