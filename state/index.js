@@ -7,12 +7,16 @@ import {
   reducer as dialogsReducer,
   applyMiddleware as dialogsApplyMiddleware
 } from './dialogs/index.js';
-import {reducer as usersReducer} from './users/index.js';
-import {reducer as chatsReducer} from './chats/index.js';
+import {
+  reducer as usersReducer
+} from './users/index.js';
+import {
+  reducer as chatsReducer,
+  applyMiddleware as chatsApplyMiddleware
+} from './chats/index.js';
 
 const {buildStateStream, combineReducers, dispatchInit, getActionStream} = store;
 const {BehaviorSubject} = rxjs;
-const {map, distinctUntilChanged} = rxjs.operators;
 
 
 export default function init(connection) {
@@ -31,7 +35,13 @@ export default function init(connection) {
     subject.next(newState);
   });
   window.getState$ = () => subject;
-  authApplyMiddleware(action$, getState$(), connection);
-  dialogsApplyMiddleware(action$, getState$(), connection);
+  R.map(
+    middleware => middleware(action$, getState$(), connection),
+    [
+      authApplyMiddleware,
+      dialogsApplyMiddleware,
+      chatsApplyMiddleware
+    ]
+  );
 }
 

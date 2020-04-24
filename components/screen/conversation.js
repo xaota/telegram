@@ -4,7 +4,7 @@ import {
   getActiveDialogInfo$,
   getActiveDialogId$,
   getActiveDialogMessages$,
-  getNextHistoryLoader$,
+  getNextHistoryLoader$
 } from '../../state/dialogs/stream-builders.js';
 import {loadDialogHistory} from '../../state/dialogs/actions.js';
 import {authorizedUser$} from '../../state/auth/stream-builders.js';

@@ -1,3 +1,3 @@
-export {setUser, setUserList} from './actions.js';
+export {setUser, setUserList, getFullUser} from './actions.js';
 export {default as reducer} from './reducer.js';
 

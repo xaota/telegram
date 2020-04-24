@@ -3,11 +3,22 @@ import {SET_ACTIVE_DIALOG} from '../constants.js';
 import {isAuthKeyCreated} from '../../utils.js';
 import {getInputPeerSelectorByPeerId} from '../helpers.js';
 import {wrapAsObjWithKey} from '../../../script/helpers.js';
+import {getFullUser} from '../../users/index.js';
+import {getFullChat} from '../../chats/index.js';
 
 const {fromEvent} = rxjs;
 const {filter, map, switchMapTo, distinctUntilChanged, withLatestFrom} = rxjs.operators;
 
+const {isObjectOf} = zagram;
 const {isActionOf} = store;
+
+const isChatObject = R.anyPass([isObjectOf('inputPeerChannel'), isObjectOf('inputPeerChat')]);
+
+const getFullInfoByInputPeerInfo = R.cond([
+  [isObjectOf('inputPeerUser'), getFullUser],
+  [isChatObject, getFullChat],
+  [R.T, R.identity]
+]);
 
 /**
  * Loads mtproto connection
@@ -34,6 +45,8 @@ export default function setActiveDialogMiddleware(action$, state$, connection) {
     withLatestFrom(state$),
     map(R.apply(R.call))
   );
+
+  dialogPeer$.subscribe(getFullInfoByInputPeerInfo);
 
   dialogPeer$
     .pipe(map(wrapAsObjWithKey('peer')))
