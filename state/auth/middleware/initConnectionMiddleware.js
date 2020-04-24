@@ -1,6 +1,6 @@
 import {setAuthorizationData} from '../actions.js';
 import {setPage} from '../../pages/index.js';
-import {config} from '../../../tdweb/Telegram.js';
+import config from '../../../script/app/config.js';
 import {wrapAsObjWithKey} from '../../../script/helpers.js';
 import {isAuthKeyCreated} from '../../utils.js';
 
@@ -17,14 +17,9 @@ function initConnection$(connection, x) {
       query: method(
         'initConnection',
         {
-          api_id: config.api_id,
-          device_model: navigator.userAgent,
-          system_version: navigator.platform,
-          app_version: '0.0.1',
-          system_lang_code: navigator.language,
-          lang_pack: '',
-          lang_code: 'ru-ru',
-          query: method('help.getConfig')
+          api_id: config.api.id,
+          query: method('help.getConfig'),
+          ...config.app
         }
       )
     }

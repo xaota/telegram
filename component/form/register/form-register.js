@@ -57,7 +57,7 @@ export default class FormRegister extends Component {
               R.pipe(R.nth(2), R.set(R.lensProp('avatar'), R.__, {}))
             ]),
             R.mergeAll
-          )),
+          ))
       );
     submit$.subscribe(signUp);
 
