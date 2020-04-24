@@ -3,8 +3,10 @@ import $ from '../../script/ui/DOM.js';
 import {
   getActiveDialogInfo$,
   getActiveDialogId$,
-  getActiveDialogMessages$
+  getActiveDialogMessages$,
+  getNextHistoryLoader$,
 } from '../../state/dialogs/stream-builders.js';
+import {loadDialogHistory} from '../../state/dialogs/actions.js';
 import {authorizedUser$} from '../../state/auth/stream-builders.js';
 import {getDialogTitle} from '../../state/dialogs/helpers.js';
 
@@ -17,7 +19,7 @@ import MessageText from '../messages/text.js';
 /* eslint-enable */
 
 const {fromEvent} = rxjs;
-const {map, distinctUntilChanged} = rxjs.operators;
+const {map, distinctUntilChanged, withLatestFrom} = rxjs.operators;
 
 const style = css`
   :host {
@@ -54,24 +56,10 @@ const style = css`
   }
 `;
 
-/**
- * @param state - of app
- * @returns - full info about dialog
- */
-const getActiveDialogInfo = R.pipe(
-  R.of,
-  R.ap([
-    R.pipe(
-      R.path(['dialogs', 'activeDialog']),
-      R.propOr(null)
-    ),
-    R.path(['dialogs', 'dialogs'])
-  ]),
-  R.apply(R.call)
-);
 
 const attributes = {};
 const properties = {};
+
 
 /** {ScreenConversation} @class
   * @description Отображение раздела беседы
@@ -334,7 +322,15 @@ export default class ScreenConversation extends Component {
 
     authorizedUser$(state$).subscribe(authorizedUser => this.store({authorizedUser}));
 
+    const nextHistoryLoader$ = getNextHistoryLoader$(state$);
+
     const loadMoreClick$ = fromEvent(loadMoreNode, 'click');
+    const loadMore$ = loadMoreClick$.pipe(
+      withLatestFrom(nextHistoryLoader$),
+      map(R.nth(1))
+    );
+
+    loadMore$.subscribe(loadDialogHistory);
     return super.mount(node, attributes, properties);
   }
 

@@ -1,9 +1,9 @@
-import {getPeerInfoSelectorByPeerId} from './helpers.js';
+import {getPeerInfoSelectorByPeerId, getInputPeerSelectorByPeerId} from './helpers.js';
 import {getUser$} from '../users/stream-builders.js';
 import {wrapAsObjWithKey} from '../../script/helpers.js';
 
 const {combineLatest, of} = rxjs;
-const {map, switchMap} = rxjs.operators;
+const {map, switchMap, withLatestFrom} = rxjs.operators;
 
 
 /**
@@ -168,4 +168,34 @@ export function getActiveDialogMessages$(state$) {
   ]);
 
   return getActiveDialogId$(state$).pipe(switchMap(getActiveDialog$));
+}
+
+/**
+ * @param {Observable<*>} state$ - stream of application state
+ * @returns {Observable<*>} - stream of objects to load next batch of history for active dialog
+ */
+export function getNextHistoryLoader$(state$) {
+  const activeDialogId$ = getActiveDialogId$(state$);
+
+  const lastMessageId$ = activeDialogId$.pipe(
+    map(x => R.pathOr([], ['dialogs', 'dialogs', x, 'messages_order'])),
+    withLatestFrom(state$),
+    map(R.apply(R.call)),
+    map(R.last)
+  );
+
+  const inputPeer$ = activeDialogId$.pipe(
+    map(R.cond([
+      [R.isNil, R.always(() => null)],
+      [R.T, getInputPeerSelectorByPeerId]
+    ])),
+    withLatestFrom(state$),
+    map(R.apply(R.call))
+  );
+
+  return inputPeer$.pipe(
+    withLatestFrom(lastMessageId$),
+    map(R.zip(['peer', 'offset_id'])),
+    map(R.fromPairs)
+  );
 }

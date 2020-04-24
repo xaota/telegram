@@ -120,14 +120,20 @@ const buildInputPeerChannelSelector = R.pipe(
  * @param {string} dialogId
  * @return {Function} - returns function that takes state and returns InputPeer object
  */
-export const getInputPeerSelectorByPeerId = R.pipe(
-  peerIdToPeer,
-  R.cond([
-    [isObjectOf('peerUser'), buildInputPeerUserSelector],
-    [isObjectOf('peerChat'), buildInputPeerChatSelector],
-    [R.T, buildInputPeerChannelSelector]
-  ])
-);
+export const getInputPeerSelectorByPeerId = R.cond([
+  [R.isNil, R.always(() => null)],
+  [
+    R.T,
+    R.pipe(
+      peerIdToPeer,
+      R.cond([
+        [isObjectOf('peerUser'), buildInputPeerUserSelector],
+        [isObjectOf('peerChat'), buildInputPeerChatSelector],
+        [R.T, buildInputPeerChannelSelector]
+      ])
+    )
+  ]
+]);
 
 const getFullName = R.pipe(
   R.of,
