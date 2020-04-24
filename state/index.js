@@ -8,7 +8,8 @@ import {
   applyMiddleware as dialogsApplyMiddleware
 } from './dialogs/index.js';
 import {
-  reducer as usersReducer
+  reducer as usersReducer,
+  applyMiddleware as usersApplyMiddleware
 } from './users/index.js';
 import {
   reducer as chatsReducer,
@@ -40,7 +41,8 @@ export default function init(connection) {
     [
       authApplyMiddleware,
       dialogsApplyMiddleware,
-      chatsApplyMiddleware
+      chatsApplyMiddleware,
+      usersApplyMiddleware
     ]
   );
 }

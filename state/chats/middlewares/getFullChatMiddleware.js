@@ -3,7 +3,7 @@ import {isAuthKeyCreated, requestToTelegram$} from '../../utils.js';
 import {GET_FULL_CHAT} from '../constants.js';
 import {setFullChat, setChatList} from '../actions.js';
 import {wrapAsObjWithKey} from '../../../script/helpers.js';
-import { setUserList } from '../../users/index.js'
+import {setUserList} from '../../users/index.js';
 
 const {fromEvent} = rxjs;
 const {map, filter, switchMapTo, switchMap} = rxjs.operators;
@@ -29,13 +29,13 @@ const handleSuccessResponse = R.pipe(
     R.pipe(R.prop('users'), setUserList),
     R.pipe(R.prop('chats'), setChatList),
     R.pipe(R.prop('full_chat'), setFullChat)
-  ]),
+  ])
 );
 
 const handleResponse = R.cond([
   [isRpcError, console.warn],
-  [R.T, handleSuccessResponse],
-])
+  [R.T, handleSuccessResponse]
+]);
 
 export default function getFullChatMiddleware(action$, state$, connection) {
   const sendRequest$ = R.partial(requestToTelegram$, [connection]);

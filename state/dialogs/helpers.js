@@ -31,21 +31,21 @@ export const getDialogWithLastMessage = R.pipe(
 const buildUserByIdSelector = R.pipe(
   R.prop('user_id'),
   R.toString,
-  R.partialRight(R.append, [['users']]),
+  x => ['users', x, 'base'],
   R.path
 );
 
 const buildChatByIdSelector = R.pipe(
   R.prop('chat_id'),
   R.toString,
-  (x) => ['chats', x, 'base'],
+  x => ['chats', x, 'base'],
   R.path
 );
 
 const buildChannelByIdSelector = R.pipe(
   R.prop('channel_id'),
   R.toString,
-  (x) => ['chats', x, 'base'],
+  x => ['chats', x, 'base'],
   R.path
 );
 
