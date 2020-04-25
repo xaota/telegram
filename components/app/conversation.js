@@ -187,10 +187,11 @@ const getIdFromPeer = R.pipe(
       const current = formatDate(dateDay(), true);
 
       const peer     = getIdFromPeer(dialog);
-      const verify   = dialog?.peer_info?.verified;
+      const verify   = R.pathOr(false, ['peer_info', 'verified'], dialog);
       const chaption = getDialogTitle(dialog);
-      const updated  = formatDate(dateDay(1000 * (dialog?.last_message?.date || 0)), true);
-      const timestamp = current === updated ? AppMessage.timestamp(dialog?.last_message?.date) : updated;
+      const lastMessageDate = R.pathOr(0, ['last_message', 'date'], dialog);
+      const updated  = formatDate(dateDay(1000 * lastMessageDate), true);
+      const timestamp = current === updated ? AppMessage.timestamp(lastMessageDate) : updated;
 
       // pinned, muted
 
@@ -198,7 +199,7 @@ const getIdFromPeer = R.pipe(
       // nodes
       const avatarNode    = $('ui-avatar',        node);
       const chaptionNode  = $('header > p',       node);
-      const receiveNode   = $('header > ui-icon', node);
+      // const receiveNode   = $('header > ui-icon', node);
       const timestampNode = $('header > span',    node);
       const authorNode    = $('main > p',         node);
       const messageNode   = $('main > span',      node);
