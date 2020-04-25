@@ -33,14 +33,17 @@ export default class ConnectionWrapper extends EventTarget {
   }
 
   handleMessage(e) {
+    const handlers = {
+      'event': this.handleEvent.bind(this),
+      'response': this.handleResponse.bind(this),
+      'download_success': this.handleDownloadSuccess.bind(this),
+      'download_error': this.handleDownloadError.bind(this)
+    };
     const messageType = getMessageType(e);
-    console.log('message', messageType);
-    if (messageType === 'event') {
-      this.handleEvent(getPayload(e));
-    }
-    if (messageType === 'response') {
-      this.handleResponse(getPayload(e));
-    }
+
+    const handle = R.propOr(R.identity, messageType, handlers);
+
+    handle(getPayload(e));
   }
 
   handleEvent(payload) {
@@ -53,8 +56,6 @@ export default class ConnectionWrapper extends EventTarget {
   }
 
   handleResponse({uid, response}) {
-    console.log('Handle response', uid, response);
-    console.log(this.promiseMap[uid]);
     const {resolve, reject} = this.promiseMap[uid];
 
     if (isRpcError(response)) {
@@ -66,9 +67,19 @@ export default class ConnectionWrapper extends EventTarget {
     delete this.promiseMap[uid];
   }
 
+  handleDownloadSuccess({uid, file}) {
+    const {resolve} = this.promiseMap[uid];
+    resolve(file);
+  }
+
+  handleDownloadError({uid, error}) {
+    const {reject} = this.promiseMap[uid];
+    reject(error);
+  }
+
   request(obj) {
+    const uid = randomString();
     return new Promise((resolve, reject) => {
-      const uid = randomString();
       this.promiseMap[uid] = {resolve, reject};
       this.worker.postMessage({
         type: 'request',
@@ -79,4 +90,26 @@ export default class ConnectionWrapper extends EventTarget {
       });
     });
   }
+
+  download(obj, progessCb) {
+    const uid = randomString();
+    const promise =  new Promise((resolve, reject) => {
+      this.promiseMap[uid] = {resolve, reject};
+      this.worker.postMessage({
+        type: 'download',
+        payload: {
+          uid,
+          data: obj
+        }
+      });
+    });
+
+    return {promise, cancel: () => this.cancelDownload(uid)};
+  }
+
+  /* eslint-disable class-methods-use-this */
+  cancelDownload(uid) {
+    console.warn('Cancel downloading not implemented yet');
+  }
+  /* eslint-enable class-methods-use-this */
 }

@@ -2,7 +2,7 @@ import Component, {css, html} from '../../script/ui/Component.js';
 import $ from '../../script/ui/DOM.js';
 /* eslint-disable */
 import UIIcon from '../ui/icon.js'
-import UIAvatar from '../ui/avatar.js'
+import PeerAvatar from '../ui/peer-avatar.js'
 import AppMessage from '../app/message.js'
 import {getDialogTitle, previewMessage} from '../../state/dialogs/helpers.js'
 import {dateDay, formatDate} from '../../script/helpers.js'
@@ -27,19 +27,27 @@ const style = css`
     grid-template-areas:
         'avatar header'
         'avatar content';
-    grid-template-columns: calc(3.6rem + 8px) auto;
-    grid-template-rows: 1.8rem 1.8rem;
+    grid-template-columns: 64px auto;
+    grid-template-row: 32px 32px;
   }
 
   :host(:hover) {
     background-color: var(--background-aside-hover);
   }
 
-  ui-avatar {
-    width: 3.6rem;
-    height: 3.6rem;
+  div.peer-avatar-place {
+    width: 54px;
+    height: 54px;
     grid-area: avatar;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin-right: 8px;
+  }
+  
+  did.peer-avatar-place peer-avatar {
+    width: 54px;
+    height: 54px;
   }
 
   header, main {
@@ -138,7 +146,8 @@ const getIdFromPeer = R.pipe(
     static template = html`
       <template>
         <style>${style}</style>
-        <ui-avatar></ui-avatar>
+        <div class="peer-avatar-place">
+        </div>
         <header>
           <p><!-- chaption --></p>
           <ui-icon>receive</ui-icon>
@@ -167,7 +176,11 @@ const getIdFromPeer = R.pipe(
       super.mount(node, attributes, properties);
       const {dialogId} = this.store(); // id диалога, string
 
-      const state$ = getState$();
+      const peerAvatarPlaceNode = $('.peer-avatar-place', node);
+      const avatar = new PeerAvatar(dialogId);
+      peerAvatarPlaceNode.appendChild(avatar);
+
+    const state$ = getState$();
       getDialogWithLastMessage$(state$, dialogId).subscribe(dialog => {
         this.store({dialog});
       });
@@ -196,7 +209,7 @@ const getIdFromPeer = R.pipe(
 
 
       // nodes
-      const avatarNode    = $('ui-avatar',        node);
+      // const avatarNode    = $('ui-avatar',        node);
       const chaptionNode  = $('header > p',       node);
       // const receiveNode   = $('header > ui-icon', node);
       const timestampNode = $('header > span',    node);
@@ -206,8 +219,6 @@ const getIdFromPeer = R.pipe(
 
       // patch ui
       this.dataset.peer = peer;
-      avatarNode.color = UIAvatar.color(peer);
-      avatarNode.innerText = UIAvatar.letter(chaption);
       chaptionNode.innerText = chaption;
       if (verify) chaptionNode.append(new UIIcon('verify'));
       timestampNode.innerText = timestamp;

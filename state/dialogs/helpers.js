@@ -208,8 +208,6 @@ export function getMessageType(message) {
   if (isObjectOf('messageService', message)) {
     return getServiceMessageType(message);
   }
-
-  console.warn('Not a message!', message);
 }
 
 /**

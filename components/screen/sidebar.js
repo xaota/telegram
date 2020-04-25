@@ -1,13 +1,15 @@
 import Component, {html, css} from '../../script/ui/Component.js';
 import $ from '../../script/ui/DOM.js';
-import {getPeerCommonInfoOfActiveDialog$} from '../../state/dialogs/stream-builders.js';
+import {getPeerCommonInfoOfActiveDialog$, getActiveDialogId$} from '../../state/dialogs/stream-builders.js';
 import {getTitle} from '../../state/dialogs/helpers.js';
+
+const {distinctUntilChanged} = rxjs.operators;
 
 /* eslint-disable */
 import UITab      from '../ui/tab.js';
 import UITabs     from '../ui/tabs.js';
 import UIIcon     from '../ui/icon.js'
-import UIAvatar   from '../ui/avatar.js';
+import PeerAvatar from '../ui/peer-avatar.js'
 import IUProperty from '../ui/property.js';
 import AppHeader  from '../app/header.js';
 /* eslint-enable */
@@ -22,10 +24,14 @@ const style = css`
   main {
     text-align: center;
   }
-  ui-avatar {
+  .peer-avatar-place {
     width: 120px;
     height: 120px;
     margin: 24px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
   ui-icon:hover {
     color: var(--iconStatic);
@@ -66,7 +72,7 @@ const properties = {};
         <style>${style}</style>
         <app-header close more></app-header>
         <main>
-          <ui-avatar id="avatar"></ui-avatar>
+          <div class="peer-avatar-place"></div>
           <h1 id="title"></h1>
           <h2 id="members"></h2>
         </main>
@@ -89,8 +95,20 @@ const properties = {};
     mount(node) {
       super.mount(node, attributes, properties);
       const state$ = getState$();
+
       getPeerCommonInfoOfActiveDialog$(state$).subscribe(peerInfo => {
         this.store({peerInfo});
+      });
+
+      const activeDialogId$ = getActiveDialogId$(state$);
+
+      const peerAvatarPlaceNode = $('.peer-avatar-place', node);
+      activeDialogId$.pipe(distinctUntilChanged()).subscribe(dialogId => {
+        if (dialogId) {
+          peerAvatarPlaceNode.innerHTML = '';
+          const peerAvatar = new PeerAvatar(dialogId);
+          peerAvatarPlaceNode.appendChild(peerAvatar);
+        }
       });
       return this;
     }
@@ -99,7 +117,6 @@ const properties = {};
       const {peerInfo} = this.store();
       const titleNode = $('#title', node);
       const membersNode = $('#members', node);
-      const avatarNode = $('#avatar', node);
       const aboutNode = $("#about", node);
       const inviteLink = $("#invite_link", node);
 
@@ -118,9 +135,6 @@ const properties = {};
       } else {
         membersNode.innerText = '';
       }
-
-      avatarNode.color = UIAvatar.color(R.pathOr(0, ['base', 'id'], peerInfo));
-      avatarNode.innerText = UIAvatar.letter(chaption);
 
       aboutNode.innerText = R.pathOr("", ['full', 'about'], peerInfo);
       inviteLink.innerText = R.pathOr("", ['full', 'exported_invite', 'link'], peerInfo);

@@ -40,7 +40,7 @@ const style = css`
     height: 100%;
     border-radius: 50%;
   }
-
+  
   slot + img[src] {
     display: block;
   }

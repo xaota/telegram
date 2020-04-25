@@ -41,7 +41,6 @@ function creatNewConnection(e) {
 }
 
 function initConnection() {
-  console.log('Init connection', connection);
   connection.init();
 }
 
@@ -72,10 +71,50 @@ function request(e) {
     .catch(R.partial(sendResponse, [uid]));
 }
 
+/* eslint-disable no-empty-function */
+function handleDownloadProgress(uid, ...args) {
+}
+/* eslint-enable no-empty-function */
+
+function sendDownloadedFile(uid, file) {
+  postMessage({
+    type: 'download_success',
+    payload: {
+      uid,
+      file
+    }
+  });
+}
+
+function sendDownloadFileError(uid, error) {
+  postMessage({
+    type: 'download_error',
+    payload: {
+      uid,
+      error
+    }
+  });
+}
+
+/**
+ * Start downloading process
+ * @param e
+ */
+function download(e) {
+  const {uid, data} = getPayload(e);
+  const progressCb = R.partial(handleDownloadProgress, [uid]);
+  const {promise} = connection.download(data, progressCb);
+
+  promise
+    .then(R.partial(sendDownloadedFile, [uid]))
+    .catch(R.partial(sendDownloadFileError, [uid]));
+}
+
 const messageHandler = R.cond([
  [isEventOfType('newConnection'), creatNewConnection],
  [isEventOfType('init'), initConnection],
  [isEventOfType('request'), request],
+ [isEventOfType('download'), download],
  [R.T, console.warn]
 ]);
 
