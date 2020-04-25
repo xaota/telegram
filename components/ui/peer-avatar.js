@@ -93,7 +93,7 @@ export default class PeerAvatar extends Component {
   }
 
   render(node) {
-    const {peerInfo, peerId} = this.store();
+    const {peerInfo} = this.store();
     if (R.isNil(peerInfo)) {
       return this;
     }

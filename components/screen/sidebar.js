@@ -63,6 +63,61 @@ const style = css`
 const attributes = {};
 const properties = {};
 
+function switchNode(node, value) {
+  if (!value) {
+    node.style.display = 'none';
+  } else {
+    node.innerText = value;
+    node.style.display = 'block';
+  }
+}
+
+/**
+ * @param {HTMLElement} - node for text value
+ * @param {Function} - function that takes peerInfo and returns string
+ * @param {*} - peerInfo object
+ */
+const switchWithPeer = R.nAry(3, R.unapply(R.pipe(
+  R.of,
+  R.ap([
+    R.nth(0),
+    R.pipe(
+      R.of,
+      R.ap([R.nth(1), R.nth(2)]),
+      R.apply(R.call)
+    )
+  ]),
+  R.apply(switchNode)
+)));
+
+const buildSwitcher = R.pipe(
+  R.map(R.partial(switchWithPeer)),
+  R.ap,
+  R.curry(R.binary(R.pipe))(R.of)
+);
+
+const getTitleFromPeerInfo = R.pipe(
+  R.prop('base'),
+  getTitle
+);
+
+const getUsernameFromPeerInfo =R.pathOr('', ['base', 'username']);
+
+const getAboutFromPeerInfo = R.pathOr('', ['full', 'about']);
+
+const getInviteLinkFromPeerInfo = R.pathOr("", ['full', 'exported_invite', 'link']);
+
+const getPhoneFromPeerInfo = R.pathOr("", ['base', 'phone']);
+
+function getMembersCountFromPeerInfo(peerInfo) {
+  if (isObjectOf('channelFull', R.propOr({}, 'full', peerInfo))) {
+    const membersCount = R.pathOr(0, ['full', 'participants_count'], peerInfo);
+    const onlineCount = R.pathOr(0, ['full', 'online_count'], peerInfo);
+    return `members: ${membersCount} online: ${onlineCount}`;
+  }
+  return '';
+}
+
 /** {ScreenSidebar} @class
   * @description Отображение раздела беседы
   */
@@ -77,7 +132,9 @@ const properties = {};
           <h2 id="members"></h2>
         </main>
 
+        <ui-property id="username" icon="username" caption="Username" side="left" large></ui-property>
         <ui-property id="about" icon="info" caption="About" side="left" large></ui-property>
+        <ui-property id="phone" icon="phone" caption="phone" side="left" large></ui-property>
         <ui-property id="invite_link" icon="username" caption="Link" side="left" large></ui-property>
 
         <ui-tabs>
@@ -116,28 +173,26 @@ const properties = {};
     render(node) {
       const {peerInfo} = this.store();
       const titleNode = $('#title', node);
+      const usernameNode = $('#username', node);
       const membersNode = $('#members', node);
       const aboutNode = $("#about", node);
-      const inviteLink = $("#invite_link", node);
+      const inviteLinkNode = $("#invite_link", node);
+      const phoneNode = $('#phone', node);
 
       if (R.isNil(peerInfo)) {
         return this;
       }
 
-      const chaption = getTitle(peerInfo.base);
+      const switchByPeerInfo = buildSwitcher([
+        [titleNode, getTitleFromPeerInfo],
+        [usernameNode, getUsernameFromPeerInfo],
+        [membersNode, getMembersCountFromPeerInfo],
+        [aboutNode, getAboutFromPeerInfo],
+        [inviteLinkNode, getInviteLinkFromPeerInfo],
+        [phoneNode, getPhoneFromPeerInfo]
+      ]);
 
-      titleNode.innerText = chaption;
-
-      if (isObjectOf('channelFull', R.propOr({}, 'full', peerInfo))) {
-        const membersCount = R.pathOr(0, ['full', 'participants_count'], peerInfo);
-        const onlineCount = R.pathOr(0, ['full', 'online_count'], peerInfo);
-        membersNode.innerText = `members: ${membersCount} online: ${onlineCount}`;
-      } else {
-        membersNode.innerText = '';
-      }
-
-      aboutNode.innerText = R.pathOr("", ['full', 'about'], peerInfo);
-      inviteLink.innerText = R.pathOr("", ['full', 'exported_invite', 'link'], peerInfo);
+      switchByPeerInfo(peerInfo);
 
       return this;
     }
