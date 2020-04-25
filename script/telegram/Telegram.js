@@ -2,11 +2,15 @@
   * @typedef { import("../app/config.js").default } Config
   */
 
+import '../../zagram/zagram.js';
 import ApiError from './ApiError.js';
 
 import Storage from '../utils/Storage.js';
+import ConnectionWrapper from './ConnectionWrapper.js'
+
 
 // @ts-ignore
+// import {MTProto, schema, method, construct} from '../../zagram/zagram.js';
 const {MTProto, schema, method, construct} = zagram;
 // +isMessageOf('rpc_error_type'), isObjectOf, CONSTRUCTOR_KEY
 
@@ -97,7 +101,7 @@ const {MTProto, schema, method, construct} = zagram;
         ? 'ws://' + url + 's'
         : 'http://' + url;
 
-      this.connection = new MTProto(addr, schema, authKeyData);
+      this.connection = new ConnectionWrapper(addr, schema, authKeyData);
     }
   }
 
@@ -124,6 +128,7 @@ const {MTProto, schema, method, construct} = zagram;
       telegram.connection.init(); // @event statusChanged
 
       telegram.once('statusChanged', ({status, detail}) => {
+        console.log('STATUS CHANGED');
         if (status !== 'AUTH_KEY_CREATED') return reject(status); // AUTH_KEY_CREATE_FAILED, AUTH_KEY_ERROR
 
         telegram.keys = detail;
