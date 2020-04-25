@@ -88,7 +88,7 @@ const properties = {};
     */
     mount(node) {
       super.mount(node, attributes, properties);
-      const state$ = getState$()
+      const state$ = getState$();
       getPeerCommonInfoOfActiveDialog$(state$).subscribe(peerInfo => {
         this.store({peerInfo});
       });

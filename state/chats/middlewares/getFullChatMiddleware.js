@@ -45,7 +45,7 @@ export default function getFullChatMiddleware(action$, state$, connection) {
   const getFullChatAction$ = authKeyCreated$
     .pipe(
       switchMapTo(action$),
-      filter(isActionOf('GET_FULL_CHAT')),
+      filter(isActionOf(GET_FULL_CHAT)),
       map(R.prop('payload')),
       map(buildRequestMethod),
       switchMap(sendRequest$)

@@ -1,5 +1,4 @@
 import Component, {html, css} from '../../script/ui/Component.js';
-import $ from '../../script/ui/DOM.js';
 
 /* eslint-disable */
 import UIIcon from '../ui/icon.js';
@@ -106,10 +105,6 @@ const properties = {};
     */
     mount(node) {
       super.mount(node, attributes, properties);
-      const newGroup   = $('#group ui-icon', node);
-      const newChannel = $('#channel ui-icon', node);
-      // newGroup  .addEventListener('click', _ => channel.send('route-aside', {route: 'form-group'}));
-      // newChannel.addEventListener('click', _ => channel.send('route-aside', {route: 'form-channel'}));
       return this;
     }
   }

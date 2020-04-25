@@ -6,12 +6,12 @@ import '../../zagram/zagram.js';
 import ApiError from './ApiError.js';
 
 import Storage from '../utils/Storage.js';
-import ConnectionWrapper from './ConnectionWrapper.js'
+import ConnectionWrapper from './ConnectionWrapper.js';
 
 
 // @ts-ignore
 // import {MTProto, schema, method, construct} from '../../zagram/zagram.js';
-const {MTProto, schema, method, construct} = zagram;
+const {schema, method, construct} = zagram;
 // +isMessageOf('rpc_error_type'), isObjectOf, CONSTRUCTOR_KEY
 
 /** {Telegram} Работа с Telegram @class @export @default

@@ -2,8 +2,6 @@ import Component, {html, css} from '../../script/ui/Component.js';
 import $ from '../../script/ui/DOM.js';
 import {sendAuthCode} from '../../state/auth/index.js';
 
-import locator from '../../script/app/locator.js';
-
 /* eslint-disable */
 import UILogo     from '../ui/logo.js';
 import UIInput    from '../ui/input.js';

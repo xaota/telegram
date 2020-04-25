@@ -8,6 +8,25 @@ import ScreenEmpty        from '../screen/empty.js';
 import ScreenConversation from '../screen/conversation.js';
 /* eslint-enable */
 
+
+function showScreenEmpty(node) {
+  const screenEmpty = $('screen-empty', node);
+  const screenConversation  = $('screen-conversation', node);
+
+  screenEmpty.style.display = 'flex';
+  screenConversation.style.display = 'none';
+}
+
+
+function showScreenConversation(node) {
+  const screenEmpty = $('screen-empty', node);
+  const screenConversation  = $('screen-conversation', node);
+
+  screenEmpty.style.display = 'none';
+  screenConversation.style.display = 'flex';
+}
+
+
 const style = css`
   :host {
     display: grid;
@@ -49,24 +68,8 @@ export default class LayoutConversation extends Component {
 
     const state$ = getState$();
     getActiveDialogId$(state$).subscribe(dialogId => this.store({dialogId}));
-    this.showScreenEmpty(node);
+    showScreenEmpty(node);
     return this;
-  }
-
-  showScreenEmpty(node) {
-    const screenEmpty = $('screen-empty', node);
-    const screenConversation  = $('screen-conversation', node);
-
-    screenEmpty.style.display = 'flex';
-    screenConversation.style.display = 'none';
-  }
-
-  showScreenConversation(node) {
-    const screenEmpty = $('screen-empty', node);
-    const screenConversation  = $('screen-conversation', node);
-
-    screenEmpty.style.display = 'none';
-    screenConversation.style.display = 'flex';
   }
 
   render(node) {
@@ -75,9 +78,9 @@ export default class LayoutConversation extends Component {
     const {dialogId} = this.store();
 
     if (R.isNil(dialogId)) {
-      this.showScreenEmpty(node);
+      showScreenEmpty(node);
     } else {
-      this.showScreenConversation(node);
+      showScreenConversation(node);
     }
 
     return this;

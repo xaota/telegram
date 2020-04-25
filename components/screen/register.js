@@ -3,8 +3,6 @@ import $ from '../../script/ui/DOM.js';
 import {buildInput$} from '../../script/helpers.js';
 import {signUp} from '../../state/auth/index.js';
 
-import locator from '../../script/app/locator.js';
-
 /* eslint-disable */
 import UIInput   from '../ui/input.js';
 import UIButton  from '../ui/button.js';

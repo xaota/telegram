@@ -76,10 +76,6 @@ const properties = {};
   * @description Отображение экрана списка чатов
   */
   export default class ScreenConversations extends Component {
-    constructor() {
-      super();
-    }
-
     static template = html`
       <template>
         <style>${style}</style>

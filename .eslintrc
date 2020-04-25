@@ -400,5 +400,7 @@
     "store": "readonly",
     "getState$": "readonly",
     "BigInt": "readonly",
+    "importScripts": "readonly",
+    "telegram": "readonly"
   }
 }

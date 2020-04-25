@@ -28,13 +28,13 @@ export default class ConnectionWrapper extends EventTarget {
 
   init() {
     this.worker.postMessage({
-      type: 'init',
+      type: 'init'
     });
   }
 
   handleMessage(e) {
     const messageType = getMessageType(e);
-    console.log('message', messageType)
+    console.log('message', messageType);
     if (messageType === 'event') {
       this.handleEvent(getPayload(e));
     }
@@ -44,7 +44,7 @@ export default class ConnectionWrapper extends EventTarget {
   }
 
   handleEvent(payload) {
-    if(payload.type === 'statusChanged') {
+    if (payload.type === 'statusChanged') {
       const event = new Event('statusChanged');
       event.status = payload.status;
       event.detail = payload.detail;
@@ -57,7 +57,7 @@ export default class ConnectionWrapper extends EventTarget {
     console.log(this.promiseMap[uid]);
     const {resolve, reject} = this.promiseMap[uid];
 
-    if(isRpcError(response)) {
+    if (isRpcError(response)) {
       reject(response);
     } else {
       resolve(response);
@@ -69,14 +69,14 @@ export default class ConnectionWrapper extends EventTarget {
   request(obj) {
     return new Promise((resolve, reject) => {
       const uid = randomString();
-      this.promiseMap[uid] = { resolve, reject };
+      this.promiseMap[uid] = {resolve, reject};
       this.worker.postMessage({
         type: 'request',
         payload: {
           uid,
-          data: obj,
+          data: obj
         }
-      })
+      });
     });
   }
 }

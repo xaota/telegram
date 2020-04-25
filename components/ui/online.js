@@ -1,5 +1,4 @@
 import Component, {html, css} from '../../script/ui/Component.js';
-import $ from '../../script/ui/DOM.js';
 
 const style = css`
   :host {

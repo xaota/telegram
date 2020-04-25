@@ -16,7 +16,7 @@ import {
   applyMiddleware as chatsApplyMiddleware
 } from './chats/index.js';
 
-const {buildStateStream, combineReducers, dispatchInit, getActionStream} = store;
+const {buildStateStream, combineReducers, getActionStream} = store;
 const {BehaviorSubject} = rxjs;
 
 

@@ -4,7 +4,7 @@ import {setPage} from '../../pages/index.js';
 
 const fromPromise = rxjs.from;
 const {of, combineLatest} = rxjs;
-const {catchError, filter, map, mergeMap, withLatestFrom, switchMap, tap} = rxjs.operators;
+const {catchError, filter, map, mergeMap, withLatestFrom, switchMap} = rxjs.operators;
 const {isActionOf} = store;
 const {method, isRpcError} = zagram;
 

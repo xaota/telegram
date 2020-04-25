@@ -1,5 +1,5 @@
 import Component, {html, css} from '../../script/ui/Component.js';
-import $, {cssVariable, updateChildrenText} from '../../script/ui/DOM.js';
+import {cssVariable, updateChildrenText} from '../../script/ui/DOM.js';
 
 const style = css`
   :host {

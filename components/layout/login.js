@@ -1,8 +1,6 @@
 import Component, {html, css} from '../../script/ui/Component.js';
 import Router from '../../script/ui/Router.js';
 
-import locator from '../../script/app/locator.js';
-
 /* eslint-disable */
 import ScreenLogin    from '../screen/login.js';
 import ScreenConfirm  from '../screen/confirm.js';

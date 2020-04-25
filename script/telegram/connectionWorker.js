@@ -12,7 +12,7 @@ let connection;
 const isEventOfType = R.pipe(
   R.equals,
   R.curry(R.binary(R.pipe))(R.path(['data', 'type']))
-)
+);
 
 /**
  * Gets payload from MessageEvent
@@ -28,14 +28,14 @@ const getPayload = R.path(['data', 'payload']);
 function creatNewConnection(e) {
   const {serverUrl, schema, authData} = getPayload(e);
   connection = new MTProto(serverUrl, schema, authData);
-  connection.addEventListener('statusChanged', (e) => {
+  connection.addEventListener('statusChanged', e => {
     postMessage({
       type: 'event',
       payload: {
         type: 'statusChanged',
         status: e.status,
-        detail: e.detail,
-      },
+        detail: e.detail
+      }
     });
   });
 }
@@ -55,9 +55,9 @@ function sendResponse(uid, response) {
     type: 'response',
     payload: {
       uid,
-      response,
+      response
     }
-  })
+  });
 }
 
 /**

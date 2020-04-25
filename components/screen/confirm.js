@@ -3,8 +3,6 @@ import $ from '../../script/ui/DOM.js';
 import {setPage} from '../../state/pages/index.js';
 import {sendVerifyCode} from '../../state/auth/index.js';
 
-import locator from '../../script/app/locator.js';
-
 /* eslint-disable */
 import UIIcon   from '../ui/icon.js';
 import UIInput  from '../ui/input.js';
