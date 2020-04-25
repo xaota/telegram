@@ -146,7 +146,6 @@ const properties = {};
     );
 
     loadMore$.subscribe(x => {
-      console.log('[LAST DIALOG]', x);
       loadDialogs({
         offset_id: R.propOr(0, 'top_message', x),
         offset_date: R.pathOr(0, ['last_message', 'date'], x),

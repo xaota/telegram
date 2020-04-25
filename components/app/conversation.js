@@ -182,7 +182,6 @@ const getIdFromPeer = R.pipe(
     render(node) {
       const {dialog} = this.store(); // id диалога, string
       if (!dialog) return this;
-      console.log('[LAST MESSAGE]', dialog.last_message);
 
       const current = formatDate(dateDay(), true);
 
