@@ -1,4 +1,8 @@
-import {getPeerInfoSelectorByPeerId, getInputPeerSelectorByPeerId} from './helpers.js';
+import {
+  getPeerBaseInfoSelectorByPeerId,
+  getInputPeerSelectorByPeerId,
+  getPeerCommonInfoSelectorByPeerId
+} from './helpers.js';
 import {getUser$} from '../users/stream-builders.js';
 import {wrapAsObjWithKey} from '../../script/helpers.js';
 
@@ -30,15 +34,24 @@ export function getDialogInfo$(state$, dialogId) {
 
 
 /**
- * Get's info about peer by it's id
+ * Get's base info about peer by it's id
  * @param {Observable<*>} state$ - stream of current state
  * @param {string} peerId - id of peer(same as dialogId)
  * @returns {Observable<*>} - observable of info about peer
  */
-export function getPeerInfo$(state$, peerId) {
-  return state$.pipe(map(getPeerInfoSelectorByPeerId(peerId)));
+export function getBasePeerInfo$(state$, peerId) {
+  return state$.pipe(map(getPeerBaseInfoSelectorByPeerId(peerId)));
 }
 
+/**
+ * Get's common info about peer by it's id
+ * @param {Observable<*>} state$ - stream of current state
+ * @param {string} peerId - id of peer(same as dialogId)
+ * @returns {Observable<*>} - observable of info about peer
+ */
+export function getPeerCommonInfo$(state$, peerId) {
+  return state$.pipe(map(getPeerCommonInfoSelectorByPeerId(peerId)));
+}
 
 /**
  * @param {Observable<*>} state$ - stream of current state
@@ -48,7 +61,7 @@ export function getPeerInfo$(state$, peerId) {
 export function getDialogWithPeerInfo$(state$, dialogId) {
   const addPeerInfoToDialog = R.set(R.lensProp('peer_info'));
   return combineLatest(
-    getPeerInfo$(state$, dialogId),
+    getBasePeerInfo$(state$, dialogId),
     getDialogInfo$(state$, dialogId)
   ).pipe(map(R.apply(addPeerInfoToDialog)));
 }
@@ -198,4 +211,16 @@ export function getNextHistoryLoader$(state$) {
     map(R.zip(['peer', 'offset_id'])),
     map(R.fromPairs)
   );
+}
+
+/**
+ * @param {Observable<*>} state$ - stream of application state
+ * @returns {Observable<*>} - stream of objects with common info about peer
+ */
+export function getPeerCommonInfoOfActiveDialog$(state$) {
+  const getInfo$ = R.cond([
+    [R.isNil, R.always(of([]))],
+    [R.T, R.partial(getPeerCommonInfo$, [state$])]
+  ]);
+  return getActiveDialogId$(state$).pipe(switchMap(getInfo$));
 }

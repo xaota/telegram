@@ -31,25 +31,35 @@ export const getDialogWithLastMessage = R.pipe(
 const buildUserByIdSelector = R.pipe(
   R.prop('user_id'),
   R.toString,
-  x => ['users', x, 'base'],
+  x => ['users', x],
   R.path
 );
 
 const buildChatByIdSelector = R.pipe(
   R.prop('chat_id'),
   R.toString,
-  x => ['chats', x, 'base'],
+  x => ['chats', x],
   R.path
 );
 
 const buildChannelByIdSelector = R.pipe(
   R.prop('channel_id'),
   R.toString,
-  x => ['chats', x, 'base'],
+  x => ['chats', x],
   R.path
 );
 
-export const getPeerInfoSelectorByPeerId = R.pipe(
+export const getPeerBaseInfoSelectorByPeerId = R.pipe(
+  peerIdToPeer,
+  R.cond([
+    [isObjectOf('peerUser'), buildUserByIdSelector],
+    [isObjectOf('peerChat'), buildChatByIdSelector],
+    [R.T, buildChannelByIdSelector]
+  ]),
+  R.curry(R.binary(R.compose))(R.prop('base'))
+);
+
+export const getPeerCommonInfoSelectorByPeerId = R.pipe(
   peerIdToPeer,
   R.cond([
     [isObjectOf('peerUser'), buildUserByIdSelector],
@@ -78,6 +88,7 @@ const userToInputPeerUser = R.pipe(
  */
 const buildInputPeerUserSelector = R.pipe(
   buildUserByIdSelector,
+  R.curry(R.binary(R.compose))(R.prop('base')),
   R.curry(R.binary(R.compose))(userToInputPeerUser)
 );
 
@@ -116,6 +127,7 @@ const peerChannelToInputPeerChannel = R.pipe(
  */
 const buildInputPeerChannelSelector = R.pipe(
   buildChannelByIdSelector,
+  R.curry(R.binary(R.compose))(R.prop('base')),
   R.curry(R.binary(R.compose))(peerChannelToInputPeerChannel)
 );
 
@@ -147,13 +159,16 @@ const getFullName = R.pipe(
   R.join(' ')
 );
 
+
+export const getTitle = R.cond([
+  [R.equals(undefined), R.always('dialog')],
+  [isObjectOf('user'), getFullName],
+  [isObjectOf('chat'), R.prop('title')],
+  [isObjectOf('channel'), R.prop('title')],
+  [R.T, R.always('dialog')]
+]);
+
 export const getDialogTitle = R.pipe(
   R.prop('peer_info'),
-  R.cond([
-    [R.equals(undefined), R.always('dialog')],
-    [isObjectOf('user'), getFullName],
-    [isObjectOf('chat'), R.prop('title')],
-    [isObjectOf('channel'), R.prop('title')],
-    [R.T, R.always('dialog')]
-  ])
+  getTitle
 );
