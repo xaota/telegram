@@ -4,14 +4,16 @@ import $ from '../../script/ui/DOM.js';
 import UIIcon from '../ui/icon.js'
 import UIAvatar from '../ui/avatar.js'
 import AppMessage from '../app/message.js'
-import {getDialogTitle} from '../../state/dialogs/helpers.js'
+import {getDialogTitle, previewMessage} from '../../state/dialogs/helpers.js'
 import {dateDay, formatDate} from '../../script/helpers.js'
 import {setActiveDialog} from '../../state/dialogs/actions.js'
 import {getDialogWithLastMessage$} from '../../state/dialogs/stream-builders.js'
+import {getUserFullName} from '../../state/users/utils.js';
 /* eslint-enable */
 
 const {fromEvent} = rxjs;
 const {mapTo} = rxjs.operators;
+
 
 const style = css`
   :host {
@@ -25,6 +27,8 @@ const style = css`
     grid-template-areas:
         'avatar header'
         'avatar content';
+    grid-template-columns: calc(3.6rem + 8px) auto;
+    grid-template-rows: 1.8rem 1.8rem;
   }
 
   :host(:hover) {
@@ -97,6 +101,10 @@ const style = css`
     margin-right: 4px;
   }
   main > p:after {
+    content: '';
+  }
+  
+  main > p.with-author:after {
     content: ':';
   }
 
@@ -174,6 +182,7 @@ const getIdFromPeer = R.pipe(
     render(node) {
       const {dialog} = this.store(); // id диалога, string
       if (!dialog) return this;
+      console.log('[LAST MESSAGE]', dialog.last_message);
 
       const current = formatDate(dateDay(), true);
 
@@ -203,6 +212,16 @@ const getIdFromPeer = R.pipe(
       if (verify) chaptionNode.append(new UIIcon('verify'));
       timestampNode.innerText = timestamp;
       badgeNode.innerText = dialog.unread_count;
+      const fullName = getUserFullName(R.pathOr({}, ['last_message', 'author'], dialog));
+      if (fullName) {
+        authorNode.innerText = fullName;
+        authorNode.classList.add('withAuthor');
+        authorNode.style.display = '';
+      } else {
+        authorNode.innerText = '';
+        authorNode.classList.remove('withAuthor');
+      }
+      messageNode.innerText = previewMessage(R.propOr({}, 'last_message', dialog));
 
       // console.log('[app-conversation]', dialog);
       return this;

@@ -4,7 +4,7 @@
 import {peerIdToPeer} from '../utils.js';
 import {wrapAsObjWithKey} from '../../script/helpers.js';
 
-const {isObjectOf, construct} = zagram;
+const {isObjectOf, construct, CONSTRUCTOR_KEY} = zagram;
 
 export const getLastMessage = R.pipe(
   R.of,
@@ -172,3 +172,66 @@ export const getDialogTitle = R.pipe(
   R.prop('peer_info'),
   getTitle
 );
+
+/**
+ * Returns 'messageText' if message without media else returns type by
+ * message media
+ * @param message
+ */
+export function getCommonMessageType(message) {
+  const {media} = message;
+  if (media) {
+    return media[CONSTRUCTOR_KEY];
+  }
+  return 'messageText';
+}
+
+/**
+ * Returns service message type by action constructor:
+ * https://core.telegram.org/type/MessageAction
+ * @param message
+ */
+export function getServiceMessageType(message) {
+  const {action} = message;
+  return action[CONSTRUCTOR_KEY];
+}
+
+/**
+ * Returns types of message for function
+ * @param message
+ */
+export function getMessageType(message) {
+  if (isObjectOf('message', message)) {
+    return getCommonMessageType(message);
+  }
+
+  if (isObjectOf('messageService', message)) {
+    return getServiceMessageType(message);
+  }
+
+  console.warn('Not a message!', message);
+}
+
+/**
+ * @param {*} message - telegram message or service message object
+ * @return {string} - text preview for last message
+ */
+export function previewMessage(message) {
+  const type = getMessageType(message);
+  const handlers = {
+    messageText: m => m.message,
+    messageMediaPoll: () => '📊 Poll',
+    messageMediaPhoto:     m => '🖼 ' + (m.message || 'Photo'),
+    // messageVideo:     c => '🎥 ' + (c.caption && c.caption.text || 'Video'),
+    // messageAudio:     c => '🎵 ' + c.audio.title || 'Audio',
+    // messageSticker:   c =>  'Sticker ' + c.sticker.emoji,
+    messageMediaDocument:  () => `Document`,
+    // messageAnimation: c => 'GIF',
+    messageChatAddMembers:    () => 'добавление в чат',
+    messageActionContactSignUp: () => 'теперь в телеграм'
+  };
+  const text = typeof handlers[type] === 'function'
+    ? handlers[type](message)
+    : 'неподдерживаемое сообщение (' + type + ')';
+  return text.split(/\n/)[0];
+}

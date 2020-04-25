@@ -6,5 +6,5 @@ const {map} = rxjs.operators;
  * @returns {Observable}  - observe user with this id
  */
 export function getUser$(state$, userId) {
-  return state$.pipe(map(R.path(['users', R.toString(userId)])));
+  return state$.pipe(map(R.path(['users', R.toString(userId), 'base'])));
 }
