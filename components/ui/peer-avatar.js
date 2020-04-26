@@ -77,9 +77,11 @@ export default class PeerAvatar extends Component {
       map(R.pathOr(null, ['photo', 'photo_small'])),
       filter(isNotNull),
       map(R.pick(['local_id', 'volume_id'])),
-      distinctUntilChanged(),
       withLatestFrom(inputPeer$.pipe(map(wrapAsObjWithKey('peer')))),
       map(R.mergeAll),
+      distinctUntilChanged((prev, curr) => {
+        return prev.local_id === curr.local_id && prev.volume_id === curr.volume_id;
+      }),
       map(R.partial(construct, ['inputPeerPhotoFileLocation'])),
       switchMap(downloadFile$),
       map(createUrl)
