@@ -1,6 +1,10 @@
 import Component, {html, css} from '../../script/ui/Component.js';
 import $ from '../../script/ui/DOM.js';
-import {getPeerCommonInfoOfActiveDialog$, getActiveDialogId$} from '../../state/dialogs/stream-builders.js';
+import {
+  getPeerCommonInfoOfActiveDialog$,
+  getActiveDialogId$,
+  getActiveDialogSearchedMessages$
+} from '../../state/dialogs/stream-builders.js';
 import {getTitle} from '../../state/dialogs/helpers.js';
 
 const {distinctUntilChanged} = rxjs.operators;
@@ -12,7 +16,7 @@ import UIIcon     from '../ui/icon.js'
 import PeerAvatar from '../ui/peer-avatar.js'
 import IUProperty from '../ui/property.js';
 import AppHeader  from '../app/header.js';
-import MediaPreview from '../app/media-preview.js'
+import MediaFileList from '../app/media-file-list.js'
 /* eslint-enable */
 
 const {isObjectOf} = zagram;
@@ -63,9 +67,7 @@ const style = css`
   
   .tab-content {
     display: flex; 
-    flex-direction: row;
-    justify-content: space-around;
-    flex-wrap: wrap;
+    flex-direction: column;
   }
   `;
 
@@ -153,6 +155,7 @@ function getMembersCountFromPeerInfo(peerInfo) {
           <ui-tab id="audio">Audio</ui-tab>
         </ui-tabs>
         <div class="tab-content">
+          <media-file-list></media-file-list>
         </div>
       </template>`;
 
@@ -178,12 +181,6 @@ function getMembersCountFromPeerInfo(peerInfo) {
           peerAvatarPlaceNode.appendChild(peerAvatar);
         }
       });
-
-      const tabContentNode = $('.tab-content', node);
-      for (let i = 0; i < 15; i++) {
-        const mediaPreview = new MediaPreview({});
-        tabContentNode.appendChild(mediaPreview);
-      }
 
     return this;
     }

@@ -49,3 +49,18 @@ export const wrapAsObjWithKey = R.pipe(
   R.lensProp,
   R.partialRight(R.set, [R.__, {}])
 );
+const fromPromise = rxjs.from;
+
+/**
+ * @param {*} inputFileLocation - telegrams inputFileLocation object
+ * @returns {Observable<*>} - stream of downloaded file
+ */
+export function downloadFile$(inputFileLocation) {
+  const {promise} = telegram.connection.download(inputFileLocation);
+  return fromPromise(promise);
+}
+
+export function createUrl(file) {
+  const urlCreator = window.URL || window.webkitURL;
+  return urlCreator.createObjectURL(file);
+}

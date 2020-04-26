@@ -1,31 +1,16 @@
-import Component, {html, css} from '../../script/ui/Component.js';
+import Component, {css, html} from '../../script/ui/Component.js';
 import $ from '../../script/ui/DOM.js';
 import {getBasePeerInfo$} from '../../state/dialogs/stream-builders.js';
-import {getTitle, getInputPeerSelectorByPeerId} from '../../state/dialogs/helpers.js';
+import {getInputPeerSelectorByPeerId, getTitle} from '../../state/dialogs/helpers.js';
 import UIAvatar from './avatar.js';
-import {wrapAsObjWithKey} from '../../script/helpers.js';
+import {wrapAsObjWithKey, createUrl, downloadFile$} from '../../script/helpers.js';
 
-const fromPromise = rxjs.from;
 const {map, filter, distinctUntilChanged, withLatestFrom, switchMap} = rxjs.operators;
 
 const {construct} = zagram;
 
 const attributes = {};
 const properties = {};
-
-/**
- * @param {*} inputFileLocation - telegrams inputFileLocation object
- * @returns {Observable<*>} - stream of downloaded file
- */
-function downloadFile$(inputFileLocation) {
-  const {promise} = telegram.connection.download(inputFileLocation);
-  return fromPromise(promise);
-}
-
-function createUrl(file) {
-  const urlCreator = window.URL || window.webkitURL;
-  return urlCreator.createObjectURL(file);
-}
 
 const style = css`
   :host {
