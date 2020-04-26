@@ -41,7 +41,7 @@ export default class ConnectionWrapper extends EventTarget {
     };
     const messageType = getMessageType(e);
 
-    const handle = R.propOr(R.identity, messageType, handlers);
+    const handle = R.propOr(console.warn, messageType, handlers);
 
     handle(getPayload(e));
   }
@@ -77,6 +77,10 @@ export default class ConnectionWrapper extends EventTarget {
     reject(error);
   }
 
+  /**
+   * @param {*} obj - request object that will be send to telegrams server
+   * @return {Promise<unknown>}
+   */
   request(obj) {
     const uid = randomString();
     return new Promise((resolve, reject) => {
@@ -91,7 +95,14 @@ export default class ConnectionWrapper extends EventTarget {
     });
   }
 
-  download(obj, progessCb) {
+  /**
+   * @param {Object} obj - telegrams object of type InputFileLocation
+   * @param {Function} [progressCb] - callback to track downloading progress
+   * @param {Object} options - other options
+   * @return {{cancel: (function(): void), promise: Promise<unknown>}} - function
+   * to cancel downloading, and promise with result of downloading
+   */
+  download(obj, {progressCb, ...options} ) {
     const uid = randomString();
     const promise =  new Promise((resolve, reject) => {
       this.promiseMap[uid] = {resolve, reject};
@@ -109,7 +120,10 @@ export default class ConnectionWrapper extends EventTarget {
 
   /* eslint-disable class-methods-use-this */
   cancelDownload(uid) {
-    console.warn('Cancel downloading not implemented yet');
+    this.worker.postMessage({
+      type: 'cancel_download',
+      payload: uid
+    });
   }
   /* eslint-enable class-methods-use-this */
 }

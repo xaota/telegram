@@ -9,6 +9,8 @@ const {MTProto} = zagram;
 
 let connection;
 
+const cancelDownloadMap = {};
+
 const isEventOfType = R.pipe(
   R.equals,
   R.curry(R.binary(R.pipe))(R.path(['data', 'type']))
@@ -76,6 +78,11 @@ function handleDownloadProgress(uid, ...args) {
 }
 /* eslint-enable no-empty-function */
 
+
+function removeDownloadCancelMethod(uid) {
+  delete cancelDownloadMap[uid];
+}
+
 function sendDownloadedFile(uid, file) {
   postMessage({
     type: 'download_success',
@@ -84,6 +91,7 @@ function sendDownloadedFile(uid, file) {
       file
     }
   });
+  removeDownloadCancelMethod(uid);
 }
 
 function sendDownloadFileError(uid, error) {
@@ -94,6 +102,7 @@ function sendDownloadFileError(uid, error) {
       error
     }
   });
+  removeDownloadCancelMethod(uid);
 }
 
 /**
@@ -103,11 +112,20 @@ function sendDownloadFileError(uid, error) {
 function download(e) {
   const {uid, data} = getPayload(e);
   const progressCb = R.partial(handleDownloadProgress, [uid]);
-  const {promise} = connection.download(data, progressCb);
+  const {promise, cancel} = connection.download(data, progressCb);
+
+  cancelDownloadMap[uid] = cancel;
 
   promise
     .then(R.partial(sendDownloadedFile, [uid]))
     .catch(R.partial(sendDownloadFileError, [uid]));
+}
+
+
+function cancelDownload(e) {
+  const uid = getPayload(e);
+  const cancel = R.propOr(R.identity, uid, cancelDownloadMap);
+  cancel();
 }
 
 const messageHandler = R.cond([
@@ -115,6 +133,7 @@ const messageHandler = R.cond([
  [isEventOfType('init'), initConnection],
  [isEventOfType('request'), request],
  [isEventOfType('download'), download],
+ [isEventOfType('cancel_download'), cancelDownload],
  [R.T, console.warn]
 ]);
 
