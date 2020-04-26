@@ -76,15 +76,7 @@ function creatNewConnection(e) {
   const {serverUrl, schema, authData} = getPayload(e);
   connection = new MTProto(serverUrl, schema, authData);
   const connection$ = fromEvent(connection, 'statusChanged')
-    .pipe(
-      filter(isAuthKeyCreated),
-      tap(e => {
-        const newAuthData = getNewAuthData(e);
-        for (let i = 0; i < SUB_CONNECTIONS_COUNT; i++) {
-          newSubConnection(serverUrl, schema, newAuthData);
-        }
-      })
-    );
+    .pipe(filter(isAuthKeyCreated));
 
   connection$.subscribe(e => {
     console.log(e);
