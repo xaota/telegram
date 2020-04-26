@@ -38,8 +38,11 @@ export default class ConnectionWrapper extends EventTarget {
       'event': this.handleEvent.bind(this),
       'response': this.handleResponse.bind(this),
       'download_success': this.handleDownloadSuccess.bind(this),
-      'download_error': this.handleDownloadError.bind(this),
-      'download_progress': this.handleDownloadProgress.bind(this),
+      'download_error': this.handleError.bind(this),
+      'download_progress': this.handleProgress.bind(this),
+      'upload_success': this.handleUploadSuccess.bind(this),
+      'upload_error': this.handleError.bind(this),
+      'upload_progress': this.handleProgress.bind(this)
     };
     const messageType = getMessageType(e);
 
@@ -76,16 +79,23 @@ export default class ConnectionWrapper extends EventTarget {
     delete this.progressCbMap[uid];
   }
 
-  handleDownloadError({uid, error}) {
+  handleError({uid, error}) {
     const {reject} = this.promiseMap[uid];
     reject(error);
     delete this.promiseMap[uid];
     delete this.progressCbMap[uid];
   }
 
-  handleDownloadProgress({uid, args}) {
+  handleProgress({uid, args}) {
     const progressCb = R.propOr(R.identity, this.progressCbMap, uid);
     progressCb(...args);
+  }
+
+  handleUploadSuccess({uid, result}) {
+    const {resolve} = this.promiseMap[uid];
+    resolve(result);
+    delete this.promiseMap[uid];
+    delete this.progressCbMap[uid];
   }
 
   /**
@@ -139,4 +149,32 @@ export default class ConnectionWrapper extends EventTarget {
     });
   }
   /* eslint-enable class-methods-use-this */
+
+  /**
+   * @param {File} file - file that should be uploaded to telegrams server
+   * @param {Function} [progressCb] - function to track uploading progress
+   * @return {{cancel: (function(): *), promise: Promise<unknown>}} - cancel func and result promise
+   */
+  upload(file, progressCb) {
+    const uid = randomString();
+    const promise = new Promise((resolve, reject) => {
+      this.promiseMap[uid] = {resolve, reject};
+      this.progressCbMap[uid] = progressCb;
+      this.worker.postMessage({
+        type: 'upload',
+        payload: {
+          uid,
+          file
+        }
+      });
+    });
+    return {promise, cancel: () => this.cancelUpload(uid)};
+  }
+
+  cancelUpload(uid) {
+    this.worker.postMessage({
+      type: 'cancel_upload',
+      payload: uid
+    });
+  }
 }

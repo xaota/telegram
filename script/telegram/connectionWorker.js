@@ -9,7 +9,7 @@ const {MTProto} = zagram;
 
 let connection;
 
-const cancelDownloadMap = {};
+const cancelMap = {};
 
 const isEventOfType = R.pipe(
   R.equals,
@@ -83,8 +83,8 @@ function handleDownloadProgress(uid, ...args) {
 /* eslint-enable no-empty-function */
 
 
-function removeDownloadCancelMethod(uid) {
-  delete cancelDownloadMap[uid];
+function removeCancelMethod(uid) {
+  delete cancelMap[uid];
 }
 
 function sendDownloadedFile(uid, file) {
@@ -95,7 +95,6 @@ function sendDownloadedFile(uid, file) {
       file
     }
   });
-  removeDownloadCancelMethod(uid);
 }
 
 function sendDownloadFileError(uid, error) {
@@ -106,30 +105,60 @@ function sendDownloadFileError(uid, error) {
       error
     }
   });
-  removeDownloadCancelMethod(uid);
 }
 
-/**
- * Start downloading process
- * @param e
- */
 function download(e) {
-  const {uid, data, options = {} } = getPayload(e);
+  const {uid, data, options = {}} = getPayload(e);
   const progressCb = R.partial(handleDownloadProgress, [uid]);
-  const {promise, cancel} = connection.download(data, { progressCb, ...options });
+  const {promise, cancel} = connection.download(data, {progressCb, ...options});
 
-  cancelDownloadMap[uid] = cancel;
+  cancelMap[uid] = cancel;
 
   promise
     .then(R.partial(sendDownloadedFile, [uid]))
-    .catch(R.partial(sendDownloadFileError, [uid]));
+    .catch(R.partial(sendDownloadFileError, [uid]))
+    .finally(R.partial(removeCancelMethod, [uid]));
+}
+
+function cancelUploadDownloadProcess(e) {
+  const uid = getPayload(e);
+  const cancel = R.propOr(R.identity, uid, cancelMap);
+  cancel();
 }
 
 
-function cancelDownload(e) {
-  const uid = getPayload(e);
-  const cancel = R.propOr(R.identity, uid, cancelDownloadMap);
-  cancel();
+function handleUploadProgress(uid, ...args) {
+  postMessage({
+    type: 'upload_progress',
+    payload: {uid, args}
+  });
+}
+
+function handleUploadSuccess(uid, result) {
+  postMessage({
+    type: 'upload_success',
+    payload: {uid, result}
+  });
+}
+
+function handleUploadError(uid, error) {
+  postMessage({
+    type: 'upload_error',
+    payload: {uid, error}
+  });
+}
+
+function upload(e) {
+  const {uid, file} = getPayload(e);
+  const progressCb = R.partial(handleUploadProgress, [uid]);
+  const {promise, cancel} = connection.upload(file, progressCb);
+
+  cancelMap[uid] = cancel;
+
+  promise
+    .then(R.partial(handleUploadSuccess, [uid]))
+    .catch(R.partial(handleUploadError, [uid]))
+    .finally(R.partial(removeCancelMethod, [uid]));
 }
 
 const messageHandler = R.cond([
@@ -137,7 +166,9 @@ const messageHandler = R.cond([
  [isEventOfType('init'), initConnection],
  [isEventOfType('request'), request],
  [isEventOfType('download'), download],
- [isEventOfType('cancel_download'), cancelDownload],
+ [isEventOfType('cancel_download'), cancelUploadDownloadProcess],
+ [isEventOfType('upload'), upload],
+ [isEventOfType('cancel_upload'), cancelUploadDownloadProcess],
  [R.T, console.warn]
 ]);
 

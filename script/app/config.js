@@ -9,7 +9,7 @@ export default {
     }
   },
 
-  test: false,
+  test: true,
   layer: 108,
   socket: true,
   authKeyStore: 'authKeyStore',
