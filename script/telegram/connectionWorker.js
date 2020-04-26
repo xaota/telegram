@@ -75,6 +75,10 @@ function request(e) {
 
 /* eslint-disable no-empty-function */
 function handleDownloadProgress(uid, ...args) {
+  postMessage({
+    type: 'download_progress',
+    payload: {uid, args}
+  });
 }
 /* eslint-enable no-empty-function */
 
@@ -110,9 +114,9 @@ function sendDownloadFileError(uid, error) {
  * @param e
  */
 function download(e) {
-  const {uid, data} = getPayload(e);
+  const {uid, data, options = {} } = getPayload(e);
   const progressCb = R.partial(handleDownloadProgress, [uid]);
-  const {promise, cancel} = connection.download(data, progressCb);
+  const {promise, cancel} = connection.download(data, { progressCb, ...options });
 
   cancelDownloadMap[uid] = cancel;
 

@@ -18,6 +18,7 @@ export default class ConnectionWrapper extends EventTarget {
   constructor(serverUrl, schema, authData) {
     super();
     this.promiseMap = {};
+    this.progressCbMap = {};
     this.worker = new Worker('./script/telegram/connectionWorker.js');
     this.worker.onmessage = this.handleMessage.bind(this);
     this.worker.postMessage({
@@ -37,7 +38,8 @@ export default class ConnectionWrapper extends EventTarget {
       'event': this.handleEvent.bind(this),
       'response': this.handleResponse.bind(this),
       'download_success': this.handleDownloadSuccess.bind(this),
-      'download_error': this.handleDownloadError.bind(this)
+      'download_error': this.handleDownloadError.bind(this),
+      'download_progress': this.handleDownloadProgress.bind(this),
     };
     const messageType = getMessageType(e);
 
@@ -70,11 +72,20 @@ export default class ConnectionWrapper extends EventTarget {
   handleDownloadSuccess({uid, file}) {
     const {resolve} = this.promiseMap[uid];
     resolve(file);
+    delete this.promiseMap[uid];
+    delete this.progressCbMap[uid];
   }
 
   handleDownloadError({uid, error}) {
     const {reject} = this.promiseMap[uid];
     reject(error);
+    delete this.promiseMap[uid];
+    delete this.progressCbMap[uid];
+  }
+
+  handleDownloadProgress({uid, args}) {
+    const progressCb = R.propOr(R.identity, this.progressCbMap, uid);
+    progressCb(...args);
   }
 
   /**
@@ -102,15 +113,17 @@ export default class ConnectionWrapper extends EventTarget {
    * @return {{cancel: (function(): void), promise: Promise<unknown>}} - function
    * to cancel downloading, and promise with result of downloading
    */
-  download(obj, {progressCb, ...options} ) {
+  download(obj, {progressCb = R.identity, ...options} = {} ) {
     const uid = randomString();
     const promise =  new Promise((resolve, reject) => {
       this.promiseMap[uid] = {resolve, reject};
+      this.progressCbMap[uid] = progressCb;
       this.worker.postMessage({
         type: 'download',
         payload: {
           uid,
-          data: obj
+          data: obj,
+          options
         }
       });
     });
