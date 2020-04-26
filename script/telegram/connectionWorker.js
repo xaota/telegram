@@ -3,13 +3,58 @@
  */
 this.window = this;
 importScripts('../../lib/ramda.min.js');
+importScripts('../../lib/rxjs.umd.js');
 importScripts('../../zagram/zagram.js');
 
-const {MTProto} = zagram;
+const {fromEvent} = rxjs;
+const {filter, map, tap} = rxjs.operators;
+const {MTProto, tlDumps, sha256, schema: layer108} = zagram;
+
+const SUB_CONNECTIONS_COUNT = 2;
 
 let connection;
+const subConnections = [];
+
+function getSubConnection() {
+  if (subConnections.length === 0) {
+    return connection;
+  }
+
+  this.counter = this.counter || 0;
+  return subConnections[++this.counter % SUB_CONNECTIONS_COUNT];
+}
 
 const cancelMap = {};
+
+const cache = {};
+const getCacheKey = R.pipe(
+  R.partial(tlDumps, [layer108]),
+  sha256,
+  x => x.toHex()
+);
+
+const isAuthKeyCreated = R.pipe(
+  R.prop('status'),
+  R.equals('AUTH_KEY_CREATED')
+);
+
+function getNewAuthData(e) {
+  return {
+    authKey: R.path(['detail', 'authKey'], e),
+    authKeyId: R.path(['detail', 'authKeyId'], e),
+    serverSalt: R.path(['detail', 'serverSalt'], e)
+  };
+}
+
+function newSubConnection(serverUrl, schema, authData) {
+  const subConnection = new MTProto(serverUrl, schema, authData);
+  const subConnection$ = fromEvent(subConnection, 'statusChanged')
+    .pipe(filter(isAuthKeyCreated));
+  subConnection.init();
+  subConnection$.subscribe(() => {
+    subConnections.push(subConnection);
+  });
+}
 
 const isEventOfType = R.pipe(
   R.equals,
@@ -30,7 +75,19 @@ const getPayload = R.path(['data', 'payload']);
 function creatNewConnection(e) {
   const {serverUrl, schema, authData} = getPayload(e);
   connection = new MTProto(serverUrl, schema, authData);
-  connection.addEventListener('statusChanged', e => {
+  const connection$ = fromEvent(connection, 'statusChanged')
+    .pipe(
+      filter(isAuthKeyCreated),
+      tap(e => {
+        const newAuthData = getNewAuthData(e);
+        for (let i = 0; i < SUB_CONNECTIONS_COUNT; i++) {
+          newSubConnection(serverUrl, schema, newAuthData);
+        }
+      })
+    );
+
+  connection$.subscribe(e => {
+    console.log(e);
     postMessage({
       type: 'event',
       payload: {
@@ -87,7 +144,8 @@ function removeCancelMethod(uid) {
   delete cancelMap[uid];
 }
 
-function sendDownloadedFile(uid, file) {
+function sendDownloadedFile(uid, cacheKey, file) {
+  cache[cacheKey] = file;
   postMessage({
     type: 'download_success',
     payload: {
@@ -109,13 +167,20 @@ function sendDownloadFileError(uid, error) {
 
 function download(e) {
   const {uid, data, options = {}} = getPayload(e);
+  const cacheKey = getCacheKey(data);
+  if (R.has(cacheKey, cache)) {
+    sendDownloadedFile(uid, cacheKey, cache[cacheKey]);
+    return;
+  }
   const progressCb = R.partial(handleDownloadProgress, [uid]);
-  const {promise, cancel} = connection.download(data, {progressCb, ...options});
+  const conn = getSubConnection();
+  const {promise, cancel} = conn.download(data, {progressCb, ...options});
+
 
   cancelMap[uid] = cancel;
 
   promise
-    .then(R.partial(sendDownloadedFile, [uid]))
+    .then(R.partial(sendDownloadedFile, [uid, cacheKey]))
     .catch(R.partial(sendDownloadFileError, [uid]))
     .finally(R.partial(removeCancelMethod, [uid]));
 }
@@ -151,7 +216,8 @@ function handleUploadError(uid, error) {
 function upload(e) {
   const {uid, file} = getPayload(e);
   const progressCb = R.partial(handleUploadProgress, [uid]);
-  const {promise, cancel} = connection.upload(file, progressCb);
+  const conn = getSubConnection();
+  const {promise, cancel} = conn.upload(file, progressCb);
 
   cancelMap[uid] = cancel;
 
