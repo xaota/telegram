@@ -4,7 +4,8 @@ import {
   DIALOGS_LOADED,
   ADD_MESSAGE,
   ADD_MESSAGES_BATCH,
-  SET_ACTIVE_DIALOG
+  SET_ACTIVE_DIALOG,
+  SET_SEARCHED_DIALOG_MESSAGES
 } from './constants.js';
 import {wrapAsObjWithKey} from '../../script/helpers.js';
 import {peerToPeerId} from '../utils.js';
@@ -109,6 +110,16 @@ const buildMessageOrderLens = R.pipe(
   R.lensPath
 );
 
+/**
+ * Takes message and returns lens for search_order of dialog
+ */
+const buildSearchMessageOrderLens = R.pipe(
+  getPeerIdFromMessage,
+  R.partialRight(R.append, [['dialogs']]),
+  R.append('search_order'),
+  R.lensPath
+);
+
 const buildMessageLens = R.pipe(
   R.of,
   R.ap([
@@ -133,6 +144,16 @@ const setNewMessageOrder = R.pipe(
   R.of,
   R.ap([
     R.pipe(R.nth(1), buildMessageOrderLens),
+    R.pipe(R.path([1, 'id']), R.append, R.curry(R.binary(R.compose))(R.uniq)),
+    R.nth(0)
+  ]),
+  R.apply(R.over)
+);
+
+const setSearchMessageOrder = R.pipe(
+  R.of,
+  R.ap([
+    R.pipe(R.nth(1), buildSearchMessageOrderLens),
     R.pipe(R.path([1, 'id']), R.append, R.curry(R.binary(R.compose))(R.uniq)),
     R.nth(0)
   ]),
@@ -221,10 +242,25 @@ const addMessage = R.pipe(
   R.nth(0)
 );
 
+const addSearchMessage = R.pipe(
+  setToPeerForMessage,
+  R.of,
+  R.ap([
+    setNewMessage,
+    R.nth(1)
+  ]),
+  R.of,
+  R.ap([
+    setSearchMessageOrder,
+    R.nth(1)
+  ]),
+  R.nth(0)
+);
+
 const handleAddMessage = R.pipe(
   R.of,
   R.ap([
-    R.nth(0),
+    getState,
     R.path([1, 'payload'])
   ]),
   addMessage
@@ -234,7 +270,7 @@ const handleAddMessagesBatch = R.pipe(
   R.of,
   R.ap([
     R.always(R.unapply(addMessage)),
-    R.nth(0),
+    getState,
     R.path([1, 'payload'])
   ]),
   R.apply(R.reduce)
@@ -249,11 +285,22 @@ const handleSetActiveDialog = R.pipe(
   R.mergeAll
 );
 
+const handleSetSearchedDialogMessages = R.pipe(
+  R.of,
+  R.ap([
+    R.always(R.unapply(addSearchMessage)),
+    getState,
+    R.path([1, 'payload'])
+  ]),
+  R.apply(R.reduce)
+);
+
 export default buildReducer({}, [
   [isActionOf(LOAD_DIALOGS), handleLoadingTrue],
   [isActionOf(DIALOGS_LOAD_FAILED), handleDialogsLoadFailed],
   [isActionOf(DIALOGS_LOADED), handleDialogsLoaded],
   [isActionOf(ADD_MESSAGE), handleAddMessage],
   [isActionOf(ADD_MESSAGES_BATCH), handleAddMessagesBatch],
-  [isActionOf(SET_ACTIVE_DIALOG), handleSetActiveDialog]
+  [isActionOf(SET_ACTIVE_DIALOG), handleSetActiveDialog],
+  [isActionOf(SET_SEARCHED_DIALOG_MESSAGES), handleSetSearchedDialogMessages]
 ]);

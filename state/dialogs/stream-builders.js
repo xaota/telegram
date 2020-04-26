@@ -7,7 +7,7 @@ import {getUser$} from '../users/stream-builders.js';
 import {wrapAsObjWithKey} from '../../script/helpers.js';
 
 const {combineLatest, of} = rxjs;
-const {map, switchMap, withLatestFrom} = rxjs.operators;
+const {map, switchMap, withLatestFrom, tap} = rxjs.operators;
 
 
 /**
@@ -142,10 +142,27 @@ export function getDialogWithLastMessage$(state$, dialogId) {
  * @returns {Observable<Array<*>>} - observable of messages list for dialog
  */
 export function getDialogMessages$(state$, dialogId) {
-  return state$.pipe(
-    map(R.path(['dialogs', 'dialogs', dialogId, 'messages'])),
-    map(R.values),
-    map(R.sortBy(R.prop('id')))
+  const dialogStructure$ = getDialogStructure$(state$, dialogId);
+  return dialogStructure$.pipe(
+    map(R.propOr([], 'messages_order')),
+    map(R.map(R.prop)),
+    withLatestFrom(dialogStructure$.pipe(map(R.pipe(R.prop('messages'), R.of)))),
+    map(R.apply(R.ap))
+  );
+}
+
+/**
+ * @param {Observable<*>} state$ - stream of current state
+ * @param {string} dialogId - id of dialog to show messages
+ * @returns {Observable<Array<string>>} - observable of messages ids
+ */
+export function getDialogSearchMessagesId$(state$, dialogId) {
+  const dialogStructure$ = getDialogStructure$(state$, dialogId);
+  return dialogStructure$.pipe(
+    map(R.propOr([], 'search_order')),
+    map(R.map(R.prop)),
+    withLatestFrom(dialogStructure$.pipe(map(R.pipe(R.prop('messages'), R.of)))),
+    map(R.apply(R.ap))
   );
 }
 
@@ -223,4 +240,13 @@ export function getPeerCommonInfoOfActiveDialog$(state$) {
     [R.T, R.partial(getPeerCommonInfo$, [state$])]
   ]);
   return getActiveDialogId$(state$).pipe(switchMap(getInfo$));
+}
+
+export function getActiveDialogSearchedMessages$(state$) {
+  const getSearchedResults$ = R.cond([
+    [R.isNil, R.always(of([]))],
+    [R.T, R.partial(getDialogSearchMessagesId$, [state$])]
+  ]);
+
+  return getActiveDialogId$(state$).pipe(switchMap(getSearchedResults$));
 }

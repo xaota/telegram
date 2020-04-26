@@ -1,4 +1,4 @@
-import {loadDialogHistory} from '../actions.js';
+import {loadDialogHistory, loadDialogMediaFiles} from '../actions.js';
 import {SET_ACTIVE_DIALOG} from '../constants.js';
 import {isAuthKeyCreated} from '../../utils.js';
 import {getInputPeerSelectorByPeerId} from '../helpers.js';
@@ -19,6 +19,14 @@ const getFullInfoByInputPeerInfo = R.cond([
   [isChatObject, getFullChat],
   [R.T, R.identity]
 ]);
+
+const handleDialogChange = R.pipe(
+  R.of,
+  R.ap([
+    loadDialogHistory,
+    loadDialogMediaFiles
+  ])
+);
 
 /**
  * Loads mtproto connection
@@ -50,5 +58,5 @@ export default function setActiveDialogMiddleware(action$, state$, connection) {
 
   dialogPeer$
     .pipe(map(wrapAsObjWithKey('peer')))
-    .subscribe(loadDialogHistory);
+    .subscribe(handleDialogChange);
 }
