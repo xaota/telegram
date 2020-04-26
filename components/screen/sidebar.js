@@ -12,6 +12,7 @@ import UIIcon     from '../ui/icon.js'
 import PeerAvatar from '../ui/peer-avatar.js'
 import IUProperty from '../ui/property.js';
 import AppHeader  from '../app/header.js';
+import MediaPreview from '../app/media-preview.js'
 /* eslint-enable */
 
 const {isObjectOf} = zagram;
@@ -58,7 +59,15 @@ const style = css`
     top: -3px;
     /* z-index: 100;
     background: var(--background-aside); */
-  }`;
+  }
+  
+  .tab-content {
+    display: flex; 
+    flex-direction: row;
+    justify-content: space-around;
+    flex-wrap: wrap;
+  }
+  `;
 
 const attributes = {};
 const properties = {};
@@ -143,6 +152,8 @@ function getMembersCountFromPeerInfo(peerInfo) {
           <ui-tab id="links">Links</ui-tab>
           <ui-tab id="audio">Audio</ui-tab>
         </ui-tabs>
+        <div class="tab-content">
+        </div>
       </template>`;
 
   /** Создание элемента в DOM (DOM доступен) / mount @lifecycle
@@ -167,7 +178,14 @@ function getMembersCountFromPeerInfo(peerInfo) {
           peerAvatarPlaceNode.appendChild(peerAvatar);
         }
       });
-      return this;
+
+      const tabContentNode = $('.tab-content', node);
+      for (let i = 0; i < 15; i++) {
+        const mediaPreview = new MediaPreview({});
+        tabContentNode.appendChild(mediaPreview);
+      }
+
+    return this;
     }
 
     render(node) {
