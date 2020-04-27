@@ -10,19 +10,7 @@ const {fromEvent} = rxjs;
 const {filter, map, tap} = rxjs.operators;
 const {MTProto, tlDumps, sha256, schema: layer108} = zagram;
 
-const SUB_CONNECTIONS_COUNT = 2;
-
 let connection;
-const subConnections = [];
-
-function getSubConnection() {
-  if (subConnections.length === 0) {
-    return connection;
-  }
-
-  this.counter = this.counter || 0;
-  return subConnections[++this.counter % SUB_CONNECTIONS_COUNT];
-}
 
 const cancelMap = {};
 
@@ -37,24 +25,6 @@ const isAuthKeyCreated = R.pipe(
   R.prop('status'),
   R.equals('AUTH_KEY_CREATED')
 );
-
-function getNewAuthData(e) {
-  return {
-    authKey: R.path(['detail', 'authKey'], e),
-    authKeyId: R.path(['detail', 'authKeyId'], e),
-    serverSalt: R.path(['detail', 'serverSalt'], e)
-  };
-}
-
-function newSubConnection(serverUrl, schema, authData) {
-  const subConnection = new MTProto(serverUrl, schema, authData);
-  const subConnection$ = fromEvent(subConnection, 'statusChanged')
-    .pipe(filter(isAuthKeyCreated));
-  subConnection.init();
-  subConnection$.subscribe(() => {
-    subConnections.push(subConnection);
-  });
-}
 
 const isEventOfType = R.pipe(
   R.equals,
@@ -165,8 +135,7 @@ function download(e) {
     return;
   }
   const progressCb = R.partial(handleDownloadProgress, [uid]);
-  const conn = getSubConnection();
-  const {promise, cancel} = conn.download(data, {progressCb, ...options});
+  const {promise, cancel} = connection.download(data, {progressCb, ...options});
 
 
   cancelMap[uid] = cancel;
@@ -208,8 +177,7 @@ function handleUploadError(uid, error) {
 function upload(e) {
   const {uid, file} = getPayload(e);
   const progressCb = R.partial(handleUploadProgress, [uid]);
-  const conn = getSubConnection();
-  const {promise, cancel} = conn.upload(file, progressCb);
+  const {promise, cancel} = connection.upload(file, progressCb);
 
   cancelMap[uid] = cancel;
 
