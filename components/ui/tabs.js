@@ -11,6 +11,7 @@ const style = css`
     /*
     overflow: hidden;
     */
+    background: #fff;
   }
   slot {
     display: flex;
