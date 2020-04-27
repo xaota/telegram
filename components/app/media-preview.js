@@ -7,6 +7,16 @@ const {isObjectOf, construct} = zagram;
 
 const getMedia = R.prop('media');
 
+const isMessageWithMediaPhoto = R.pipe(
+  getMedia,
+  isObjectOf('messageMediaPhoto')
+);
+
+const isMessageWithMediaDocument = R.pipe(
+  getMedia,
+  isObjectOf('messageMediaDocument')
+);
+
 const getDocument =  R.pipe(R.cond([
     [
       isObjectOf('messageMediaPhoto'),
@@ -23,7 +33,11 @@ const getAccessHash = R.pipe(getMediaDocument, R.prop('access_hash'));
 
 const getFileReference = R.pipe(getMediaDocument, R.prop('file_reference'));
 
-const getThumbObject= R.pipe(
+/**
+ * @param {Object} message - telegrams message with media
+ * @returns {Object} - information about size preview
+ */
+const getThumbObject = R.pipe(
   getMediaDocument,
   R.cond([
     [isObjectOf('photo'), R.path(['sizes'])],
@@ -33,7 +47,12 @@ const getThumbObject= R.pipe(
   R.last
 );
 
-const buildInputPhotoFileLocation = R.pipe(
+
+/**
+ * @param {Object} message - telegrams message with media
+ * @returns {Object} - params for building InputFileLocation object
+ */
+const buildInputFileParams = R.pipe(
   R.of,
   R.ap([
     R.pipe(getMediaId, wrapAsObjWithKey('id')),
@@ -41,9 +60,39 @@ const buildInputPhotoFileLocation = R.pipe(
     R.pipe(getFileReference, wrapAsObjWithKey('file_reference')),
     R.pipe(getThumbObject, R.prop('type'), wrapAsObjWithKey('thumb_size'))
   ]),
-  R.mergeAll,
+  R.mergeAll
+);
+
+
+/**
+ * @param {Object} message - telegrams message with messageMediaPhoto
+ * @return {Object} - inputPhotoFileLocation object
+ */
+const buildInputPhotoFileLocation = R.pipe(
+  buildInputFileParams,
   R.partial(construct, ['inputPhotoFileLocation'])
 );
+
+
+/**
+ * @param {Object} message - telegrams message with messageMediaDocument
+ * @return {Object} - inputDocumentFileLocation object
+ */
+const buildInputDocumentFileLocation = R.pipe(
+  buildInputFileParams,
+  R.partial(construct, ['inputDocumentFileLocation'])
+);
+
+
+/**
+ * param {Object} message - telegrams message with media(photo or video)
+ * @return {Object} - object of InputFileLocation to download it
+ */
+const buildInputFileLocation = R.cond([
+  [isMessageWithMediaPhoto, buildInputPhotoFileLocation],
+  [isMessageWithMediaDocument, buildInputDocumentFileLocation]
+]);
+
 
 const style = css`
   :host {
@@ -90,7 +139,7 @@ export default class MediaPreview extends Component {
     const divNode = $('.image', node);
 
     const {message} = this.store();
-    const inputPhotoLocation = buildInputPhotoFileLocation(message);
+    const inputPhotoLocation = buildInputFileLocation(message);
 
     downloadFile$(inputPhotoLocation)
       .pipe(map(createUrl))
