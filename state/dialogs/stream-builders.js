@@ -7,7 +7,7 @@ import {getUser$} from '../users/stream-builders.js';
 import {wrapAsObjWithKey} from '../../script/helpers.js';
 
 const {combineLatest, of} = rxjs;
-const {map, switchMap, withLatestFrom, tap} = rxjs.operators;
+const {map, switchMap, withLatestFrom} = rxjs.operators;
 
 
 /**
@@ -51,6 +51,17 @@ export function getBasePeerInfo$(state$, peerId) {
  */
 export function getPeerCommonInfo$(state$, peerId) {
   return state$.pipe(map(getPeerCommonInfoSelectorByPeerId(peerId)));
+}
+
+
+/**
+ * Get's common info about peer by it's id
+ * @param {Observable<*>} state$ - stream of current state
+ * @param {string} peerId - id of peer(same as dialogId)
+ * @returns {Observable<*>} - observable of input peer
+ */
+export function getInputPeer$(state$, peerId) {
+  return state$.pipe(map(getInputPeerSelectorByPeerId(peerId)));
 }
 
 /**
@@ -201,6 +212,19 @@ export function getActiveDialogMessages$(state$) {
 }
 
 /**
+ * @param {Observable<*>} state$ - stream of current state
+ * @returns {Observable<*>} - observable of input peer of active dialog
+ */
+export function getActiveDialogInputPeer$(state$) {
+  const getPeer$ = R.cond([
+    [R.isNil, R.always(of([]))],
+    [R.T, R.partial(getInputPeer$, [state$])]
+  ]);
+
+  return getActiveDialogId$(state$).pipe(switchMap(getPeer$));
+}
+
+/**
  * @param {Observable<*>} state$ - stream of application state
  * @returns {Observable<*>} - stream of objects to load next batch of history for active dialog
  */
@@ -249,4 +273,15 @@ export function getActiveDialogSearchedMessages$(state$) {
   ]);
 
   return getActiveDialogId$(state$).pipe(switchMap(getSearchedResults$));
+}
+
+/**
+ * @param {Observable<*>} state$ - stream of application state
+ * @returns {Observable<*>} - stream of objects with latest search message id
+ */
+export function getLastSearchedMessageId$(state$) {
+  return getActiveDialogId$(state$).pipe(
+    switchMap(R.partial(getDialogStructure$, [state$])),
+    map(R.pipe(R.propOr([], 'search_order'), R.last))
+  );
 }

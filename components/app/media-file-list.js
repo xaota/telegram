@@ -2,11 +2,17 @@ import Component, {html, css} from '../../script/ui/Component.js';
 import $ from '../../script/ui/DOM.js';
 import {
   getActiveDialogId$,
-  getActiveDialogSearchedMessages$
+  getActiveDialogSearchedMessages$,
+  getActiveDialogInputPeer$,
+  getLastSearchedMessageId$
 } from '../../state/dialogs/stream-builders.js';
+import {searchDialogMessages} from '../../state/dialogs/actions.js';
 import MediaPreview from './media-preview.js';
+import {wrapAsObjWithKey} from '../../script/helpers.js';
 
-const {distinctUntilChanged} = rxjs.operators;
+const {construct} = zagram;
+const {of, fromEvent} = rxjs;
+const {map, distinctUntilChanged, withLatestFrom} = rxjs.operators;
 
 const style = css`
   :host {
@@ -33,13 +39,14 @@ export default class MediaFileList extends Component {
       <style>${style}</style>
       <div class="list">
       </div>
+      <button id="load-more">load more</button>
     </template>
   `;
 
   mount(node) {
     super.mount(node, attributes, properties);
     const listNode = $('.list', node);
-
+    const loadMoreButton = $('#load-more', node);
 
     const state$ = getState$();
 
@@ -71,6 +78,24 @@ export default class MediaFileList extends Component {
       this.store({messageIds: R.merge(messageIds, newMessageIds)});
     });
 
+    const loadMoreButtonClick$ = fromEvent(loadMoreButton, 'click');
+    const activeDialogInputPeer$ = getActiveDialogInputPeer$(state$);
+    const lastSearchMessageId$ = getLastSearchedMessageId$(state$);
+
+    const loadMore$ = loadMoreButtonClick$.pipe(
+      withLatestFrom(activeDialogInputPeer$
+          .pipe(map(wrapAsObjWithKey('peer')))),
+      withLatestFrom(of(construct('inputMessagesFilterPhotoVideo'))
+          .pipe(map(wrapAsObjWithKey('filter')))),
+      withLatestFrom(lastSearchMessageId$
+          .pipe(map(wrapAsObjWithKey('offset_id')))),
+      map(R.flatten),
+      map(R.remove(0, 1)),
+      map(R.mergeAll)
+    );
+
+
+    loadMore$.subscribe(searchDialogMessages);
     return this;
   }
 }

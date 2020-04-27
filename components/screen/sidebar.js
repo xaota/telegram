@@ -2,8 +2,7 @@ import Component, {html, css} from '../../script/ui/Component.js';
 import $ from '../../script/ui/DOM.js';
 import {
   getPeerCommonInfoOfActiveDialog$,
-  getActiveDialogId$,
-  getActiveDialogSearchedMessages$
+  getActiveDialogId$
 } from '../../state/dialogs/stream-builders.js';
 import {getTitle} from '../../state/dialogs/helpers.js';
 

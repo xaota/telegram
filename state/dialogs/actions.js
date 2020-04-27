@@ -23,4 +23,4 @@ export const setSearchedDialogMessages= R.partial(dispatch, [SET_SEARCHED_DIALOG
 export const clearSearchedDialogs = R.partial(dispatch, [CLEAR_SEARCHED_DIALOG_MESSAGES]);
 
 export const loadDialogHistory = R.partial(dispatch, [LOAD_DIALOG_HISTORY]);
-export const loadDialogMediaFiles = R.partial(dispatch, [SEARCH_DIALOG_MESSAGES]);
+export const searchDialogMessages = R.partial(dispatch, [SEARCH_DIALOG_MESSAGES]);
