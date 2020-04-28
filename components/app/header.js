@@ -13,6 +13,7 @@ const style = css`
     height: 60px;
     display: flex;
     flex-grow: 1;
+    flex-direction: row;
     align-items: center;
     /* padding-left: 18px;
         width: 100%;

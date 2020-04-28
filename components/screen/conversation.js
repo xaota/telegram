@@ -8,13 +8,12 @@ import {
 } from '../../state/dialogs/stream-builders.js';
 import {loadDialogHistory} from '../../state/dialogs/actions.js';
 import {authorizedUser$} from '../../state/auth/stream-builders.js';
-import {getDialogTitle} from '../../state/dialogs/helpers.js';
 
 /* eslint-disable */
 import AppHeader   from '../app/header.js';
 import AppMessage  from '../app/message.js';
 import ScreenField from '../screen/field.js';
-
+import DialogHeader from '../app/dialog-header.js';
 import MessageText from '../messages/text.js';
 /* eslint-enable */
 
@@ -70,7 +69,7 @@ export default class ScreenConversation extends Component {
         <style>${style}</style>
           <div class="header-area">
             <app-header find more>
-              <span>ui-avatar + caption + ui-online</span>
+                <dialog-header slot="data"></dialog-header>
             </app-header>
           </div>
         
@@ -339,14 +338,6 @@ export default class ScreenConversation extends Component {
     if (R.isNil(dialog)) {
       return this;
     }
-    const title = getDialogTitle(dialog);
-
-    const appHeaderNode = $('app-header', node);
-    const appTitleNode = $('app-header > span', node);
-    appTitleNode.innerText = title;
-    appTitleNode.slot = "data";
-    appHeaderNode.find = false;
-    appHeaderNode.more = false;
 
     const messageAreaNode = $('.message-area-inner', node);
     messageAreaNode.innerHTML = '';

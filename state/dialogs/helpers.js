@@ -233,3 +233,25 @@ export function previewMessage(message) {
     : 'неподдерживаемое сообщение (' + type + ')';
   return text.split(/\n/)[0];
 }
+
+export const getTitleFromPeerInfo = R.pipe(
+  R.prop('base'),
+  getTitle
+);
+
+export const getUsernameFromPeerInfo = R.pathOr('', ['base', 'username']);
+
+export const getAboutFromPeerInfo = R.pathOr('', ['full', 'about']);
+
+export const getInviteLinkFromPeerInfo = R.pathOr('', ['full', 'exported_invite', 'link']);
+
+export const getPhoneFromPeerInfo = R.pathOr('', ['base', 'phone']);
+
+export function getMembersCountFromPeerInfo(peerInfo) {
+  if (isObjectOf('channelFull', R.propOr({}, 'full', peerInfo))) {
+    const membersCount = R.pathOr(0, ['full', 'participants_count'], peerInfo);
+    const onlineCount = R.pathOr(0, ['full', 'online_count'], peerInfo);
+    return `members: ${membersCount} online: ${onlineCount}`;
+  }
+  return '';
+}

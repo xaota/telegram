@@ -1,11 +1,20 @@
-import Component, {html, css} from '../../script/ui/Component.js';
+import Component, {css, html} from '../../script/ui/Component.js';
 import $ from '../../script/ui/DOM.js';
 import {
-  getPeerCommonInfoOfActiveDialog$,
-  getActiveDialogId$
+  getActiveDialogId$,
+  getPeerCommonInfoOfActiveDialog$
 } from '../../state/dialogs/stream-builders.js';
-import {getTitle} from '../../state/dialogs/helpers.js';
+/* eslint-disable */
+import {
+  getAboutFromPeerInfo,
+  getInviteLinkFromPeerInfo,
+  getMembersCountFromPeerInfo,
+  getPhoneFromPeerInfo,
+  getTitleFromPeerInfo,
+  getUsernameFromPeerInfo
+} from '../../state/dialogs/helpers.js'
 
+const {fromEvent} = rxjs;
 const {distinctUntilChanged} = rxjs.operators;
 
 /* eslint-disable */
@@ -17,8 +26,6 @@ import IUProperty from '../ui/property.js';
 import AppHeader  from '../app/header.js';
 import MediaFileList from '../app/media-file-list.js'
 /* eslint-enable */
-
-const {isObjectOf} = zagram;
 
 const style = css`
   :host {
@@ -106,33 +113,11 @@ const buildSwitcher = R.pipe(
   R.curry(R.binary(R.pipe))(R.of)
 );
 
-const getTitleFromPeerInfo = R.pipe(
-  R.prop('base'),
-  getTitle
-);
-
-const getUsernameFromPeerInfo =R.pathOr('', ['base', 'username']);
-
-const getAboutFromPeerInfo = R.pathOr('', ['full', 'about']);
-
-const getInviteLinkFromPeerInfo = R.pathOr("", ['full', 'exported_invite', 'link']);
-
-const getPhoneFromPeerInfo = R.pathOr("", ['base', 'phone']);
-
-function getMembersCountFromPeerInfo(peerInfo) {
-  if (isObjectOf('channelFull', R.propOr({}, 'full', peerInfo))) {
-    const membersCount = R.pathOr(0, ['full', 'participants_count'], peerInfo);
-    const onlineCount = R.pathOr(0, ['full', 'online_count'], peerInfo);
-    return `members: ${membersCount} online: ${onlineCount}`;
-  }
-  return '';
-}
-
 /** {ScreenSidebar} @class
-  * @description Отображение раздела беседы
-  */
-  export default class ScreenSidebar extends Component {
-    static template = html`
+ * @description Отображение раздела беседы
+ */
+export default class ScreenSidebar extends Component {
+  static template = html`
       <template>
         <style>${style}</style>
         <app-header close more></app-header>
@@ -156,60 +141,60 @@ function getMembersCountFromPeerInfo(peerInfo) {
         <div class="tab-content">
           <media-file-list></media-file-list>
         </div>
-      </template>`;
+      </template>`
 
   /** Создание элемента в DOM (DOM доступен) / mount @lifecycle
-    * @param {ShadowRoot} node корневой узел элемента
-    * @return {Component} @this {ScreenSidebar} текущий компонент
-    */
-    mount(node) {
-      super.mount(node, attributes, properties);
-      const state$ = getState$();
+   * @param {ShadowRoot} node корневой узел элемента
+   * @return {Component} @this {ScreenSidebar} текущий компонент
+   */
+  mount(node) {
+    super.mount(node, attributes, properties);
+    const state$ = getState$();
 
-      getPeerCommonInfoOfActiveDialog$(state$).subscribe(peerInfo => {
-        this.store({peerInfo});
-      });
+    getPeerCommonInfoOfActiveDialog$(state$).subscribe(peerInfo => {
+      this.store({peerInfo});
+    });
 
-      const activeDialogId$ = getActiveDialogId$(state$);
+    const activeDialogId$ = getActiveDialogId$(state$);
 
-      const peerAvatarPlaceNode = $('.peer-avatar-place', node);
-      activeDialogId$.pipe(distinctUntilChanged()).subscribe(dialogId => {
-        if (dialogId) {
-          peerAvatarPlaceNode.innerHTML = '';
-          const peerAvatar = new PeerAvatar(dialogId);
-          peerAvatarPlaceNode.appendChild(peerAvatar);
-        }
-      });
+    const peerAvatarPlaceNode = $('.peer-avatar-place', node);
+    activeDialogId$.pipe(distinctUntilChanged()).subscribe(dialogId => {
+      if (dialogId) {
+        peerAvatarPlaceNode.innerHTML = '';
+        const peerAvatar = new PeerAvatar(dialogId);
+        peerAvatarPlaceNode.appendChild(peerAvatar);
+      }
+    });
 
     return this;
-    }
+  }
 
-    render(node) {
-      const {peerInfo} = this.store();
-      const titleNode = $('#title', node);
-      const usernameNode = $('#username', node);
-      const membersNode = $('#members', node);
-      const aboutNode = $("#about", node);
-      const inviteLinkNode = $("#invite_link", node);
-      const phoneNode = $('#phone', node);
+  render(node) {
+    const {peerInfo} = this.store();
+    const titleNode = $('#title', node);
+    const usernameNode = $('#username', node);
+    const membersNode = $('#members', node);
+    const aboutNode = $('#about', node);
+    const inviteLinkNode = $('#invite_link', node);
+    const phoneNode = $('#phone', node);
 
-      if (R.isNil(peerInfo)) {
-        return this;
-      }
-
-      const switchByPeerInfo = buildSwitcher([
-        [titleNode, getTitleFromPeerInfo],
-        [usernameNode, getUsernameFromPeerInfo],
-        [membersNode, getMembersCountFromPeerInfo],
-        [aboutNode, getAboutFromPeerInfo],
-        [inviteLinkNode, getInviteLinkFromPeerInfo],
-        [phoneNode, getPhoneFromPeerInfo]
-      ]);
-
-      switchByPeerInfo(peerInfo);
-
+    if (R.isNil(peerInfo)) {
       return this;
     }
+
+    const switchByPeerInfo = buildSwitcher([
+      [titleNode, getTitleFromPeerInfo],
+      [usernameNode, getUsernameFromPeerInfo],
+      [membersNode, getMembersCountFromPeerInfo],
+      [aboutNode, getAboutFromPeerInfo],
+      [inviteLinkNode, getInviteLinkFromPeerInfo],
+      [phoneNode, getPhoneFromPeerInfo]
+    ]);
+
+    switchByPeerInfo(peerInfo);
+
+    return this;
   }
+}
 
 Component.init(ScreenSidebar, 'screen-sidebar', {attributes, properties});

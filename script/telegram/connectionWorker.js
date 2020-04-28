@@ -7,7 +7,7 @@ importScripts('../../lib/rxjs.umd.js');
 importScripts('../../zagram/zagram.js');
 
 const {fromEvent} = rxjs;
-const {filter, map, tap} = rxjs.operators;
+const {filter} = rxjs.operators;
 const {MTProto, tlDumps, sha256, schema: layer108} = zagram;
 
 let connection;
