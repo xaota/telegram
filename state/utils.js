@@ -1,4 +1,5 @@
 import {wrapAsObjWithKey} from '../script/helpers.js';
+
 const {construct, isObjectOf} = zagram;
 
 const fromPromise = rxjs.from;
@@ -59,3 +60,7 @@ export const peerIdToPeer = R.cond([
 export function requestToTelegram$(connection, methodObject) {
   return fromPromise(connection.request(methodObject)).pipe(catchError(R.of));
 }
+
+export const getState = R.nth(0);
+export const getAction = R.nth(1);
+export const getActionPayload = R.pipe(getAction, R.prop('payload'));

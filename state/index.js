@@ -15,6 +15,7 @@ import {
   reducer as chatsReducer,
   applyMiddleware as chatsApplyMiddleware
 } from './chats/index.js';
+import {reducer as uiReducer} from './ui/index.js';
 
 const {buildStateStream, combineReducers, getActionStream} = store;
 const {BehaviorSubject} = rxjs;
@@ -24,6 +25,7 @@ export default function init(connection) {
   const subject = new BehaviorSubject({});
   const state$ = buildStateStream(combineReducers({
     page: pageReducer,
+    ui: uiReducer,
     auth: authReducer,
     dialogs: dialogsReducer,
     users: usersReducer,

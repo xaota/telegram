@@ -1,23 +1,17 @@
 import {
-  LOAD_DIALOGS,
-  DIALOGS_LOAD_FAILED,
-  DIALOGS_LOADED,
   ADD_MESSAGE,
   ADD_MESSAGES_BATCH,
+  DIALOGS_LOAD_FAILED,
+  DIALOGS_LOADED,
+  LOAD_DIALOGS,
   SET_ACTIVE_DIALOG,
   SET_SEARCHED_DIALOG_MESSAGES
 } from './constants.js';
 import {wrapAsObjWithKey} from '../../script/helpers.js';
-import {peerToPeerId} from '../utils.js';
+import {peerToPeerId, getAction, getState} from '../utils.js';
 
 const {construct, isObjectOf} = zagram;
 const {isActionOf, buildReducer} = store;
-
-
-const getState = R.nth(0);
-
-
-const getAction = R.nth(1);
 
 
 const handleLoadingTrue = R.pipe(
