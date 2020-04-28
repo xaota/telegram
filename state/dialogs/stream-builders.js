@@ -282,6 +282,6 @@ export function getActiveDialogSearchedMessages$(state$) {
 export function getLastSearchedMessageId$(state$) {
   return getActiveDialogId$(state$).pipe(
     switchMap(R.partial(getDialogStructure$, [state$])),
-    map(R.pipe(R.propOr([], 'search_order'), R.last))
+    map(R.pipe(R.propOr([0], 'search_order'), R.last))
   );
 }

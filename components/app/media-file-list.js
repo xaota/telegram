@@ -11,8 +11,8 @@ import MediaPreview from './media-preview.js';
 import {wrapAsObjWithKey} from '../../script/helpers.js';
 
 const {construct} = zagram;
-const {of, fromEvent} = rxjs;
-const {map, distinctUntilChanged, withLatestFrom} = rxjs.operators;
+const {of, fromEvent, combineLatest} = rxjs;
+const {map, distinctUntilChanged, withLatestFrom, startWith} = rxjs.operators;
 
 const style = css`
   :host {
@@ -50,8 +50,8 @@ export default class MediaFileList extends Component {
 
     const state$ = getState$();
 
-    const activeDailogId$ = getActiveDialogId$(state$);
-    activeDailogId$.pipe(distinctUntilChanged()).subscribe(() => {
+    const activeDailogId$ = getActiveDialogId$(state$).pipe(distinctUntilChanged());
+    activeDailogId$.subscribe(() => {
       listNode.innerHTML = '';
       this.store({messageIds: {}});
     });
@@ -78,11 +78,12 @@ export default class MediaFileList extends Component {
       this.store({messageIds: R.merge(messageIds, newMessageIds)});
     });
 
-    const loadMoreButtonClick$ = fromEvent(loadMoreButton, 'click');
+    const loadMoreButtonClick$ = fromEvent(loadMoreButton, 'click')
+      .pipe(startWith(null));
     const activeDialogInputPeer$ = getActiveDialogInputPeer$(state$);
     const lastSearchMessageId$ = getLastSearchedMessageId$(state$);
 
-    const loadMore$ = loadMoreButtonClick$.pipe(
+    const loadMore$ = combineLatest(loadMoreButtonClick$, activeDailogId$).pipe(
       withLatestFrom(activeDialogInputPeer$
           .pipe(map(wrapAsObjWithKey('peer')))),
       withLatestFrom(of(construct('inputMessagesFilterPhotoVideo'))

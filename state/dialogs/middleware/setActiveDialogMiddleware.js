@@ -24,7 +24,6 @@ const handleDialogChange = R.pipe(
   R.of,
   R.ap([
     loadDialogHistory,
-    searchDialogMessages
   ])
 );
 
