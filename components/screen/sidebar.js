@@ -26,6 +26,7 @@ import PeerAvatar from '../ui/peer-avatar.js'
 import IUProperty from '../ui/property.js';
 import AppHeader  from '../app/header.js';
 import MediaFileList from '../app/media-file-list.js'
+import DocumentFileList from '../app/document-file-list.js'
 /* eslint-enable */
 
 const style = css`
@@ -202,6 +203,10 @@ export default class ScreenSidebar extends Component {
         if (x === '#media') {
           const mediaFileList = new MediaFileList();
           uiTabContentNode.appendChild(mediaFileList);
+        }
+        if (x === '#docs') {
+          const docsFileList = new DocumentFileList();
+          uiTabContentNode.appendChild(docsFileList);
         }
       });
 
