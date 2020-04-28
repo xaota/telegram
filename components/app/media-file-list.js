@@ -6,9 +6,10 @@ import {
   getActiveDialogInputPeer$,
   getLastSearchedMessageId$
 } from '../../state/dialogs/stream-builders.js';
-import {searchDialogMessages} from '../../state/dialogs/actions.js';
+import {searchDialogMessages, clearSearchedDialogs} from '../../state/dialogs/actions.js';
 import MediaPreview from './media-preview.js';
 import {wrapAsObjWithKey} from '../../script/helpers.js';
+import {peerIdToPeer} from '../../state/utils.js';
 
 const {construct} = zagram;
 const {of, fromEvent, combineLatest} = rxjs;
@@ -51,7 +52,8 @@ export default class MediaFileList extends Component {
     const state$ = getState$();
 
     const activeDailogId$ = getActiveDialogId$(state$).pipe(distinctUntilChanged());
-    activeDailogId$.subscribe(() => {
+    activeDailogId$.subscribe(dialogId => {
+      clearSearchedDialogs(peerIdToPeer(dialogId));
       listNode.innerHTML = '';
       this.store({messageIds: {}});
     });

@@ -5,6 +5,8 @@ import Component, {html, css} from '../../script/ui/Component.js';
 // import UIIcon from './icon.js';
 // eslint-enable
 
+const {fromEvent} = rxjs;
+
 const style = css`
   :host {
     display: flex;
@@ -64,10 +66,15 @@ const properties = {};
     * @param {ShadowRoot} node корневой узел элемента
     * @return {Component} @this {UITab} текущий компонент
     */
-    mount(node) {
-      super.mount(node, attributes, properties);
-      return this;
-    }
+  mount(node) {
+    super.mount(node, attributes, properties);
+    const click$ = fromEvent(node, 'click');
+
+    click$.subscribe(e => {
+      this.event('selected');
+    });
+    return this;
   }
+}
 
 Component.init(UITab, 'ui-tab', {attributes, properties});

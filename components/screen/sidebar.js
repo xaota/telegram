@@ -15,8 +15,8 @@ import {
 } from '../../state/dialogs/helpers.js'
 import {closeSideBar} from '../../state/ui/index.js';
 
-const {fromEvent} = rxjs;
-const {distinctUntilChanged} = rxjs.operators;
+const {fromEvent, from} = rxjs;
+const {filter, map, mapTo, mergeAll, distinctUntilChanged, startWith, tap} = rxjs.operators;
 
 /* eslint-disable */
 import UITab      from '../ui/tab.js';
@@ -90,11 +90,29 @@ function switchNode(node, value) {
   }
 }
 
+const notIsNil = R.pipe(R.isNil, R.not);
+
 /**
- * @param {UiTabs} node - selected ta
- * @param tabSelector
+ * @param {UiTabs} node - that contain tabs
+ * @param {Arrary<string>} tabSelectorList - selector of selected tab
+ * @param {string} [defaultValue] - default value that should be
+ * @returns {Observable<string}>} string of selected
  */
-function tabsSelector(node, tabSelector) {}
+function tabsSelector(node, tabSelectorList, defaultValue) {
+  return from(tabSelectorList)
+    .pipe(
+      map(selector => [$(selector, node), selector]),
+      map(([tabNode, selector]) => fromEvent(tabNode, 'selected')
+          .pipe(mapTo(selector))),
+      mergeAll(),
+      startWith(defaultValue),
+      filter(notIsNil),
+      tap(selector => {
+        R.forEach(x => $(x, node).removeAttribute('selected'), tabSelectorList);
+        $(selector, node).setAttribute('selected', true);
+      })
+    );
+}
 
 /**
  * @param {HTMLElement} - node for text value
@@ -146,7 +164,6 @@ export default class ScreenSidebar extends Component {
           <ui-tab id="audio">Audio</ui-tab>
         </ui-tabs>
         <div class="tab-content">
-          <media-file-list></media-file-list>
         </div>
       </template>`
 
@@ -177,16 +194,16 @@ export default class ScreenSidebar extends Component {
     const close$ = fromEvent(appHeaderNode, 'close');
     close$.subscribe(closeSideBar);
 
-    const mediaNode = $('#media', node);
-    const mediaSelected$ = fromEvent(mediaNode, 'selected');
-    mediaSelected$.subscribe(() => console.log("media selected"));
-
-    const docsNode = $('#docs', node);
-    const docsSelected$ = fromEvent(docsNode, 'selected');
-    docsSelected$.subscribe(() => {
-      docsNode.setAttribute('selected', true);
-      console.log("docs selected");
-    });
+    const uiTabsNode = $('ui-tabs', node);
+    const uiTabContentNode = $('.tab-content', node);
+    tabsSelector(uiTabsNode, ['#media', '#docs', '#links', '#audio'], '#media')
+      .subscribe(x => {
+        uiTabContentNode.innerHTML = '';
+        if (x === '#media') {
+          const mediaFileList = new MediaFileList();
+          uiTabContentNode.appendChild(mediaFileList);
+        }
+      });
 
     return this;
   }

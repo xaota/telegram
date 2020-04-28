@@ -5,10 +5,11 @@ import {
   DIALOGS_LOADED,
   LOAD_DIALOGS,
   SET_ACTIVE_DIALOG,
-  SET_SEARCHED_DIALOG_MESSAGES
+  SET_SEARCHED_DIALOG_MESSAGES,
+  CLEAR_SEARCHED_DIALOG_MESSAGES
 } from './constants.js';
 import {wrapAsObjWithKey} from '../../script/helpers.js';
-import {peerToPeerId, getAction, getState} from '../utils.js';
+import {peerToPeerId, getAction, getState, getActionPayload} from '../utils.js';
 
 const {construct, isObjectOf} = zagram;
 const {isActionOf, buildReducer} = store;
@@ -94,13 +95,31 @@ const getPeerIdFromMessage = R.pipe(
   peerToPeerId
 );
 
+
+/**
+ * Takes peerId returns lens for dialogs messages order
+ */
+const buildOrderLens = R.pipe(
+  R.partialRight(R.append, [['dialogs']]),
+  R.append('messages_order'),
+  R.lensPath
+);
+
 /**
  * Takes message and returns lens for message_order of dialog
  */
 const buildMessageOrderLens = R.pipe(
   getPeerIdFromMessage,
+  buildOrderLens
+);
+
+
+/**
+ * Takes peerId returns lens for dialog search order
+ */
+const buildSearchOrderLens = R.pipe(
   R.partialRight(R.append, [['dialogs']]),
-  R.append('messages_order'),
+  R.append('search_order'),
   R.lensPath
 );
 
@@ -109,9 +128,7 @@ const buildMessageOrderLens = R.pipe(
  */
 const buildSearchMessageOrderLens = R.pipe(
   getPeerIdFromMessage,
-  R.partialRight(R.append, [['dialogs']]),
-  R.append('search_order'),
-  R.lensPath
+  buildSearchOrderLens
 );
 
 const buildMessageLens = R.pipe(
@@ -289,6 +306,16 @@ const handleSetSearchedDialogMessages = R.pipe(
   R.apply(R.reduce)
 );
 
+const handleClearSearchedDialogMessages = R.pipe(
+  R.of,
+  R.ap([
+    R.pipe(getActionPayload, peerToPeerId, buildSearchOrderLens),
+    R.always([]),
+    getState
+  ]),
+  R.apply(R.set)
+);
+
 export default buildReducer({}, [
   [isActionOf(LOAD_DIALOGS), handleLoadingTrue],
   [isActionOf(DIALOGS_LOAD_FAILED), handleDialogsLoadFailed],
@@ -296,5 +323,6 @@ export default buildReducer({}, [
   [isActionOf(ADD_MESSAGE), handleAddMessage],
   [isActionOf(ADD_MESSAGES_BATCH), handleAddMessagesBatch],
   [isActionOf(SET_ACTIVE_DIALOG), handleSetActiveDialog],
-  [isActionOf(SET_SEARCHED_DIALOG_MESSAGES), handleSetSearchedDialogMessages]
+  [isActionOf(SET_SEARCHED_DIALOG_MESSAGES), handleSetSearchedDialogMessages],
+  [isActionOf(CLEAR_SEARCHED_DIALOG_MESSAGES), handleClearSearchedDialogMessages]
 ]);

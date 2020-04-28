@@ -8,6 +8,7 @@ import {
 } from '../../state/dialogs/stream-builders.js';
 import {loadDialogHistory} from '../../state/dialogs/actions.js';
 import {authorizedUser$} from '../../state/auth/stream-builders.js';
+import {userIdToPeerId} from '../../state/users/utils.js';
 
 /* eslint-disable */
 import AppHeader   from '../app/header.js';
@@ -15,6 +16,7 @@ import AppMessage  from '../app/message.js';
 import ScreenField from '../screen/field.js';
 import DialogHeader from '../app/dialog-header.js';
 import MessageText from '../messages/text.js';
+import PeerAvatar from '../ui/peer-avatar.js'
 /* eslint-enable */
 
 const {fromEvent} = rxjs;
@@ -43,7 +45,7 @@ const style = css`
   
   .message-area-inner {
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
     min-height: 100%;
     justify-content: flex-end;
   }
@@ -349,25 +351,34 @@ export default class ScreenConversation extends Component {
 
       const authorizedUserMessage = messageGroup[0].from_id === authorizedUser.id;
 
-      if (authorizedUserMessage) {
-        appMessage.right = true;
-      } else {
-        appMessage.left = true;
+      if (R.has('from_id', messageGroup[0])) {
+        if (authorizedUserMessage) {
+          appMessage.setAttribute('right', true);
+        } else {
+          appMessage.setAttribute('left', true);
+
+          const peerAvatar = new PeerAvatar(userIdToPeerId(messageGroup[0].from_id));
+          peerAvatar.setAttribute('slot', 'avatar');
+          appMessage.appendChild(peerAvatar);
+        }
       }
 
       for (let j = 0; j < messageGroup.length; j++) {
         const message = new MessageText();
 
         if (authorizedUserMessage) {
-          message.right = true;
+          message.setAttribute('right', true);
         } else {
-          message.left = true;
+          message.setAttribute('left', true);
         }
 
-        message.content = messageGroup[j].message;
-        appMessage.append(message);
+        const span = document.createElement('span');
+        span.setAttribute('slot', 'content');
+        span.innerText = R.propOr('', 'message', messageGroup[j]);
+        message.appendChild(span);
+        appMessage.appendChild(message);
       }
-      messageAreaNode.append(appMessage);
+      messageAreaNode.appendChild(appMessage);
     }
 
     return this;

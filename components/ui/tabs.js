@@ -47,6 +47,7 @@ const properties = {};
     */
     mount(node) {
       super.mount(node, attributes, properties);
+
       return this;
     }
   }
