@@ -2,6 +2,7 @@ import Component, {html, css} from '../../script/ui/Component.js';
 import $ from '../../script/ui/DOM.js';
 import {getActiveDialogId$} from '../../state/dialogs/stream-builders.js';
 import {getSidebarStatus$} from '../../state/ui/stream-builders.js';
+import {} from '../../state/users/utils.js';
 
 /* eslint-disable */
 import LayoutSidebar      from './sidebar.js';

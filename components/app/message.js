@@ -19,17 +19,15 @@ const style = css`
   :host([left]) {
     grid-template-areas:"avatar content ."
                         ". markup .";
-    grid-template-columns: fit-content(var(--avatar)) fit-content(80%) auto;
+    grid-template-columns: calc(3em + 8px) auto calc(3em + 8px);
     justify-items: start;
   }
 
   :host([right]) {
     grid-template-areas:". content avatar"
                         ". markup .";
-    grid-template-columns: auto fit-content(80%) fit-content(var(--avatar));
+    grid-template-columns: calc(3em + 8px) auto calc(3em + 8px);
     justify-items: end;
-
-    margin-right: 3em; /* зато нет аватарки */
   }
 
   slot {
@@ -40,7 +38,7 @@ const style = css`
   slot:not([name]) { /* содержимое сообщения */
     grid-area: content;
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
     align-items: center;
   }
 
@@ -56,16 +54,33 @@ const style = css`
     margin-top: 4px;
   }
 
-  slot[name="avatar"] {
+  
+  div.avatar-place {
     grid-area: avatar;
-
-    /* width: 2rem;
-    height: 2rem; */
 
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
+    align-items: flex-end;
     height: 100%;
+  }
+  
+  :host([left]) div.avatar-place {
+    padding-left: 8px;
+  }
+  
+  slot[name="avatar"] {
+    display: inline-flex;
+    justify-content: center;
+    align-content: center;
+    width: 40px;
+    height 40px;
+    grow: 0
+  }
+  
+  slot[name="avatar"] + peer-avatar {
+    width: 2rem;
+    height: 2rem;
   }
 
   slot[name="markup"] {
@@ -88,7 +103,9 @@ const properties = {};
     static template = html`
       <template>
         <style>${style}</style>
-        <slot name="avatar"></slot>
+        <div class="avatar-place">
+            <slot name="avatar"></slot>
+        </div>
         <slot></slot>
         <slot name="markup"></slot>
       </template>`;

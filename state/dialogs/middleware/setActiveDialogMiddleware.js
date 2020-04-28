@@ -1,4 +1,4 @@
-import {loadDialogHistory, searchDialogMessages} from '../actions.js';
+import {loadDialogHistory} from '../actions.js';
 import {SET_ACTIVE_DIALOG} from '../constants.js';
 import {isAuthKeyCreated} from '../../utils.js';
 import {getInputPeerSelectorByPeerId} from '../helpers.js';
@@ -23,7 +23,7 @@ const getFullInfoByInputPeerInfo = R.cond([
 const handleDialogChange = R.pipe(
   R.of,
   R.ap([
-    loadDialogHistory,
+    loadDialogHistory
   ])
 );
 

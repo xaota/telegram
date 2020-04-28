@@ -10,3 +10,9 @@ export const getUserFullName = R.pipe(
   R.join(' '),
   R.trim
 );
+
+/**
+ * @param {Number} userId
+ * @return {string}
+ */
+export const userIdToPeerId = userId => `peer_user_${userId}`;

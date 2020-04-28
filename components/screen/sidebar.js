@@ -91,6 +91,12 @@ function switchNode(node, value) {
 }
 
 /**
+ * @param {UiTabs} node - selected ta
+ * @param tabSelector
+ */
+function tabsSelector(node, tabSelector) {}
+
+/**
  * @param {HTMLElement} - node for text value
  * @param {Function} - function that takes peerInfo and returns string
  * @param {*} - peerInfo object
@@ -170,6 +176,17 @@ export default class ScreenSidebar extends Component {
     const appHeaderNode = $('app-header', node);
     const close$ = fromEvent(appHeaderNode, 'close');
     close$.subscribe(closeSideBar);
+
+    const mediaNode = $('#media', node);
+    const mediaSelected$ = fromEvent(mediaNode, 'selected');
+    mediaSelected$.subscribe(() => console.log("media selected"));
+
+    const docsNode = $('#docs', node);
+    const docsSelected$ = fromEvent(docsNode, 'selected');
+    docsSelected$.subscribe(() => {
+      docsNode.setAttribute('selected', true);
+      console.log("docs selected");
+    });
 
     return this;
   }
