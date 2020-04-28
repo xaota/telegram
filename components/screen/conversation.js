@@ -22,11 +22,12 @@ const {map, distinctUntilChanged, withLatestFrom} = rxjs.operators;
 
 const style = css`
   :host {
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
-    height: 100wh;
-    max-height: 100wh;
   }
+  
   .header-area {
     display: flex;
     flex-direction: row;

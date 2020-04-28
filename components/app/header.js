@@ -138,14 +138,14 @@ const properties = {
       super.mount(node, attributes, properties);
 
       const back  = $('#back', node);
-      const close = $('#back', node);
-      const find  = $('#back', node);
-      // const mute = $('#back', node);
+      const close = $('#close', node);
+      const find  = $('#find', node);
+      // const mute = $('#find', node);
       // search
 
-      back .addEventListener('click', () => this.event('back'));
+      back.addEventListener('click', () => this.event('back'));
       close.addEventListener('click', () => this.event('close'));
-      find .addEventListener('click', () => this.event('find'));
+      find.addEventListener('click', () => this.event('find'));
       // mute .addEventListener('click', () => this.event('mute'));
       // search
 

@@ -6,8 +6,10 @@ import {
 } from '../../state/dialogs/stream-builders.js';
 import PeerAvatar from '../ui/peer-avatar.js';
 import {getTitleFromPeerInfo, getMembersCountFromPeerInfo} from '../../state/dialogs/helpers.js';
+import {openSideBar} from '../../state/ui/index.js';
 
-const {distinctUntilChanged} = rxjs.operators;
+const {fromEvent} = rxjs;
+const {tap, distinctUntilChanged} = rxjs.operators;
 
 const style = css`
   :host {
@@ -65,6 +67,7 @@ export default class DialogHeader extends Component {
   mount(node) {
     super.mount(node, attributes, properties);
     const avatarPlaceNode = $('.avatar-place', node);
+    const titleNode = $('#title', node);
 
     const state$ = getState$();
 
@@ -82,6 +85,11 @@ export default class DialogHeader extends Component {
     activeDialogInfo$.subscribe(peerInfo => {
       this.store({peerInfo});
     });
+
+    const titleClick$ = fromEvent(titleNode, 'click')
+      .pipe(tap(e => e.preventDefault()));
+
+    titleClick$.subscribe(openSideBar);
     return this;
   }
 

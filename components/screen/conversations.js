@@ -79,16 +79,16 @@ const properties = {};
     static template = html`
       <template>
         <style>${style}</style>
-        <ui-network updating></ui-network>
-        <ui-tabs>
-          <ui-tab selected>All chats</ui-tab>
-          <ui-tab>Unread</ui-tab>
-          <ui-tab>Personal</ui-tab>
-          <ui-tab>Groups</ui-tab>
-          <!-- <ui-tab>Channels</ui-tab>
-          <ui-tab>Bots</ui-tab>
-          <ui-tab>Other</ui-tab> -->
-        </ui-tabs>
+<!--        <ui-network updating></ui-network>-->
+<!--        <ui-tabs>-->
+<!--          <ui-tab selected>All chats</ui-tab>-->
+<!--          <ui-tab>Unread</ui-tab>-->
+<!--          <ui-tab>Personal</ui-tab>-->
+<!--          <ui-tab>Groups</ui-tab>-->
+<!--          &lt;!&ndash; <ui-tab>Channels</ui-tab>-->
+<!--          <ui-tab>Bots</ui-tab>-->
+<!--          <ui-tab>Other</ui-tab> &ndash;&gt;-->
+<!--        </ui-tabs>-->
         <ui-list>
         </ui-list>
         <button>loadMore</button>

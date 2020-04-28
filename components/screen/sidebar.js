@@ -13,6 +13,7 @@ import {
   getTitleFromPeerInfo,
   getUsernameFromPeerInfo
 } from '../../state/dialogs/helpers.js'
+import {closeSideBar} from '../../state/ui/index.js';
 
 const {fromEvent} = rxjs;
 const {distinctUntilChanged} = rxjs.operators;
@@ -165,6 +166,10 @@ export default class ScreenSidebar extends Component {
         peerAvatarPlaceNode.appendChild(peerAvatar);
       }
     });
+
+    const appHeaderNode = $('app-header', node);
+    const close$ = fromEvent(appHeaderNode, 'close');
+    close$.subscribe(closeSideBar);
 
     return this;
   }

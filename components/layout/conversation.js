@@ -1,6 +1,7 @@
 import Component, {html, css} from '../../script/ui/Component.js';
 import $ from '../../script/ui/DOM.js';
 import {getActiveDialogId$} from '../../state/dialogs/stream-builders.js';
+import {getSidebarStatus$} from '../../state/ui/stream-builders.js';
 
 /* eslint-disable */
 import LayoutSidebar      from './sidebar.js';
@@ -8,6 +9,8 @@ import ScreenEmpty        from '../screen/empty.js';
 import ScreenConversation from '../screen/conversation.js';
 /* eslint-enable */
 
+
+const {distinctUntilChanged} = rxjs.operators;
 
 function showScreenEmpty(node) {
   const screenEmpty = $('screen-empty', node);
@@ -29,18 +32,25 @@ function showScreenConversation(node) {
 
 const style = css`
   :host {
-    display: grid;
+    display: flex;
+    flex-direction: row;
+    max-height: 100wh;
     position: relative;
-
-    grid-template-areas: 'conversation sidebar';
-    grid-template-columns: auto 320px; /* minmax(200px, 320px); */
+  }
+  
+  #conversation-place {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1
+  }
+  
+  #sidebar-place {
+    display: flex;
+    flex-grow: 0;
   }
 
   layout-sidebar {
-    /* max-width: 420px;
-    min-width: 420px; */
-    grid-area: sidebar;
-    border-left: 1px solid var(--edge);
+    width: 320px;
   }
 `;
 
@@ -54,9 +64,12 @@ export default class LayoutConversation extends Component {
     static template = html`
       <template>
         <style>${style}</style>
-          <screen-empty></screen-empty>
-          <screen-conversation></screen-conversation>
-        <layout-sidebar></layout-sidebar>
+          <div id="conversation-place">
+            <screen-empty></screen-empty>
+            <screen-conversation></screen-conversation>
+          </div>
+          <div id="sidebar-place">
+          </div>
       </template>`;
 
   /** Создание элемента в DOM (DOM доступен) / mount @lifecycle
@@ -68,6 +81,19 @@ export default class LayoutConversation extends Component {
 
     const state$ = getState$();
     getActiveDialogId$(state$).subscribe(dialogId => this.store({dialogId}));
+
+    const sidebarStatus$ = getSidebarStatus$(state$);
+
+    const sidebarPlaceNode = $('#sidebar-place', node);
+    sidebarStatus$.pipe(distinctUntilChanged()).subscribe(status => {
+      if (status) {
+        const sidebar = new LayoutSidebar();
+        sidebarPlaceNode.appendChild(sidebar);
+      } else {
+        sidebarPlaceNode.innerHTML = '';
+      }
+    });
+
     showScreenEmpty(node);
     return this;
   }
