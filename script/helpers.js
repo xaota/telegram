@@ -54,11 +54,14 @@ const fromPromise = rxjs.from;
 /**
  * @param {*} inputFileLocation - telegrams inputFileLocation object
  * @param {Object} options - options that could be passed for downloading
- * @returns {Observable<*>} - stream of downloaded file
+ * @param {Boolean} [cancelable] - allow to cancel downloading
+ * @returns {Observable<*>|[Observable<*>, Function]} - stream of downloaded file or tuple with stream anc
+ * cancel function
  */
-export function downloadFile$(inputFileLocation, options = {}) {
-  const {promise} = telegram.connection.download(inputFileLocation, options);
-  return fromPromise(promise);
+export function downloadFile$(inputFileLocation, options = {}, cancelable) {
+  const {promise, cancel} = telegram.connection.download(inputFileLocation, options);
+  const promise$ = fromPromise(promise);
+  return cancelable ? [promise$, cancel] : promise$;
 }
 
 export function createUrl(file) {

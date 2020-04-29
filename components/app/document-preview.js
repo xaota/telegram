@@ -68,6 +68,43 @@ function setDownloaded(node) {
   node.innerText = 'Downloaded';
 }
 
+function setCanceled(node) {
+  node.innerText = 'Canceled';
+}
+
+function showDownload(node) {
+  const downloadNode = $('.icon-download', node);
+  downloadNode.style.display = 'flex';
+
+  const cancelNode = $('.icon-cancel', node);
+  cancelNode.style.display = 'none';
+
+  const completedNode = $('.icon-completed', node);
+  completedNode.style.display = 'none';
+}
+
+function showCancel(node) {
+  const downloadNode = $('.icon-download', node);
+  downloadNode.style.display = 'none';
+
+  const cancelNode = $('.icon-cancel', node);
+  cancelNode.style.display = 'flex';
+
+  const completedNode = $('.icon-completed', node);
+  completedNode.style.display = 'none';
+}
+
+function showCompleted(node) {
+  const downloadNode = $('.icon-download', node);
+  downloadNode.style.display = 'none';
+
+  const cancelNode = $('.icon-cancel', node);
+  cancelNode.style.display = 'none';
+
+  const completedNode = $('.icon-completed', node);
+  completedNode.style.display = 'flex';
+}
+
 /**
  * @param {File} file
  */
@@ -114,7 +151,6 @@ const style = css`
   
   ui-icon {
     color: #fff;
-    cursor: pointer;
   }
   
   .info-place {
@@ -125,15 +161,62 @@ const style = css`
     width: calc(100% - 72px);
   }
   
+  .icon-download {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 0;
+    background-color: #4092E4;
+    cursor: pointer;
+  }
+  
+  .icon-cancel {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 0;
+    background-color: #4092E4;
+    cursor: pointer;
+  }
+  
+  .icon-cancel:hover {
+    background-color: #f6553b;
+  }
+  
+  .icon-completed {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 0;
+    background-color: #4092E4;
+  }
+  
   .name-place {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
   
-  .sub-info {
+  .sub-info-place {
     color: var(--grayTextColor);
     font-size: 14px;
+    display: flex;
+    flex-direction: row;
+  }
+  .size-info {
+    margin-right: 8px;
   }
 `;
 
@@ -146,11 +229,22 @@ export default class DocumentPreview extends  Component {
     <template>
       <style>${style}</style>
       <div class="icon-place">
-        <ui-icon id="download">download</ui-icon>
+        <div class="icon-download">
+            <ui-icon id="download">download</ui-icon>
+        </div>
+        <div class="icon-cancel">
+            <ui-icon id="cancel">close</ui-icon>
+        </div>
+        <div class="icon-completed">
+            <ui-icon id="cancel">check</ui-icon>
+        </div>
       </div>
       <div class="info-place">
         <div class="name-place">Some file name</div>
-        <div class="sub-info"></div>
+        <div class="sub-info-place">
+            <span class="size-info"></span>
+            <span class="sub-info"></span>
+        </div>
       </div>
     </template>
   `;
@@ -169,25 +263,51 @@ export default class DocumentPreview extends  Component {
     namePlaceNode.innerText = filename;
 
     const fileSize = getReadableFileSize(message);
+    const sizeInfoNode = $('.size-info', node);
+    sizeInfoNode.innerText = fileSize;
+
     const subInfoNode = $('.sub-info', node);
-    subInfoNode.innerText = fileSize;
 
-    const iconPlaceNode = $('.icon-place', node);
-    const iconPlaceClick$ = fromEvent(iconPlaceNode, 'click');
+    let cancelDownloading = R.identity;
 
-    const download$ =  iconPlaceClick$.pipe(
+    const iconPlaceNode = $('.icon-download', node);
+    const downloadClick$ = fromEvent(iconPlaceNode, 'click');
+
+    const download$ =  downloadClick$.pipe(
         mapTo(message),
         map(buildInputDocumentFileLocation),
         map(fileLocation => [
           fileLocation,
-          {progressCb: R.partial(trackProgress, [subInfoNode]), size: getFileSize(message)}
+          {progressCb: R.partial(trackProgress, [subInfoNode]), size: getFileSize(message)},
+          true
         ]),
-        switchMap(R.apply(downloadFile$)),
+        map(R.apply(downloadFile$)),
+        tap(([promise$, cancel]) => {
+          cancelDownloading = cancel;
+          showCancel(node);
+        }),
+        switchMap(R.nth(0)),
         tap(R.partial(saveDownloadedFile, [filename]))
       );
 
-    download$.subscribe(x => {
-      setDownloaded(subInfoNode);
+    download$.subscribe(
+      () => {
+        setDownloaded(subInfoNode);
+        showCompleted(node);
+      },
+      x => {
+        console.warn(x);
+        setCanceled(subInfoNode);
+        showDownload(node);
+      }
+    );
+
+    const cancelNode = $('.icon-cancel', node);
+    const cancel$ = fromEvent(cancelNode, 'click');
+    cancel$.subscribe(() => {
+      cancelDownloading();
+      setCanceled(subInfoNode);
+      showDownload(node);
     });
 
     return this;
