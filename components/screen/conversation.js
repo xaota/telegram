@@ -12,12 +12,15 @@ import {userIdToPeerId} from '../../state/users/utils.js';
 
 /* eslint-disable */
 import AppHeader   from '../app/header.js';
-import AppMessage  from '../app/message.js';
 import ScreenField from '../screen/field.js';
 import DialogHeader from '../app/dialog-header.js';
-import MessageText from '../messages/text.js';
 import PeerAvatar from '../ui/peer-avatar.js'
 /* eslint-enable */
+
+import AppMessage  from '../app/message.js';
+
+import MessageText from '../messages/text.js';
+import MessagePhoto from '../messages/photo.js';
 
 const {fromEvent} = rxjs;
 const {map, distinctUntilChanged, withLatestFrom} = rxjs.operators;
@@ -29,27 +32,27 @@ const style = css`
     display: flex;
     flex-direction: column;
   }
-  
+
   .header-area {
     display: flex;
     flex-direction: row;
     flex-grow: 0;
   }
-  
+
   .message-area {
     overflow-y: auto;
     height: 0px;
     justify-content: flex-end;
     flex-grow: 1;
   }
-  
+
   .message-area-inner {
     display: flex;
     flex-direction: column-reverse;
     min-height: 100%;
     justify-content: flex-end;
   }
-  
+
   .send-message-area {
     display: flex;
     flex-direction: column;
@@ -70,16 +73,17 @@ export default class ScreenConversation extends Component {
   static template = html`
       <template>
         <style>${style}</style>
-          <div class="header-area">
+          <div class="header-area"> <!-- зачем обертка? -->
             <app-header find more>
-                <dialog-header slot="data"></dialog-header>
+              <dialog-header slot="data"></dialog-header>
             </app-header>
           </div>
-        
+
 
         <div class="load-more-area">
-            <button class="load-more">load-more</button>
+          <button class="load-more">load-more</button>
         </div>
+
         <div class="message-area">
           <div class="message-area-inner">
           <app-message data-hash="1587063600000x1">
@@ -286,7 +290,7 @@ export default class ScreenConversation extends Component {
               <span slot="content">Не знаю почему</span>
             </message-text>
           </app-message>
-          
+
           </div>
         </div>
 
@@ -364,7 +368,30 @@ export default class ScreenConversation extends Component {
       }
 
       for (let j = 0; j < messageGroup.length; j++) {
-        const message = new MessageText();
+        // console.log(messageGroup[j]);
+        // debugger;
+
+        const message = messageGroup[j]?.media?.photo
+          ? new MessagePhoto(messageGroup[j].media.photo)
+          : new MessageText();
+
+          // media:
+          // webpage:
+          // @@constructor: "webPage"
+          // @@type: "WebPage"
+          // id: 5127856301970688130n
+          // url: "https://youtu.be/UEwCD8PjrZI"
+          // display_url: "youtube.com/watch?v=UEwCD8PjrZI"
+          // hash: 0
+          // type: "video"
+          // site_name: "YouTube"
+          // title: "Лох,Пидор"
+          // description: "опасный поцик"
+          // photo
+          // embed_url: "https://www.youtube.com/embed/UEwCD8PjrZI"
+          // embed_type: "iframe"
+          // embed_width: 480
+          // embed_height: 360
 
         if (authorizedUserMessage) {
           message.setAttribute('right', true);
@@ -376,6 +403,13 @@ export default class ScreenConversation extends Component {
         span.setAttribute('slot', 'content');
         span.innerText = R.propOr('', 'message', messageGroup[j]);
         message.appendChild(span);
+
+        message.timestamp = AppMessage.timestamp(messageGroup[j].date);
+
+        if (messageGroup[j]?.media?.webpage) {
+          message?.webpage(messageGroup[j].media.webpage);
+        }
+
         appMessage.appendChild(message);
       }
       messageAreaNode.appendChild(appMessage);

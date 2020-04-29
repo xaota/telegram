@@ -1,6 +1,6 @@
 import Component, {html, css} from "../../script/ui/Component.js";
 import $ from '../../script/ui/DOM.js';
-import {wrapAsObjWithKey} from '../../../script/helpers.js';
+import {wrapAsObjWithKey} from '../../script/helpers.js';
 
 const {fromEvent, combineLatest, from, animationFrameScheduler, bindCallback} = rxjs;
 const {map, switchMap, tap, subscribeOn, takeUntil, withLatestFrom, startWith} = rxjs.operators;

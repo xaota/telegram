@@ -1,8 +1,6 @@
 import Component, {html, css} from '../../script/ui/Component.js';
 import {cssVariable, updateChildrenText} from '../../script/ui/DOM.js';
 
-import MessagePhoto from './photo.js';
-
 const style = css`
   :host {
     display: block;
@@ -164,10 +162,10 @@ const properties = {
   // edited
 };
 
-/** {MessageText} @class
+/** {MessageSystem} @class
   * @description Отображение сообщения-текста
   */
-  export default class MessageText extends Component {
+  export default class MessageSystem extends Component {
     static template = html`
       <template>
         <style>${style}</style>
@@ -179,66 +177,21 @@ const properties = {
         </div>
       </template>`;
 
-  // /** Создание компонента {MessageText} @constructor
-  //   // * @param {string?} text содержимое элемента
-  //   */
-  //   constructor() { // text
-  //     super();
-  //     // if (text) this.innerText = text;
-  //   }
+  /** Создание компонента {MessageSystem} @constructor
+    * @param {string?} text содержимое элемента
+    */
+    constructor(text) {
+      super();
+      if (text) this.innerText = text;
+    }
 
   /** Создание элемента в DOM (DOM доступен) / mount @lifecycle
     * @param {ShadowRoot} node корневой узел элемента
-    * @return {Component} @this {MessageText} текущий компонент
+    * @return {Component} @this {MessageSystem} текущий компонент
     */
     mount(node) {
       return super.mount(node, attributes, properties);
     }
-
-  /** */
-    webpage(webPage) {
-      const web = document.createElement('div');
-      // web.setAttribute('class', 'web');
-      web.slot = 'web-page';
-      web.addEventListener('click', () => {
-        window.open(webPage.url,'_blank');
-      });
-
-      if (webPage.photo) {
-        const img = document.createElement('img');
-        MessagePhoto.src(webPage.photo).then(url => img.src = url);
-        web.append(img);
-      }
-
-      if (webPage.site_name) {
-        const name = document.createElement('span');
-        name.innerText = webPage.site_name;
-        name.setAttribute('class', 'name');
-        web.append(name);
-      }
-
-
-      if (webPage.title) {
-        const title = document.createElement('span');
-        title.innerText = webPage.title;
-        title.setAttribute('class', 'title');
-        web.append(title);
-      }
-
-      if (webPage.description) {
-        const descr = document.createElement('span');
-        descr.innerText = webPage.description;
-        descr.setAttribute('class', 'descr');
-        web.append(descr);
-      }
-
-      this.append(web);
-
-      // content.replace(
-      //     /((http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?)/g, // eslint-disable-line
-      //     '<a href="$1">$1</a>'
-      // );
-    }
   }
 
-Component.init(MessageText, 'message-text', {attributes, properties});
+Component.init(MessageSystem, 'message-system', {attributes, properties});

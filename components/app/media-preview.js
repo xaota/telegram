@@ -101,7 +101,7 @@ const style = css`
     flex: 1 0 calc(33% - 4px);
     cursor: pointer;
   }
-  
+
   .image {
     display: flex;
     width: 100%;
@@ -110,7 +110,7 @@ const style = css`
     background-position: center;
     background-color: grey;
   }
-  
+
   .image:after {
     content: '';
     display: block;
@@ -151,7 +151,7 @@ export default class MediaPreview extends Component {
           console.warn('location:', inputPhotoLocation);
           console.warn('error:', error);
         }
-);
+      );
 
     return this;
   }
