@@ -1,5 +1,5 @@
 import reducer from './reducer.js';
-import {SET_SIDE_BAR} from './constants.js';
+import {SET_SIDE_BAR, SET_MESSAGE_SPLASH_SCREEN} from './constants.js';
 
 describe('ui', () => {
   describe('SET_SIDE_BAR', () => {
@@ -21,6 +21,47 @@ describe('ui', () => {
       };
 
       expect(reducer(state, action)).toEqual({sidebar: false});
+    });
+  });
+
+  describe('SET_MESSAGE_SPLASH_SCREEN', () => {
+    it('set value', () => {
+      const state = {sidebar: true};
+      const action = {
+        type: SET_MESSAGE_SPLASH_SCREEN,
+        payload: {
+          messageId: 123123,
+          dialogId: 'peer_user_77700'
+        }
+      };
+
+      expect(reducer(state, action)).toEqual({
+        sidebar: true,
+        splashScreenMessage: {
+          messageId: 123123,
+          dialogId: 'peer_user_77700'
+        }
+      });
+    });
+
+    it('set null', () => {
+      const state = {
+        sidebar: true,
+        splashScreenMessage: {
+          messageId: 123123,
+          dialogId: 'peer_user_77700'
+        }
+      };
+
+      const action = {
+        type: SET_MESSAGE_SPLASH_SCREEN,
+        payload: null
+      };
+
+      expect(reducer(state, action)).toEqual({
+        sidebar: true,
+        splashScreenMessage: null
+      });
     });
   });
 });
