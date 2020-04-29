@@ -53,10 +53,11 @@ const fromPromise = rxjs.from;
 
 /**
  * @param {*} inputFileLocation - telegrams inputFileLocation object
+ * @param {Object} options - options that could be passed for downloading
  * @returns {Observable<*>} - stream of downloaded file
  */
-export function downloadFile$(inputFileLocation) {
-  const {promise} = telegram.connection.download(inputFileLocation);
+export function downloadFile$(inputFileLocation, options = {}) {
+  const {promise} = telegram.connection.download(inputFileLocation, options);
   return fromPromise(promise);
 }
 

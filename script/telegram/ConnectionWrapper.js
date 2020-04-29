@@ -87,7 +87,7 @@ export default class ConnectionWrapper extends EventTarget {
   }
 
   handleProgress({uid, args}) {
-    const progressCb = R.propOr(R.identity, this.progressCbMap, uid);
+    const progressCb = R.propOr(R.identity, uid, this.progressCbMap);
     progressCb(...args);
   }
 
