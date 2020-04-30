@@ -1,6 +1,12 @@
 import Component, {html, css} from "../../script/ui/Component.js";
 import $ from '../../script/ui/DOM.js';
 import {downloadFile$, createUrl} from '../../script/helpers.js';
+import {
+  buildInputDocumentFileLocation,
+  getFileSize,
+  getFilename,
+  getReadableFileSize
+} from '../../script/utils/message.js';
 
 /* eslint-disable */
 import UIIcon     from '../ui/icon.js';
@@ -9,55 +15,6 @@ import UIIcon     from '../ui/icon.js';
 const {fromEvent} = rxjs;
 const {mapTo, map, switchMap, tap} = rxjs.operators;
 const {isObjectOf, construct} = zagram;
-
-/* eslint-disable */
-function humanFileSize(bytes) {
-  const thresh = 1024;
-  if(Math.abs(bytes) < thresh) {
-    return bytes + ' B';
-  }
-  const units = ['kB','MB','GB','TB','PB','EB','ZB','YB']
-  let u = -1;
-  do {
-    bytes /= thresh;
-    ++u;
-  } while(Math.abs(bytes) >= thresh && u < units.length - 1);
-  return bytes.toFixed(1)+' '+units[u];
-}
-/* eslint-enable*/
-
-/**
- * Takes document object from message
- */
-const getDocument = R.path(['media', 'document']);
-
-const getFilename = R.pipe(
-  getDocument,
-  R.prop('attributes'),
-  R.filter(isObjectOf('documentAttributeFilename')),
-  R.pathOr('file', [0, 'file_name'])
-);
-
-
-const getFileSize = R.pipe(
-  getDocument,
-  R.prop('size')
-);
-
-const getReadableFileSize = R.pipe(
-  getFileSize,
-  humanFileSize
-);
-
-/**
- * Takes message and returns input document file location object
- */
-const buildInputDocumentFileLocation = R.pipe(
-  getDocument,
-  R.pick(['id', 'file_reference', 'access_hash']),
-  R.merge({'thumb_size': 0}),
-  R.partial(construct, ['inputDocumentFileLocation'])
-);
 
 function trackProgress(node, downloadedPartsCount, totalPartsCount) {
   const percent = (downloadedPartsCount/totalPartsCount) * 100;

@@ -1,8 +1,11 @@
 import Component, {html, css} from '../../script/ui/Component.js';
+import $ from '../../script/ui/DOM.js';
+import {getSplashScreenMessage$} from '../../state/ui/stream-builders.js';
 
 /* eslint-disable */
 import LayoutMain         from './main.js';
 import LayoutConversation from './conversation.js';
+import LayoutSplashscreen from './layout-splashscreen.js'
 /* eslint-enable */
 
 const {map} = rxjs.operators;
@@ -42,35 +45,50 @@ const properties = {};
 /** {LayoutMessenger} @class
   * @description Главный
   */
-  export default class LayoutMessenger extends Component {
-    static template = html`
+export default class LayoutMessenger extends Component {
+  static template = html`
       <template>
         <style>${style}</style>
         <layout-main></layout-main>
         <layout-conversation></layout-conversation>
+        <layout-splashscreen></layout-splashscreen>
       </template>`;
 
   /** Создание компонента {LayoutMessenger} @constructor
     * @param {object?} user данные пользователя
     */
-    constructor(user) {
-      super();
-      const state$ = getState$();
-      const user$ = state$
-        .pipe(map(R.path(['auth', 'user'])));
+  constructor(user) {
+    super();
 
-      user$.subscribe(user => {
-        this.store(user);
-      });
-    }
+    const state$ = getState$();
+    const user$ = state$
+      .pipe(map(R.path(['auth', 'user'])));
+
+    user$.subscribe(user => {
+      this.store(user);
+    });
+  }
 
   /** Создание элемента в DOM (DOM доступен) / mount @lifecycle
     * @param {ShadowRoot} node корневой узел элемента
     * @return {Component} @this {LayoutMessenger} текущий компонент
     */
     mount(node) {
-      return super.mount(node, attributes, properties);
-    }
+    super.mount(node, attributes, properties);
+    const splashScreenNode = $('layout-splashscreen', node);
+
+    const state$ = getState$();
+    const splashScreenMessage$ = getSplashScreenMessage$(state$);
+    splashScreenMessage$.subscribe(message => {
+      if (R.isNil(message)) {
+        splashScreenNode.style.display = 'none';
+      } else {
+        splashScreenNode.style.display = 'flex';
+      }
+    });
+
+    return this;
   }
+}
 
 Component.init(LayoutMessenger, 'layout-messenger', {attributes, properties});

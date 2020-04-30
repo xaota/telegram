@@ -27,6 +27,14 @@ export function dateDay(date = new Date()) {
     return new Date(date.getFullYear(), date.getMonth(), date.getDate());
 }
 
+/**
+ * @param {Number} timestamp - timestamp from telegram
+ * @return {Date}
+ */
+export function tgDate(timestamp) {
+    return dateDay(timestamp * 1000);
+}
+
 export function debounce(func, wait, immediate) {
     let timeout;
     return function(...args) {

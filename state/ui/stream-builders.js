@@ -7,3 +7,11 @@ const {map} = rxjs.operators;
 export function getSidebarStatus$(state$) {
   return state$.pipe(map(R.pathOr(false, ['ui', 'sidebar'])));
 }
+
+/**
+ * @param {Observable<*>} state$ - current state of application
+ * @return {Observable<*|null>} - stream with splash screen message or null
+ */
+export function getSplashScreenMessage$(state$) {
+  return state$.pipe(map(R.pathOr(null, ['ui', 'splashScreenMessage'])));
+}
