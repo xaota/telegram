@@ -16,6 +16,7 @@ import {
   applyMiddleware as chatsApplyMiddleware
 } from './chats/index.js';
 import {reducer as uiReducer} from './ui/index.js';
+import telegramUpdateMiddleware from './telegramUpdateMiddleware.js';
 
 const {buildStateStream, combineReducers, getActionStream} = store;
 const {BehaviorSubject} = rxjs;
@@ -44,7 +45,8 @@ export default function init(connection) {
       authApplyMiddleware,
       dialogsApplyMiddleware,
       chatsApplyMiddleware,
-      usersApplyMiddleware
+      usersApplyMiddleware,
+      telegramUpdateMiddleware
     ]
   );
 }

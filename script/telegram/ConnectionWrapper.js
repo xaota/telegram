@@ -58,6 +58,12 @@ export default class ConnectionWrapper extends EventTarget {
       event.detail = payload.detail;
       this.dispatchEvent(event);
     }
+
+    if (payload.type === 'telegramUpdate') {
+      const event = new Event('telegramUpdate');
+      event.detail = payload.detail;
+      this.dispatchEvent(event);
+    }
   }
 
   handleResponse({uid, response}) {

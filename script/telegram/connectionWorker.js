@@ -59,6 +59,18 @@ function creatNewConnection(e) {
       }
     });
   });
+
+  const update$ = fromEvent(connection, 'telegramUpdate');
+
+  update$.subscribe(e => {
+    postMessage({
+      type: 'event',
+      payload: {
+        type: 'telegramUpdate',
+        detail: e.detail
+      }
+    });
+  });
 }
 
 function initConnection() {
