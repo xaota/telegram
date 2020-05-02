@@ -4,7 +4,8 @@ import {
   DIALOGS_LOADED,
   SET_ACTIVE_DIALOG,
   SET_SEARCHED_DIALOG_MESSAGES,
-  CLEAR_SEARCHED_DIALOG_MESSAGES
+  CLEAR_SEARCHED_DIALOG_MESSAGES,
+  PREPEND_MESSAGE
 } from './constants.js';
 
 import reducer from './reducer.js';
@@ -567,6 +568,135 @@ describe('dialogs', () => {
       };
 
       expect(reducer(state, action)).toEqual(expectedState);
+    });
+  });
+
+  describe('PREPEND_MESSAGE', () => {
+    const state = {
+      dialogsOrder: [
+        'peer_user_77700'
+      ],
+      dialogs: {
+        'peer_user_77700': {
+          info: construct('dialog', {
+            pinned: false,
+            unread_mark: false,
+            peer: construct('peerUser', {'user_id': 77700}),
+            top_message: 313079,
+            read_inbox_max_id: 199,
+            read_outbox_max_id: 14,
+            unread_count: 9,
+            unread_mentions_count: 0,
+            notify_settings: construct('peerNotifySettings', {})
+          }),
+          messages_order: [
+            313079
+          ],
+          messages: {
+            313079: construct(
+              'message',
+              {
+                date: 1587231833,
+                edit_hide: false,
+                from_id: 2443566,
+                from_scheduled: false,
+                id: 313079,
+                legacy: false,
+                media_unread: false,
+                mentioned: false,
+                message: "И не поспоришь",
+                out: true,
+                post: false,
+                silent: false,
+                to_id: construct('peerUser', {'user_id': 77700})
+              }
+            )
+          }
+        }
+      }
+    };
+
+    const action = {
+      type: PREPEND_MESSAGE,
+      payload: construct(
+        'message',
+        {
+          date: 1587231833,
+          edit_hide: false,
+          from_id: 2443566,
+          from_scheduled: false,
+          id: 313080,
+          legacy: false,
+          media_unread: false,
+          mentioned: false,
+          message: "new message",
+          out: true,
+          post: false,
+          silent: false,
+          to_id: construct('peerUser', {'user_id': 77700})
+        }
+      )
+    };
+
+    expect(reducer(state, action)).toEqual({
+      dialogsOrder: [
+        'peer_user_77700'
+      ],
+      dialogs: {
+        'peer_user_77700': {
+          info: construct('dialog', {
+            pinned: false,
+            unread_mark: false,
+            peer: construct('peerUser', {'user_id': 77700}),
+            top_message: 313080,
+            read_inbox_max_id: 199,
+            read_outbox_max_id: 14,
+            unread_count: 9,
+            unread_mentions_count: 0,
+            notify_settings: construct('peerNotifySettings', {})
+          }),
+          messages_order: [313080, 313079],
+          messages: {
+            313079: construct(
+              'message',
+              {
+                date: 1587231833,
+                edit_hide: false,
+                from_id: 2443566,
+                from_scheduled: false,
+                id: 313079,
+                legacy: false,
+                media_unread: false,
+                mentioned: false,
+                message: "И не поспоришь",
+                out: true,
+                post: false,
+                silent: false,
+                to_id: construct('peerUser', {'user_id': 77700})
+              }
+            ),
+            313080: construct(
+              'message',
+              {
+                date: 1587231833,
+                edit_hide: false,
+                from_id: 2443566,
+                from_scheduled: false,
+                id: 313080,
+                legacy: false,
+                media_unread: false,
+                mentioned: false,
+                message: "new message",
+                out: true,
+                post: false,
+                silent: false,
+                to_id: construct('peerUser', {'user_id': 77700})
+              }
+            )
+          }
+        }
+      }
+
     });
   });
 

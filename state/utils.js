@@ -62,5 +62,12 @@ export function requestToTelegram$(connection, methodObject) {
 }
 
 export const getState = R.nth(0);
+
 export const getAction = R.nth(1);
+
 export const getActionPayload = R.pipe(getAction, R.prop('payload'));
+
+export const applyAll = R.pipe(
+  R.ap,
+  R.curry(R.binary(R.pipe))(R.of)
+);

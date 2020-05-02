@@ -1,24 +1,23 @@
 import {
   ADD_MESSAGE,
   ADD_MESSAGES_BATCH,
+  CLEAR_SEARCHED_DIALOG_MESSAGES,
   DIALOGS_LOAD_FAILED,
   DIALOGS_LOADED,
   LOAD_DIALOGS,
+  PREPEND_MESSAGE,
   SET_ACTIVE_DIALOG,
-  SET_SEARCHED_DIALOG_MESSAGES,
-  CLEAR_SEARCHED_DIALOG_MESSAGES
+  SET_SEARCHED_DIALOG_MESSAGES
 } from './constants.js';
 import {wrapAsObjWithKey} from '../../script/helpers.js';
-import {peerToPeerId, getAction, getState, getActionPayload} from '../utils.js';
+import {getAction, getActionPayload, getState, peerToPeerId, applyAll} from '../utils.js';
 
 const {construct, isObjectOf} = zagram;
 const {isActionOf, buildReducer} = store;
 
-
 const handleLoadingTrue = R.pipe(
-  R.nth(0),
-  R.of,
-  R.ap([
+  getState,
+  applyAll([
     R.identity,
     R.always({dialogsLoading: true})
   ]),
@@ -45,8 +44,7 @@ const buildNewDialogsOrder = R.pipe(
 );
 
 const buildDialogsOrder = R.pipe(
-  R.of,
-  R.ap([
+  applyAll([
     R.pipe(getState, R.propOr([], 'dialogsOrder')),
     buildNewDialogsOrder
   ]),
@@ -55,10 +53,10 @@ const buildDialogsOrder = R.pipe(
   wrapAsObjWithKey('dialogsOrder')
 );
 
-const buildDialogsPair = R.pipe(
-  R.of,
-  R.ap([getPeerIdFromDialog, R.set(R.lensProp('info'), R.__, {messages: {}, messages_order: []})])
-);
+const buildDialogsPair = R.pipe(applyAll([
+    getPeerIdFromDialog,
+    R.set(R.lensProp('info'), R.__, {messages: {}, messages_order: []})
+  ]));
 
 const buildNewDialogsMap = R.pipe(
   getAction,
@@ -68,8 +66,7 @@ const buildNewDialogsMap = R.pipe(
 );
 
 const buildDialogsMap = R.pipe(
-  R.of,
-  R.ap([
+  applyAll([
     buildNewDialogsMap,
     R.pipe(getState, R.prop('dialogs'))
   ]),
@@ -81,8 +78,7 @@ const handleDialogsLoadFailed = removeLoadingFromState;
 
 
 const handleDialogsLoaded = R.pipe(
-  R.of,
-  R.ap([
+  applyAll([
     removeLoadingFromState,
     buildDialogsOrder,
     buildDialogsMap
@@ -115,6 +111,17 @@ const buildMessageOrderLens = R.pipe(
 
 
 /**
+ * Takes message and returns lens for top_message of dialog
+ */
+const buildTopMessageLens = R.pipe(
+  getPeerIdFromMessage,
+  R.partialRight(R.append, [['dialogs']]),
+  R.partialRight(R.concat, [['info', 'top_message']]),
+  R.lensPath
+);
+
+
+/**
  * Takes peerId returns lens for dialog search order
  */
 const buildSearchOrderLens = R.pipe(
@@ -132,8 +139,7 @@ const buildSearchMessageOrderLens = R.pipe(
 );
 
 const buildMessageLens = R.pipe(
-  R.of,
-  R.ap([
+  applyAll([
     R.pipe(
       getPeerIdFromMessage,
       R.partialRight(R.append, [['dialogs']]),
@@ -151,9 +157,8 @@ const buildMessageLens = R.pipe(
  * @param {[*, *]} tuple - action
  * @return {*}
  */
-const setNewMessageOrder = R.pipe(
-  R.of,
-  R.ap([
+const appendNewMessageOrder = R.pipe(
+  applyAll([
     R.pipe(R.nth(1), buildMessageOrderLens),
     R.pipe(R.path([1, 'id']), R.append, R.curry(R.binary(R.compose))(R.uniq)),
     R.nth(0)
@@ -161,14 +166,36 @@ const setNewMessageOrder = R.pipe(
   R.apply(R.over)
 );
 
-const setSearchMessageOrder = R.pipe(
-  R.of,
-  R.ap([
+const prependNewMessageOrder = R.pipe(
+  applyAll([
+    R.pipe(R.nth(1), buildMessageOrderLens),
+    R.pipe(
+      R.path([1, 'id']),
+      R.of,
+      R.concat,
+      R.curry(R.binary(R.compose))(R.uniq)
+    ),
+    R.nth(0)
+  ]),
+  R.apply(R.over)
+);
+
+const appendSearchMessageOrder = R.pipe(
+  applyAll([
     R.pipe(R.nth(1), buildSearchMessageOrderLens),
     R.pipe(R.path([1, 'id']), R.append, R.curry(R.binary(R.compose))(R.uniq)),
     R.nth(0)
   ]),
   R.apply(R.over)
+);
+
+const setTopMessage = R.pipe(
+  applyAll([
+    R.pipe(R.nth(1), buildTopMessageLens),
+    R.pipe(R.path([1, 'id'])),
+    R.nth(0)
+  ]),
+  R.apply(R.set)
 );
 
 /**
@@ -189,8 +216,7 @@ const isNotPeerUserMessage = R.pipe(
  * Takes message and build peerUser with id from `from_id`
  */
 const changeMessageToId = R.pipe(
-  R.of,
-  R.ap([
+  applyAll([
     R.identity,
     R.pipe(
       R.prop('from_id'),
@@ -212,13 +238,10 @@ const setToPeerForMessage = R.cond([
   ],
   [
     R.T,
-    R.pipe(
-      R.of,
-      R.ap([
-        R.nth(0),
-        R.pipe(R.nth(1), changeMessageToId)
-      ])
-    )
+    applyAll([
+      R.nth(0),
+      R.pipe(R.nth(1), changeMessageToId)
+    ])
   ]
 ]);
 
@@ -226,8 +249,7 @@ const setToPeerForMessage = R.cond([
  * Takes tuple with state and action data. Returns state with dialog
  */
 const setNewMessage = R.pipe(
-  R.of,
-  R.ap([
+  applyAll([
     R.pipe(R.nth(1), buildMessageLens),
     R.nth(1),
     R.nth(0)
@@ -240,14 +262,29 @@ const setNewMessage = R.pipe(
  */
 const addMessage = R.pipe(
   setToPeerForMessage,
-  R.of,
-  R.ap([
+  applyAll([
     setNewMessage,
     R.nth(1)
   ]),
-  R.of,
-  R.ap([
-    setNewMessageOrder,
+  applyAll([
+    appendNewMessageOrder,
+    R.nth(1)
+  ]),
+  R.nth(0)
+);
+
+const prependMessage = R.pipe(
+  setToPeerForMessage,
+  applyAll([
+    setNewMessage,
+    R.nth(1)
+  ]),
+  applyAll([
+    prependNewMessageOrder,
+    R.nth(1)
+  ]),
+  applyAll([
+    setTopMessage,
     R.nth(1)
   ]),
   R.nth(0)
@@ -255,41 +292,44 @@ const addMessage = R.pipe(
 
 const addSearchMessage = R.pipe(
   setToPeerForMessage,
-  R.of,
-  R.ap([
+  applyAll([
     setNewMessage,
     R.nth(1)
   ]),
-  R.of,
-  R.ap([
-    setSearchMessageOrder,
+  applyAll([
+    appendSearchMessageOrder,
     R.nth(1)
   ]),
   R.nth(0)
 );
 
 const handleAddMessage = R.pipe(
-  R.of,
-  R.ap([
+  applyAll([
     getState,
-    R.path([1, 'payload'])
+    getActionPayload
   ]),
   addMessage
 );
 
+const handlePrependMessage = R.pipe(
+  applyAll([
+    getState,
+    getActionPayload
+  ]),
+  prependMessage
+);
+
 const handleAddMessagesBatch = R.pipe(
-  R.of,
-  R.ap([
+  applyAll([
     R.always(R.unapply(addMessage)),
     getState,
-    R.path([1, 'payload'])
+    getActionPayload
   ]),
   R.apply(R.reduce)
 );
 
 const handleSetActiveDialog = R.pipe(
-  R.of,
-  R.ap([
+  applyAll([
     getState,
     R.pipe(getAction, R.prop('payload'), wrapAsObjWithKey('activeDialog'))
   ]),
@@ -297,8 +337,7 @@ const handleSetActiveDialog = R.pipe(
 );
 
 const handleSetSearchedDialogMessages = R.pipe(
-  R.of,
-  R.ap([
+  applyAll([
     R.always(R.unapply(addSearchMessage)),
     getState,
     R.path([1, 'payload'])
@@ -307,8 +346,7 @@ const handleSetSearchedDialogMessages = R.pipe(
 );
 
 const handleClearSearchedDialogMessages = R.pipe(
-  R.of,
-  R.ap([
+  applyAll([
     R.pipe(getActionPayload, peerToPeerId, buildSearchOrderLens),
     R.always([]),
     getState
@@ -324,5 +362,6 @@ export default buildReducer({}, [
   [isActionOf(ADD_MESSAGES_BATCH), handleAddMessagesBatch],
   [isActionOf(SET_ACTIVE_DIALOG), handleSetActiveDialog],
   [isActionOf(SET_SEARCHED_DIALOG_MESSAGES), handleSetSearchedDialogMessages],
-  [isActionOf(CLEAR_SEARCHED_DIALOG_MESSAGES), handleClearSearchedDialogMessages]
+  [isActionOf(CLEAR_SEARCHED_DIALOG_MESSAGES), handleClearSearchedDialogMessages],
+  [isActionOf(PREPEND_MESSAGE), handlePrependMessage]
 ]);
