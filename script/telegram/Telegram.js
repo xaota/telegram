@@ -62,7 +62,50 @@ export default class Telegram extends EventTarget {
   }
 
   request(query) {
-    return this.connection.request(query);
+    return this.connection.request(query).catch(e => {
+      console.log('Caught error', e);
+      if (
+        R.propEq('errorMessage', 'PHONE_MIGRATE_1', e) ||
+        R.propEq('errorMessage', 'NETWORK_MIGRATE_1', e) ||
+        R.propEq('errorMessage', 'USER_MIGRATE_1', e)
+      ) {
+        this.setMainDc(1);
+        return this.connections[1].request(query);
+      }
+      if (
+        R.propEq('errorMessage', 'PHONE_MIGRATE_2', e) ||
+        R.propEq('errorMessage', 'NETWORK_MIGRATE_2', e) ||
+        R.propEq('errorMessage', 'USER_MIGRATE_2', e)
+      ) {
+        this.setMainDc(2);
+        return this.connections[2].request(query);
+      }
+      if (
+        R.propEq('errorMessage', 'PHONE_MIGRATE_3', e) ||
+        R.propEq('errorMessage', 'NETWORK_MIGRATE_3', e) ||
+        R.propEq('errorMessage', 'USER_MIGRATE_3', e)
+      ) {
+        this.setMainDc(3);
+        return this.connections[3].request(query);
+      }
+      if (
+        R.propEq('errorMessage', 'PHONE_MIGRATE_4', e) ||
+        R.propEq('errorMessage', 'NETWORK_MIGRATE_4', e) ||
+        R.propEq('errorMessage', 'USER_MIGRATE_4', e)
+      ) {
+        this.setMainDc(4);
+        return this.connections[4].request(query);
+      }
+      if (
+        R.propEq('errorMessage', 'PHONE_MIGRATE_5', e) ||
+        R.propEq('errorMessage', 'NETWORK_MIGRATE_5', e) ||
+        R.propEq('errorMessage', 'USER_MIGRATE_5', e)
+      ) {
+        this.setMainDc(5);
+        return this.connections[5].request(query);
+      }
+      return Promise.reject(e);
+    });
   }
 
   download(inputFileLocation, options = {}) {
@@ -104,14 +147,7 @@ export default class Telegram extends EventTarget {
       .then(mainDcs => {
         const mainDc = R.nth(0, mainDcs);
         console.log('Main dc:', mainDc);
-        this.mainDc = mainDc;
-
-        this.connection.addEventListener('telegramUpdate', e => {
-          const event = new Event('telegramUpdate');
-          event.detail = e.detail;
-          this.dispatchEvent(event);
-        });
-
+        this.setMainDc(mainDc);
         const event = new Event('statusChanged');
         event.status = 'AUTH_KEY_CREATED';
 
@@ -121,6 +157,18 @@ export default class Telegram extends EventTarget {
 
   initConnectionDc(dcId) {
     return connect(this, dcId).then(R.always(dcId));
+  }
+
+  setMainDc(dcId) {
+    this.connection.removeEventListener('telegramUpdate', this.handleTelegramUpdate.bind(this));
+    this.mainDc = dcId;
+    this.connection.addEventListener('telegramUpdate', this.handleTelegramUpdate.bind(this));
+  }
+
+  handleTelegramUpdate(e) {
+    const event = new Event('telegramUpdate');
+    event.detail = e.detail;
+    this.dispatchEvent(event);
   }
 
 
