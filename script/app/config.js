@@ -9,7 +9,36 @@ export default {
     }
   },
 
-  test: false,
+  // http://(name)(-1).web.telegram.org:80/api(w)(s)(_test)
+  dcs: {
+    1: {
+      test: 'ws://pluto.web.telegram.org/apiws_test',
+      prod: 'ws://pluto.web.telegram.org/apiws',
+      authKeyStore: 'authKeyStore1'
+    },
+    2: {
+      test: 'ws://venus.web.telegram.org/apiws_test',
+      prod: 'ws://venus.web.telegram.org/apiws',
+      authKeyStore: 'authKeyStore2'
+    },
+    3: {
+      test: 'ws://aurora.web.telegram.org/apiws_test',
+      prod: 'ws://aurora.web.telegram.org/apiws',
+      authKeyStore: 'authKeyStore3'
+    },
+    4: {
+      test: 'ws://vesta.web.telegram.org/apiws_test',
+      prod: 'ws://vesta.web.telegram.org/apiws',
+      authKeyStore: 'authKeyStore4'
+    },
+    5: {
+      test: 'ws://flora.web.telegram.org/apiws_test',
+      prod: 'ws://flora.web.telegram.org/apiws',
+      authKeyStore: 'authKeyStore5'
+    }
+  },
+
+  test: true,
   layer: 108,
   socket: true,
   authKeyStore: 'authKeyStore',

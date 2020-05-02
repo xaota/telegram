@@ -23,7 +23,18 @@ export default class Telegram extends EventTarget {
   constructor(config) {
     super();
     this.config = config;
-    this.connect();
+    this.connections = {};
+    R.pipe(
+      R.prop('dcs'),
+      R.keys,
+      R.map(dcId => this.connect(dcId))
+    )(this.config);
+    this.authKeyStores = {};
+    this.mainDc = 1;
+  }
+
+  get connection() {
+    return this.connections[this.mainDc];
   }
 
   /** */
@@ -74,22 +85,44 @@ export default class Telegram extends EventTarget {
   }
 
   /** */
-  async init() {
-    try {
-      await connect(this);
+  init() {
+    const initConnectionData = {
+      ...this.config.app,
+      api_id: this.config.api.id,
+      query: method('help.getConfig')
+    };
+    const promises = R.pipe(
+      R.keys,
+      R.map(dcId => this
+          .initConnectionDc(dcId)
+          .then(x => invoke(this, x, 'initConnection', initConnectionData))
+          .then(() => this.connections[dcId].request(method('help.getNearestDc')))
+          .then(R.prop('nearest_dc')))
+    )(this.connections);
 
-      const initConnectionData = {
-        ...this.config.app,
-        api_id: this.config.api.id,
-        query: method('help.getConfig')
-      };
+    return Promise.all(promises)
+      .then(mainDcs => {
+        const mainDc = R.nth(0, mainDcs);
+        console.log('Main dc:', mainDc);
+        this.mainDc = mainDc;
 
-      return invoke(this, 'initConnection', initConnectionData);
-    } catch (error) {
-      const status = error.message;
-      console.error(status);
-    }
+        this.connection.addEventListener('telegramUpdate', e => {
+          const event = new Event('telegramUpdate');
+          event.detail = e.detail;
+          this.dispatchEvent(event);
+        });
+
+        const event = new Event('statusChanged');
+        event.status = 'AUTH_KEY_CREATED';
+
+        this.dispatchEvent(event);
+      });
   }
+
+  initConnectionDc(dcId) {
+    return connect(this, dcId).then(R.always(dcId));
+  }
+
 
   /** */
   save() {
@@ -101,30 +134,14 @@ export default class Telegram extends EventTarget {
     }
 
   /** @private */
-  connect() {
+  connect(dcId) {
     const config = this.config;
-    const authKeyStore = config.authKeyStore;
-    const authKeyData = authKeyStore
-      ? new Storage(authKeyStore).load()
-      : undefined;
+    const dcConfig = this.config.dcs[dcId];
+    const authKeyStore = dcConfig.authKeyStore;
+    const authKeyData = authKeyStore ? new Storage(authKeyStore).load() : undefined;
+    const url = config.test ? dcConfig.test : dcConfig.prod;
 
-    const url = config.api.url[config.test ? 'test' : 'prod'];
-    const addr = config.socket
-      ? 'ws://' + url + 's'
-      : 'http://' + url;
-
-    this.connection = new ConnectionWrapper(addr, schema, authKeyData);
-    this.connection.addEventListener('statusChanged', e => {
-      const event = new Event('statusChanged');
-      event.status = R.clone(e.status);
-      event.detail = R.clone(e.detail);
-      this.dispatchEvent(event);
-    });
-    this.connection.addEventListener('telegramUpdate', e => {
-      const event = new Event('telegramUpdate');
-      event.detail = R.clone(e.detail);
-      this.dispatchEvent(event);
-    });
+    this.connections[dcId] = new ConnectionWrapper(url, schema, authKeyData);
   }
  }
 
@@ -146,28 +163,28 @@ function constructing(data, type) {
 }
 
 /** / connect @async */
-function connect(telegram) {
+function connect(telegram, dcId) {
   return new Promise((resolve, reject) => {
-    telegram.connection.init(); // @event statusChanged
+    telegram.connections[dcId].init(); // @event statusChanged
 
-    telegram.once('statusChanged', ({status, detail}) => {
+    telegram.connections[dcId].addEventListener('statusChanged', ({status, detail}) => {
       if (status !== 'AUTH_KEY_CREATED') {
         return reject(status); // AUTH_KEY_CREATE_FAILED, AUTH_KEY_ERROR
       }
-      telegram.keys = detail;
+      telegram.authKeyStores[dcId] = detail;
       resolve(status); // AUTH_KEY_CREATED
     });
   });
 }
 
 /** / invoke @async */
-function invoke(telegram, call, data = {}) {
+function invoke(telegram, dcId, call, data = {}) {
   const invokeWithLayerData = {
     layer: telegram.config.layer,
     query: method(call, data)
   };
   const request = method('invokeWithLayer', invokeWithLayerData);
-  return telegram.connection.request(request);
+  return telegram.connections[dcId].request(request);
 }
 
 // #endregion
