@@ -24,7 +24,7 @@ async function main() {
   const channel  = new Channel();
   const storage  = new Storage();
   locator.set({config, telegram, channel, storage});
-  initState(telegram.connection);
+  initState(telegram);
   const router = routing();
 
   const page$ = getState$().pipe(

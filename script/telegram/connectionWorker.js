@@ -49,7 +49,6 @@ function creatNewConnection(e) {
     .pipe(filter(isAuthKeyCreated));
 
   connection$.subscribe(e => {
-    console.log(e);
     postMessage({
       type: 'event',
       payload: {
