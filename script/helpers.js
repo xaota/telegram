@@ -67,7 +67,7 @@ const fromPromise = rxjs.from;
  * cancel function
  */
 export function downloadFile$(inputFileLocation, options = {}, cancelable) {
-  const {promise, cancel} = telegram.connection.download(inputFileLocation, options);
+  const {promise, cancel} = telegram.download(inputFileLocation, options);
   const promise$ = fromPromise(promise);
   return cancelable ? [promise$, cancel] : promise$;
 }

@@ -137,7 +137,55 @@ export default class Telegram extends EventTarget {
   }
 
   download(inputFileLocation, options = {}) {
-    return this.connection.download(inputFileLocation, options);
+    let cancelFunc = R.identity;
+    const {promise, cancel} =  this.connection.download(inputFileLocation, options);
+    cancelFunc = cancel;
+
+    const switchAblePromise = promise.catch(e => {
+      if (R.propEq('errorMessage', 'FILE_MIGRATE_1', e)) {
+        const {
+          promise: switchedPromise,
+          cancel: newCancel
+        } = this.connections[1].download(inputFileLocation, options);
+        cancelFunc = newCancel;
+        return switchedPromise;
+      }
+      if (R.propEq('errorMessage', 'FILE_MIGRATE_2', e)) {
+        const {
+          promise: switchedPromise,
+          cancel: newCancel
+        } = this.connections[2].download(inputFileLocation, options);
+        cancelFunc = newCancel;
+        return switchedPromise;
+      }
+      if (R.propEq('errorMessage', 'FILE_MIGRATE_3', e)) {
+        const {
+          promise: switchedPromise,
+          cancel: newCancel
+        } = this.connections[3].download(inputFileLocation, options);
+        cancelFunc = newCancel;
+        return switchedPromise;
+      }
+      if (R.propEq('errorMessage', 'FILE_MIGRATE_4', e)) {
+        const {
+          promise: switchedPromise,
+          cancel: newCancel
+        } = this.connections[4].download(inputFileLocation, options);
+        cancelFunc = newCancel;
+        return switchedPromise;
+      }
+      if (R.propEq('errorMessage', 'FILE_MIGRATE_5', e)) {
+        const {
+          promise: switchedPromise,
+          cancel: newCancel
+        } = this.connections[5].download(inputFileLocation, options);
+        cancelFunc = newCancel;
+        return switchedPromise;
+      }
+      return Promise.reject(e);
+    });
+
+    return {promise: switchAblePromise, cancel: () => cancelFunc()};
   }
 
   upload(file, progressCb) {
