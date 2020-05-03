@@ -108,6 +108,34 @@ export default class Telegram extends EventTarget {
     });
   }
 
+  exportAuth() {
+    const isNotMainDc = R.pipe(
+      R.equals(R.toString(this.mainDc)),
+      R.not
+    );
+
+    const promises = R.pipe(
+      R.keys,
+      R.filter(isNotMainDc),
+      R.map(x => parseInt(x, 10)),
+      R.map(x => Number(x)),
+      R.map(dcId => this.exportAuthToDc(dcId).catch(() => { console.log(`Can't export to dc ${dcId}`); }))
+    )(this.connections);
+
+    return Promise.all(promises);
+  }
+
+  exportAuthToDc(dcId) {
+    console.log(`Export from ${this.mainDc} to ${dcId}`);
+
+    if (this.mainDc === dcId) {
+      Promise.reject(new Error('Can`t export authorization to same dc'));
+    }
+    return this.connections[this.mainDc].request(method('auth.exportAuthorization', {dc_id: dcId}))
+      .then(exportValue => method('auth.importAuthorization', exportValue))
+      .then(importRequest => this.connections[dcId].request(importRequest));
+  }
+
   download(inputFileLocation, options = {}) {
     return this.connection.download(inputFileLocation, options);
   }
@@ -174,12 +202,13 @@ export default class Telegram extends EventTarget {
 
   /** */
   save() {
-    const authKeyStore = this.config.authKeyStore;
-    const keys = this.keys;
-    if (!keys) return;
-    keys.serverSalt = Array.from(keys.serverSalt);
-      new Storage(authKeyStore).save(keys);
-    }
+    console.log(this.authKeyStores);
+    // const authKeyStore = this.config.authKeyStore;
+    // const keys = this.keys;
+    // if (!keys) return;
+    // keys.serverSalt = Array.from(keys.serverSalt);
+    //   new Storage(authKeyStore).save(keys);
+  }
 
   /** @private */
   connect(dcId) {

@@ -37,6 +37,9 @@ const properties = {};
     */
     mount(node) {
       super.mount(node, attributes, properties);
+      telegram.exportAuth().then(x => {
+        console.log('EXPORT AUTH:', x);
+      });
       telegram.save(); // saving auth key will be moved to middleware
 
       locator.channel.send('header.main', {options: { // переключаем шапку
