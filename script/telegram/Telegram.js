@@ -202,12 +202,18 @@ export default class Telegram extends EventTarget {
 
   /** */
   save() {
-    console.log(this.authKeyStores);
-    // const authKeyStore = this.config.authKeyStore;
-    // const keys = this.keys;
-    // if (!keys) return;
-    // keys.serverSalt = Array.from(keys.serverSalt);
-    //   new Storage(authKeyStore).save(keys);
+    R.pipe(
+      R.keys,
+      R.map(this.saveDcAuth.bind(this))
+    )(this.connections);
+  }
+
+  saveDcAuth(dcId) {
+    const authKeyStore = this.config.dcs[dcId].authKeyStore;
+    const keys = this.authKeyStores[dcId];
+    if (!keys) return;
+    keys.serverSalt = Array.from(keys.serverSalt);
+      new Storage(authKeyStore).save(keys);
   }
 
   /** @private */
