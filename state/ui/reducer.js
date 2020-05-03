@@ -1,20 +1,21 @@
-import {SET_SIDE_BAR, SET_MESSAGE_SPLASH_SCREEN} from './constants.js';
-import {getState, getActionPayload} from '../utils.js';
+import {SET_SIDE_BAR, SET_SEARCH_BAR, SET_MESSAGE_SPLASH_SCREEN} from './constants.js';
+import {getState, getActionPayload, applyAll} from '../utils.js';
 const {buildReducer, isActionOf} = store;
 
 const sidebarLens = R.lensProp('sidebar');
 
+const splashScreenMessageLens = R.lensProp('splashScreenMessage');
+
+const searchbarLens = R.lensProp('searchbar');
+
 const handleSetSidebar = R.pipe(
-  R.of,
-  R.ap([
+  applyAll([
     R.always(sidebarLens),
     getActionPayload,
     getState
   ]),
-  R.apply(R.set)
+  R.apply(R.set),
 );
-
-const splashScreenMessageLens = R.lensProp('splashScreenMessage');
 
 const handleSetSplashScreenMessage = R.pipe(
   R.of,
@@ -26,7 +27,17 @@ const handleSetSplashScreenMessage = R.pipe(
   R.apply(R.set)
 );
 
+const handleSetSearchbar = R.pipe(
+  applyAll([
+    R.always(searchbarLens),
+    getActionPayload,
+    getState
+  ]),
+  R.apply(R.set),
+);
+
 export default buildReducer({}, [
   [isActionOf(SET_SIDE_BAR), handleSetSidebar],
-  [isActionOf(SET_MESSAGE_SPLASH_SCREEN), handleSetSplashScreenMessage]
+  [isActionOf(SET_MESSAGE_SPLASH_SCREEN), handleSetSplashScreenMessage],
+  [isActionOf(SET_SEARCH_BAR), handleSetSearchbar]
 ]);

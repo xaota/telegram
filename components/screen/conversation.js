@@ -337,6 +337,13 @@ export default class ScreenConversation extends Component {
     );
 
     loadMore$.subscribe(loadDialogHistory);
+
+    const appHeaderNode = $('app-header', node);
+    const searchClick$ = fromEvent(appHeaderNode, 'find');
+
+    searchClick$.subscribe(() => {
+      console.log('OPEN SEARCH SCREEN');
+    });
     return super.mount(node, attributes, properties);
   }
 
