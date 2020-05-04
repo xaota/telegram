@@ -1,4 +1,5 @@
-import {wrapAsObjWithKey} from '../helpers.js';
+import {wrapAsObjWithKey, formatDate, tgDate} from '../helpers.js';
+import {userIdToPeerId} from '../../state/users/utils.js';
 
 const {isObjectOf, construct} = zagram;
 
@@ -142,4 +143,21 @@ export const buildInputDocumentFileLocation = R.pipe(
   R.pick(['id', 'file_reference', 'access_hash']),
   R.merge({'thumb_size': 0}),
   R.partial(construct, ['inputDocumentFileLocation'])
+);
+
+export const getUserIdFromMessage = R.prop('from_id');
+
+export const getPeerIdFromMessage = R.pipe(
+  getUserIdFromMessage,
+  userIdToPeerId
+);
+
+const getMessageDate = R.pipe(
+  R.prop('date'),
+  tgDate
+);
+
+export const getMessageDateStr = R.pipe(
+  getMessageDate,
+  formatDate
 );

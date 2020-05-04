@@ -30,12 +30,12 @@ export default {
       test: 'ws://vesta.web.telegram.org/apiws_test',
       prod: 'ws://vesta.web.telegram.org/apiws',
       authKeyStore: 'authKeyStore4'
-    },
-    5: {
-      test: 'ws://flora.web.telegram.org/apiws_test',
-      prod: 'ws://flora.web.telegram.org/apiws',
-      authKeyStore: 'authKeyStore5'
     }
+    // 5: {
+    //   test: 'ws://flora.web.telegram.org/apiws_test',
+    //   prod: 'ws://flora.web.telegram.org/apiws',
+    //   authKeyStore: 'authKeyStore5'
+    // }
   },
 
   test: false,

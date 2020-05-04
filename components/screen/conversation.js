@@ -9,6 +9,7 @@ import {
 import {loadDialogHistory} from '../../state/dialogs/actions.js';
 import {authorizedUser$} from '../../state/auth/stream-builders.js';
 import {userIdToPeerId} from '../../state/users/utils.js';
+import {closeSideBar, openSearchBar, closeSearchBar} from '../../state/ui/index.js';
 
 /* eslint-disable */
 import AppHeader   from '../app/header.js';
@@ -312,6 +313,8 @@ export default class ScreenConversation extends Component {
     const loadMoreNode = $('.load-more', node);
 
     activeDialogId$.pipe(distinctUntilChanged()).subscribe(() => {
+      closeSearchBar();
+      closeSideBar();
       msgAreaInnerNode.scrollTop = msgAreaInnerNode.scrollHeight - msgAreaInnerNode.clientHeight;
     });
 
@@ -342,7 +345,8 @@ export default class ScreenConversation extends Component {
     const searchClick$ = fromEvent(appHeaderNode, 'find');
 
     searchClick$.subscribe(() => {
-      console.log('OPEN SEARCH SCREEN');
+      closeSideBar();
+      openSearchBar();
     });
     return super.mount(node, attributes, properties);
   }

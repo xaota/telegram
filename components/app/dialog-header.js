@@ -6,7 +6,7 @@ import {
 } from '../../state/dialogs/stream-builders.js';
 import PeerAvatar from '../ui/peer-avatar.js';
 import {getTitleFromPeerInfo, getMembersCountFromPeerInfo} from '../../state/dialogs/helpers.js';
-import {openSideBar} from '../../state/ui/index.js';
+import {openSideBar, closeSearchBar} from '../../state/ui/index.js';
 
 const {fromEvent} = rxjs;
 const {tap, distinctUntilChanged} = rxjs.operators;
@@ -89,7 +89,10 @@ export default class DialogHeader extends Component {
     const titleClick$ = fromEvent(titleNode, 'click')
       .pipe(tap(e => e.preventDefault()));
 
-    titleClick$.subscribe(openSideBar);
+    titleClick$.subscribe(() => {
+      closeSearchBar();
+      openSideBar();
+    });
     return this;
   }
 

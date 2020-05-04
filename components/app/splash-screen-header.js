@@ -1,28 +1,15 @@
-import Component, {html, css} from '../../script/ui/Component.js';
+import Component, {css, html} from '../../script/ui/Component.js';
 import $ from '../../script/ui/DOM.js';
-import {getUserFullName, userIdToPeerId} from '../../state/users/utils.js';
+import {getUserFullName} from '../../state/users/utils.js';
 
 import PeerAvatar from '../ui/peer-avatar.js';
 import {getUser$} from '../../state/users/stream-builders.js';
-import {tgDate, formatDate} from '../../script/helpers.js';
+import {
+  getMessageDateStr,
+  getPeerIdFromMessage,
+  getUserIdFromMessage
+} from '../../script/utils/message.js';
 
-
-const getUserIdFromMessage = R.prop('from_id');
-
-const getPeerIdFromMessage = R.pipe(
-  getUserIdFromMessage,
-  userIdToPeerId
-);
-
-const getMessageDate = R.pipe(
-  R.prop('date'),
-  tgDate
-);
-
-const getMessageDateStr = R.pipe(
-  getMessageDate,
-  formatDate
-);
 
 const style = css`
   :host {

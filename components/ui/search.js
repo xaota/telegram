@@ -104,7 +104,7 @@ const properties = {
       slot.addEventListener('slotchange', _ => updateChildrenAttribute(node, 'input', 'placeholder', this.innerText || this.innerHTML));
       input.addEventListener('input', _ => inputHandler.call(this, input, _));
       input.addEventListener('change', _ => this.event('change'));
-      input.addEventListener('keydown', e => { if (e.key === 'Enter') return this.event('enter'); });
+      input.addEventListener('keydown', e => { if (e.key === 'Enter') return this.event('enter', {value: input.value}); });
       this.addEventListener('focus', _ => input.focus());
       this.debounced = debounce(value => {
         this.event('ui-search', {value});

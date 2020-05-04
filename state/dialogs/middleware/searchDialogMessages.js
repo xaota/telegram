@@ -13,7 +13,7 @@ const {isActionOf} = store;
 const buildRequestObject = R.pipe(
   R.merge({
     q: "",
-    filter: construct('inputMessagesFilterPhotoVideo'),
+    filter: construct('inputMessagesFilterEmpty'),
     min_date: 0,
     max_date: 0,
     offset_id: 0,

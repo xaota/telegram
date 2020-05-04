@@ -14,7 +14,7 @@ const handleSetSidebar = R.pipe(
     getActionPayload,
     getState
   ]),
-  R.apply(R.set),
+  R.apply(R.set)
 );
 
 const handleSetSplashScreenMessage = R.pipe(
@@ -33,7 +33,7 @@ const handleSetSearchbar = R.pipe(
     getActionPayload,
     getState
   ]),
-  R.apply(R.set),
+  R.apply(R.set)
 );
 
 export default buildReducer({}, [

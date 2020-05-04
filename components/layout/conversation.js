@@ -1,11 +1,12 @@
 import Component, {html, css} from '../../script/ui/Component.js';
 import $ from '../../script/ui/DOM.js';
 import {getActiveDialogId$} from '../../state/dialogs/stream-builders.js';
-import {getSidebarStatus$} from '../../state/ui/stream-builders.js';
+import {getSidebarStatus$, getSearchbarStatus$} from '../../state/ui/stream-builders.js';
 import {} from '../../state/users/utils.js';
 
 /* eslint-disable */
 import LayoutSidebar      from './sidebar.js';
+import LayoutSearchbar from './searchbar.js'
 import ScreenEmpty        from '../screen/empty.js';
 import ScreenConversation from '../screen/conversation.js';
 /* eslint-enable */
@@ -49,6 +50,11 @@ const style = css`
     display: flex;
     flex-grow: 0;
   }
+  
+  #searchbar-place {
+    display: flex;
+    flex-grow: 0;
+  }
 
   layout-sidebar {
     width: 320px;
@@ -70,6 +76,8 @@ export default class LayoutConversation extends Component {
             <screen-conversation></screen-conversation>
           </div>
           <div id="sidebar-place">
+          </div>
+          <div id="searchbar-place">
           </div>
       </template>`;
 
@@ -95,9 +103,21 @@ export default class LayoutConversation extends Component {
       }
     });
 
+    const searchbarStatus$ = getSearchbarStatus$(state$);
+    const searchbarPlaceNode = $('#searchbar-place', node);
+    searchbarStatus$.pipe(distinctUntilChanged()).subscribe(status => {
+      if (status) {
+        const searchbar = new LayoutSearchbar();
+        searchbarPlaceNode.appendChild(searchbar);
+      } else {
+        searchbarPlaceNode.innerHTML = '';
+      }
+    });
+
     showScreenEmpty(node);
     return this;
   }
+
 
   render(node) {
     super.render(node);
