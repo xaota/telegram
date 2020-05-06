@@ -10,6 +10,7 @@ import UIMenu          from '../ui/menu.js';
 import UIDrop          from '../ui/drop.js';
 import UIItem          from '../ui/item.js';
 import UIList          from '../ui/list.js';
+import VirtualList from '../ui/virtual-list.js';
 import UINetwork       from '../ui/network.js';
 import AppConversation from '../app/conversation.js';
 /* eslint-enable */
@@ -51,6 +52,12 @@ const style = css`
     left: 0;
     right: 0;
   }
+  
+  .virtual-list-place {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
 
   ui-drop {
     position: absolute;
@@ -89,8 +96,8 @@ const properties = {};
 <!--          <ui-tab>Bots</ui-tab>-->
 <!--          <ui-tab>Other</ui-tab> &ndash;&gt;-->
 <!--        </ui-tabs>-->
-        <ui-list>
-        </ui-list>
+        <div class="virtual-list-place">
+        </div>
         <ui-drop up right>
           <ui-fab>edit</ui-fab>
           <ui-menu slot="drop">
@@ -107,7 +114,6 @@ const properties = {};
     */
     mount(node) {
       super.mount(node, attributes, properties);
-      const uiList = $('ui-list', node);
 
       const state$ = getState$();
       const dialogsOrderList$ = state$.pipe(
@@ -115,29 +121,18 @@ const properties = {};
         distinctUntilChanged()
       );
 
-      dialogsOrderList$.subscribe(dialogs => {
-        const localState = this.store();
-        const newUiItems = {};
-        for (let i = 0; i < dialogs.length; i++) {
-          if (R.has(dialogs[i], localState)) {
-            continue;
-          }
-          const appConversation = new AppConversation(dialogs[i]);
-          uiList.append(appConversation);
-          newUiItems[dialogs[i]] = appConversation;
-        }
-        this.store({...localState, ...newUiItems});
-      });
+      const virtualListPlace = $('.virtual-list-place', node);
+      const uiList = new VirtualList(dialogsOrderList$, AppConversation, 70);
+      virtualListPlace.appendChild(uiList);
 
-
-    const loadMoreButtonClick$ = fromEvent(uiList, 'load-more');
+    const loadMoreButtonEvent$ = fromEvent(uiList, 'load-more');
     const latestDialog$ = dialogsOrderList$.pipe(
       map(R.pipe(R.last, R.partialRight(R.append, [['dialogs', 'dialogs']]))),
       withLatestFrom(state$),
       map(R.apply(R.path))
     );
 
-    const loadMore$ = loadMoreButtonClick$.pipe(
+    const loadMore$ = loadMoreButtonEvent$.pipe(
       withLatestFrom(latestDialog$),
       map(R.nth(1)),
       map(getDialogWithLastMessage)

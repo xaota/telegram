@@ -25,6 +25,7 @@ import MediaFileList from '../app/media-file-list.js'
 import DocumentFileList from '../app/document-file-list.js'
 import UISearch from '../ui/search.js';
 import SearchedPreview from '../app/searched-preview.js'
+import VirtualList from '../ui/virtual-list.js'
 /* eslint-enable */
 
 const {fromEvent} = rxjs;
@@ -69,6 +70,12 @@ const style = css`
     display: flex;
     flex-direction: row;
   }
+  .list {
+    width: 320px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
 `;
 
 const attributes = {};
@@ -86,7 +93,7 @@ export default class ScreenSearchbar extends Component {
                 <ui-search slot="data"></ui-search>
             </app-header>
         </div>
-        <ui-list></ui-list>
+        <div class="list"></div>
       </template>`
 
   /** Создание элемента в DOM (DOM доступен) / mount @lifecycle
@@ -95,7 +102,7 @@ export default class ScreenSearchbar extends Component {
    */
   mount(node) {
     super.mount(node, attributes, properties);
-    const searchResultsPlaceNode = $('ui-list', node);
+    const searchResultsPlaceNode = $('.list', node);
     const appHeaderNode = $('app-header', node);
     const close$ = fromEvent(appHeaderNode, 'close');
     close$.subscribe(closeSearchBar);
@@ -118,7 +125,6 @@ export default class ScreenSearchbar extends Component {
     );
     clearSearch$.subscribe(dialogPeer => {
       clearSearchedDialogs(dialogPeer);
-      searchResultsPlaceNode.innerHTML = '';
       this.store({renderedMessages: {}});
     });
 
@@ -131,26 +137,16 @@ export default class ScreenSearchbar extends Component {
     searchStart$.subscribe(searchDialogMessages);
 
     const searchedMessages$ = getActiveDialogSearchedMessages$(state$);
-    searchedMessages$.subscribe(searchedMessages => {
-      const {renderedMessages} = this.store();
-      const newRenderedMessages = {};
-
-      for (let i = 0; i < searchedMessages.length; i++) {
-        const message = searchedMessages[i];
-        if (renderedMessages[message.id]) {
-          continue;
-        }
-        const searchedPreview = new SearchedPreview(message);
-        searchResultsPlaceNode.appendChild(searchedPreview);
-
-        newRenderedMessages[message.id] = true;
-      }
-
-      this.store({renderedMessages: {...renderedMessages, ...newRenderedMessages}});
-    });
+    const virtualList = new VirtualList(
+      searchedMessages$,
+      SearchedPreview,
+      72,
+      R.pipe(R.prop('message'), R.toString)
+    );
+    searchResultsPlaceNode.appendChild(virtualList);
 
     const lastSearchMessageId$ = getLastSearchedMessageId$(state$);
-    const loadMoreEvent$ = fromEvent(searchResultsPlaceNode, 'load-more');
+    const loadMoreEvent$ = fromEvent(virtualList, 'load-more');
     const loadMore$ = loadMoreEvent$.pipe(
       withLatestFrom(searchStart$),
       map(R.nth(1)),

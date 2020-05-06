@@ -10,6 +10,7 @@ import {searchDialogMessages, clearSearchedDialogs} from '../../state/dialogs/ac
 import {wrapAsObjWithKey} from '../../script/helpers.js';
 import {peerIdToPeer} from '../../state/utils.js';
 import DocumentPreview from './document-preview.js';
+import VirtualList from '../ui/virtual-list.js';
 
 const {construct} = zagram;
 const {of, fromEvent, combineLatest} = rxjs;
@@ -38,11 +39,12 @@ export default class DocumentFileList extends Component {
   static template = html`
     <template>
       <style>${style}</style>
-      <ui-list class="list"></div>
+      <div class="list"></div>
     </template>
   `;
 
   mount(node) {
+    console.log('mount document file list');
     super.mount(node, attributes, properties);
     const listNode = $('.list', node);
 
@@ -56,32 +58,19 @@ export default class DocumentFileList extends Component {
     });
 
     const searchedMessages$ = getActiveDialogSearchedMessages$(state$);
-    searchedMessages$.subscribe(messages => {
-      const {messageIds = {}} = this.store();
-      const newMessageIds = {};
+    const virtualList = new VirtualList(
+      searchedMessages$,
+      DocumentPreview,
+      64,
+      R.pipe(R.prop('id'), R.toString)
+    );
+    listNode.append(virtualList);
 
-      for (let i = 0; i < messages.length; i++) {
-        const message = messages[i];
-
-        if (R.has(message.id, messageIds)) {
-          continue;
-        }
-
-        const documentPreview = new DocumentPreview(message);
-
-        listNode.append(documentPreview);
-
-        newMessageIds[message.id] = true;
-      }
-
-      this.store({messageIds: R.merge(messageIds, newMessageIds)});
-    });
-
-    const loadMoreButtonClick$ = fromEvent(listNode, 'load-more');
+    const loadMoreEvent$ = fromEvent(virtualList, 'load-more');
     const activeDialogInputPeer$ = getActiveDialogInputPeer$(state$);
     const lastSearchMessageId$ = getLastSearchedMessageId$(state$);
 
-    const loadMore$ = combineLatest(loadMoreButtonClick$, activeDailogId$).pipe(
+    const loadMore$ = combineLatest(loadMoreEvent$, activeDailogId$).pipe(
       withLatestFrom(activeDialogInputPeer$
         .pipe(map(wrapAsObjWithKey('peer')))),
       withLatestFrom(of(construct('inputMessagesFilterDocument'))
