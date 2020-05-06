@@ -1,5 +1,5 @@
 import Component, {html, css} from '../../script/ui/Component.js';
-// import $ from '../../script/ui/DOM.js';
+import $ from '../../script/ui/DOM.js';
 
 const style = css`
   :host {
@@ -11,9 +11,6 @@ const style = css`
   }
 
   slot {
-    height: 100%;
-    overflow: auto;
-    position: relative;
     display: flex;
     flex-direction: column;
   }
@@ -21,7 +18,15 @@ const style = css`
   :host([bottom]) slot {
     flex-direction: column-reverse;
     /* justify-content: flex-end; */
-  }`;
+  }
+  
+  .load-more {
+    flex-shrink: 0;
+    height: 30px;
+    background: #ff0000;
+    opacity: 0;
+  }
+`;
 
 const attributes = {};
 const properties = {};
@@ -34,6 +39,7 @@ const properties = {};
       <template>
         <style>${style}</style>
         <slot></slot>
+        <div class="load-more"></div>
       </template>`;
 
   // /** Создание компонента {UIList} @constructor
@@ -50,25 +56,19 @@ const properties = {};
     */
     mount(node) {
       super.mount(node, attributes, properties);
-      // const options = {
-      //   root: null,
-      //   rootMargin: '50px',
-      //   threshold: 1
-      // };
+      const options = {
+        root: $(':host', node),
+        rootMargin: '0px',
+        threshold: 1.0
+      };
 
-      // const observer = new IntersectionObserver((changes, observer) => {
-      //   changes.forEach(change => {
-      //     if (change.intersectionRatio > 0) {
-      //       this.event('list-overscroll', {up: true});
-      //       // observer.unobserve(change.target);
-      //     }
-      //   });
-      // }, options);
-      // const div = document.createElement('div');
-      // setTimeout(() => {
-      //   this.shadowRoot.appendChild(div);
-      // }, 3000); // TODO дикий костыль, считаем что дочерние элементы отрендерятся, иначе лишний раз отрабатывает событие
-      // observer.observe(div);
+      const observer = new IntersectionObserver((changes, observer) => {
+        console.log('load more node');
+        this.event('load-more');
+      }, options);
+
+      const loadMoreNode = $('.load-more', node);
+      observer.observe(loadMoreNode);
       return this;
     }
   }

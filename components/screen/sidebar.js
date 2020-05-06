@@ -33,6 +33,10 @@ const style = css`
   :host {
     color:      var(--foreground);
     background: var(--background-aside);
+    flex-grow: 1;
+    height: 100wh;
+    display: flex;
+    flex-direction: column;
   }
   main {
     text-align: center;
@@ -76,6 +80,12 @@ const style = css`
   .tab-content {
     display: flex; 
     flex-direction: column;
+    flex-grow: 1;
+  }
+  
+  .header-place {
+    display: flex;
+    flex-direction: row;
   }
   `;
 
@@ -146,7 +156,9 @@ export default class ScreenSidebar extends Component {
   static template = html`
       <template>
         <style>${style}</style>
-        <app-header close more></app-header>
+        <div class="header-place">
+            <app-header close more></app-header>
+        </div>
         <main>
           <div class="peer-avatar-place"></div>
           <h1 id="title"></h1>

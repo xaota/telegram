@@ -5,8 +5,6 @@ import {wrapAsObjWithKey, createUrl, downloadFile$} from '../../script/helpers.j
 const {map} = rxjs.operators;
 const {isObjectOf, construct} = zagram;
 
-const getMedia = R.prop('media');
-
 const style = css`
   :host {
     display: block;

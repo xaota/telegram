@@ -6,8 +6,6 @@ import {buildThumbnailFileLocation} from '../../script/utils/message.js';
 
 const {fromEvent} = rxjs;
 const {map} = rxjs.operators;
-const {isObjectOf, construct} = zagram;
-
 
 const style = css`
   :host {

@@ -91,7 +91,6 @@ const properties = {};
 <!--        </ui-tabs>-->
         <ui-list>
         </ui-list>
-        <button>loadMore</button>
         <ui-drop up right>
           <ui-fab>edit</ui-fab>
           <ui-menu slot="drop">
@@ -109,7 +108,6 @@ const properties = {};
     mount(node) {
       super.mount(node, attributes, properties);
       const uiList = $('ui-list', node);
-      const loadMoreButton = $('button', node);
 
       const state$ = getState$();
       const dialogsOrderList$ = state$.pipe(
@@ -132,7 +130,7 @@ const properties = {};
       });
 
 
-    const loadMoreButtonClick$ = fromEvent(loadMoreButton, 'click');
+    const loadMoreButtonClick$ = fromEvent(uiList, 'load-more');
     const latestDialog$ = dialogsOrderList$.pipe(
       map(R.pipe(R.last, R.partialRight(R.append, [['dialogs', 'dialogs']]))),
       withLatestFrom(state$),

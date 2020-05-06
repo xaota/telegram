@@ -14,7 +14,6 @@ import UIIcon     from '../ui/icon.js';
 
 const {fromEvent} = rxjs;
 const {mapTo, map, switchMap, tap} = rxjs.operators;
-const {isObjectOf, construct} = zagram;
 
 function trackProgress(node, downloadedPartsCount, totalPartsCount) {
   const percent = (downloadedPartsCount/totalPartsCount) * 100;

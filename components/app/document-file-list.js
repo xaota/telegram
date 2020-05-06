@@ -13,12 +13,13 @@ import DocumentPreview from './document-preview.js';
 
 const {construct} = zagram;
 const {of, fromEvent, combineLatest} = rxjs;
-const {map, distinctUntilChanged, withLatestFrom, startWith} = rxjs.operators;
+const {map, distinctUntilChanged, withLatestFrom} = rxjs.operators;
 
 const style = css`
   :host {
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
   }
   
   .list {
@@ -37,15 +38,13 @@ export default class DocumentFileList extends Component {
   static template = html`
     <template>
       <style>${style}</style>
-      <div class="list"></div>
-      <button id="load-more">load more</button>
+      <ui-list class="list"></div>
     </template>
   `;
 
   mount(node) {
     super.mount(node, attributes, properties);
     const listNode = $('.list', node);
-    const loadMoreButton = $('#load-more', node);
 
     const state$ = getState$();
 
@@ -78,8 +77,7 @@ export default class DocumentFileList extends Component {
       this.store({messageIds: R.merge(messageIds, newMessageIds)});
     });
 
-    const loadMoreButtonClick$ = fromEvent(loadMoreButton, 'click')
-      .pipe(startWith(null));
+    const loadMoreButtonClick$ = fromEvent(listNode, 'load-more');
     const activeDialogInputPeer$ = getActiveDialogInputPeer$(state$);
     const lastSearchMessageId$ = getLastSearchedMessageId$(state$);
 

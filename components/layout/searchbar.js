@@ -8,8 +8,9 @@ import MediaPreview from '../app/media-preview.js';
 
 const style = css`
   :host {
-    display:    block;
+    display: flex;
     height: 100wh;
+    flex-direction: column;
     width: 320px;
     overflow-y: auto;
     position:   relative;

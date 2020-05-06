@@ -3,18 +3,8 @@ import $ from '../../script/ui/DOM.js';
 import {getUserFullName} from '../../state/users/utils.js';
 import {formatDate, tgDate} from '../../script/helpers.js';
 import PeerAvatar from '../ui/peer-avatar.js';
-import {
-  getMessageDateStr,
-  getPeerIdFromMessage,
-  getUserIdFromMessage
-} from '../../script/utils/message.js';
+import {getPeerIdFromMessage} from '../../script/utils/message.js';
 import {getUser$} from '../../state/users/stream-builders.js';
-
-
-const getAuthorName = R.pipe(
-  R.prop('author'),
-  getUserFullName
-);
 
 const getTextMessage = R.prop('message');
 

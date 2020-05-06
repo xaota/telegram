@@ -34,6 +34,10 @@ const style = css`
   :host {
     color:      var(--foreground);
     background: var(--background-aside);
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    height: 100wh;
   }
   main {
     text-align: center;
@@ -61,6 +65,10 @@ const style = css`
     font-size: 14px;
     font-weight: normal;
   }
+  .header-place {
+    display: flex;
+    flex-direction: row;
+  }
 `;
 
 const attributes = {};
@@ -73,11 +81,12 @@ export default class ScreenSearchbar extends Component {
   static template = html`
       <template>
         <style>${style}</style>
-        <app-header close>
-            <ui-search slot="data"></ui-search>
-        </app-header>
-        <div class="search-results-place"></div>
-        <button id="load-more">load more</button>
+        <div class="header-place">
+            <app-header close>
+                <ui-search slot="data"></ui-search>
+            </app-header>
+        </div>
+        <ui-list></ui-list>
       </template>`
 
   /** Создание элемента в DOM (DOM доступен) / mount @lifecycle
@@ -86,7 +95,7 @@ export default class ScreenSearchbar extends Component {
    */
   mount(node) {
     super.mount(node, attributes, properties);
-    const searchResultsPlaceNode = $('.search-results-place', node);
+    const searchResultsPlaceNode = $('ui-list', node);
     const appHeaderNode = $('app-header', node);
     const close$ = fromEvent(appHeaderNode, 'close');
     close$.subscribe(closeSearchBar);
@@ -141,9 +150,8 @@ export default class ScreenSearchbar extends Component {
     });
 
     const lastSearchMessageId$ = getLastSearchedMessageId$(state$);
-    const loadMoreButton = $('#load-more', node);
-    const loadMoreClick$ = fromEvent(loadMoreButton, 'click');
-    const loadMore$ = loadMoreClick$.pipe(
+    const loadMoreEvent$ = fromEvent(searchResultsPlaceNode, 'load-more');
+    const loadMore$ = loadMoreEvent$.pipe(
       withLatestFrom(searchStart$),
       map(R.nth(1)),
       withLatestFrom(lastSearchMessageId$.pipe(map(wrapAsObjWithKey('offset_id')))),
