@@ -11,7 +11,7 @@ const style = css`
   :host {
     display: inline-flex;
     background-size: cover;
-    flex: 1 0 calc(33% - 4px);
+    flex: 1 0 calc(25% - 4px);
     cursor: pointer;
   }
 

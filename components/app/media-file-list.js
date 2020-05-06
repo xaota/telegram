@@ -7,7 +7,8 @@ import {
   getLastSearchedMessageId$
 } from '../../state/dialogs/stream-builders.js';
 import {searchDialogMessages, clearSearchedDialogs} from '../../state/dialogs/actions.js';
-import MediaPreview from './media-preview.js';
+import VirtualList from '../ui/virtual-list.js';
+import MediaFileRow from './media-file-row.js';
 import {wrapAsObjWithKey} from '../../script/helpers.js';
 import {peerIdToPeer} from '../../state/utils.js';
 
@@ -19,13 +20,13 @@ const style = css`
   :host {
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
   }
   
   .list {
     display: flex; 
-    flex-direction: row;
-    justify-content: space-around;
-    flex-wrap: wrap;
+    flex-direction: column;
+    flex-grow: 1;
   }
 `;
 
@@ -40,14 +41,12 @@ export default class MediaFileList extends Component {
       <style>${style}</style>
       <div class="list">
       </div>
-      <button id="load-more">load more</button>
     </template>
   `;
 
   mount(node) {
     super.mount(node, attributes, properties);
     const listNode = $('.list', node);
-    const loadMoreButton = $('#load-more', node);
 
     const state$ = getState$();
 
@@ -58,29 +57,15 @@ export default class MediaFileList extends Component {
       this.store({messageIds: {}});
     });
 
-    const searchedMessages$ = getActiveDialogSearchedMessages$(state$);
-    searchedMessages$.subscribe(messages => {
-      const {messageIds = {}} = this.store();
-      const newMessageIds = {};
+    const getMessageGroupId = R.pipe(
+      R.map(R.pipe(R.prop('id'), R.toString)),
+      R.join('_')
+    );
+    const searchedMessages$ = getActiveDialogSearchedMessages$(state$).pipe(map(R.splitEvery(4)));
+    const virtualList = new VirtualList(searchedMessages$, MediaFileRow, 80, getMessageGroupId);
+    listNode.appendChild(virtualList);
 
-      for (let i = 0; i < messages.length; i++) {
-        const message = messages[i];
-
-        if (R.has(message.id, messageIds)) {
-          continue;
-        }
-
-        const mediaPreview = new MediaPreview(message);
-
-        listNode.append(mediaPreview);
-
-        newMessageIds[message.id] = true;
-      }
-
-      this.store({messageIds: R.merge(messageIds, newMessageIds)});
-    });
-
-    const loadMoreButtonClick$ = fromEvent(loadMoreButton, 'click')
+    const loadMoreButtonClick$ = fromEvent(virtualList, 'load-more')
       .pipe(startWith(null));
     const activeDialogInputPeer$ = getActiveDialogInputPeer$(state$);
     const lastSearchMessageId$ = getLastSearchedMessageId$(state$);

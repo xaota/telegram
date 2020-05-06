@@ -18,7 +18,7 @@ const buildRequestObject = R.pipe(
     max_date: 0,
     offset_id: 0,
     add_offset: 0,
-    limit: 30,
+    limit: 40,
     max_id: 0,
     min_id: 0,
     hash: 0
