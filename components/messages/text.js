@@ -48,8 +48,8 @@ const style = css`
     border-bottom-left-radius: 5px;
   }
 
-  :host([left]:last-child) div::after, :host([left]:last-child) div::before,
-  :host([right]:last-child) div::after, :host([right]:last-child) div::before {
+  :host([left]:first-child) div::after, :host([left]:last-child) div::before,
+  :host([right]:first-child) div::after, :host([right]:last-child) div::before {
     position: absolute;
     width: 12px;
     left: 0;
@@ -58,26 +58,26 @@ const style = css`
     content: "";
   }
 
-  :host([left]:last-child) div::before,
-  :host([right]:last-child) div::before { /* тень хвостика (только вниз пусть будет) */
+  :host([left]:first-child) div::before,
+  :host([right]:first-child) div::before { /* тень хвостика (только вниз пусть будет) */
     height: 1px; /* 0 */
     box-shadow: 0 1px 2px 0 rgba(16, 35, 47, 0.15);
   }
 
-  :host([left]:last-child) div::after,
-  :host([right]:last-child) div::after { /* хвостик */
+  :host([left]:first-child) div::after,
+  :host([right]:first-child) div::after { /* хвостик */
     height: 24px;
     background: radial-gradient(ellipse farthest-side at top left, transparent 100%, var(--background-message-in) 100%);
   }
 
-  :host([right]:last-child) div::before,
-  :host([right]:last-child) div::after {
+  :host([right]:first-child) div::before,
+  :host([right]:first-child) div::after {
     right: 0;
     transform: translateX(calc(100% - 2px));
     left: inherit;
   }
 
-  :host([right]:last-child) div::after {
+  :host([right]:first-child) div::after {
     background: radial-gradient(ellipse farthest-side at top right, transparent 100%, var(--background-message-out) 100%);
   }
 

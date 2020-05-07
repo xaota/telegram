@@ -3,7 +3,7 @@ import $ from '../../script/ui/DOM.js';
 /* eslint-disable */
 import UIIcon from '../ui/icon.js'
 import PeerAvatar from '../ui/peer-avatar.js'
-import AppMessage from '../app/message.js'
+import AppMessageGroup from '../app/message-group.js'
 import {getDialogTitle, previewMessage} from '../../state/dialogs/helpers.js'
 import {dateDay, formatDate} from '../../script/helpers.js'
 import {setActiveDialog} from '../../state/dialogs/actions.js'
@@ -203,7 +203,7 @@ const getIdFromPeer = R.pipe(
       const chaption = getDialogTitle(dialog);
       const lastMessageDate = R.pathOr(0, ['last_message', 'date'], dialog);
       const updated  = formatDate(dateDay(1000 * lastMessageDate), true);
-      const timestamp = current === updated ? AppMessage.timestamp(lastMessageDate) : updated;
+      const timestamp = current === updated ? AppMessageGroup.timestamp(lastMessageDate) : updated;
 
       // pinned, muted
 
