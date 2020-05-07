@@ -7,6 +7,6 @@ const {map, distinctUntilChanged} = rxjs.operators;
 export function authorizedUser$(state$) {
   return state$.pipe(
     map(R.pathOr(null, ['auth', 'user'])),
-    distinctUntilChanged()
+    distinctUntilChanged(R.eqProps('id'))
   );
 }

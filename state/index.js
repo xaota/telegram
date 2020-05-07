@@ -40,7 +40,7 @@ export default function init(connection) {
   });
   window.getState$ = () => subject;
   R.map(
-    middleware => middleware(action$, getState$(), connection),
+    middleware => middleware(action$, subject, connection),
     [
       authApplyMiddleware,
       dialogsApplyMiddleware,

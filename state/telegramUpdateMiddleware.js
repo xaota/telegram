@@ -1,11 +1,11 @@
 import {setChatList} from './chats/index.js';
 import {setUserList} from './users/index.js';
 import {prependMessage} from './dialogs/index.js';
-import {applyAll} from './utils.js';
+import {applyAll, isAuthKeyCreated} from './utils.js';
 import {wrapAsObjWithKey} from '../script/helpers.js';
 
 const {of, fromEvent, merge} = rxjs;
-const {map, filter, tap, switchMap, withLatestFrom} = rxjs.operators;
+const {map, filter, tap, switchMap, switchMapTo, withLatestFrom} = rxjs.operators;
 
 const {isObjectOf, construct} = zagram;
 
@@ -96,7 +96,13 @@ export default function telegramUpdateMiddleware(action$, state$, connection) {
   const authUser$ = state$.pipe(map(R.path(['auth', 'user'])));
   const authUserId$ = authUser$.pipe(map(R.prop('id')));
 
-  const telegramUpdate$ = fromEvent(connection, 'telegramUpdate')
+  const authKeyCreated$ = fromEvent(connection, 'statusChanged')
+    .pipe(filter(isAuthKeyCreated));
+
+  const telegramUpdate$ = authKeyCreated$.pipe(switchMapTo(fromEvent(
+    connection,
+    'telegramUpdate'
+  )))
     .pipe(map(R.prop('detail')));
 
   const updateShort$ = telegramUpdate$
