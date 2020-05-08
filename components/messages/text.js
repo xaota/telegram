@@ -127,6 +127,14 @@ const style = css`
   slot[name="content"] {
     /* white-space: pre-wrap; */
   }
+  
+  slot[name="web-page"] {
+    width: 100%;
+  }
+  
+  slot[name="web-page"] img {
+    width: 100%;
+  }
 
   :host([reply]) slot[name="content"]::slotted(span) {
     color: #707579;
@@ -151,7 +159,8 @@ const style = css`
 
   :host([reply]) span {
     display: none;
-  }`;
+  }
+  `;
 
 const attributes = {
   color(root, value) { cssVariable(this, 'color', value); },
@@ -198,6 +207,8 @@ const properties = {
   /** */
     webpage(webPage) {
       const web = document.createElement('div');
+      web.classList.add('web-page');
+      web.style.width = '400px';
       // web.setAttribute('class', 'web');
       web.slot = 'web-page';
       web.addEventListener('click', () => {
@@ -207,6 +218,7 @@ const properties = {
       if (webPage.photo) {
         const img = document.createElement('img');
         MessagePhoto.src(webPage.photo).then(url => img.src = url);
+        img.style.maxWidth = '100%';
         web.append(img);
       }
 

@@ -20,10 +20,11 @@ import telegramUpdateMiddleware from './telegramUpdateMiddleware.js';
 
 const {buildStateStream, combineReducers, getActionStream} = store;
 const {BehaviorSubject} = rxjs;
+const {throttleTime} = rxjs.operators;
 
 
 export default function init(connection) {
-  const subject = new BehaviorSubject({});
+  const baseSubject = new BehaviorSubject({});
   const state$ = buildStateStream(combineReducers({
     page: pageReducer,
     ui: uiReducer,
@@ -35,12 +36,17 @@ export default function init(connection) {
   const action$ = getActionStream();
 
   state$.subscribe(newState => {
-    console.log('[state]:', newState);
-    subject.next(newState);
+    console.log('[state]:', new Date(), newState);
+    baseSubject.next(newState);
   });
-  window.getState$ = () => subject;
+
+  const throttleSubject = new BehaviorSubject({});
+  baseSubject.pipe(throttleTime(17)).subscribe(x => throttleSubject.next(x));
+
+  window.getState$ = () => throttleSubject;
+
   R.map(
-    middleware => middleware(action$, subject, connection),
+    middleware => middleware(action$, baseSubject, connection),
     [
       authApplyMiddleware,
       dialogsApplyMiddleware,

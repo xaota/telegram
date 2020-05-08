@@ -18,6 +18,7 @@ const style = css`
     border-top-right-radius: 5px;
   }
   .img {
+    width: 100%;
     min-width: 200px;
   }
   .solo img {
