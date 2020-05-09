@@ -4,6 +4,9 @@ import $, {$$} from '../../script/ui/DOM.js';
 import Router              from '../../script/ui/Router.js';
 import locator             from '../../script/app/locator.js';
 
+import {userIdToPeerId} from '../../state/users/utils.js';
+import {setActiveDialog} from '../../state/dialogs/actions.js';
+
 /* eslint-disable */
 import AppHeader           from '../app/header.js';
 import LayoutLoading       from './loading.js';
@@ -34,8 +37,8 @@ const properties = {};
             <ui-item icon="group" data-route="form-group">New group</ui-item>
             <ui-item icon="private">Contacts</ui-item>
             <ui-item icon="archive">Archived</ui-item>
-            <ui-item icon="favorite" data-route="#favorite">Saved</ui-item>
-            <ui-item icon="conversation" data-route="#conversation">Open by ID</ui-item>
+            <ui-item icon="favorite" data-call="favorite">Saved</ui-item>
+            <!-- <ui-item icon="conversation" data-route="#conversation">Open by ID</ui-item> -->
             <ui-item icon="settings" data-action="router.main" data-detail='{"location":"layout-settings"}'>Settings</ui-item>
             <ui-item icon="help" data-route="//telegram.org/support">Help</ui-item>
             <ui-item icon="bulb" data-route="#night-mode">Night Mode</ui-item>
@@ -79,6 +82,16 @@ const properties = {};
         });
       });
 
+      const calls = $$('app-header ui-item[data-call]', node);
+      calls.forEach(item => { // меню
+        item.addEventListener('click', () => {
+          const action = item.dataset.call;
+          call[action]();
+          // const detail = JSON.parse(item.dataset.detail);
+          // locator.channel.send(action, detail);
+        });
+      });
+
       setTimeout(() => { // типа запросили список чатов
         locator.channel.send('router.main', {location: 'layout-conversations'});
       }, 1000);
@@ -106,5 +119,15 @@ Component.init(LayoutMain, 'layout-main', {attributes, properties});
         name: 'layout-loading',
         default: true
       });
+  }
+
+
+/** call */
+  const call = {
+    favorite() {
+      const user = getState$()._value.auth.user; // !
+      const peer = userIdToPeerId(user.id);
+      setActiveDialog(peer);
+    }
   }
 // #endregion
