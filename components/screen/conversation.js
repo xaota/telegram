@@ -189,6 +189,7 @@ export default class ScreenConversation extends Component {
         messageAreaNode.appendChild(appMessageGroup);
         newRenderedNodes[messageGroupId] = appMessageGroup;
       }
+      newRenderedNodes[messageGroupId].style.order = i;
     }
 
     const unusedNodeKeys = R.pipe(

@@ -25,6 +25,20 @@ export const peerToPeerId = R.cond([
 ]);
 
 
+/**
+ * Takes input peer and returns string that could be used as id of dialog
+ *
+ * @param {*} peer - input peer object
+ * @returns string - dialog id
+ */
+export const inputPeerToPeerId = R.cond([
+  [isObjectOf('inputPeerUser'), R.pipe(R.prop('user_id'), x => `peer_user_${x}`)],
+  [isObjectOf('inputPeerChat'), R.pipe(R.prop('chat_id'), x => `peer_chat_${x}`)],
+  [isObjectOf('inputPeerChannel'), R.pipe(R.prop('channel_id'), x => `peer_channel_${x}`)],
+  [R.T, 'unknown_peer']
+]);
+
+
 const toInt = R.pipe(
   R.match(/\d+/),
   R.partialRight(parseInt, [10])
@@ -50,6 +64,9 @@ export const peerIdToPeer = R.cond([
     R.pipe(toInt, wrapAsObjWithKey('channel_id'), R.partial(construct, ['peerChannel']))
   ]
 ]);
+
+
+export const inputPeerToPeer = R.pipe(inputPeerToPeerId, peerIdToPeer);
 
 
 /**

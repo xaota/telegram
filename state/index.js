@@ -20,7 +20,7 @@ import telegramUpdateMiddleware from './telegramUpdateMiddleware.js';
 
 const {buildStateStream, combineReducers, getActionStream} = store;
 const {BehaviorSubject} = rxjs;
-const {throttleTime} = rxjs.operators;
+const {debounceTime} = rxjs.operators;
 
 
 export default function init(connection) {
@@ -41,7 +41,7 @@ export default function init(connection) {
   });
 
   const throttleSubject = new BehaviorSubject({});
-  baseSubject.pipe(throttleTime(17)).subscribe(x => throttleSubject.next(x));
+  baseSubject.pipe(debounceTime(17)).subscribe(x => throttleSubject.next(x));
 
   window.getState$ = () => throttleSubject;
 

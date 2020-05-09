@@ -1,5 +1,3 @@
-const {dispatch} = store;
-
 import {
   LOAD_DIALOGS,
   DIALOGS_LOAD_FAILED,
@@ -11,8 +9,11 @@ import {
   SET_SEARCHED_DIALOG_MESSAGES,
   LOAD_DIALOG_HISTORY,
   SEARCH_DIALOG_MESSAGES,
-  CLEAR_SEARCHED_DIALOG_MESSAGES
+  CLEAR_SEARCHED_DIALOG_MESSAGES,
+  SEND_MESSAGE
 } from './constants.js';
+
+const {dispatch} = store;
 
 export const loadDialogs = R.partial(dispatch, [LOAD_DIALOGS]);
 export const setLoadDialogsFailed = R.partial(dispatch, [DIALOGS_LOAD_FAILED]);
@@ -26,3 +27,5 @@ export const clearSearchedDialogs = R.partial(dispatch, [CLEAR_SEARCHED_DIALOG_M
 
 export const loadDialogHistory = R.partial(dispatch, [LOAD_DIALOG_HISTORY]);
 export const searchDialogMessages = R.partial(dispatch, [SEARCH_DIALOG_MESSAGES]);
+
+export const sendMessage = R.partial(dispatch, [SEND_MESSAGE]);

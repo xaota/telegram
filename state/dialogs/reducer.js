@@ -152,6 +152,11 @@ const buildMessageLens = R.pipe(
 );
 
 
+const sortKey = R.pipe(
+  R.subtract,
+  R.multiply(-1)
+);
+
 /**
  * Takes tuple with state and action data. Returns state with order of new message
  * @param {[*, *]} tuple - action
@@ -160,7 +165,12 @@ const buildMessageLens = R.pipe(
 const appendNewMessageOrder = R.pipe(
   applyAll([
     R.pipe(R.nth(1), buildMessageOrderLens),
-    R.pipe(R.path([1, 'id']), R.append, R.curry(R.binary(R.compose))(R.uniq)),
+    R.pipe(
+      R.path([1, 'id']),
+      R.append,
+      R.curry(R.binary(R.compose))(R.uniq),
+      R.curry(R.binary(R.compose))(R.sort(sortKey))
+    ),
     R.nth(0)
   ]),
   R.apply(R.over)
@@ -173,7 +183,8 @@ const prependNewMessageOrder = R.pipe(
       R.path([1, 'id']),
       R.of,
       R.concat,
-      R.curry(R.binary(R.compose))(R.uniq)
+      R.curry(R.binary(R.compose))(R.uniq),
+      R.curry(R.binary(R.compose))(R.sort(sortKey))
     ),
     R.nth(0)
   ]),

@@ -1,11 +1,14 @@
 import Component, {html, css} from '../../script/ui/Component.js';
-// import $ from '../../script/ui/DOM.js';
+import $ from '../../script/ui/DOM.js';
 
 /* eslint-disable */
 import UIDrop from '../ui/drop.js';
 import UIMenu from '../ui/menu.js';
 import UIItem from '../ui/item.js';
 /* eslint-enable */
+
+const {fromEvent} = rxjs;
+const {filter, map, tap} = rxjs.operators;
 
 const style = css`
   .inp {
@@ -190,6 +193,21 @@ const properties = {};
     */
     mount(node) {
       super.mount(node, attributes, properties);
+      const textareaNode = $('textarea', node);
+
+      const textareaKeyUP$ = fromEvent(textareaNode, 'keyup');
+      const textareaEnterPress$ = textareaKeyUP$.pipe(filter(R.propEq('keyCode', 13)));
+
+      const textareaValue$ = textareaEnterPress$.pipe(
+        map(() => textareaNode.value),
+        tap(() => {
+          textareaNode.value = '';
+        })
+      );
+      textareaValue$.subscribe(message => {
+        this.event('new-message', message);
+      });
+
       return this;
     }
   }

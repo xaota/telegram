@@ -1,10 +1,16 @@
 import Component, {html, css} from '../../script/ui/Component.js';
-// import $ from '../../script/ui/DOM.js';
+import $ from '../../script/ui/DOM.js';
+import {sendMessage} from '../../state/dialogs/actions.js';
 
 /* eslint-disable */
 import UIIcon   from '../ui/icon.js';
 import AppField from '../app/field.js';
+import {getActiveDialogInputPeer$} from '../../state/dialogs/stream-builders.js'
+import {wrapAsObjWithKey} from '../../script/helpers.js'
 /* eslint-enable */
+
+const {fromEvent} = rxjs;
+const {map, withLatestFrom} = rxjs.operators;
 
 const style = css`
   :host {
@@ -106,6 +112,18 @@ const properties = {};
     */
     mount(node) {
       super.mount(node, attributes, properties);
+      const state$ = getState$();
+      const activeDialogInputPeer$ = getActiveDialogInputPeer$(state$);
+
+      const appField = $('app-field', node);
+      const newMessage$ = fromEvent(appField, 'new-message').pipe(map(R.prop('detail')));
+
+      const sendMessage$ = newMessage$.pipe(
+        map(wrapAsObjWithKey('message')),
+        withLatestFrom(activeDialogInputPeer$.pipe(map(wrapAsObjWithKey('peer')))),
+        map(R.mergeAll)
+      );
+      sendMessage$.subscribe(sendMessage);
       return this;
     }
   }
