@@ -105,6 +105,7 @@ const chatToInputPeerChat = R.pipe(
  */
 const buildInputPeerChatSelector = R.pipe(
   buildChatByIdSelector,
+  R.curry(R.binary(R.compose))(R.prop('base')),
   R.curry(R.binary(R.compose))(chatToInputPeerChat)
 );
 

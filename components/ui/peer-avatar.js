@@ -70,9 +70,12 @@ export default class PeerAvatar extends Component {
       map(createUrl)
     );
 
-    avatar$.subscribe(url => {
-      avatarNode.src = url;
-    });
+    avatar$.subscribe(
+      url => { avatarNode.src = url; },
+      error => {
+        console.warn('Error ', peerId, error);
+      }
+    );
 
     return this;
   }
