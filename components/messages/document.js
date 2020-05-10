@@ -193,7 +193,7 @@ const properties = {
       const data = this.store();
 
       const div = $('div', node);
-      const f = {} // new UiFile({file: data, message: true});
+      const f = {}; // new UiFile({file: data, message: true});
       div.append(f);
       const span = document.createElement('span');
       span.innerText = this.time;

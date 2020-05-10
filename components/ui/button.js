@@ -10,7 +10,19 @@ const style = css`
     display: block;
     position: relative;
   }
-
+  
+  :host([size="small"]) button {
+    height: 32px;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+  
+  :host([size="small"]) ui-loading {
+    width: 16px;
+    height: 16px;
+    right: 4px;
+  }
+  
   button {
     outline: none;
     background: var(--blueColor);
@@ -53,6 +65,8 @@ const attributes = {};
 const properties = {
   // eslint-disable-next-line no-empty-function
   loading() {},
+  // eslint-disable-next-line no-empty-function
+  size() {},
   disabled(root, value) { updateChildrenProperty(root, 'button', 'disabled', value); }
 };
 

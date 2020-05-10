@@ -5,6 +5,11 @@ import $ from '../../script/ui/DOM.js';
 import UIDrop from '../ui/drop.js';
 import UIMenu from '../ui/menu.js';
 import UIItem from '../ui/item.js';
+import UIIcon from '../ui/icon.js';
+import UIInput from '../ui/input.js';
+import UIButton from '../ui/button.js';
+import {attachOverlay} from '../ui/overlay.js'
+import ModalSendPhoto from './modal-send-photo.js';
 /* eslint-enable */
 
 const {fromEvent} = rxjs;
@@ -135,7 +140,8 @@ const style = css`
     border-left: 2px solid #4ea4f5;
     display: flex;
     margin-top: 5px;
-  }`;
+  }
+  `;
 
 const attributes = {};
 const properties = {};
@@ -175,8 +181,9 @@ const properties = {};
               </ui-menu>
             </ui-drop>
           </div>
-
         </div>
+        <input type="file" style="display: none" id="mediaFile" accept="video/*,image/*" />
+        <input type="file" style="display: none" id="mediaDocument" accept="" />
       </template>`;
 
   // /** Создание компонента {AppField} @constructor
@@ -206,6 +213,19 @@ const properties = {};
       );
       textareaValue$.subscribe(message => {
         this.event('new-message', message);
+      });
+
+
+      const photoNode = $('#photo', node);
+      const photoClick$ = fromEvent(photoNode, 'click');
+      const mediaFileNode = $('#mediaFile', node);
+      photoClick$.subscribe(() => {
+        mediaFileNode.click();
+      });
+      const mediaChanged$ = fromEvent(mediaFileNode, 'change');
+      const mediaFile$ = mediaChanged$.pipe(map(() => mediaFileNode.files[0]));
+      mediaFile$.subscribe(file => {
+        attachOverlay(node, ModalSendPhoto, file);
       });
 
       return this;

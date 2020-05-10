@@ -129,5 +129,5 @@ Component.init(LayoutMain, 'layout-main', {attributes, properties});
       const peer = userIdToPeerId(user.id);
       setActiveDialog(peer);
     }
-  }
+  };
 // #endregion
