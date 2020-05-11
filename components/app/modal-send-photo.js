@@ -1,6 +1,8 @@
 import Component, {html, css} from '../../script/ui/Component.js';
 import $ from '../../script/ui/DOM.js';
-import {createUrl} from '../../script/helpers.js';
+import {createUrl, wrapAsObjWithKey} from '../../script/helpers.js';
+import {getActiveDialogInputPeer$} from '../../state/dialogs/stream-builders.js';
+import {sendMessage} from '../../state/dialogs/actions.js';
 
 /* eslint-disable */
 import UIButton from '../ui/button.js';
@@ -8,7 +10,8 @@ import UIInput from '../ui/input.js';
 import UIIcon from '../ui/icon.js';
 /* eslint-enable */
 
-const {fromEvent} = rxjs;
+const {fromEvent, merge} = rxjs;
+const {map, filter, withLatestFrom} = rxjs.operators;
 
 const style = css`
   .modal {
@@ -91,13 +94,13 @@ export default class ModalSendPhoto extends Component {
             Send photo/video
           </div>
           <div class="button-place">
-            <ui-button size="small" >Send</ui-button>
+            <ui-button id="send-button" size="small" >Send</ui-button>
           </div>
         </div>
         <div class="modal-body">
         </div>
         <div class="modal-footer">
-          <ui-input>Add a caption</ui-input>
+          <ui-input id="caption">Add a caption</ui-input>
         </div>
       </div>
     </template>
@@ -121,10 +124,37 @@ export default class ModalSendPhoto extends Component {
     const closeIconNode = $('#close', node);
     const close$ = fromEvent(closeIconNode, 'click');
     close$.subscribe(() => {
-      console.log('Emit close modal');
       this.event('close-modal');
     });
 
+    const state$ = getState$();
+    const activeInputPeer$ = getActiveDialogInputPeer$(state$);
+
+    const buttonNode = $('#send-button', node);
+    console.log('Button node:', buttonNode);
+    const submitClick$ = fromEvent(buttonNode, 'click');
+
+    const captionNode = $('#caption', node);
+    const submitOnEnter$ = fromEvent(captionNode, 'keyup')
+      .pipe(filter(R.propEq('keyCode', 13)));
+
+    const submitEvent$ = merge(submitClick$, submitOnEnter$);
+
+    const submit$ = submitEvent$.pipe(
+      map(() => ({
+        message: captionNode.value,
+        media: this.fileImage
+      })),
+      withLatestFrom(activeInputPeer$.pipe(map(wrapAsObjWithKey('peer')))),
+      map(R.mergeAll)
+    );
+
+    submit$.subscribe(x => {
+      sendMessage(x);
+      this.event('close-modal');
+    });
+
+    captionNode.focus();
     return this;
   }
 }
