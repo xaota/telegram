@@ -161,7 +161,7 @@ export default class ModalSendFile extends Component {
 
     const submit$ = submitEvent$.pipe(
       map(() => ({
-        message: captionNode.value,
+        message: captionNode.value || '',
         media: this.file
       })),
       withLatestFrom(activeInputPeer$.pipe(map(wrapAsObjWithKey('peer')))),

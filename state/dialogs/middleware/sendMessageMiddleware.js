@@ -96,13 +96,18 @@ const isImageFile = R.pipe(
   R.startsWith('image')
 );
 
+const isBigFile = R.pipe(isObjectOf('inputFileBig'));
+
 /**
  * @params {[inputFile, file]} - takes input file and file
  * @returns InputMedia object
  */
 const buildInputMedia = R.cond([
   [
-    R.pipe(R.nth(1), isImageFile),
+    R.allPass([
+      R.pipe(R.nth(1), isImageFile),
+      R.pipe(R.nth(0), isBigFile, R.not)
+    ]),
     R.pipe(
       R.nth(0),
       wrapAsObjWithKey('file'),
