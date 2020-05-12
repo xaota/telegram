@@ -11,16 +11,27 @@ function getUploadPreview(file) {
     const img = new Image();
     img.src = createUrl(file);
     return img;
-  } 
-    return new FileUploadPreview(file);
+  }
+  if (R.startsWith('video', file.type)) {
+    const element = document.createElement('video');
+    element.src = createUrl(file);
+    element.muted = true;
+    element.autoplay = true;
+    element.loop = true;
+    return element;
+  }
+  return new FileUploadPreview(file);
 }
 
 
 function getModalHeader(file) {
   if (R.startsWith('image/', file.type)) {
     return 'Send photo';
-  } 
-    return 'Send file';
+  }
+  if (R.startsWith('video/', file.type)) {
+    return 'Send video';
+  }
+  return 'Send file';
 }
 
 
@@ -91,6 +102,12 @@ const style = css`
   }
   
   .modal-body img{
+    max-width: 100%;
+    max-height: 500px;
+    border-radius: 8px;
+  }
+  
+  .modal-body video {
     max-width: 100%;
     max-height: 500px;
     border-radius: 8px;
