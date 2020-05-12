@@ -3,6 +3,26 @@ import $ from '../../script/ui/DOM.js';
 import {createUrl, wrapAsObjWithKey} from '../../script/helpers.js';
 import {getActiveDialogInputPeer$} from '../../state/dialogs/stream-builders.js';
 import {sendMessage} from '../../state/dialogs/actions.js';
+import FileUploadPreview from '../../components/app/file-upload-preview.js';
+
+
+function getUploadPreview(file) {
+  if (R.startsWith('image/', file.type))  {
+    const img = new Image();
+    img.src = createUrl(file);
+    return img;
+  } 
+    return new FileUploadPreview(file);
+}
+
+
+function getModalHeader(file) {
+  if (R.startsWith('image/', file.type)) {
+    return 'Send photo';
+  } 
+    return 'Send file';
+}
+
 
 /* eslint-disable */
 import UIButton from '../ui/button.js';
@@ -81,7 +101,7 @@ const style = css`
 `;
 const attributes = {};
 const properties = {};
-export default class ModalSendPhoto extends Component {
+export default class ModalSendFile extends Component {
   static template = html`
     <template>
       <style>${style}</style>
@@ -91,7 +111,6 @@ export default class ModalSendPhoto extends Component {
             <ui-icon id="close">close</ui-icon>
           </div>
           <div class="header-place">
-            Send photo/video
           </div>
           <div class="button-place">
             <ui-button id="send-button" size="small" >Send</ui-button>
@@ -106,20 +125,20 @@ export default class ModalSendPhoto extends Component {
     </template>
   `
 
-  constructor(fileImage) {
+  constructor(file) {
     super();
-    this.fileImage = fileImage;
+    this.file = file;
   }
 
   mount(node) {
     super.mount(node, attributes, properties);
 
-    const url = createUrl(this.fileImage);
-    const img = new Image();
-    img.src = url;
-    const modalBodyNode = $('.modal-body', node);
+    const modalHeaderNode = $('.header-place', node);
+    modalHeaderNode.innerText = getModalHeader(this.file);
 
-    modalBodyNode.appendChild(img);
+    const modalBodyNode = $('.modal-body', node);
+    const element = getUploadPreview(this.file);
+    modalBodyNode.appendChild(element);
 
     const closeIconNode = $('#close', node);
     const close$ = fromEvent(closeIconNode, 'click');
@@ -143,7 +162,7 @@ export default class ModalSendPhoto extends Component {
     const submit$ = submitEvent$.pipe(
       map(() => ({
         message: captionNode.value,
-        media: this.fileImage
+        media: this.file
       })),
       withLatestFrom(activeInputPeer$.pipe(map(wrapAsObjWithKey('peer')))),
       map(R.mergeAll)
@@ -159,4 +178,4 @@ export default class ModalSendPhoto extends Component {
   }
 }
 
-Component.init(ModalSendPhoto, 'modal-send-photo', {attributes, properties});
+Component.init(ModalSendFile, 'modal-send-file', {attributes, properties});

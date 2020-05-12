@@ -7,7 +7,7 @@ import {authorizedUser$} from '../../auth/stream-builders.js';
 
 const fromPromise = rxjs.from;
 const {of, fromEvent, combineLatest, iif} = rxjs;
-const {map, filter, switchMap, switchMapTo} = rxjs.operators;
+const {map, filter, switchMap, switchMapTo, tap, withLatestFrom} = rxjs.operators;
 const {isActionOf} = store;
 const {method, isObjectOf, construct} = zagram;
 
@@ -72,6 +72,58 @@ function sendTextMessage$(connection, data) {
 }
 
 /**
+ * @param {File} file - file
+ * @returns {Array<Object>} - array with objects of type DocumentAttribute
+ */
+const buildDocumentAttributes = R.pipe(applyAll([
+    R.pipe(
+      R.prop('name'),
+      wrapAsObjWithKey('file_name'),
+      x => {
+        console.log('File name:', x);
+        return x;
+      },
+      R.partial(construct, ['documentAttributeFilename']),
+      x => {
+        console.log('attribute:', x);
+        return x;
+      }
+    )
+  ]));
+
+const isImageFile = R.pipe(
+  R.prop('type'),
+  R.startsWith('image')
+);
+
+/**
+ * @params {[inputFile, file]} - takes input file and file
+ * @returns InputMedia object
+ */
+const buildInputMedia = R.cond([
+  [
+    R.pipe(R.nth(1), isImageFile),
+    R.pipe(
+      R.nth(0),
+      wrapAsObjWithKey('file'),
+      R.partial(construct, ['inputMediaUploadedPhoto'])
+    )
+  ],
+  [
+    R.T,
+    R.pipe(
+      applyAll([
+        R.pipe(R.nth(0), wrapAsObjWithKey('file')),
+        R.pipe(R.nth(1), R.prop('type'), wrapAsObjWithKey('mime_type')),
+        R.pipe(R.nth(1), buildDocumentAttributes, wrapAsObjWithKey('attributes'))
+      ]),
+      R.mergeAll,
+      R.partial(construct, ['inputMediaUploadedDocument'])
+    )
+  ]
+]);
+
+/**
  * Uploads file returns input media
  * @param connection
  * @param file
@@ -79,8 +131,8 @@ function sendTextMessage$(connection, data) {
 function uploadFile$(connection, file) {
   const {promise} = connection.upload(file, R.identity);
   return fromPromise(promise).pipe(
-    map(wrapAsObjWithKey('file')),
-    map(R.partial(construct, ['inputMediaUploadedPhoto']))
+    withLatestFrom(of(file)),
+    map(buildInputMedia)
   );
 }
 
@@ -92,6 +144,9 @@ function sendMediaMessage$(connection, data) {
   ).pipe(
     map(R.mergeAll),
     map(buildMediaRequest),
+    tap(x => {
+      console.log('Upload media request:', x);
+    }),
     switchMap(sendMedia$)
   );
 }

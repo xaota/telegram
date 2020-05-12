@@ -9,10 +9,10 @@ import UIIcon from '../ui/icon.js';
 import UIInput from '../ui/input.js';
 import UIButton from '../ui/button.js';
 import {attachOverlay} from '../ui/overlay.js'
-import ModalSendPhoto from './modal-send-photo.js';
+import ModalSendFile from './modal-send-file.js';
 /* eslint-enable */
 
-const {fromEvent} = rxjs;
+const {fromEvent, merge} = rxjs;
 const {filter, map, tap} = rxjs.operators;
 
 const style = css`
@@ -222,10 +222,25 @@ const properties = {};
       photoClick$.subscribe(() => {
         mediaFileNode.click();
       });
-      const mediaChanged$ = fromEvent(mediaFileNode, 'change');
-      const mediaFile$ = mediaChanged$.pipe(map(() => mediaFileNode.files[0]));
+
+      const documentNode = $('#document', node);
+      const documentClick$ = fromEvent(documentNode, 'click');
+      const mediaDocumentNode = $('#mediaDocument', node);
+      documentClick$.subscribe(() => {
+        mediaDocumentNode.click();
+      });
+
+      const mediaFileChanged$ = fromEvent(mediaFileNode, 'change')
+        .pipe(map(() => mediaFileNode.files[0]));
+      const mediaDocumentChanged$ = fromEvent(mediaDocumentNode, 'change')
+        .pipe(map(() => mediaDocumentNode.files[0]));
+
+      const mediaFile$ = merge(mediaFileChanged$, mediaDocumentChanged$);
+
       mediaFile$.subscribe(file => {
-        attachOverlay(node, ModalSendPhoto, file);
+        attachOverlay(node, ModalSendFile, file);
+        mediaFileNode.value = null;
+        mediaDocumentNode.value = null;
       });
 
       return this;
