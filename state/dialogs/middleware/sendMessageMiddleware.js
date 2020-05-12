@@ -6,7 +6,7 @@ import {wrapAsObjWithKey} from '../../../script/helpers.js';
 import {authorizedUser$} from '../../auth/stream-builders.js';
 
 const fromPromise = rxjs.from;
-const {of, fromEvent, combineLatest, iif} = rxjs;
+const {of, fromEvent, combineLatest} = rxjs;
 const {map, filter, switchMap, switchMapTo, tap, withLatestFrom} = rxjs.operators;
 const {isActionOf} = store;
 const {method, isObjectOf, construct} = zagram;
@@ -166,11 +166,10 @@ export default function sendMessageMiddleware(action$, state$, connection) {
     map(R.prop('payload')),
     switchMap(x => combineLatest(
       of(x),
-      iif(
-        () => R.has('media', x),
-        sendMediaMessage$(connection, x),
-        sendTextMessage$(connection, x)
-      ),
+      R.cond([
+        [R.has('media'), R.partial(sendMediaMessage$, [connection])],
+        [R.T, R.partial(sendTextMessage$, [connection])]
+      ])(x),
       authorizedUser$(state$)
     ))
   );

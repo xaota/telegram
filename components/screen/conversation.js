@@ -19,7 +19,7 @@ import PeerAvatar from '../ui/peer-avatar.js'
 import AppMessageGroup  from '../app/message-group.js';
 
 const {fromEvent, Observable} = rxjs;
-const {map, distinctUntilChanged, withLatestFrom} = rxjs.operators;
+const {map, distinctUntilChanged, withLatestFrom, filter} = rxjs.operators;
 
 const getMessageGroupId = R.pipe(
   R.map(R.pipe(R.prop('id'), R.toString)),
@@ -125,8 +125,8 @@ export default class ScreenConversation extends Component {
     */
   mount(node) {
     const state$ = getState$();
-    const activeDialog$ = getActiveDialogInfo$(state$);
-    const activeDialogId$ = getActiveDialogId$(state$);
+    const activeDialog$ = getActiveDialogInfo$(state$).pipe(filter(R.pipe(R.isNil, R.not)));
+    const activeDialogId$ = getActiveDialogId$(state$).pipe(filter(R.pipe(R.isNil, R.not)));
     const msgAreaInnerNode = $('.message-area', node);
 
     activeDialogId$.pipe(distinctUntilChanged()).subscribe(() => {

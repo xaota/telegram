@@ -7,7 +7,7 @@ import {getUser$} from '../users/stream-builders.js';
 import {wrapAsObjWithKey} from '../../script/helpers.js';
 
 const {combineLatest, of} = rxjs;
-const {map, switchMap, withLatestFrom} = rxjs.operators;
+const {map, switchMap, withLatestFrom, filter} = rxjs.operators;
 
 
 /**
@@ -229,7 +229,7 @@ export function getActiveDialogInputPeer$(state$) {
  * @returns {Observable<*>} - stream of objects to load next batch of history for active dialog
  */
 export function getNextHistoryLoader$(state$) {
-  const activeDialogId$ = getActiveDialogId$(state$);
+  const activeDialogId$ = getActiveDialogId$(state$).pipe(filter(R.pipe(R.isNil, R.not)));
 
   const lastMessageId$ = activeDialogId$.pipe(
     map(x => R.pathOr([], ['dialogs', 'dialogs', x, 'messages_order'])),
