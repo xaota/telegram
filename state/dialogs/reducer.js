@@ -7,7 +7,8 @@ import {
   LOAD_DIALOGS,
   PREPEND_MESSAGE,
   SET_ACTIVE_DIALOG,
-  SET_SEARCHED_DIALOG_MESSAGES
+  SET_SEARCHED_DIALOG_MESSAGES,
+  DELETE_MESSAGE
 } from './constants.js';
 import {wrapAsObjWithKey} from '../../script/helpers.js';
 import {getAction, getActionPayload, getState, peerToPeerId, applyAll} from '../utils.js';
@@ -102,6 +103,17 @@ const buildOrderLens = R.pipe(
 );
 
 /**
+ * Takes peerId returns lens for dialogs messages
+ */
+const buildMessagesLens = R.pipe(
+  getPeerIdFromMessage,
+  R.partialRight(R.append, [['dialogs']]),
+  R.append('messages'),
+  R.lensPath
+);
+
+
+/**
  * Takes message and returns lens for message_order of dialog
  */
 const buildMessageOrderLens = R.pipe(
@@ -170,6 +182,37 @@ const appendNewMessageOrder = R.pipe(
       R.append,
       R.curry(R.binary(R.compose))(R.uniq),
       R.curry(R.binary(R.compose))(R.sort(sortKey))
+    ),
+    R.nth(0)
+  ]),
+  R.apply(R.over)
+);
+
+
+const removeFromMessageOrder = R.pipe(
+  applyAll([
+    R.pipe(R.nth(1), buildMessageOrderLens),
+    R.pipe(
+      R.nth(1),
+      R.prop('id'),
+      R.equals,
+      R.curry(R.binary(R.compose))(R.not),
+      R.filter
+    ),
+    R.nth(0)
+  ]),
+  R.apply(R.over)
+);
+
+const removeMessage = R.pipe(
+  applyAll([
+    R.pipe(R.nth(1), buildMessagesLens),
+    R.pipe(
+      R.nth(1),
+      R.prop('id'),
+      R.toString,
+      R.of,
+      R.omit
     ),
     R.nth(0)
   ]),
@@ -365,6 +408,22 @@ const handleClearSearchedDialogMessages = R.pipe(
   R.apply(R.set)
 );
 
+const handleDeleteMessage = R.pipe(
+  applyAll([
+    getState,
+    getActionPayload
+  ]),
+  applyAll([
+    removeFromMessageOrder,
+    R.nth(1)
+  ]),
+  applyAll([
+    removeMessage,
+    R.nth(1)
+  ]),
+  R.nth(0)
+);
+
 export default buildReducer({}, [
   [isActionOf(LOAD_DIALOGS), handleLoadingTrue],
   [isActionOf(DIALOGS_LOAD_FAILED), handleDialogsLoadFailed],
@@ -374,5 +433,6 @@ export default buildReducer({}, [
   [isActionOf(SET_ACTIVE_DIALOG), handleSetActiveDialog],
   [isActionOf(SET_SEARCHED_DIALOG_MESSAGES), handleSetSearchedDialogMessages],
   [isActionOf(CLEAR_SEARCHED_DIALOG_MESSAGES), handleClearSearchedDialogMessages],
-  [isActionOf(PREPEND_MESSAGE), handlePrependMessage]
+  [isActionOf(PREPEND_MESSAGE), handlePrependMessage],
+  [isActionOf(DELETE_MESSAGE), handleDeleteMessage]
 ]);
