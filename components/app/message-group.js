@@ -140,18 +140,19 @@ export default class AppMessageGroup extends Component {
     if (R.isNil(authorizedUser)) {
       return this;
     }
-    const authorizedUserMessage = messageGroup[0].from_id === authorizedUser.id;
+    const authorizedUserMessage = (
+      messageGroup[0].from_id === authorizedUser.id ||
+      R.has('random_id', messageGroup[0])
+    );
 
-    if (R.has('from_id', messageGroup[0])) {
-      if (authorizedUserMessage) {
-        appMessageNode.classList.add('right');
-      } else {
-        appMessageNode.classList.add('left');
+    if (authorizedUserMessage) {
+      appMessageNode.classList.add('right');
+    } else if (R.has('from_id', messageGroup[0])) {
+      appMessageNode.classList.add('left');
 
-        const avatarPlaceNode = $('.avatar-place', node);
-        const peerAvatar = new PeerAvatar(userIdToPeerId(messageGroup[0].from_id));
-        avatarPlaceNode.appendChild(peerAvatar);
-      }
+      const avatarPlaceNode = $('.avatar-place', node);
+      const peerAvatar = new PeerAvatar(userIdToPeerId(messageGroup[0].from_id));
+      avatarPlaceNode.appendChild(peerAvatar);
     }
 
     for (let j = 0; j < messageGroup.length; j++) {

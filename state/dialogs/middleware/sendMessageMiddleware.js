@@ -1,5 +1,5 @@
 import {SEND_MESSAGE} from '../constants.js';
-import {prependMessage} from '../actions.js';
+import {prependMessage, deleteMessage} from '../actions.js';
 import {isAuthKeyCreated, requestToTelegram$, applyAll, inputPeerToPeer} from '../../utils.js';
 import {getRandomBigInt} from '../../../script/crypto.js';
 import {wrapAsObjWithKey} from '../../../script/helpers.js';
@@ -16,15 +16,18 @@ function attachRandomId(x) {
   return {random_id: getRandomBigInt(8), ...x};
 }
 
-const buildTextRequest = R.pipe(
-  attachRandomId,
-  R.partial(method, ['messages.sendMessage'])
-);
+function attachTmpIds(x) {
+  return {
+    ...x,
+    out: true,
+    id: 2 ** 32 + Math.floor(Math.random() * 2 ** 16),
+    to_id: inputPeerToPeer(x.peer)
+  };
+}
 
-const buildMediaRequest = R.pipe(
-  attachRandomId,
-  R.partial(method, ['messages.sendMedia'])
-);
+const buildTextRequest = R.pipe(R.partial(method, ['messages.sendMessage']));
+
+const buildMediaRequest = R.pipe(R.partial(method, ['messages.sendMedia']));
 
 const isShortUpdate = isObjectOf('updateShortSentMessage');
 
@@ -38,7 +41,7 @@ const buildMessageFromRequestShortUpdate = R.pipe(
   applyAll([
     R.pipe(getRequest, R.prop('peer'), inputPeerToPeer, wrapAsObjWithKey('to_id')),
     R.pipe(getRequest, R.prop('message'), wrapAsObjWithKey('message')),
-    R.pipe(getResponse, R.pick(['id', 'media', 'out'])),
+    R.pipe(getResponse, R.pick(['id', 'media', 'out', 'date'])),
     R.pipe(getAuthorizedUser, R.prop('id'), wrapAsObjWithKey('from_id'))
   ]),
   R.mergeAll,
@@ -164,6 +167,12 @@ export default function sendMessageMiddleware(action$, state$, connection) {
     switchMapTo(action$),
     filter(isActionOf(SEND_MESSAGE)),
     map(R.prop('payload')),
+    map(attachRandomId),
+    map(attachTmpIds), // attach tmp values
+    tap(x => {
+      console.log('Prepend message', x);
+      prependMessage(x);
+    }),
     switchMap(x => combineLatest(
       of(x),
       R.cond([
@@ -171,7 +180,12 @@ export default function sendMessageMiddleware(action$, state$, connection) {
         [R.T, R.partial(sendTextMessage$, [connection])]
       ])(x),
       authorizedUser$(state$)
-    ))
+    )),
+    tap(x => {
+      const tmpMsg = x[0];
+      console.log('Delete message', tmpMsg);
+      deleteMessage(tmpMsg);
+    })
   );
 
   sentMessage$.subscribe(handleMessageResponse);

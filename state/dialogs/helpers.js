@@ -219,6 +219,7 @@ export function previewMessage(message) {
   const type = getMessageType(message);
   const handlers = {
     messageText: m => m.message,
+    messageMediaEmpty: m => m.message,
     messageMediaPoll: () => '📊 Poll',
     messageMediaPhoto:     m => '🖼 ' + (m.message || 'Photo'),
     // messageVideo:     c => '🎥 ' + (c.caption && c.caption.text || 'Video'),
