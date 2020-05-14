@@ -28,7 +28,7 @@ export function dateDay(date = new Date()) {
 }
 
 /**
- * @param {Number} timestamp - timestamp from telegram
+ * @param {Number} timestamp - getTimestamp from telegram
  * @return {Date}
  */
 export function tgDate(timestamp) {
@@ -75,4 +75,17 @@ export function downloadFile$(inputFileLocation, options = {}, cancelable) {
 export function createUrl(file) {
   const urlCreator = window.URL || window.webkitURL;
   return urlCreator.createObjectURL(file);
+}
+
+/** форматирование времени / getTimestamp @static */
+export function getTimestamp(timestamp) {
+    if (!timestamp) return '';
+    try {
+        timestamp = new Date(timestamp * 1000);
+        return [timestamp.getHours(), timestamp.getMinutes()]
+          .map(e => ('0' + e).slice(-2))
+          .join(':');
+    } catch (e) {
+        debugger; // eslint-disable-line
+    }
 }

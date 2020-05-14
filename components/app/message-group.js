@@ -1,8 +1,7 @@
 import Component, {html, css} from '../../script/ui/Component.js';
 import PeerAvatar from '../ui/peer-avatar.js';
 import {userIdToPeerId} from '../../state/users/utils.js';
-import MessagePhoto from '../messages/photo.js';
-import MessageText from '../messages/text.js';
+import messageFactory from '../messages/index.js';
 import {authorizedUser$} from '../../state/auth/stream-builders.js';
 import $ from '../../script/ui/DOM.js';
 
@@ -156,62 +155,12 @@ export default class AppMessageGroup extends Component {
     }
 
     for (let j = 0; j < messageGroup.length; j++) {
-      const message = messageGroup[j]?.media?.photo
-        ? new MessagePhoto(messageGroup[j].media.photo)
-        : new MessageText();
-
-      // media:
-      // webpage:
-      // @@constructor: "webPage"
-      // @@type: "WebPage"
-      // id: 5127856301970688130n
-      // url: "https://youtu.be/UEwCD8PjrZI"
-      // display_url: "youtube.com/watch?v=UEwCD8PjrZI"
-      // hash: 0
-      // type: "video"
-      // site_name: "YouTube"
-      // title: "Лох,Пидор"
-      // description: "опасный поцик"
-      // photo
-      // embed_url: "https://www.youtube.com/embed/UEwCD8PjrZI"
-      // embed_type: "iframe"
-      // embed_width: 480
-      // embed_height: 360
-
-      if (authorizedUserMessage) {
-        message.setAttribute('right', true);
-      } else {
-        message.setAttribute('left', true);
-      }
-
-      const span = document.createElement('span');
-      span.setAttribute('slot', 'content');
-      span.innerText = R.propOr('', 'message', messageGroup[j]);
-      message.appendChild(span);
-
-      message.timestamp = AppMessageGroup.timestamp(messageGroup[j].date);
-
-      if (messageGroup[j]?.media?.webpage) {
-        message?.webpage(messageGroup[j].media.webpage);
-      }
+      const message = messageFactory(messageGroup[j]);
 
       const contentNode = $('.content', node);
       contentNode.appendChild(message);
     }
     return this;
-  }
-
-  /** форматирование времени / timestamp @static */
-  static timestamp(timestamp) {
-    if (!timestamp) return '';
-    try {
-      timestamp = new Date(timestamp * 1000);
-      return [timestamp.getHours(), timestamp.getMinutes()]
-        .map(e => ('0' + e).slice(-2))
-        .join(':');
-    } catch (e) {
-      debugger; // eslint-disable-line
-    }
   }
 }
 
