@@ -3,11 +3,12 @@ import $ from '../../script/ui/DOM.js';
 /* eslint-disable */
 import UIIcon from '../ui/icon.js'
 import PeerAvatar from '../ui/peer-avatar.js'
-import {getDialogTitle, previewMessage} from '../../state/dialogs/helpers.js'
+import {getDialogTitle} from '../../state/dialogs/helpers.js'
 import {dateDay, formatDate, getTimestamp} from '../../script/helpers.js'
 import {setActiveDialog} from '../../state/dialogs/actions.js'
 import {getDialogWithLastMessage$} from '../../state/dialogs/stream-builders.js'
 import {getUserFullName} from '../../state/users/utils.js';
+import { previewMessage } from '../../script/utils/message.js'
 /* eslint-enable */
 
 const {fromEvent} = rxjs;
