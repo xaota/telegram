@@ -6,7 +6,7 @@ import {wrapAsObjWithKey} from '../../../script/helpers.js';
 import {setUserList} from '../../users/index.js';
 
 const {fromEvent} = rxjs;
-const {map, filter, switchMapTo, switchMap} = rxjs.operators;
+const {tap, map, filter, switchMapTo, switchMap} = rxjs.operators;
 
 const {isActionOf} = store;
 const {isObjectOf, isRpcError, method} = zagram;
@@ -16,7 +16,7 @@ const buildFullChannelRequestMethod = R.pipe(
   R.partial(method, ['channels.getFullChannel'])
 );
 
-const buildFullChatRequestMethod = R.partial(method, ['channels.getFullChat']);
+const buildFullChatRequestMethod = R.partial(method, ['messages.getFullChat']);
 
 const buildRequestMethod = R.cond([
   [isObjectOf('inputPeerChannel'), buildFullChannelRequestMethod],
@@ -47,6 +47,7 @@ export default function getFullChatMiddleware(action$, state$, connection) {
       switchMapTo(action$),
       filter(isActionOf(GET_FULL_CHAT)),
       map(R.prop('payload')),
+      filter(R.pipe(R.isNil, R.not)),
       map(buildRequestMethod),
       switchMap(sendRequest$)
     );
