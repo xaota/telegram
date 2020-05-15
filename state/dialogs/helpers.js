@@ -174,42 +174,78 @@ export const getDialogTitle = R.pipe(
   getTitle
 );
 
+
+/**
+ * Returns true if document is sticker
+ */
+export const isVideoDocument = R.pipe(
+  R.prop('attributes'),
+  R.filter(isObjectOf('documentAttributeVideo')),
+  R.length,
+  R.equals(1)
+);
+
+
+/**
+ * Returns true if document is sticker
+ */
+export const isStickerDocument = R.pipe(
+  R.prop('attributes'),
+  R.filter(isObjectOf('documentAttributeSticker')),
+  R.length,
+  R.equals(1)
+);
+
+
+/**
+ * Returns type of message from document
+ * @param {*} - Document
+ */
+export const getTypeFromDocument = R.cond([
+  [isVideoDocument, R.always('messageVideo')],
+  [isStickerDocument, R.always('messageSticker')],
+  [R.T, R.always('messageMediaDocument')]
+])
+
+
+/**
+ * Returns 'messageText' if message without media else returns type by
+ * message media
+ * @param media
+ */
+export const getTypeFromMedia = R.cond([
+  [isObjectOf('messageMediaEmpty'), R.always('messageText')],
+  [isObjectOf('messageMediaDocument'), R.pipe(R.prop('document'), getTypeFromDocument)],
+  [R.T, R.prop(CONSTRUCTOR_KEY)]
+]);
+
+
 /**
  * Returns 'messageText' if message without media else returns type by
  * message media
  * @param message
  */
-export function getCommonMessageType(message) {
-  const {media} = message;
-  if (media) {
-    return media[CONSTRUCTOR_KEY];
-  }
-  return 'messageText';
-}
+export const getCommonMessageType = R.cond([
+  [R.has('media'), R.pipe(R.prop('media'), getTypeFromMedia)],
+  [R.T, R.always('messageText')]
+]);
+
 
 /**
  * Returns service message type by action constructor:
  * https://core.telegram.org/type/MessageAction
  * @param message
  */
-export function getServiceMessageType(message) {
-  const {action} = message;
-  return action[CONSTRUCTOR_KEY];
-}
+export const getServiceMessageType = R.path(['action', CONSTRUCTOR_KEY]);
 
 /**
  * Returns types of message for function
  * @param message
  */
-export function getMessageType(message) {
-  if (isObjectOf('message', message)) {
-    return getCommonMessageType(message);
-  }
-
-  if (isObjectOf('messageService', message)) {
-    return getServiceMessageType(message);
-  }
-}
+export const getMessageType = R.cond([
+  [isObjectOf('message'), getCommonMessageType],
+  [isObjectOf('messageService'), getServiceMessageType]
+]);
 
 /**
  * @param {*} message - telegram message or service message object
