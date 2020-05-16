@@ -1,15 +1,30 @@
 import MessagePhoto from './photo.js';
 import MessageText from './text.js';
-import {getTimestamp} from '../../script/helpers.js';
+import MessageWebPage from './web-page.js';
+import MessageUnexpected from './unexpected.js';
+import {getMessageType} from '../../script/utils/message.js';
+
+
+const getMessageClass = R.cond([
+  [R.equals('messageMediaPhoto'), R.always(MessagePhoto)],
+  [R.equals('messageText'), R.always(MessageText)],
+  [R.equals('messageMediaWebPage'), R.always(MessageWebPage)],
+  [R.T, R.always(MessageUnexpected)]
+]);
+
 
 /**
  * @param {*} message - message or tmp message object
  * @returns {HTMLElement} - element of message
  */
 export default function messageFactory(message) {
-  const messageNode = message?.media?.photo
-    ? new MessagePhoto(message.media.photo)
-    : new MessageText();
+  console.log(`----- Message: ${message.id} -----`);
+  console.log('Type: ', getMessageType(message));
+  console.log(message);
+  const type = getMessageType(message);
+
+  const MessageClass = getMessageClass(type);
+  const messageNode = new MessageClass(message);
 
   // media:
   // webpage:
@@ -35,16 +50,7 @@ export default function messageFactory(message) {
     messageNode.setAttribute('left', true);
   }
 
-  const span = document.createElement('span');
-  span.setAttribute('slot', 'content');
-  span.innerText = R.propOr('', 'message', message);
-  messageNode.appendChild(span);
-
-  messageNode.timestamp = getTimestamp(message.date);
-
-  if (message?.media?.webpage) {
-    messageNode?.webpage(message.media.webpage);
-  }
-
+  console.log(messageNode);
+  console.log(`------------`);
   return messageNode;
 }

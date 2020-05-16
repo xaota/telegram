@@ -1,7 +1,9 @@
 import Component, {html, css} from '../../script/ui/Component.js';
 import $, {cssVariable, updateChildrenText} from '../../script/ui/DOM.js';
-import {wrapAsObjWithKey, createUrl, downloadFile$} from '../../script/helpers.js';
+import {wrapAsObjWithKey, createUrl, downloadFile$, getTimestamp} from '../../script/helpers.js';
+import {setMessageSplashScreen} from '../../state/ui/index.js';
 
+const {fromEvent} = rxjs;
 const {map} = rxjs.operators;
 const {isObjectOf, construct} = zagram;
 
@@ -11,6 +13,10 @@ const style = css`
     position: relative;
   }
 
+  .image {
+    cursor: pointer;
+  }
+  
   img {
     height: 100%;
     width: 100%;
@@ -69,7 +75,7 @@ const style = css`
     width: 1.8rem;
   }
 
-  #time { /* timestamp */
+  .timestamp { /* timestamp */
     position: absolute;
     /* display: block;
     text-align: right; */
@@ -86,7 +92,7 @@ const style = css`
 
 const attributes = {
   color(root, value) { cssVariable(this, 'color', value); },
-  timestamp(root, value) { updateChildrenText(root, 'span', value); }
+  timestamp(root, value) { updateChildrenText(root, 'span#time', value); }
   // status=received, sended
   // views
   // sign (author)
@@ -163,17 +169,19 @@ const buildInputPhotoFileLocation = R.pipe(
           <div class="image">
             <!-- <img /> -->
           </div>
-          <slot name="content"></slot>
+          <div class="content">
+          
+</div>
         </div>
-        <span id="time"></span> <!-- timestamp -->
+        <span id="time" class="timestamp"></span> <!-- timestamp -->
       </template>`;
 
   /** Создание компонента {MessagePhoto} @constructor
-    * @param {object?} photo сообщение
+    * @param {object?} message сообщение
     */
-    constructor(photo) {
+    constructor(message) {
       super();
-      if (photo) this.store({photo});
+      this.store({message});
     }
 
   /** Создание элемента в DOM (DOM доступен) / mount @lifecycle
@@ -182,9 +190,11 @@ const buildInputPhotoFileLocation = R.pipe(
     */
     mount(node) {
       super.mount(node, attributes, properties);
-      const {photo} = this.store();
-      if (!photo) return this; // !
+      const {message} = this.store();
+
+      if (!message) return this; // !
       const divNode = $('.image', node);
+      const photo = R.path(['media', 'photo'], message);
 
       MessagePhoto.src(photo).then(url => {
         const img = new Image();
@@ -192,7 +202,20 @@ const buildInputPhotoFileLocation = R.pipe(
         divNode.append(img);
       });
 
-      return this;
+      const imageClick$ = fromEvent(divNode, 'click');
+
+      imageClick$.subscribe(() => {
+        setMessageSplashScreen(message);
+      });
+
+      const contentNode = $('.content', node);
+      contentNode.innerText = message.message;
+
+    const timestamp = getTimestamp(message.date);
+    const timestampNode = $('.timestamp', node);
+    timestampNode.innerText = timestamp;
+
+    return this;
     }
 
     static src(photo) {

@@ -1,6 +1,6 @@
 import Component, {html, css} from '../../script/ui/Component.js';
-import $, {cssVariable, updateChildrenText} from '../../script/ui/DOM.js';
-
+import $, {cssVariable} from '../../script/ui/DOM.js';
+import {getMessageType} from '../../script/utils/message.js';
 import {getTimestamp} from '../../script/helpers.js';
 
 const style = css`
@@ -163,8 +163,7 @@ const style = css`
   `;
 
 const attributes = {
-  color(root, value) { cssVariable(this, 'color', value); },
-  timestamp(root, value) { updateChildrenText(root, '.timestamp', value); }
+  color(root, value) { cssVariable(this, 'color', value); }
   // status=received, sended
   // views
   // sign (author)
@@ -173,8 +172,11 @@ const properties = {
   // edited
 };
 
-export default class MessageText extends Component {
-    static template = html`
+/** {MessageWebPage} @class
+ * @description Отображение сообщения-текста
+ */
+export default class MessageUnexpected extends Component {
+  static template = html`
       <template>
         <style>${style}</style>
         <div> <!-- main -->
@@ -183,10 +185,10 @@ export default class MessageText extends Component {
         </div>
       </template>`;
 
-    constructor(message) {
-      super();
-      this.store({message});
-    }
+  constructor(message) {
+    super();
+    this.store({message});
+  }
 
   // /** Создание компонента {MessageWebPage} @constructor
   //   // * @param {string?} text содержимое элемента
@@ -197,22 +199,22 @@ export default class MessageText extends Component {
   //   }
 
   /** Создание элемента в DOM (DOM доступен) / mount @lifecycle
-    * @param {ShadowRoot} node корневой узел элемента
-    * @return {Component} @this {MessageWebPage} текущий компонент
-    */
-    mount(node) {
-      super.mount(node, attributes, properties);
-      const {message} = this.store();
+   * @param {ShadowRoot} node корневой узел элемента
+   * @return {Component} @this {MessageWebPage} текущий компонент
+   */
+  mount(node) {
+    super.mount(node, attributes, properties);
+    const {message} = this.store();
 
-      const contentNode = $('.content', node);
-      contentNode.innerText = message.message;
+    const contentNode = $('.content', node);
+    console.warn(message);
+    contentNode.innerText = `Unexpected message: ${getMessageType(message)}`;
 
-      const timestamp = getTimestamp(message.date);
-      const timestampNode = $('.timestamp', node);
-      timestampNode.innerText = timestamp;
-
-      return this;
-    }
+    const timestamp = getTimestamp(message.date);
+    const timestampNode = $('.timestamp', node);
+    timestampNode.innerText = timestamp;
+    return this;
   }
+}
 
-Component.init(MessageText, 'message-text', {attributes, properties});
+Component.init(MessageUnexpected, 'message-unexpected', {attributes, properties});
