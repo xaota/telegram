@@ -5,11 +5,15 @@ import MessageWebPage from './web-page.js';
 import MessageUnexpected from './unexpected.js';
 import MessageSticker from './sticker.js';
 import MessageDocument from './document.js';
+import MessageTmpText from './tmp-text.js';
+import MessageTmpMedia from './tmp-media.js';
 import {getMessageType} from '../../script/utils/message.js';
 
 
 const getMessageClass = R.cond([
   [R.equals('messageMediaPhoto'), R.always(MessagePhoto)],
+  [R.equals('tmpMessageText'), R.always(MessageTmpText)],
+  [R.equals('tmpMessageMedia'), R.always(MessageTmpMedia)],
   [R.equals('messageVideo'), R.always(MessageVideo)],
   [R.equals('messageText'), R.always(MessageText)],
   [R.equals('messageMediaWebPage'), R.always(MessageWebPage)],

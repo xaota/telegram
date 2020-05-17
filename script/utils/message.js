@@ -278,11 +278,18 @@ export const getCommonMessageType = R.cond([
 export const getServiceMessageType = R.path(['action', CONSTRUCTOR_KEY]);
 
 
+export const getTmpMessageType = R.cond([
+  [R.has('media'), R.always('tmpMessageMedia')],
+  [R.T, R.always('tmpMessageText')]
+]);
+
+
 /**
  * Returns types of message for function
  * @param message
  */
 export const getMessageType = R.cond([
+  [R.has('random_id'), getTmpMessageType],
   [isObjectOf('message'), getCommonMessageType],
   [isObjectOf('messageService'), getServiceMessageType]
 ]);
@@ -306,7 +313,9 @@ export function previewMessage(message) {
     messageMediaDocument: () => `Document`,
     // messageAnimation: c => 'GIF',
     messageChatAddMembers: () => 'добавление в чат',
-    messageActionContactSignUp: () => 'теперь в телеграм'
+    messageActionContactSignUp: () => 'теперь в телеграм',
+    tmpMessageText: m => R.prop('message', m),
+    tmpMessageMedia: m => '📎 ' +  (R.prop('message', m) || 'File')
   };
   const text = typeof handlers[type] === 'function'
     ? handlers[type](message)
