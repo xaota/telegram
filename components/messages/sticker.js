@@ -1,7 +1,19 @@
 import Component, {html, css} from '../../script/ui/Component.js';
-import {cssVariable, updateChildrenText} from '../../script/ui/DOM.js';
+import $, {cssVariable, updateChildrenText} from '../../script/ui/DOM.js';
+import {downloadFile$, createUrl, getTimestamp} from '../../script/helpers.js';
+import {
+  buildInputDocumentFileLocation,
+  getMediaDocument,
+  getThumbObjectFromMessage
+} from '../../script/utils/message.js';
 
-// import MessagePhoto from './photo.js';
+const {of} = rxjs;
+const {map, switchMap} = rxjs.operators;
+
+const isImageSticker = R.pipe(
+  getMediaDocument,
+  R.propEq('mime_type', 'image/webp')
+);
 
 const style = css`
   :host {
@@ -10,8 +22,8 @@ const style = css`
   }
 
   img {
-    width: 200px;
-    height: 200px;
+    width: 128px;
+    height: 128px;
   }
 
   span {
@@ -45,17 +57,16 @@ const properties = {
     static template = html`
       <template>
         <style>${style}</style>
-
-        <img />
-        <span></span> <!-- timestamp -->
+        <div class="image-place"></div>
+        <span class="timestamp"></span> <!-- timestamp -->
       </template>`;
 
   /** Создание компонента {MessageSticker} @constructor
     * @param {object?} sticker сообщение
     */
-    constructor(sticker) {
+    constructor(message) {
       super();
-      if (sticker) this.store({sticker});
+      this.store({message});
     }
 
   /** Создание элемента в DOM (DOM доступен) / mount @lifecycle
@@ -64,10 +75,38 @@ const properties = {
     */
     mount(node) {
       super.mount(node, attributes, properties);
+      const {message} = this.store();
 
-      // const data = this.store();
-      // File.getFile(data.is_animated ? data.thumbnail.photo : data.sticker).then(blob => updateChildrenAttribute(node, 'img', 'src', blob));
+      if (isImageSticker(message)) {
+        const stickerFile$ = of(message).pipe(
+          map(buildInputDocumentFileLocation),
+          switchMap(downloadFile$),
+          map(createUrl)
+        );
 
+        stickerFile$.subscribe(fileUrl => {
+          const imgPlaceNode = $('.image-place', node);
+          const imgNode = new Image();
+
+          const thumbInfo = getThumbObjectFromMessage(message);
+          console.log("Thumb info", thumbInfo);
+          if (R.isNil(thumbInfo)) {
+            console.warn("Cat get thumb size from", message);
+          } else {
+            imgNode.style.height = `${thumbInfo.h}px`;
+            imgNode.style.width = `${thumbInfo.w}px`;
+          }
+          imgNode.src = fileUrl;
+
+          imgPlaceNode.appendChild(imgNode);
+        });
+      } else {
+        console.log('Download and display animated sticker');
+      }
+
+      const timestamp = getTimestamp(message.date);
+      const timestampNode = $('.timestamp', node);
+      timestampNode.innerText = timestamp;
       return this;
     }
 

@@ -3,6 +3,7 @@ import MessageVideo from './video.js';
 import MessageText from './text.js';
 import MessageWebPage from './web-page.js';
 import MessageUnexpected from './unexpected.js';
+import MessageSticker from './sticker.js';
 import {getMessageType} from '../../script/utils/message.js';
 
 
@@ -11,6 +12,7 @@ const getMessageClass = R.cond([
   [R.equals('messageVideo'), R.always(MessageVideo)],
   [R.equals('messageText'), R.always(MessageText)],
   [R.equals('messageMediaWebPage'), R.always(MessageWebPage)],
+  [R.equals('messageSticker'), R.always(MessageSticker)],
   [R.T, R.always(MessageUnexpected)]
 ]);
 
@@ -20,9 +22,6 @@ const getMessageClass = R.cond([
  * @returns {HTMLElement} - element of message
  */
 export default function messageFactory(message) {
-  console.log(`----- Message: ${message.id} -----`);
-  console.log('Type: ', getMessageType(message));
-  console.log(message);
   const type = getMessageType(message);
 
   const MessageClass = getMessageClass(type);
@@ -51,8 +50,5 @@ export default function messageFactory(message) {
   } else {
     messageNode.setAttribute('left', true);
   }
-
-  console.log(messageNode);
-  console.log(`------------`);
   return messageNode;
 }

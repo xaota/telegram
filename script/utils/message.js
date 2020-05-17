@@ -43,7 +43,7 @@ const getDocument = R.pipe(R.cond([
   ]
 ]));
 
-const getMediaDocument = R.pipe(getMedia, getDocument);
+export const getMediaDocument = R.pipe(getMedia, getDocument);
 
 const getMediaId = R.pipe(getMediaDocument, R.prop('id'));
 
@@ -57,7 +57,7 @@ export const getThumbObject = R.pipe(
     [isObjectOf('photo'), R.path(['sizes'])],
     [R.T, R.path(['thumbs'])]
   ]),
-  R.filter(isObjectOf('photoSize')),
+  R.filter(R.anyPass([isObjectOf('photoSize'), isObjectOf('photoCachedSize')])),
   R.filter(R.propEq('type', 'm')),
   R.last
 );
