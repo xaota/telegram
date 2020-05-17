@@ -2,11 +2,13 @@ import Component, {html, css} from '../../script/ui/Component.js';
 import $ from '../../script/ui/DOM.js';
 import {clearMessageSplashScreen} from '../../state/ui/index.js';
 import {getSplashScreenMessage$} from '../../state/ui/stream-builders.js';
+import {getMessageType} from '../../script/utils/message.js';
 
 /* eslint-disable */
 import UIIcon from '../ui/icon.js'
 import SplashScreenHeader from '../app/splash-screen-header.js'
 import SplashScreenPhoto from '../app/splash-screen-photo.js'
+import SplashScreenVideo from '../app/splash-screen-video.js'
 /* eslint-enable */
 
 const {fromEvent} = rxjs;
@@ -16,6 +18,7 @@ const getId = R.propOr(-1, 'id');
 
 const getSplashScreenView = R.cond([
   [R.isNil, R.identity],
+  [R.pipe(getMessageType, R.equals('messageVideo')), R.always(SplashScreenVideo)],
   [R.T, R.always(SplashScreenPhoto)]
 ]);
 

@@ -1,6 +1,6 @@
 import Component, {html, css} from '../../script/ui/Component.js';
 import $ from '../../script/ui/DOM.js';
-import {buildInputPhotoFileLocation} from '../../script/utils/message.js';
+import {buildInputDocumentFileLocation} from '../../script/utils/message.js';
 import {createUrl, downloadFile$} from '../../script/helpers.js';
 
 /* eslint-disable */
@@ -16,15 +16,19 @@ ui-loading {
   width: 40px;
   height: 40px;
 }
+
+video {
+  max-height: 70vh;
+}
 `;
 const attributes = {};
 const properties = {};
-export default class SplashScreenPhoto extends Component {
+export default class SplashScreenVideo extends Component {
   static template = html`
     <template>
         <style>${style}</style>
         <ui-loading></ui-loading>
-        <img alt="preview" />
+        <video />
     </template>
   `;
 
@@ -39,17 +43,18 @@ export default class SplashScreenPhoto extends Component {
 
     const uiLoadingNode = $('ui-loading', node);
 
-    const imgNode = $('img', node);
-    imgNode.style.display = 'none';
+    const videoNode = $('video', node);
+    videoNode.style.display = 'none';
 
-    const inputFileLocation = buildInputPhotoFileLocation(message);
+    const inputFileLocation = buildInputDocumentFileLocation(message);
     const download$ = downloadFile$(inputFileLocation);
     download$.pipe(map(createUrl)).subscribe(url => {
-      imgNode.src = url;
-      imgNode.style.display = 'inline';
+      videoNode.src = url;
+      videoNode.setAttribute('controls', true);
+      videoNode.style.display = 'inline';
       uiLoadingNode.style.display = 'none';
     });
   }
 }
 
-Component.init(SplashScreenPhoto, 'splash-screen-photo', {attributes, properties});
+Component.init(SplashScreenVideo, 'splash-screen-video', {attributes, properties});
