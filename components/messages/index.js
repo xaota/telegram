@@ -4,6 +4,7 @@ import MessageText from './text.js';
 import MessageWebPage from './web-page.js';
 import MessageUnexpected from './unexpected.js';
 import MessageSticker from './sticker.js';
+import MessageDocument from './document.js';
 import {getMessageType} from '../../script/utils/message.js';
 
 
@@ -13,6 +14,7 @@ const getMessageClass = R.cond([
   [R.equals('messageText'), R.always(MessageText)],
   [R.equals('messageMediaWebPage'), R.always(MessageWebPage)],
   [R.equals('messageSticker'), R.always(MessageSticker)],
+  [R.equals('messageMediaDocument'), R.always(MessageDocument)],
   [R.T, R.always(MessageUnexpected)]
 ]);
 

@@ -1,5 +1,79 @@
 import Component, {html, css} from '../../script/ui/Component.js';
 import $, {cssVariable, updateChildrenText} from '../../script/ui/DOM.js';
+import {
+  buildInputDocumentFileLocation,
+  getFilename, getFileSize,
+  getReadableFileSize
+} from '../../script/utils/message.js';
+import {downloadFile$, getTimestamp, createUrl} from '../../script/helpers.js';
+
+/* eslint-disable */
+import UIIcon     from '../ui/icon.js';
+/* eslint-enable */
+
+
+const {fromEvent} = rxjs;
+const {mapTo, map, switchMap, tap} = rxjs.operators;
+
+function trackProgress(node, downloadedPartsCount, totalPartsCount) {
+  const percent = (downloadedPartsCount/totalPartsCount) * 100;
+  node.innerText = `${(percent).toFixed(2)}%`;
+}
+
+function setDownloaded(node) {
+  node.innerText = 'Downloaded';
+}
+
+function setCanceled(node) {
+  node.innerText = 'Canceled';
+}
+
+function showDownload(node) {
+  const downloadNode = $('.icon-download', node);
+  downloadNode.style.display = 'flex';
+
+  const cancelNode = $('.icon-cancel', node);
+  cancelNode.style.display = 'none';
+
+  const completedNode = $('.icon-completed', node);
+  completedNode.style.display = 'none';
+}
+
+function showCancel(node) {
+  const downloadNode = $('.icon-download', node);
+  downloadNode.style.display = 'none';
+
+  const cancelNode = $('.icon-cancel', node);
+  cancelNode.style.display = 'flex';
+
+  const completedNode = $('.icon-completed', node);
+  completedNode.style.display = 'none';
+}
+
+function showCompleted(node) {
+  const downloadNode = $('.icon-download', node);
+  downloadNode.style.display = 'none';
+
+  const cancelNode = $('.icon-cancel', node);
+  cancelNode.style.display = 'none';
+
+  const completedNode = $('.icon-completed', node);
+  completedNode.style.display = 'flex';
+}
+
+/**
+ * @param {File} file
+ */
+function saveDownloadedFile(filename, file) {
+  const fileUrl = createUrl(file);
+  const element = document.createElement('a');
+  element.setAttribute('href', fileUrl);
+  element.setAttribute('download', filename);
+
+  document.body.appendChild(element);
+  element.click();
+  document.body.removeChild(element);
+}
 
 const style = css`
   :host {
@@ -12,8 +86,10 @@ const style = css`
     font-size: 13px;
   }
 
-  div {
-    display: inline-block;
+  .main {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     background: var(--field);
     border-radius: 5px;
     position: relative;
@@ -24,30 +100,30 @@ const style = css`
     word-break: break-word;
   }
 
-  :host([left]) div {
+  :host([left]) .main {
     border-bottom-left-radius: 5px;
     border-top-left-radius: 5px;
     background: var(--background-message-in);
   }
 
-  :host([right]) div {
+  :host([right]) .main {
     border-bottom-right-radius: 5px;
     border-top-right-radius: 5px;
     background: var(--background-message-out);
   }
 
   /* хвостик */
-  :host([left]:last-child) div {
+  :host([left]:last-child) .main {
     border-bottom-left-radius: 0;
   }
 
-  :host([right]:last-child) div {
+  :host([right]:last-child) .main {
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 5px;
   }
 
-  :host([left]:last-child) div::after, :host([left]:last-child) div::before,
-  :host([right]:last-child) div::after, :host([right]:last-child) div::before {
+  :host([left]:last-child) .main::after, :host([left]:last-child) .main::before,
+  :host([right]:last-child) .main::after, :host([right]:last-child) .main::before {
     position: absolute;
     width: 12px;
     left: 0;
@@ -56,31 +132,31 @@ const style = css`
     content: "";
   }
 
-  :host([left]:last-child) div::before,
-  :host([right]:last-child) div::before { /* тень хвостика (только вниз пусть будет) */
+  :host([left]:last-child) .main::before,
+  :host([right]:last-child) .main::before { /* тень хвостика (только вниз пусть будет) */
     height: 1px; /* 0 */
     box-shadow: 0 1px 2px 0 rgba(16, 35, 47, 0.15);
   }
 
-  :host([left]:last-child) div::after,
-  :host([right]:last-child) div::after { /* хвостик */
+  :host([left]:last-child) .main::after,
+  :host([right]:last-child) .main::after { /* хвостик */
     height: 24px;
     background: radial-gradient(ellipse farthest-side at top left, transparent 100%, var(--background-message-in) 100%);
   }
 
-  :host([right]:last-child) div::before,
-  :host([right]:last-child) div::after {
+  :host([right]:last-child) .main::before,
+  :host([right]:last-child) .main::after {
     right: 0;
     transform: translateX(calc(100% - 2px));
     left: inherit;
   }
 
-  :host([right]:last-child) div::after {
+  :host([right]:last-child) .main::after {
     background: radial-gradient(ellipse farthest-side at top right, transparent 100%, var(--background-message-out) 100%);
   }
 
-  :host([reply]) div::before,
-  :host([reply]) div::after {
+  :host([reply]) .main::before,
+  :host([reply]) .main::after {
     display: none;
   }
 
@@ -129,7 +205,7 @@ const style = css`
     width: 1.8rem;
   }
 
-  span { /* timestamp */
+  .timestamp { 
     position: absolute;
     /* display: block;
     text-align: right; */
@@ -147,7 +223,93 @@ const style = css`
   ui-file {
     padding-right: 3px;
     padding-left: 3px;
-  }`;
+  }
+  
+  .icon-place {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 0;
+    background-color: #4092E4;
+    margin-left: 8px;
+    margin-right: 8px;
+  }
+  
+  ui-icon {
+    color: #fff;
+  }
+  
+  .info-place {
+    
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    width: calc(100% - 72px);
+  }
+  
+  .icon-download {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 0;
+    background-color: #4092E4;
+    cursor: pointer;
+  }
+  
+  .icon-cancel {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 0;
+    background-color: #4092E4;
+    cursor: pointer;
+  }
+  
+  .icon-cancel:hover {
+    background-color: #f6553b;
+  }
+  
+  .icon-completed {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 0;
+    background-color: #4092E4;
+  }
+  
+  .name-place {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .sub-info-place {
+    color: var(--grayTextColor);
+    font-size: 14px;
+    display: flex;
+    flex-direction: row;
+  }
+  .size-info {
+    margin-right: 8px;
+  }
+  
+  `;
 
 const attributes = {
   color(root, value) { cssVariable(this, 'color', value); },
@@ -168,8 +330,26 @@ const properties = {
       <template>
         <style>${style}</style>
 
-        <div>
-          <span></span>
+        <div class="main">
+      <div class="icon-place">
+        <div class="icon-download">
+            <ui-icon id="download">download</ui-icon>
+        </div>
+        <div class="icon-cancel">
+            <ui-icon id="cancel">close</ui-icon>
+        </div>
+        <div class="icon-completed">
+            <ui-icon id="cancel">check</ui-icon>
+        </div>
+      </div>
+      <div class="info-place">
+        <div class="name-place">Some file name</div>
+        <div class="sub-info-place">
+            <span class="size-info"></span>
+            <span class="sub-info"></span>
+        </div>
+      </div>
+        <span class="timestamp"></span>
         </div>
       </template>`;
 
@@ -177,10 +357,9 @@ const properties = {
     * @param {*} data содержимое элемента
     * @param {string?} time временная метка сообщения
     */
-    constructor(data, time) {
+    constructor(message) {
       super();
-      this.time = time;
-      this.store(data);
+      this.store({message});
     }
 
   /** Создание элемента в DOM (DOM доступен) / mount @lifecycle
@@ -189,18 +368,66 @@ const properties = {
     */
     mount(node) {
       super.mount(node, attributes, properties);
+      const {message} = this.store();
 
-      const data = this.store();
+    const filename = getFilename(message);
+    const namePlaceNode = $('.name-place', node);
+    namePlaceNode.innerText = filename;
 
-      const div = $('div', node);
-      const f = {}; // new UiFile({file: data, message: true});
-      div.append(f);
-      const span = document.createElement('span');
-      span.innerText = this.time;
-      div.append(span);
+    const fileSize = getReadableFileSize(message);
+    const sizeInfoNode = $('.size-info', node);
+    sizeInfoNode.innerText = fileSize;
 
-      return this;
-    }
+    const subInfoNode = $('.sub-info', node);
+
+    let cancelDownloading = R.identity;
+
+    const iconPlaceNode = $('.icon-download', node);
+    const downloadClick$ = fromEvent(iconPlaceNode, 'click');
+
+    const download$ =  downloadClick$.pipe(
+      mapTo(message),
+      map(buildInputDocumentFileLocation),
+      map(fileLocation => [
+        fileLocation,
+        {progressCb: R.partial(trackProgress, [subInfoNode]), size: getFileSize(message)},
+        true
+      ]),
+      map(R.apply(downloadFile$)),
+      tap(([promise$, cancel]) => {
+        cancelDownloading = cancel;
+        showCancel(node);
+      }),
+      switchMap(R.nth(0)),
+      tap(R.partial(saveDownloadedFile, [filename]))
+    );
+
+    download$.subscribe(
+      () => {
+        setDownloaded(subInfoNode);
+        showCompleted(node);
+      },
+      x => {
+        console.warn(x);
+        setCanceled(subInfoNode);
+        showDownload(node);
+      }
+    );
+
+    const cancelNode = $('.icon-cancel', node);
+    const cancel$ = fromEvent(cancelNode, 'click');
+    cancel$.subscribe(() => {
+      cancelDownloading();
+      setCanceled(subInfoNode);
+      showDownload(node);
+    });
+
+    const timestamp = getTimestamp(message.date);
+    const timestampNode = $('.timestamp', node);
+    timestampNode.innerText = timestamp;
+
+    return this;
+  }
 
   /**
    *

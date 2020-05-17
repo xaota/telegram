@@ -244,7 +244,12 @@ export default class Telegram extends EventTarget {
   handleTelegramUpdate(e) {
     const event = new Event('telegramUpdate');
     event.detail = e.detail;
-    this.dispatchEvent(event);
+    try {
+      this.dispatchEvent(event);
+    } catch (error) {
+      console.warn('Error:', error);
+      console.log('Event:', e);
+    }
   }
 
 
