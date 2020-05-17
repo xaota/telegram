@@ -2,7 +2,11 @@ import Component, {css, html} from '../../script/ui/Component.js';
 import $ from '../../script/ui/DOM.js';
 import {createUrl, downloadFile$} from '../../script/helpers.js';
 import {setMessageSplashScreen} from '../../state/ui/index.js';
-import {buildThumbnailFileLocation} from '../../script/utils/message.js';
+import {buildThumbnailFileLocation, getMessageType} from '../../script/utils/message.js';
+
+/* eslint-disable */
+import UIIcon from '../ui/icon.js'
+/* eslint-enable */
 
 const {fromEvent} = rxjs;
 const {map} = rxjs.operators;
@@ -29,6 +33,26 @@ const style = css`
     display: block;
     padding-bottom: 100%;
   }
+  
+  .play-icon-place {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.3);
+  }
+  
+  .play-icon-place ui-icon {
+    fill: #fff;
+    color: #fff;
+  }
+  
+  .play-icon-place:hover ui-icon {
+    color: var(--iconHover);
+    fill: var(--iconHover);
+  }
 `;
 
 const attributes = {};
@@ -37,8 +61,12 @@ const properties = {};
 export default class MediaPreview extends Component {
   static template = html`
     <template>
-        <style>${style}</style>
-        <div class="image"></div>
+      <style>${style}</style>
+      <div class="image">
+        <div class="play-icon-place">
+          <ui-icon id="play">play</ui-icon> 
+        </div>
+      </div>
     </template>
   `;
 
@@ -53,6 +81,13 @@ export default class MediaPreview extends Component {
 
     const {message} = this.store();
     const inputPhotoLocation = buildThumbnailFileLocation(message);
+
+    const iconNode = $('.play-icon-place', node);
+    if (getMessageType(message) === 'messageVideo') {
+      iconNode.style.display = 'flex';
+    } else {
+      iconNode.style.display = 'none';
+    }
 
     downloadFile$(inputPhotoLocation)
       .pipe(map(createUrl))
