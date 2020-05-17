@@ -1,11 +1,15 @@
 import Component, {html, css} from '../../script/ui/Component.js';
 import $, {cssVariable, updateChildrenText} from '../../script/ui/DOM.js';
-import {wrapAsObjWithKey, createUrl, downloadFile$, getTimestamp} from '../../script/helpers.js';
+import {createUrl, downloadFile$, getTimestamp} from '../../script/helpers.js';
 import {setMessageSplashScreen} from '../../state/ui/index.js';
+import {
+  buildThumbnailFileLocation,
+  getThumbObjectFromMessage,
+  buildInputPhotoFileLocation
+} from '../../script/utils/message.js';
 
-const {fromEvent} = rxjs;
-const {map} = rxjs.operators;
-const {isObjectOf, construct} = zagram;
+const {of, fromEvent} = rxjs;
+const {map, switchMap} = rxjs.operators;
 
 const style = css`
   :host {
@@ -52,6 +56,7 @@ const style = css`
     padding: 0;
     /*padding: 8px 6px;*/
     word-break: break-word;
+    align-items: center;
   }
 
   .solo {
@@ -88,7 +93,13 @@ const style = css`
 
   :host([reply]) span {
     display: none;
-  }`;
+  }
+  
+  .content {
+    width: 100%;
+    display: block;
+  }
+  `;
 
 const attributes = {
   color(root, value) { cssVariable(this, 'color', value); },
@@ -100,63 +111,6 @@ const attributes = {
 const properties = {
   // edited
 };
-
-//
-
-// const getDocument =  R.pipe(R.cond([
-//   [
-//     isObjectOf('messageMediaPhoto'),
-//     R.prop('photo')
-//   ],
-//   [R.T, R.prop('document')]
-// ]));
-
-// const getMediaDocument = R.pipe(getMedia, getDocument);
-
-const getMediaId = R.pipe(R.prop('id'));
-
-const getAccessHash = R.pipe(R.prop('access_hash'));
-
-const getFileReference = R.pipe(R.prop('file_reference'));
-
-/**
-* @param {Object} message - telegrams message with media
-* @returns {Object} - information about size preview
-*/
-const getThumbObject = R.pipe(
-  // getMediaDocument,
-  R.cond([
-    [isObjectOf('photo'), R.path(['sizes'])],
-    [R.T, R.path(['thumbs'])]
-  ]),
-  R.filter(isObjectOf('photoSize')),
-  R.last
-);
-
-/**
- * @param {Object} message - telegrams message with media
- * @returns {Object} - params for building InputFileLocation object
- */
-const buildInputFileParams = R.pipe(
-  R.of,
-  R.ap([
-    R.pipe(getMediaId, wrapAsObjWithKey('id')),
-    R.pipe(getAccessHash, wrapAsObjWithKey('access_hash')),
-    R.pipe(getFileReference, wrapAsObjWithKey('file_reference')),
-    R.pipe(getThumbObject, R.prop('type'), wrapAsObjWithKey('thumb_size'))
-  ]),
-  R.mergeAll
-);
-
-/**
- * @param {Object} message - telegrams message with messageMediaPhoto
- * @return {Object} - inputPhotoFileLocation object
- */
-const buildInputPhotoFileLocation = R.pipe(
-  buildInputFileParams,
-  R.partial(construct, ['inputPhotoFileLocation'])
-);
-
 /** {MessagePhoto} @class
   * @description Отображение сообщения-фотографии
   * @property {string} угу
@@ -196,10 +150,18 @@ const buildInputPhotoFileLocation = R.pipe(
       const divNode = $('.image', node);
       const photo = R.path(['media', 'photo'], message);
 
-      MessagePhoto.src(photo).then(url => {
-        const img = new Image();
-        img.src = url;
-        divNode.append(img);
+      const thumbInfo = getThumbObjectFromMessage(message);
+      divNode.style.height = `${thumbInfo.h}px`;
+      divNode.style.width = `${thumbInfo.w}px`;
+
+      const thumbNail$ = of(message).pipe(
+        map(buildThumbnailFileLocation),
+        switchMap(downloadFile$),
+        map(createUrl)
+      );
+
+      thumbNail$.subscribe(thumbUrl => {
+        divNode.style.backgroundImage = `url(${thumbUrl})`;
       });
 
       const imageClick$ = fromEvent(divNode, 'click');

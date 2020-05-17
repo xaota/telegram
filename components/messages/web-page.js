@@ -1,8 +1,11 @@
 import Component, {html, css} from '../../script/ui/Component.js';
 import $, {cssVariable, updateChildrenText} from '../../script/ui/DOM.js';
 
-import MessagePhoto from './photo.js';
-import {getTimestamp} from '../../script/helpers.js';
+import {getTimestamp, downloadFile$, createUrl} from '../../script/helpers.js';
+import {buildThumbnailFileLocation} from '../../script/utils/message.js';
+
+const {of} = rxjs;
+const {map, switchMap} = rxjs.operators;
 
 const style = css`
   :host {
@@ -134,10 +137,6 @@ const style = css`
     width: 100%;
   }
   
-  slot[name="web-page"] img {
-    width: 100%;
-  }
-
   :host([reply]) .content {
     color: #707579;
   }
@@ -227,10 +226,18 @@ export default class MessageWebPage extends Component {
     });
 
     if (webPage.photo) {
-      const img = document.createElement('img');
-      MessagePhoto.src(webPage.photo).then(url => img.src = url);
-      img.style.maxWidth = '100%';
-      web.append(img);
+      const fileUrl$ = of(message)
+        .pipe(
+          map(buildThumbnailFileLocation),
+          switchMap(downloadFile$),
+          map(createUrl)
+        );
+
+      fileUrl$.subscribe(fileUrl => {
+        const img = document.createElement('img');
+        img.src = fileUrl;
+        web.append(img);
+      });
     }
 
     if (webPage.site_name) {

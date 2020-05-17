@@ -1,4 +1,5 @@
 import MessagePhoto from './photo.js';
+import MessageVideo from './video.js';
 import MessageText from './text.js';
 import MessageWebPage from './web-page.js';
 import MessageUnexpected from './unexpected.js';
@@ -7,6 +8,7 @@ import {getMessageType} from '../../script/utils/message.js';
 
 const getMessageClass = R.cond([
   [R.equals('messageMediaPhoto'), R.always(MessagePhoto)],
+  [R.equals('messageVideo'), R.always(MessageVideo)],
   [R.equals('messageText'), R.always(MessageText)],
   [R.equals('messageMediaWebPage'), R.always(MessageWebPage)],
   [R.T, R.always(MessageUnexpected)]

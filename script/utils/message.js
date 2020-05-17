@@ -15,12 +15,32 @@ const isMessageWithMediaDocument = R.pipe(
   isObjectOf('messageMediaDocument')
 );
 
+const isMessageWithWebPage = R.pipe(
+  x => {
+    console.log('Get media from: ', x);
+    return x;
+  },
+  getMedia,
+  x => {
+    console.log('Check: ', x);
+    return x;
+  },
+  isObjectOf('messageMediaWebPage')
+);
+
 const getDocument = R.pipe(R.cond([
   [
     isObjectOf('messageMediaPhoto'),
     R.prop('photo')
   ],
-  [R.T, R.prop('document')]
+  [
+    isObjectOf('messageMediaWebPage'),
+    R.path(['webpage', 'photo'])
+  ],
+  [
+    R.T,
+    R.prop('document')
+  ]
 ]));
 
 const getMediaDocument = R.pipe(getMedia, getDocument);
@@ -31,40 +51,53 @@ const getAccessHash = R.pipe(getMediaDocument, R.prop('access_hash'));
 
 const getFileReference = R.pipe(getMediaDocument, R.prop('file_reference'));
 
-/**
- * @param {Object} message - telegrams message with media
- * @returns {Object} - information about size preview
- */
-const getThumbObject = R.pipe(
-  getMediaDocument,
+
+export const getThumbObject = R.pipe(
   R.cond([
     [isObjectOf('photo'), R.path(['sizes'])],
     [R.T, R.path(['thumbs'])]
   ]),
   R.filter(isObjectOf('photoSize')),
+  R.filter(R.propEq('type', 'm')),
   R.last
+);
+
+/**
+ * @param {Object} message - telegrams message with media
+ * @returns {Object} - information about size preview
+ */
+export const getThumbObjectFromMessage = R.pipe(
+  getMediaDocument,
+  getThumbObject
 );
 
 /**
  * @param {Object} message - telegrams message with media
  * @returns {Object} - params for building InputFileLocation object
  */
-const buildThumbInputFileParams = R.pipe(
+export const buildThumbInputFileParams = R.pipe(
   R.of,
   R.ap([
-    R.pipe(getMediaId, wrapAsObjWithKey('id')),
-    R.pipe(getAccessHash, wrapAsObjWithKey('access_hash')),
-    R.pipe(getFileReference, wrapAsObjWithKey('file_reference')),
+    R.pick(['id', 'access_hash', 'file_reference']),
     R.pipe(getThumbObject, R.prop('type'), wrapAsObjWithKey('thumb_size'))
   ]),
   R.mergeAll
+);
+
+/**
+ * @param {Object} message - telegrams message with media
+ * @returns {Object} - params for building InputFileLocation object
+ */
+const buildThumbInputFileParamsFromMessage = R.pipe(
+  getMediaDocument,
+  buildThumbInputFileParams
 );
 /**
  * @param {Object} message - telegrams message with messageMediaPhoto
  * @return {Object} - inputPhotoFileLocation object
  */
 const buildThumbInputPhotoFileLocation = R.pipe(
-  buildThumbInputFileParams,
+  buildThumbInputFileParamsFromMessage,
   R.partial(construct, ['inputPhotoFileLocation'])
 );
 /**
@@ -72,7 +105,7 @@ const buildThumbInputPhotoFileLocation = R.pipe(
  * @return {Object} - inputDocumentFileLocation object
  */
 const buildThumbInputDocumentFileLocation = R.pipe(
-  buildThumbInputFileParams,
+  buildThumbInputFileParamsFromMessage,
   R.partial(construct, ['inputDocumentFileLocation'])
 );
 /**
@@ -81,6 +114,7 @@ const buildThumbInputDocumentFileLocation = R.pipe(
  */
 export const buildThumbnailFileLocation = R.cond([
   [isMessageWithMediaPhoto, buildThumbInputPhotoFileLocation],
+  [isMessageWithWebPage, buildThumbInputPhotoFileLocation],
   [isMessageWithMediaDocument, buildThumbInputDocumentFileLocation]
 ]);
 
