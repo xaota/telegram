@@ -7,6 +7,7 @@ import {
   getThumbObjectFromMessage
 } from '../../script/utils/message.js';
 
+const fromPromise = rxjs.from;
 const {of} = rxjs;
 const {map, switchMap} = rxjs.operators;
 
@@ -14,6 +15,10 @@ const isImageSticker = R.pipe(
   getMediaDocument,
   R.propEq('mime_type', 'image/webp')
 );
+
+function readFileAsUint8Array$(file) {
+  return fromPromise(file.arrayBuffer());
+}
 
 const style = css`
   :host {
@@ -58,6 +63,7 @@ const properties = {
       <template>
         <style>${style}</style>
         <div class="image-place"></div>
+        <div class="lottie-place"></div>
         <span class="timestamp"></span> <!-- timestamp -->
       </template>`;
 
@@ -89,7 +95,6 @@ const properties = {
           const imgNode = new Image();
 
           const thumbInfo = getThumbObjectFromMessage(message);
-          console.log("Thumb info", thumbInfo);
           if (R.isNil(thumbInfo)) {
             console.warn("Cat get thumb size from", message);
           } else {
@@ -101,7 +106,31 @@ const properties = {
           imgPlaceNode.appendChild(imgNode);
         });
       } else {
-        console.log('Download and display animated sticker');
+        const stickerFile$ = of(message).pipe(
+          map(buildInputDocumentFileLocation),
+          switchMap(downloadFile$),
+          switchMap(readFileAsUint8Array$),
+          map(x => pako.inflate(x, {to: 'string'})),
+          map(x => JSON.parse(x))
+        );
+
+        stickerFile$.subscribe(stickerFileData => {
+          const thumbInfo = getThumbObjectFromMessage(message);
+          const lottiePlace = $('.lottie-place', node);
+
+          if (thumbInfo) {
+            lottiePlace.style.height = `${thumbInfo.h}px`;
+            lottiePlace.style.width = `${thumbInfo.w}px`;
+          }
+
+          lottie.loadAnimation({
+            container: lottiePlace, // the dom element that will contain the animation
+            renderer: 'svg',
+            loop: true,
+            autoplay: true,
+            animationData: stickerFileData
+          });
+        });
       }
 
       const timestamp = getTimestamp(message.date);

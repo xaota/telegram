@@ -401,6 +401,8 @@
     "getState$": "readonly",
     "BigInt": "readonly",
     "importScripts": "readonly",
-    "telegram": "readonly"
+    "telegram": "readonly",
+    "pako": "readonly",
+    "lottie": "readonly"
   }
 }
