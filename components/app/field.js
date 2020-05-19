@@ -1,5 +1,7 @@
 import Component, {html, css} from '../../script/ui/Component.js';
 import $ from '../../script/ui/DOM.js';
+import {tabsSelector} from '../../script/ui/tabSelector.js';
+import {attachOverlay} from '../ui/overlay.js';
 
 /* eslint-disable */
 import UIDrop from '../ui/drop.js';
@@ -8,8 +10,10 @@ import UIItem from '../ui/item.js';
 import UIIcon from '../ui/icon.js';
 import UIInput from '../ui/input.js';
 import UIButton from '../ui/button.js';
-import {attachOverlay} from '../ui/overlay.js'
+import UITabs from '../ui/tabs.js';
+import UITab from '../ui/tab.js';
 import ModalSendFile from './modal-send-file.js';
+import EmojiPicker from './emoji-picker.js'
 /* eslint-enable */
 
 const {fromEvent, merge} = rxjs;
@@ -141,6 +145,26 @@ const style = css`
     display: flex;
     margin-top: 5px;
   }
+  
+  .emoji-drop {
+    width: 320px;
+    height: 320px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .tab-content {
+    display: flex;
+    flex-direction: columns;
+    height: 0;
+    flex-grow: 1;
+    width: 100%;
+    overflow-y: auto;
+  }
+  
+  emoji-picker {
+    display: none;
+  }
   `;
 
 const attributes = {};
@@ -166,7 +190,16 @@ const properties = {};
           <div class="msg_block">
             <ui-drop id="drop-emoji" up>
               <ui-icon id="emoji">emoji</ui-icon>
-              <form-emoji slot="drop"></form-emoji>
+              <div class="emoji-drop" slot="drop">
+                <ui-tabs>
+                  <ui-tab id="emoji-tab" selected>Emoji</ui-tab>
+                  <ui-tab id="stickers-tab">Stickers</ui-tab>
+                  <ui-tab id="gifs-tab">GIFs</ui-tab>
+                </ui-tabs>
+                <div class="tab-content">
+                    <emoji-picker></emoji-picker>
+                </div>
+              </div>
             </ui-drop>
             <div class="wrap_textarea">
               <textarea placeholder="Message" rows="1"></textarea>
@@ -241,6 +274,33 @@ const properties = {};
         attachOverlay(node, ModalSendFile, file);
         mediaFileNode.value = null;
         mediaDocumentNode.value = null;
+      });
+
+      const emojiDropNode = $('.emoji-drop', node);
+      emojiDropNode.addEventListener('click', e => {
+        e.preventDefault();
+        e.stopPropagation();
+      });
+
+      const uiTabsNode = $('ui-tabs', node);
+      const uiTabContentNode = $('.tab-content', node);
+      const emojiPickerNode = $('emoji-picker', node);
+      tabsSelector(
+        uiTabsNode,
+        ['#emoji-tab', '#stickers-tab', '#gifs-tab'],
+        '#emoji-tab'
+      )
+        .subscribe(x => {
+          emojiPickerNode.style.display = 'none';
+          if (x === '#emoji-tab') {
+            emojiPickerNode.style.display = 'flex';
+          }
+      });
+
+      const emoji$ = fromEvent(emojiPickerNode, 'emoji-selected');
+      emoji$.subscribe(event => {
+        const {detail: emojiItem} = event;
+        textareaNode.value += emojiItem.emoji;
       });
 
       return this;

@@ -13,20 +13,16 @@ import {
   getTitleFromPeerInfo,
   getUsernameFromPeerInfo
 } from '../../state/dialogs/helpers.js'
-import {closeSideBar} from '../../state/ui/index.js';
-
-const {fromEvent, from} = rxjs;
-const {filter, map, mapTo, mergeAll, distinctUntilChanged, startWith, tap} = rxjs.operators;
-
+import { closeSideBar } from '../../state/ui/index.js'
 /* eslint-disable */
-import UITab      from '../ui/tab.js';
-import UITabs     from '../ui/tabs.js';
-import UIIcon     from '../ui/icon.js'
 import PeerAvatar from '../ui/peer-avatar.js'
-import IUProperty from '../ui/property.js';
-import AppHeader  from '../app/header.js';
 import MediaFileList from '../app/media-file-list.js'
 import DocumentFileList from '../app/document-file-list.js'
+import {tabsSelector} from '../../script/ui/tabSelector.js'
+
+const {fromEvent} = rxjs;
+const {distinctUntilChanged} = rxjs.operators;
+
 /* eslint-enable */
 
 const style = css`
@@ -99,30 +95,6 @@ function switchNode(node, value) {
     node.innerText = value;
     node.style.display = 'block';
   }
-}
-
-const notIsNil = R.pipe(R.isNil, R.not);
-
-/**
- * @param {UiTabs} node - that contain tabs
- * @param {Arrary<string>} tabSelectorList - selector of selected tab
- * @param {string} [defaultValue] - default value that should be
- * @returns {Observable<string}>} string of selected
- */
-function tabsSelector(node, tabSelectorList, defaultValue) {
-  return from(tabSelectorList)
-    .pipe(
-      map(selector => [$(selector, node), selector]),
-      map(([tabNode, selector]) => fromEvent(tabNode, 'selected')
-          .pipe(mapTo(selector))),
-      mergeAll(),
-      startWith(defaultValue),
-      filter(notIsNil),
-      tap(selector => {
-        R.forEach(x => $(x, node).removeAttribute('selected'), tabSelectorList);
-        $(selector, node).setAttribute('selected', true);
-      })
-    );
 }
 
 /**
