@@ -6,7 +6,7 @@ import {wrapAsObjWithKey} from '../../../script/helpers.js';
 import {setUserList} from '../../users/index.js';
 
 const {fromEvent} = rxjs;
-const {tap, map, filter, switchMapTo, switchMap} = rxjs.operators;
+const {map, filter, switchMapTo, switchMap} = rxjs.operators;
 
 const {isActionOf} = store;
 const {isObjectOf, isRpcError, method} = zagram;

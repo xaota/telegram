@@ -16,6 +16,10 @@ import {
   applyMiddleware as chatsApplyMiddleware
 } from './chats/index.js';
 import {reducer as uiReducer} from './ui/index.js';
+import {
+  reducer as stickersReducer,
+  applyMiddleware as stickersApplyMiddleware
+} from './stickers/index.js';
 import telegramUpdateMiddleware from './telegramUpdateMiddleware.js';
 
 const {buildStateStream, combineReducers, getActionStream} = store;
@@ -31,7 +35,8 @@ export default function init(connection) {
     auth: authReducer,
     dialogs: dialogsReducer,
     users: usersReducer,
-    chats: chatsReducer
+    chats: chatsReducer,
+    stickers: stickersReducer
   }));
   const action$ = getActionStream();
 
@@ -52,7 +57,8 @@ export default function init(connection) {
       dialogsApplyMiddleware,
       chatsApplyMiddleware,
       usersApplyMiddleware,
-      telegramUpdateMiddleware
+      telegramUpdateMiddleware,
+      stickersApplyMiddleware
     ]
   );
 }
