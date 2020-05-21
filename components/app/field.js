@@ -13,7 +13,8 @@ import UIButton from '../ui/button.js';
 import UITabs from '../ui/tabs.js';
 import UITab from '../ui/tab.js';
 import ModalSendFile from './modal-send-file.js';
-import EmojiPicker from './emoji-picker.js'
+import EmojiPicker from './emoji-picker.js';
+import StickerPicker from './sticker-picker.js';
 /* eslint-enable */
 
 const {fromEvent, merge} = rxjs;
@@ -165,6 +166,11 @@ const style = css`
   emoji-picker {
     display: none;
   }
+  
+  sticker-picker {
+    display: none;
+    height: 100%;
+  }
   `;
 
 const attributes = {};
@@ -198,6 +204,7 @@ const properties = {};
                 </ui-tabs>
                 <div class="tab-content">
                     <emoji-picker></emoji-picker>
+                    <sticker-picker></sticker-picker>
                 </div>
               </div>
             </ui-drop>
@@ -285,6 +292,7 @@ const properties = {};
       const uiTabsNode = $('ui-tabs', node);
       const uiTabContentNode = $('.tab-content', node);
       const emojiPickerNode = $('emoji-picker', node);
+      const stickerPickerNode = $('sticker-picker', node);
       tabsSelector(
         uiTabsNode,
         ['#emoji-tab', '#stickers-tab', '#gifs-tab'],
@@ -292,15 +300,23 @@ const properties = {};
       )
         .subscribe(x => {
           emojiPickerNode.style.display = 'none';
+          stickerPickerNode.style.display = 'none';
           if (x === '#emoji-tab') {
             emojiPickerNode.style.display = 'flex';
+          } else {
+            stickerPickerNode.style.display = 'flex';
           }
-      });
+        });
 
       const emoji$ = fromEvent(emojiPickerNode, 'emoji-selected');
       emoji$.subscribe(event => {
         const {detail: emojiItem} = event;
         textareaNode.value += emojiItem.emoji;
+      });
+
+      const sticker$ = fromEvent(stickerPickerNode, 'sticker-selected');
+      sticker$.subscribe(x => {
+        console.log('Sticker selected:', x);
       });
 
       return this;
