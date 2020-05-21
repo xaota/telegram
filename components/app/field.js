@@ -2,6 +2,9 @@ import Component, {html, css} from '../../script/ui/Component.js';
 import $ from '../../script/ui/DOM.js';
 import {tabsSelector} from '../../script/ui/tabSelector.js';
 import {attachOverlay} from '../ui/overlay.js';
+import {getActiveDialogInputPeer$} from '../../state/dialogs/stream-builders.js';
+import {wrapAsObjWithKey} from '../../script/helpers.js';
+import {sendMessage} from '../../state/dialogs/actions.js';
 
 /* eslint-disable */
 import UIDrop from '../ui/drop.js';
@@ -18,7 +21,9 @@ import StickerPicker from './sticker-picker.js';
 /* eslint-enable */
 
 const {fromEvent, merge} = rxjs;
-const {filter, map, tap} = rxjs.operators;
+const {filter, map, tap, withLatestFrom} = rxjs.operators;
+
+const {construct} = zagram;
 
 const style = css`
   .inp {
@@ -314,10 +319,20 @@ const properties = {};
         textareaNode.value += emojiItem.emoji;
       });
 
-      const sticker$ = fromEvent(stickerPickerNode, 'sticker-selected');
-      sticker$.subscribe(x => {
-        console.log('Sticker selected:', x);
-      });
+      const state$ = getState$();
+      const activeInputPeer$ = getActiveDialogInputPeer$(state$);
+      const sticker$ = fromEvent(stickerPickerNode, 'sticker-selected')
+        .pipe(map(R.prop('detail')));
+
+      const submit$ = sticker$.pipe(
+        map(R.partial(construct, ['inputDocument'])),
+        map(wrapAsObjWithKey('media')),
+        withLatestFrom(activeInputPeer$.pipe(map(wrapAsObjWithKey('peer')))),
+        map(R.mergeAll),
+        map(R.merge({message: ''}))
+      );
+
+      submit$.subscribe(sendMessage);
 
       return this;
     }

@@ -9,7 +9,7 @@ const fromPromise = rxjs.from;
 const {of, fromEvent, combineLatest} = rxjs;
 const {map, filter, switchMap, switchMapTo, tap, withLatestFrom} = rxjs.operators;
 const {isActionOf} = store;
-const {method, isObjectOf, construct} = zagram;
+const {method, isObjectOf, construct, isRpcError} = zagram;
 
 
 function attachRandomId(x) {
@@ -61,10 +61,22 @@ const buildMessage = R.cond([
   [R.T, getMessageFromUpdateResponse]
 ]);
 
-const handleMessageResponse = R.pipe(
+const isErrorResponse = R.pipe(getResponse, isRpcError);
+
+const handleMessageSuccessResponse = R.pipe(
   buildMessage,
   prependMessage
 );
+
+const handleErrorResponse = R.pipe(
+  getResponse,
+  console.warn
+);
+
+const handleMessageResponse = R.cond([
+  [isErrorResponse, handleErrorResponse],
+  [R.T, handleMessageSuccessResponse]
+]);
 
 function sendTextMessage$(connection, data) {
   const sendMessage$ = R.partial(requestToTelegram$, [connection]);
@@ -144,11 +156,28 @@ function uploadFile$(connection, file) {
   );
 }
 
+/**
+ * @param {*} inputDocument
+ */
+const buildInputMediaDocument = R.pipe(
+  wrapAsObjWithKey('id'),
+  R.partial(construct, ['inputMediaDocument'])
+);
+
 function sendMediaMessage$(connection, data) {
   const sendMedia$ = R.partial(requestToTelegram$, [connection]);
+
+  const getMedia$ = R.pipe(
+    R.prop('media'),
+    R.cond([
+      [R.is(File), media => uploadFile$(connection, media)],
+      [R.T, R.pipe(buildInputMediaDocument, of)]
+    ])
+  );
+
   return combineLatest(
     of(data).pipe(map(R.omit(['media']))),
-    uploadFile$(connection, data.media).pipe(map(wrapAsObjWithKey('media')))
+    getMedia$(data).pipe(map(wrapAsObjWithKey('media')))
   ).pipe(
     map(R.mergeAll),
     map(buildMediaRequest),
