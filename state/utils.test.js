@@ -1,4 +1,5 @@
 import {peerToPeerId, peerIdToPeer} from './utils.js';
+import {inputPeerToPeerId} from './utils';
 
 const {construct} = zagram;
 
@@ -14,6 +15,26 @@ describe('utils', () => {
 
     it('peerChannel', () => {
       expect(peerToPeerId(construct('peerChannel', {channel_id: 42}))).toEqual('peer_channel_42');
+    });
+  });
+
+  describe('inputPeerToPeerId', () => {
+    it('inputPeerUser', () => {
+      expect(inputPeerToPeerId(construct('inputPeerUser', {user_id: 12}))).toEqual('peer_user_12');
+    });
+
+    it('inputPeerChat', () => {
+      expect(inputPeerToPeerId(construct('inputPeerChat', {chat_id: 14}))).toEqual('peer_chat_14');
+    });
+
+    it('inputPeerChannel', () => {
+      expect(inputPeerToPeerId(construct(
+        'inputPeerChannel',
+        {
+          channel_id: 42,
+          access_hash: BigInt('123')
+        }
+      ))).toEqual('peer_channel_42');
     });
   });
 

@@ -27,6 +27,14 @@ export function dateDay(date = new Date()) {
     return new Date(date.getFullYear(), date.getMonth(), date.getDate());
 }
 
+/**
+ * @param {Number} timestamp - getTimestamp from telegram
+ * @return {Date}
+ */
+export function tgDate(timestamp) {
+    return dateDay(timestamp * 1000);
+}
+
 export function debounce(func, wait, immediate) {
     let timeout;
     return function(...args) {
@@ -49,3 +57,35 @@ export const wrapAsObjWithKey = R.pipe(
   R.lensProp,
   R.partialRight(R.set, [R.__, {}])
 );
+const fromPromise = rxjs.from;
+
+/**
+ * @param {*} inputFileLocation - telegrams inputFileLocation object
+ * @param {Object} options - options that could be passed for downloading
+ * @param {Boolean} [cancelable] - allow to cancel downloading
+ * @returns {Observable<*>|[Observable<*>, Function]} - stream of downloaded file or tuple with stream anc
+ * cancel function
+ */
+export function downloadFile$(inputFileLocation, options = {}, cancelable) {
+  const {promise, cancel} = telegram.download(inputFileLocation, options);
+  const promise$ = fromPromise(promise);
+  return cancelable ? [promise$, cancel] : promise$;
+}
+
+export function createUrl(file) {
+  const urlCreator = window.URL || window.webkitURL;
+  return urlCreator.createObjectURL(file);
+}
+
+/** форматирование времени / getTimestamp @static */
+export function getTimestamp(timestamp) {
+    if (!timestamp) return '';
+    try {
+        timestamp = new Date(timestamp * 1000);
+        return [timestamp.getHours(), timestamp.getMinutes()]
+          .map(e => ('0' + e).slice(-2))
+          .join(':');
+    } catch (e) {
+        debugger; // eslint-disable-line
+    }
+}

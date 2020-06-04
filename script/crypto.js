@@ -36,7 +36,7 @@ function xor(a, b) {
   return result;
 }
 
-function getRandomBigInt(bytesCount) {
+export function getRandomBigInt(bytesCount) {
   const array = new Uint8Array(bytesCount);
   window.crypto.getRandomValues(array);
   return uint8ToBigInt(array);

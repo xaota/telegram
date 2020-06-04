@@ -1,0 +1,221 @@
+import {SEND_MESSAGE} from '../constants.js';
+import {prependMessage, deleteMessage} from '../actions.js';
+import {isAuthKeyCreated, requestToTelegram$, applyAll, inputPeerToPeer} from '../../utils.js';
+import {getRandomBigInt} from '../../../script/crypto.js';
+import {wrapAsObjWithKey} from '../../../script/helpers.js';
+import {authorizedUser$} from '../../auth/stream-builders.js';
+
+const fromPromise = rxjs.from;
+const {of, fromEvent, combineLatest} = rxjs;
+const {map, filter, switchMap, switchMapTo, tap, withLatestFrom} = rxjs.operators;
+const {isActionOf} = store;
+const {method, isObjectOf, construct, isRpcError} = zagram;
+
+
+function attachRandomId(x) {
+  return {random_id: getRandomBigInt(8), ...x};
+}
+
+function attachTmpIds(x) {
+  return {
+    ...x,
+    out: true,
+    id: 2 ** 32 + Math.floor(Math.random() * 2 ** 16),
+    to_id: inputPeerToPeer(x.peer)
+  };
+}
+
+const buildTextRequest = R.pipe(R.partial(method, ['messages.sendMessage']));
+
+const buildMediaRequest = R.pipe(R.partial(method, ['messages.sendMedia']));
+
+const isShortUpdate = isObjectOf('updateShortSentMessage');
+
+const isResponseHasShortUpdate = R.pipe(R.nth(1), isShortUpdate);
+
+const getRequest = R.nth(0);
+const getResponse = R.nth(1);
+const getAuthorizedUser = R.nth(2);
+
+const buildMessageFromRequestShortUpdate = R.pipe(
+  applyAll([
+    R.pipe(getRequest, R.prop('peer'), inputPeerToPeer, wrapAsObjWithKey('to_id')),
+    R.pipe(getRequest, R.prop('message'), wrapAsObjWithKey('message')),
+    R.pipe(getResponse, R.pick(['id', 'media', 'out', 'date'])),
+    R.pipe(getAuthorizedUser, R.prop('id'), wrapAsObjWithKey('from_id'))
+  ]),
+  R.mergeAll,
+  R.partial(construct, ['message'])
+);
+
+const getMessageFromUpdateResponse = R.pipe(
+  getResponse,
+  R.prop('updates'),
+  R.filter(R.anyPass([isObjectOf('updateNewChannelMessage'), isObjectOf('updateNewMessage')])),
+  R.last,
+  R.prop('message')
+);
+
+const buildMessage = R.cond([
+  [isResponseHasShortUpdate, buildMessageFromRequestShortUpdate],
+  [R.T, getMessageFromUpdateResponse]
+]);
+
+const isErrorResponse = R.pipe(getResponse, isRpcError);
+
+const handleMessageSuccessResponse = R.pipe(
+  buildMessage,
+  prependMessage
+);
+
+const handleErrorResponse = R.pipe(
+  getResponse,
+  console.warn
+);
+
+const handleMessageResponse = R.cond([
+  [isErrorResponse, handleErrorResponse],
+  [R.T, handleMessageSuccessResponse]
+]);
+
+function sendTextMessage$(connection, data) {
+  const sendMessage$ = R.partial(requestToTelegram$, [connection]);
+  return of(data).pipe(
+    map(buildTextRequest),
+    switchMap(sendMessage$)
+  );
+}
+
+/**
+ * @param {File} file - file
+ * @returns {Array<Object>} - array with objects of type DocumentAttribute
+ */
+const buildDocumentAttributes = R.pipe(applyAll([
+    R.pipe(
+      R.prop('name'),
+      wrapAsObjWithKey('file_name'),
+      x => {
+        console.log('File name:', x);
+        return x;
+      },
+      R.partial(construct, ['documentAttributeFilename']),
+      x => {
+        console.log('attribute:', x);
+        return x;
+      }
+    )
+  ]));
+
+const isImageFile = R.pipe(
+  R.prop('type'),
+  R.startsWith('image')
+);
+
+const isBigFile = R.pipe(isObjectOf('inputFileBig'));
+
+/**
+ * @params {[inputFile, file]} - takes input file and file
+ * @returns InputMedia object
+ */
+const buildInputMedia = R.cond([
+  [
+    R.allPass([
+      R.pipe(R.nth(1), isImageFile),
+      R.pipe(R.nth(0), isBigFile, R.not)
+    ]),
+    R.pipe(
+      R.nth(0),
+      wrapAsObjWithKey('file'),
+      R.partial(construct, ['inputMediaUploadedPhoto'])
+    )
+  ],
+  [
+    R.T,
+    R.pipe(
+      applyAll([
+        R.pipe(R.nth(0), wrapAsObjWithKey('file')),
+        R.pipe(R.nth(1), R.prop('type'), wrapAsObjWithKey('mime_type')),
+        R.pipe(R.nth(1), buildDocumentAttributes, wrapAsObjWithKey('attributes'))
+      ]),
+      R.mergeAll,
+      R.partial(construct, ['inputMediaUploadedDocument'])
+    )
+  ]
+]);
+
+/**
+ * Uploads file returns input media
+ * @param connection
+ * @param file
+ */
+function uploadFile$(connection, file) {
+  const {promise} = connection.upload(file, R.identity);
+  return fromPromise(promise).pipe(
+    withLatestFrom(of(file)),
+    map(buildInputMedia)
+  );
+}
+
+/**
+ * @param {*} inputDocument
+ */
+const buildInputMediaDocument = R.pipe(
+  wrapAsObjWithKey('id'),
+  R.partial(construct, ['inputMediaDocument'])
+);
+
+function sendMediaMessage$(connection, data) {
+  const sendMedia$ = R.partial(requestToTelegram$, [connection]);
+
+  const getMedia$ = R.pipe(
+    R.prop('media'),
+    R.cond([
+      [R.is(File), media => uploadFile$(connection, media)],
+      [R.T, R.pipe(buildInputMediaDocument, of)]
+    ])
+  );
+
+  return combineLatest(
+    of(data).pipe(map(R.omit(['media']))),
+    getMedia$(data).pipe(map(wrapAsObjWithKey('media')))
+  ).pipe(
+    map(R.mergeAll),
+    map(buildMediaRequest),
+    tap(x => {
+      console.log('Upload media request:', x);
+    }),
+    switchMap(sendMedia$)
+  );
+}
+
+export default function sendMessageMiddleware(action$, state$, connection) {
+  const authKeyCreated$ = fromEvent(connection, 'statusChanged')
+    .pipe(filter(isAuthKeyCreated));
+
+  const sentMessage$ = authKeyCreated$.pipe(
+    switchMapTo(action$),
+    filter(isActionOf(SEND_MESSAGE)),
+    map(R.prop('payload')),
+    map(attachRandomId),
+    map(attachTmpIds), // attach tmp values
+    tap(x => {
+      console.log('Prepend message', x);
+      prependMessage(x);
+    }),
+    switchMap(x => combineLatest(
+      of(x),
+      R.cond([
+        [R.has('media'), R.partial(sendMediaMessage$, [connection])],
+        [R.T, R.partial(sendTextMessage$, [connection])]
+      ])(x),
+      authorizedUser$(state$)
+    )),
+    tap(x => {
+      const tmpMsg = x[0];
+      console.log('Delete message', tmpMsg);
+      deleteMessage(tmpMsg);
+    })
+  );
+
+  sentMessage$.subscribe(handleMessageResponse);
+}

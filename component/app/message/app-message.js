@@ -6,44 +6,6 @@ const component = Component.meta(import.meta.url, 'app-message');
 const attributes = {};
 const properties = {};
 
-/**
- * Returns 'messageText' if message without media else returns type by
- * message media
- * @param message
- */
-function getCommonMessageType(message) {
-  const {media} = message;
-  if (media) {
-    return media[CONSTRUCTOR_KEY];
-  }
-  return 'messageText';
-}
-
-/**
- * Returns service message type by action constructor:
- * https://core.telegram.org/type/MessageAction
- * @param message
- */
-function getServiceMessageType(message) {
-  const {action} = message;
-  return action[CONSTRUCTOR_KEY];
-}
-
-/**
- * Returns types of message for function
- * @param message
- */
-function getMessageType(message) {
-  if (isObjectOf('message', message)) {
-    return getCommonMessageType(message);
-  }
-
-  if (isObjectOf('messageService', message)) {
-    return getServiceMessageType(message);
-  }
-
-  console.warn('Not a message!', message);
-}
 
 export default class AppMessage extends Component {
   constructor() {
@@ -58,7 +20,6 @@ export default class AppMessage extends Component {
 
   static preview(message) {
     const type = getMessageType(message);
-    console.log(type);
     const handlers = {
       messageText: m => m.message,
       messageMediaPoll: () => '📊 Poll',

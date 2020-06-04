@@ -1,7 +1,7 @@
 :root {
   --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
 
-  --blueTextColor:    #4B91E5;
+  --blueTextColor:    #4b91e5;
   --blueMessageColor: #49A1EB;
   --blueColor:        #62A4EF;
   --blueColorHover:   #5A96DB;
@@ -20,8 +20,10 @@
   --greenColor:        #5AC14A;
 
   --iconStatic: #707579;
-  --iconHover:  #63A4EF;
+  --iconHover:  #63a4ef;
   --iconActive: #000;
+
+  --telegram-color: #70A4E9; /* --blueColor */
 
   --light-drop:                   #fff;
   --light-edge:                   #DBDCE0;

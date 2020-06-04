@@ -56,7 +56,6 @@ export default class ChatItem extends Component {
   }
 
   static from({model, user, me}) {
-    console.log(model);
     const avatar     = new UIAvatar();
     avatar.innerHTML = UIAvatar.letter(model.title);
     avatar.color     = UIAvatar.color(model.id);
