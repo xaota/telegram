@@ -8,7 +8,7 @@ importScripts('../../zagram/zagram.js');
 
 const {fromEvent} = rxjs;
 const {filter} = rxjs.operators;
-const {MTProto, tlDumps, sha256, schema: layer108} = zagram;
+const {MTProto, tlDumps, sha256, schema: layer108, arrayBufferToHex} = zagram;
 
 let connection;
 
@@ -18,7 +18,7 @@ const cache = {};
 const getCacheKey = R.pipe(
   R.partial(tlDumps, [layer108]),
   sha256,
-  x => x.toHex()
+  arrayBufferToHex
 );
 
 const isAuthKeyCreated = R.pipe(

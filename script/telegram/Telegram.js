@@ -12,7 +12,7 @@ import ConnectionWrapper from './ConnectionWrapper.js';
 // @ts-ignore
 // import {MTProto, schema, method, construct} from '../../zagram/zagram.js';
 const {schema, method, construct} = zagram;
-// +isMessageOf('rpc_error_type'), isObjectOf, CONSTRUCTOR_KEY
+// +isMessageOfType('rpc_error_type'), isObjectOf, CONSTRUCTOR_KEY
 
 /** {Telegram} Работа с Telegram @class @export @default
   */

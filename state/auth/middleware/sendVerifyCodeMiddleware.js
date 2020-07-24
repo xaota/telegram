@@ -5,7 +5,7 @@ import {sendVerifyCodeError, setAuthorizationData} from '../actions.js';
 const fromPromise = rxjs.from;
 const {isActionOf} = store;
 const {catchError, filter, map, mergeMap, withLatestFrom} = rxjs.operators;
-const {method, isMessageOf, isObjectOf} = zagram;
+const {method, isMessageOfType, isObjectOf} = zagram;
 
 const sendSignIn = R.partial(method, ['auth.signIn']);
 
@@ -58,7 +58,7 @@ const handleVerifyError = R.pipe(
 
 const handleVerifyResponse = R.cond([
   [isPhoneUnoccupied, R.partial(setPage, ['sign-up'])],
-  [isMessageOf('rpc_error_type'), handleVerifyError],
+  [isMessageOfType('rpc_error_type'), handleVerifyError],
   [R.T, R.pipe(R.of, R.ap([setAuthorizationData, R.partial(setPage, ['chat'])]))]
 ]);
 
