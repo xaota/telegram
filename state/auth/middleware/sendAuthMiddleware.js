@@ -13,7 +13,7 @@ const {
   withLatestFrom
 } = rxjs.operators;
 
-const {method, construct, isMessageOf} = zagram;
+const {method, construct, isMessageOfType} = zagram;
 const {isActionOf} = store;
 
 const sendAuthMethod = R.partial(method, ['auth.sendCode']);
@@ -47,7 +47,7 @@ const handleError = R.pipe(
 );
 
 const handleResponseWithPhone = R.pipe(R.cond([
-    [R.pipe(R.nth(0), isMessageOf('rpc_error_type')), handleError],
+    [R.pipe(R.nth(0), isMessageOfType('rpc_error_type')), handleError],
     [R.T, handleSuccess]
   ]));
 
